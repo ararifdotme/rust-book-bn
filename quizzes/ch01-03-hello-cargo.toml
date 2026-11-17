@@ -2,15 +2,15 @@
 id = "c1b7cc2e-b5fb-4b67-b0bb-600d82931f08"
 type = "MultipleChoice"
 prompt.prompt = """
-Say you just downloaded a Cargo project, and then you run `cargo run` at the command-line. Which statement is NOT true about what happens next?
+ধরুন, আপনি এইমাত্র একটি Cargo প্রজেক্ট ডাউনলোড করেছেন, তারপর কমান্ড লাইনে `cargo run` চালালেন। এরপর যা ঘটে, সে সম্পর্কে কোন বক্তব্যটি সত্য **নয়**?
 """
-answer.answer = "Cargo watches for file changes and re-executes the binary on a change"
+answer.answer = "Cargo ফাইলের পরিবর্তনের দিকে নজর রাখে এবং কোনো পরিবর্তন হলে binary আবার চালায়"
 prompt.distractors = [
-  "Cargo downloads and builds any dependencies of the project",
-  "Cargo builds the project into a binary in the `target/debug` directory",
-  "Cargo executes the project's binary"
+  "Cargo প্রজেক্টের সব dependency ডাউনলোড করে build করে",
+  "Cargo প্রজেক্টটি build করে `target/debug` ডিরেক্টরিতে একটি binary তৈরি করে",
+  "Cargo প্রজেক্টের binary চালায়"
 ]
 context = """
-Cargo does not watch your files by default. But you can use plugins like [cargo-watch](https://crates.io/crates/cargo-watch) for this
-purpose.
+ডিফল্টভাবে Cargo আপনার ফাইলের দিকে নজর রাখে না। তবে এই কাজের জন্য [cargo-watch](https://crates.io/crates/cargo-watch)-এর মতো
+প্লাগইন ব্যবহার করতে পারেন।
 """

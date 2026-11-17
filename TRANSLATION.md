@@ -197,6 +197,29 @@ tested with this repo's build.
 | unsafe Rust | unsafe Rust | নিরাপত্তা-যাচাই শিথিল করা Rust | 0 |
 | vector | vector | পরিবর্তনশীল দৈর্ঘ্যের তালিকা | 0 |
 | zero-cost abstraction | zero-cost abstraction | বাড়তি খরচ ছাড়া উচ্চ-স্তরের সুবিধা | 0 |
+| ahead-of-time compiled | ahead-of-time compiled | চালানোর আগেই সংকলিত | 1 |
+| argument | argument | function-এ পাঠানো আসল মান | 1 |
+| benchmark | benchmark করা | চলার গতি মাপা | 1 |
+| build | build করা (noun: build) | কোড compile করে চালানোর উপযোগী ফাইল বানানো | 1 |
+| build system | build system | কোড build করার ব্যবস্থা | 1 |
+| crate | crate | Rust-এর কোডের একক (library বা প্রোগ্রাম) | 1 |
+| debug build | debug build | দ্রুত তৈরি, ডিবাগের উপযোগী build | 1 |
+| declare | declare করা | ঘোষণা করা | 1 |
+| dynamic language | dynamic language | Ruby বা Python-এর মতো সরাসরি চালানো ভাষা | 1 |
+| executable / binary | executable / binary | চালানো যায় এমন ফাইল | 1 |
+| flag | flag | কমান্ডের সঙ্গে দেওয়া অপশন | 1 |
+| function body | function body | function-এর মূল অংশ | 1 |
+| key (in TOML) | key | key-value জোড়ার নাম অংশ | 1 |
+| linker | linker | compile হওয়া অংশগুলো জুড়ে একটি ফাইল বানানোর প্রোগ্রাম | 1 |
+| optimization | optimization (verb: optimize করা) | কোড দ্রুততর করা | 1 |
+| package | package | প্যাকেজ (কোডের বিতরণযোগ্য একক) | 1 |
+| parameter | parameter | function-এ পাঠানো মানের জন্য রাখা নাম | 1 |
+| profile | profile | build-এর সেটিংসের সমষ্টি | 1 |
+| prompt (command line) | prompt | কমান্ড লেখার জায়গা নির্দেশকারী চিহ্ন | 1 |
+| release build | release build | চূড়ান্ত, optimize করা build | 1 |
+| stable (version/release) | stable সংস্করণ | স্থিতিশীল সংস্করণ | 1 |
+| variable | variable | মান রাখার নাম | 1 |
+| version control system | version control system | কোডের পরিবর্তনের ইতিহাস রাখার ব্যবস্থা | 1 |
 
 ### Everyday computing words
 
@@ -212,6 +235,19 @@ Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
 | highlight | হাইলাইট | 0 |
 | open source | ওপেন সোর্স | 0 |
 | quiz | কুইজ | 0 |
+| cache | ক্যাশ | 1 |
+| configuration (file) | কনফিগারেশন (ফাইল) | 1 |
+| curly brackets / semicolon / parentheses | কার্লি ব্র্যাকেট / সেমিকোলন / বন্ধনী | 1 |
+| directory | ডিরেক্টরি | 1 |
+| documentation | ডকুমেন্টেশন | 1 |
+| file extension | এক্সটেনশন | 1 |
+| plugin | প্লাগইন | 1 |
+| repository | রিপোজিটরি | 0 |
+| script | স্ক্রিপ্ট | 1 |
+| shell | শেল | 1 |
+| source file / source code | সোর্স ফাইল / সোর্স কোড | 0 |
+| terminal | টার্মিনাল | 1 |
+| text editor | টেক্সট এডিটর | 1 |
 
 ## Progress
 
@@ -224,7 +260,7 @@ Each line covers the chapter's `.md` files and the quizzes and listings they
 use.
 
 - [x] Chapter 0: Front matter (experiment-intro, title-page, foreword, ch00-00-introduction)
-- [ ] Chapter 1: Getting Started (ch01-*)
+- [x] Chapter 1: Getting Started (ch01-*)
 - [ ] Chapter 2: Programming a Guessing Game (ch02-*)
 - [ ] Chapter 3: Common Programming Concepts (ch03-*)
 - [ ] Chapter 4: Understanding Ownership (ch04-*)

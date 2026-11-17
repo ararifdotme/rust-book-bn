@@ -1,126 +1,126 @@
-## Installation
+## ইনস্টলেশন {#installation}
 
-The first step is to install Rust. We’ll download Rust through `rustup`, a
-command line tool for managing Rust versions and associated tools. You’ll need
-an internet connection for the download.
+প্রথম ধাপ হলো Rust ইনস্টল করা। আমরা Rust ডাউনলোড করব `rustup` দিয়ে; এটি
+Rust-এর বিভিন্ন সংস্করণ আর সংশ্লিষ্ট টুলগুলো সামলানোর একটি কমান্ড লাইন টুল।
+ডাউনলোডের জন্য ইন্টারনেট সংযোগ লাগবে।
 
-> Note: If you prefer not to use `rustup` for some reason, please see the
-> [Other Rust Installation Methods page][otherinstall] for more options.
+> Note: কোনো কারণে `rustup` ব্যবহার করতে না চাইলে আরও বিকল্পের জন্য
+> [Rust ইনস্টলের অন্যান্য পদ্ধতির পাতাটি][otherinstall] দেখুন।
 
-The following steps install the latest stable version of the Rust compiler.
-Rust’s stability guarantees ensure that all the examples in the book that
-compile will continue to compile with newer Rust versions. The output might
-differ slightly between versions because Rust often improves error messages and
-warnings. In other words, any newer, stable version of Rust you install using
-these steps should work as expected with the content of this book.
+নিচের ধাপগুলো Rust compiler (সংকলক)-এর সর্বশেষ stable সংস্করণ (স্থিতিশীল
+সংস্করণ) ইনস্টল করে। Rust স্থিতিশীলতার নিশ্চয়তা দেয়, তাই বইয়ের যেসব উদাহরণ
+এখন compile (সংকলন) হয়, সেগুলো Rust-এর নতুন সংস্করণেও compile হতে থাকবে।
+তবে সংস্করণভেদে আউটপুট সামান্য আলাদা হতে পারে, কারণ Rust প্রায়ই তার error
+message আর সতর্কবার্তা উন্নত করে। অর্থাৎ, এই ধাপগুলো দিয়ে Rust-এর যে নতুন
+stable সংস্করণই ইনস্টল করুন, এই বইয়ের বিষয়বস্তুর সঙ্গে সেটি ঠিকঠাক কাজ করবে।
 
-> ### Command Line Notation
+> ### কমান্ড লাইনের লেখার নিয়ম {#command-line-notation}
 >
-> In this chapter and throughout the book, we’ll show some commands used in the
-> terminal. Lines that you should enter in a terminal all start with `$`. You
-> don’t need to type the `$` character; it’s the command line prompt shown to
-> indicate the start of each command. Lines that don’t start with `$` typically
-> show the output of the previous command. Additionally, PowerShell-specific
-> examples will use `>` rather than `$`.
+> এই অধ্যায়ে এবং পুরো বইজুড়ে আমরা টার্মিনালে ব্যবহৃত কিছু কমান্ড দেখাব।
+> টার্মিনালে যে লাইনগুলো আপনাকে লিখতে হবে, সেগুলো সব `$` দিয়ে শুরু। `$`
+> চিহ্নটি আপনাকে টাইপ করতে হবে না; এটি কমান্ড লাইনের prompt (কমান্ড লেখার
+> জায়গা নির্দেশকারী চিহ্ন), যা প্রতিটি কমান্ডের শুরু বোঝাতে দেখানো হয়। যেসব
+> লাইন `$` দিয়ে শুরু হয় না, সেগুলো সাধারণত আগের কমান্ডের আউটপুট দেখায়। এছাড়া
+> শুধু PowerShell-এর উদাহরণগুলোতে `$`-এর বদলে `>` ব্যবহার করা হবে।
 
-### Installing `rustup` on Linux or macOS
+### Linux বা macOS-এ `rustup` ইনস্টল করা {#installing-rustup-on-linux-or-macos}
 
-If you’re using Linux or macOS, open a terminal and enter the following command:
+Linux বা macOS ব্যবহার করলে একটি টার্মিনাল খুলে নিচের কমান্ডটি লিখুন:
 
 ```console
 $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
 
-The command downloads a script and starts the installation of the `rustup`
-tool, which installs the latest stable version of Rust. You might be prompted
-for your password. If the install is successful, the following line will appear:
+কমান্ডটি একটি স্ক্রিপ্ট ডাউনলোড করে `rustup` টুলের ইনস্টলেশন শুরু করে, আর
+এই টুলটি Rust-এর সর্বশেষ stable সংস্করণ ইনস্টল করে। আপনার কাছে পাসওয়ার্ড চাওয়া
+হতে পারে। ইনস্টলেশন সফল হলে নিচের লাইনটি দেখা যাবে:
 
 ```text
 Rust is installed now. Great!
 ```
 
-You will also need a _linker_, which is a program that Rust uses to join its
-compiled outputs into one file. It is likely you already have one. If you get
-linker errors, you should install a C compiler, which will typically include a
-linker. A C compiler is also useful because some common Rust packages depend on
-C code and will need a C compiler.
+আপনার একটি _linker_-ও লাগবে। এটি এমন একটি প্রোগ্রাম, যা দিয়ে Rust তার compile
+করা আউটপুটগুলো জুড়ে একটি ফাইল বানায়।
+খুব সম্ভবত আপনার কম্পিউটারে এটি আগে থেকেই আছে। linker-সংক্রান্ত error পেলে একটি
+C compiler ইনস্টল করুন; সাধারণত এর সঙ্গে একটি linker-ও থাকে। C compiler আরেকটি
+কারণেও কাজের: Rust-এর কিছু বহুল ব্যবহৃত package (প্যাকেজ, কোডের বিতরণযোগ্য একক)
+C কোডের ওপর নির্ভর করে, তাই সেগুলোর জন্য C compiler লাগে।
 
-On macOS, you can get a C compiler by running:
+macOS-এ নিচের কমান্ড চালিয়ে একটি C compiler পেতে পারেন:
 
 ```console
 $ xcode-select --install
 ```
 
-Linux users should generally install GCC or Clang, according to their
-distribution’s documentation. For example, if you use Ubuntu, you can install
-the `build-essential` package.
+Linux ব্যবহারকারীদের সাধারণত নিজেদের ডিস্ট্রিবিউশনের ডকুমেন্টেশন অনুযায়ী GCC বা
+Clang ইনস্টল করা উচিত। যেমন, Ubuntu ব্যবহার করলে `build-essential` package-টি
+ইনস্টল করতে পারেন।
 
-### Installing `rustup` on Windows
+### Windows-এ `rustup` ইনস্টল করা {#installing-rustup-on-windows}
 
-On Windows, go to [https://www.rust-lang.org/tools/install][install]<!-- ignore
---> and follow the instructions for installing Rust. At some point in the
-installation, you’ll be prompted to install Visual Studio. This provides a
-linker and the native libraries needed to compile programs. If you need more
-help with this step, see
+Windows-এ [https://www.rust-lang.org/tools/install][install]<!-- ignore
+--> পাতায় গিয়ে Rust ইনস্টলের নির্দেশনা অনুসরণ করুন। ইনস্টলেশনের একপর্যায়ে
+আপনাকে Visual Studio ইনস্টল করতে বলা হবে। এটি একটি linker এবং প্রোগ্রাম compile
+করার জন্য দরকারি native library (লাইব্রেরি) সরবরাহ করে। এই ধাপে আরও সাহায্য
+লাগলে দেখুন
 [https://rust-lang.github.io/rustup/installation/windows-msvc.html][msvc]<!--
-ignore -->.
+ignore -->।
 
-The rest of this book uses commands that work in both _cmd.exe_ and PowerShell.
-If there are specific differences, we’ll explain which to use.
+বইয়ের বাকি অংশে এমন কমান্ড ব্যবহার করা হয়েছে, যা _cmd.exe_ ও PowerShell
+দুটোতেই কাজ করে। কোথাও নির্দিষ্ট পার্থক্য থাকলে কোনটি ব্যবহার করবেন, তা আমরা
+বলে দেব।
 
-### Troubleshooting
+### সমস্যা সমাধান {#troubleshooting}
 
-To check whether you have Rust installed correctly, open a shell and enter this
-line:
+Rust ঠিকমতো ইনস্টল হয়েছে কি না দেখতে একটি শেল খুলে এই লাইনটি লিখুন:
 
 ```console
 $ rustc --version
 ```
 
-You should see the version number, commit hash, and commit date for the latest
-stable version that has been released, in the following format:
+প্রকাশিত সর্বশেষ stable সংস্করণের সংস্করণ নম্বর, commit hash আর commit-এর তারিখ
+নিচের আকারে দেখতে পাবেন:
 
 ```text
 rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
-If you see this information, you have installed Rust successfully! If you don’t
-see this information, check that Rust is in your `PATH`
-system variable as follows.
+এই তথ্য দেখতে পেলে আপনি সফলভাবে Rust ইনস্টল করেছেন! যদি না দেখেন, তাহলে
+নিচের উপায়ে দেখে নিন Rust আপনার `PATH`
+সিস্টেম variable (মান রাখার নাম)-এ আছে কি না।
 
-In Windows CMD, use:
+Windows CMD-তে লিখুন:
 
 ```console
 > echo %PATH%
 ```
 
-In PowerShell, use:
+PowerShell-এ লিখুন:
 
 ```powershell
 > echo $env:Path
 ```
 
-In Linux and macOS, use:
+Linux ও macOS-এ লিখুন:
 
 ```console
 $ echo $PATH
 ```
 
-If that’s all correct and Rust still isn’t working, there are a number of
-places you can get help. Find out how to get in touch with other Rustaceans (a
-silly nickname we call ourselves) on [the community page][community].
+সব ঠিক থাকার পরও Rust কাজ না করলে সাহায্য পাওয়ার অনেক জায়গা আছে। অন্য
+Rustacean-দের (নিজেদের আমরা মজা করে এই নামে ডাকি) সঙ্গে কীভাবে যোগাযোগ করবেন,
+তা জানতে দেখুন [কমিউনিটি পেজ][community]।
 
-### Updating and Uninstalling
+### আপডেট ও আনইনস্টল {#updating-and-uninstalling}
 
-Once Rust is installed via `rustup`, updating to a newly released version is
-easy. From your shell, run the following update script:
+`rustup` দিয়ে Rust ইনস্টল করা থাকলে নতুন প্রকাশিত সংস্করণে আপডেট করা সহজ।
+আপনার শেল থেকে নিচের আপডেট স্ক্রিপ্টটি চালান:
 
 ```console
 $ rustup update
 ```
 
-To uninstall Rust and `rustup`, run the following uninstall script from your
-shell:
+Rust আর `rustup` আনইনস্টল করতে শেল থেকে নিচের আনইনস্টল স্ক্রিপ্টটি চালান:
 
 ```console
 $ rustup self uninstall
@@ -129,34 +129,33 @@ $ rustup self uninstall
 <!-- Old headings. Do not remove or links may break. -->
 <a id="local-documentation"></a>
 
-### Reading the Local Documentation
+### লোকাল ডকুমেন্টেশন পড়া {#reading-the-local-documentation}
 
-The installation of Rust also includes a local copy of the documentation so
-that you can read it offline. Run `rustup doc` to open the local documentation
-in your browser.
+Rust ইনস্টলের সঙ্গে ডকুমেন্টেশনের একটি লোকাল কপিও আসে, যাতে আপনি অফলাইনে
+পড়তে পারেন। ব্রাউজারে লোকাল ডকুমেন্টেশন খুলতে `rustup doc` চালান।
 
-Any time a type or function is provided by the standard library and you’re not
-sure what it does or how to use it, use the application programming interface
-(API) documentation to find out!
+standard library (আদর্শ লাইব্রেরি)-র দেওয়া কোনো type (ডেটার ধরন) বা function
+(ফাংশন) কী করে বা কীভাবে ব্যবহার করতে হয়, তা নিয়ে নিশ্চিত না হলে যেকোনো সময়
+application programming interface (API) ডকুমেন্টেশন দেখে নিন!
 
 <!-- Old headings. Do not remove or links may break. -->
 <a id="text-editors-and-integrated-development-environments"></a>
 
-### Using Text Editors and IDEs
+### টেক্সট এডিটর ও IDE ব্যবহার {#using-text-editors-and-ides}
 
-This book makes no assumptions about what tools you use to author Rust code.
-Just about any text editor will get the job done! However, many text editors and
-integrated development environments (IDEs) have built-in support for Rust. You
-can always find a fairly current list of many editors and IDEs on [the tools
-page][tools] on the Rust website.
+Rust কোড লিখতে আপনি কোন টুল ব্যবহার করবেন, তা নিয়ে এই বই কিছু ধরে নেয় না।
+প্রায় যেকোনো টেক্সট এডিটরেই কাজ চলবে! তবে অনেক টেক্সট এডিটর আর integrated
+development environment (IDE)-এ Rust-এর জন্য বিল্ট-ইন সাপোর্ট আছে। Rust
+ওয়েবসাইটের [টুলস
+পেজে][tools] অনেক এডিটর ও IDE-র মোটামুটি হালনাগাদ একটি তালিকা সবসময় পাবেন।
 
-### Working Offline with This Book
+### এই বই নিয়ে অফলাইনে কাজ করা {#working-offline-with-this-book}
 
-In several examples, we will use Rust packages beyond the standard library. To
-work through those examples, you will either need to have an internet connection
-or to have downloaded those dependencies ahead of time. To download the
-dependencies ahead of time, you can run the following commands. (We’ll explain
-what `cargo` is and what each of these commands does in detail later.)
+কয়েকটি উদাহরণে আমরা standard library-র বাইরের Rust package ব্যবহার করব। সেই
+উদাহরণগুলো করতে হলে হয় ইন্টারনেট সংযোগ লাগবে, নয়তো সেই dependency (নির্ভরতা,
+অর্থাৎ যে লাইব্রেরির ওপর কোড নির্ভর করে)-গুলো আগে থেকেই ডাউনলোড করে রাখতে
+হবে। আগে থেকে ডাউনলোড করতে নিচের কমান্ডগুলো চালাতে পারেন। (`cargo` কী, আর
+এই কমান্ডগুলোর প্রতিটি কী করে, তা আমরা পরে বিস্তারিত বলব।)
 
 ```console
 $ cargo new get-dependencies
@@ -164,11 +163,11 @@ $ cd get-dependencies
 $ cargo add rand@0.8.5 trpl@0.2.0
 ```
 
-This will cache the downloads for these packages so you will not need to
-download them later. Once you have run this command, you do not need to keep the
-`get-dependencies` folder. If you have run this command, you can use the
-`--offline` flag with all `cargo` commands in the rest of the book to use these
-cached versions instead of attempting to use the network.
+এতে এই package-গুলো ডাউনলোড হয়ে ক্যাশে জমা থাকবে, ফলে পরে আর ডাউনলোড করতে
+হবে না। কমান্ডটি একবার চালানোর পর `get-dependencies` ফোল্ডারটি রাখার দরকার নেই।
+এই কমান্ড চালিয়ে থাকলে বইয়ের বাকি অংশে সব `cargo` কমান্ডের সঙ্গে `--offline`
+flag (কমান্ডের সঙ্গে দেওয়া অপশন) ব্যবহার করতে পারেন; তখন নেটওয়ার্ক ব্যবহারের
+চেষ্টা না করে ক্যাশে রাখা সংস্করণগুলোই ব্যবহার হবে।
 
 {{#quiz ../quizzes/ch01-01-installation.toml}}
 

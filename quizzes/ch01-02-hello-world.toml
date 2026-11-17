@@ -1,10 +1,10 @@
 [[questions]]
 id = "87c3b09e-84d3-49d7-8680-0b2d068a7fc5"
 type = "ShortAnswer"
-prompt.prompt = "Every executable Rust program must contain a function with the name:"
+prompt.prompt = "প্রতিটি executable Rust প্রোগ্রামে অবশ্যই এই নামের একটি function থাকতে হবে:"
 answer.answer = "main"
 context = """
-In your program, you add a main function like this:
+আপনার প্রোগ্রামে এভাবে একটি main function যোগ করতে হয়:
 
 ```
 fn main() {
@@ -17,7 +17,7 @@ fn main() {
 id = "0d78d302-eb3d-4ac7-a1ac-f2d661810744"
 type = "MultipleChoice"
 prompt.prompt = """
-Let's say you have the following program in a file `hello.rs`:
+ধরুন, `hello.rs` ফাইলে আপনার নিচের প্রোগ্রামটি আছে:
 
 ```
 fn main() {
@@ -25,14 +25,14 @@ fn main() {
 }
 ```
 
-Say you then run the command `rustc hello.rs` from the command-line. Which statement best describes what happens next?
+এরপর আপনি কমান্ড লাইন থেকে `rustc hello.rs` কমান্ডটি চালালেন। এরপর কী ঘটবে, তা কোন বক্তব্যটি সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
-answer.answer = "`rustc` generates a binary executable named `hello`"
+answer.answer = "`rustc` `hello` নামের একটি binary executable তৈরি করে"
 prompt.distractors = [
-  "`rustc` will print an error because this is an invalid program",
-  "`rustc` executes the program and prints out `Hello world!`",
-  "`rustc` reformats `hello.rs` according to the Rust style guide"
+  "এটি একটি অবৈধ প্রোগ্রাম, তাই `rustc` একটি error প্রিন্ট করবে",
+  "`rustc` প্রোগ্রামটি চালায় এবং `Hello world!` প্রিন্ট করে",
+  "`rustc` Rust-এর স্টাইল গাইড অনুযায়ী `hello.rs`-এর ফরম্যাট ঠিক করে দেয়"
 ]
 context = """
-Running `rustc` checks and compiles your program, but does not execute it.
+`rustc` চালালে এটি আপনার প্রোগ্রাম যাচাই করে compile করে, কিন্তু চালায় না।
 """
