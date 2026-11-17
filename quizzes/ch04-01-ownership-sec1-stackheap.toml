@@ -2,25 +2,25 @@
 id = "5d774a01-8604-4386-8d81-498496ccd96c"
 type = "MultipleChoice"
 prompt.prompt = """
-Which of the following best describes the difference between the stack and the heap?
+stack আর heap-এর পার্থক্য নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
-answer.answer = "The stack holds data associated with a specific function, while the heap holds data that can outlive a function"
+answer.answer = "stack একটি নির্দিষ্ট function-এর সঙ্গে যুক্ত ডেটা রাখে, আর heap এমন ডেটা রাখে, যা একটি function-এর চেয়ে বেশিদিন টিকে থাকতে পারে"
 prompt.distractors = [ 
-  "The stack can hold pointers to data stored on the heap, while the heap only holds data without pointers",
-  "The stack holds immutable data, while the heap holds mutable data.",
-  "The stack holds copyable data, while the heap holds uncopyable data."
+  "stack heap-এ রাখা ডেটার pointer রাখতে পারে, আর heap শুধু pointer-ছাড়া ডেটা রাখে",
+  "stack immutable ডেটা রাখে, আর heap mutable ডেটা রাখে।",
+  "stack copyable ডেটা রাখে, আর heap non-copyable ডেটা রাখে।"
 ]
 context = """
-Frames in the stack are associated with a specific function, and are deallocated when the function returns.
-Data on the heap can live indefinitely. Note that both stack and heap data can be mutable and can be copyable. The heap is allowed to
-contain pointers (even to the stack, as we will see later).
+stack-এর frame-গুলো একটি নির্দিষ্ট function-এর সঙ্গে যুক্ত, আর function return করলে deallocate হয়।
+heap-এর ডেটা অনির্দিষ্টকাল টিকে থাকতে পারে। লক্ষ করুন, stack আর heap দুই জায়গার ডেটাই mutable হতে পারে, copyable-ও হতে পারে। heap-এ
+pointer থাকতেও পারে (এমনকি stack-এর pointer-ও, যা আমরা পরে দেখব)।
 """
 
 [[questions]]
 id = "4c953b2d-65bf-4dab-bbbb-14c9b15a690e"
 type = "ShortAnswer"
 prompt.prompt = """
-Consider the execution of the following snippet, with the final state shown:
+নিচের কোড-অংশটি চলার কথা ভাবুন, এর চূড়ান্ত অবস্থা দেখানো হয়েছে:
 
 ```aquascope,interpreter
 #fn main() {
@@ -30,9 +30,9 @@ let c = Box::new(15);`[]`
 #}
 ```
 
-In the final state, how many copies of the number `15` live anywhere in memory? Write your answer as a digit, such as 0 or 1.
+চূড়ান্ত অবস্থায় মেমোরির কোথাও না কোথাও মোট কয়টি সংখ্যা `15`-এর কপি আছে? উত্তর একটি অঙ্ক হিসেবে লিখুন, যেমন 0 বা 1।
 """
 answer.answer = "2"
 context = """
-The two boxes contain the two copies of the number 15. The assignment `let b = a` copies the heap pointer, but not the number on the heap.
+দুটি box-এ সংখ্যা 15-এর দুটি কপি আছে। `let b = a` assignment heap-এর pointer কপি করে, কিন্তু heap-এর সংখ্যাটি নয়।
 """

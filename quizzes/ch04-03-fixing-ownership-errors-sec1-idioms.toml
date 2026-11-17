@@ -2,19 +2,19 @@
 id = "8c9f9173-c5ba-4914-9cfa-e3432f8414e1"
 type = "MultipleChoice"
 prompt.prompt = """
-Which of the following is NOT a valid kind of fix to the issue of returning a stack reference from a function?
+function থেকে stack-এর reference return করার সমস্যার বৈধ সমাধান নিচের কোনটি **নয়**?
 """
-answer.answer = "Extend the lifetime of the stack frame"
-prompt.distractors = ["Use a reference-counted pointer", "Take ownership of the returned value", "Expect a mutable slot from the caller"]
+answer.answer = "stack frame-এর lifetime বাড়িয়ে দেওয়া"
+prompt.distractors = ["একটি reference-counted pointer ব্যবহার করা", "return হওয়া মানের ownership নেওয়া", "caller-এর কাছ থেকে একটি mutable ঘর আশা করা"]
 context = """
-A stack frame cannot have its lifetime extended, so that is not a valid solution.
+stack frame-এর lifetime বাড়ানো যায় না, তাই এটি বৈধ সমাধান নয়।
 """
 
 [[questions]]
 id = "e6bc84ef-069c-4d1d-99ec-69b13492569c"
 type = "MultipleChoice"
 prompt.prompt = """
-Let's say a programmer tried writing the following function:
+ধরুন একজন প্রোগ্রামার নিচের function-টি লেখার চেষ্টা করলেন:
 
 ```
 /// Returns a person's name with "Ph.D." added as a title
@@ -25,7 +25,7 @@ fn award_phd(name: &String) -> String {
 }
 ```
 
-The Rust compiler rejects their code with the following error:
+Rust compiler নিচের error দিয়ে তাদের কোড বাতিল করে দেয়:
 
 ```text
 error[E0507]: cannot move out of `*name` which is behind a shared reference
@@ -38,8 +38,8 @@ error[E0507]: cannot move out of `*name` which is behind a shared reference
   |                    help: consider borrowing here: `&*name`
 ```
 
-Given the stated purpose of the function, which of the following would be the most idiomatic fix to the program? 
-The differences from the function above are highlighted.
+function-টির উল্লিখিত উদ্দেশ্য বিবেচনায়, প্রোগ্রামটির সবচেয়ে Rust-সুলভ সমাধান নিচের কোনটি? 
+ওপরের function থেকে পার্থক্যগুলো হাইলাইট করা আছে।
 """
 answer.answer = """
 ```
@@ -77,16 +77,16 @@ fn award_phd(`[name: &mut String]`) {
 """
 ]
 context = """
-The function is not intended to change someone's original name, so changing the type of `name` to either `&mut String` or `String` 
-would be inappropriate. The solution proposed by the compiler of `&*name` is not sufficient --- an acceptable solution is to 
-clone the data with `name.clone()` and mutate the local copy.
+function-টির উদ্দেশ্য কারও মূল নাম বদলানো নয়, তাই `name`-এর type বদলে `&mut String` বা `String` করা 
+অনুপযুক্ত হবে। compiler-এর প্রস্তাবিত সমাধান `&*name` যথেষ্ট নয় --- একটি গ্রহণযোগ্য সমাধান হলো 
+`name.clone()` দিয়ে ডেটা clone করে লোকাল কপিটি mutate করা।
 """
 
 [[questions]]
 id = "8020e4a2-f0b4-4eae-90ac-a87712d9d00b"
 type = "MultipleChoice"
 prompt.prompt = """
-Let's say a programmer tried writing the following function:
+ধরুন একজন প্রোগ্রামার নিচের function-টি লেখার চেষ্টা করলেন:
 
 ```
 /// Rounds all the floats in a vector to the nearest integer, in-place
@@ -97,7 +97,7 @@ fn round_in_place(v: &Vec<f32>) {
 }
 ```
 
-The Rust compiler rejects their code with the following error:
+Rust compiler নিচের error দিয়ে তাদের কোড বাতিল করে দেয়:
 
 ```text
 error[E0594]: cannot assign to `*n`, which is behind a `&` reference
@@ -109,8 +109,8 @@ error[E0594]: cannot assign to `*n`, which is behind a `&` reference
   |         ^^^^^^^^^^^^^^ `n` is a `&` reference, so the data it refers to cannot be written
 ```
 
-Given the stated purpose of the function, which of the following would be the most idiomatic fix to the program? 
-The differences from the function above are highlighted.
+function-টির উল্লিখিত উদ্দেশ্য বিবেচনায়, প্রোগ্রামটির সবচেয়ে Rust-সুলভ সমাধান নিচের কোনটি? 
+ওপরের function থেকে পার্থক্যগুলো হাইলাইট করা আছে।
 """
 answer.answer = """
 ```
@@ -153,8 +153,8 @@ fn round_in_place(v: &Vec<f32>) {
 """,
 ]
 context = """
-Because this function is supposed to round a vector in-place, it would not be
-idiomatic to return a new copy of the same vector (`-> Vec<f32>`) or to consume
-ownership of the vector (`mut v: Vec<f32>`). The best solution is to change 
-the type signature from `&Vec<f32>` to `&mut Vec<f32>`.
+এই function-এর কাজ যেহেতু একটি vector-কে নিজ জায়গাতেই round করা, তাই একই vector-এর
+একটি নতুন কপি return করা (`-> Vec<f32>`) বা vector-টির ownership নিয়ে নেওয়া
+(`mut v: Vec<f32>`) Rust-সুলভ হবে না। সবচেয়ে ভালো সমাধান হলো 
+type signature `&Vec<f32>` থেকে বদলে `&mut Vec<f32>` করা।
 """

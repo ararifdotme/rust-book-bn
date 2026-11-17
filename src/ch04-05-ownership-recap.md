@@ -1,16 +1,16 @@
-## Ownership Recap
+## ownership-এর পুনরালোচনা {#ownership-recap}
 
-This chapter introduced a lot of new concepts like ownership, borrowing, and slices.
-If you aren't familiar with systems programming, this chapter also introduced new concepts like memory allocation, the stack vs. the heap, pointers, and undefined behavior. Before we move on to the rest of Rust, let's first stop and take a breath. We'll review and practice with the key concepts from this chapter.
+এই অধ্যায়ে ownership, borrowing আর slice-এর মতো অনেক নতুন ধারণার সঙ্গে পরিচয় করানো হয়েছে।
+systems programming-এর সঙ্গে পরিচিত না হলে এই অধ্যায়ে আপনি memory allocation, stack বনাম heap, pointer আর undefined behavior-এর মতো নতুন ধারণার সঙ্গেও পরিচিত হয়েছেন। Rust-এর বাকি অংশে যাওয়ার আগে চলুন একটু থেমে দম নিই। এই অধ্যায়ের মূল ধারণাগুলো আমরা ঝালিয়ে নেব এবং অনুশীলন করব।
 
-### Ownership versus Garbage Collection
+### ownership বনাম garbage collection {#ownership-versus-garbage-collection}
 
-To put ownership into context, we should talk about **garbage collection**.
-Most programming languages use a garbage collector to manage memory, such as in Python, Javascript, Java, and Go. A garbage collector works at runtime adjacent to a running program (a tracing collector, at least). The collector scans through memory to find data that's no longer used &mdash; that is, the running program can no longer reach that data from a function-local variable. Then the collector deallocates the unused memory for later use.
+ownership-কে প্রেক্ষাপটে রাখতে আমাদের **garbage collection** (অব্যবহৃত মেমোরি আপনা-আপনি মুক্ত করার ব্যবস্থা) নিয়ে কথা বলা উচিত।
+বেশিরভাগ প্রোগ্রামিং ভাষা মেমোরি সামলাতে একটি garbage collector ব্যবহার করে, যেমন Python, Javascript, Java আর Go। garbage collector runtime-এ চলমান প্রোগ্রামের পাশাপাশি কাজ করে (অন্তত একটি tracing collector তা-ই করে)। collector মেমোরি ঘেঁটে এমন ডেটা খোঁজে, যা আর ব্যবহার হচ্ছে না &mdash; অর্থাৎ চলমান প্রোগ্রাম কোনো function-এর local variable (শুধু একটি function-এর ভেতরে থাকা variable) থেকে আর সেই ডেটায় পৌঁছাতে পারে না। তারপর collector পরে ব্যবহারের জন্য অব্যবহৃত মেমোরি deallocate (বরাদ্দ করা মেমোরি ফেরত দেওয়া) করে।
 
-The key benefit of a garbage collector is that it avoids undefined behavior (such as using freed memory), as can happen in C or C++. Garbage collection also avoids the need for a complex type system to check for undefined behavior, like in Rust. However, there are a few drawbacks to garbage collection. One obvious drawback is performance, as garbage collection incurs either frequent small overheads (for reference-counting, like in Python and Swift) or infrequent large overheads (for tracing, like in all other GC'd languages). 
+garbage collector-এর প্রধান সুবিধা হলো, এটি C বা C++-এ যেমন ঘটতে পারে, তেমন undefined behavior (অনির্ধারিত আচরণ, যার ফল ভাষা নির্দিষ্ট করে না; যেমন free করা মেমোরি ব্যবহার) এড়ায়। garbage collection থাকলে undefined behavior যাচাইয়ের জন্য Rust-এর মতো জটিল type system-এরও দরকার হয় না। তবে garbage collection-এর কয়েকটি অসুবিধা আছে। একটি স্পষ্ট অসুবিধা হলো পারফরম্যান্স, কারণ garbage collection-এর ফলে হয় ঘনঘন ছোট বাড়তি খরচ হয় (reference counting-এর জন্য, যেমন Python আর Swift-এ), নয়তো মাঝে মাঝে বড় বাড়তি খরচ হয় (tracing-এর জন্য, যেমন garbage collection ব্যবহার করা বাকি সব ভাষায়)। 
 
-But another less obvious drawback is that **garbage collection can be unpredictable**. To illustrate the point, say we are implementing a `Document` type that represents a mutable list of words. We could implement `Document` in a garbage-collected language such as Python in this way:
+তবে আরেকটি কম স্পষ্ট অসুবিধা হলো **garbage collection-এর আচরণ আগে থেকে বোঝা কঠিন হতে পারে**। বিষয়টি দেখাতে ধরুন আমরা একটি `Document` type implement করছি, যা শব্দের একটি পরিবর্তনযোগ্য তালিকা প্রকাশ করে। Python-এর মতো garbage collection-যুক্ত ভাষায় আমরা `Document` এভাবে implement করতে পারি:
 
 ```python
 class Document:     
@@ -27,7 +27,7 @@ class Document:
         return self.words
 ```
 
-Here's one way we could use this `Document` class that creates a document `d`, copies it into a new document `d2`, and then mutates `d2`.
+এই `Document` class ব্যবহারের একটি উপায় এখানে দেওয়া হলো, যা একটি document `d` তৈরি করে, সেটিকে একটি নতুন document `d2`-তে কপি করে, তারপর `d2` mutate করে।
 
 ```python
 words = ["Hello"]
@@ -37,17 +37,17 @@ d2 = Document(d.get_words())
 d2.add_word("world")
 ```
 
-Consider two key questions about this example:
+এই উদাহরণ নিয়ে দুটি মূল প্রশ্ন ভাবুন:
 
-1. **When is the words array deallocated?** 
-This program has created three pointers to the same array. The variables `words`, `d`, and `d2` all contain a pointer to the words array allocated on the heap. Therefore Python will only deallocate the words array when all three variables are out of scope. More generally, it's often difficult to predict where data will be garbage-collected just by reading the source code.
+1. **words array কখন deallocate হয়?** 
+এই প্রোগ্রাম একই array-র তিনটি pointer তৈরি করেছে। `words`, `d` আর `d2` variable-গুলোর প্রতিটিতে heap-এ বরাদ্দ করা words array-র একটি pointer আছে। তাই তিনটি variable-ই scope-এর বাইরে গেলে তবেই Python words array deallocate করবে। আরও সাধারণভাবে, শুধু সোর্স কোড পড়ে ডেটা কোথায় garbage-collect হবে তা আগে থেকে বলা প্রায়ই কঠিন।
 
-2. **What are the contents of the document `d`?** 
-Because `d2` contains a pointer to the same words array as `d`, then `d2.add_word("world")` also mutates the document `d`. Therefore in this example, the words in `d` are `["Hello", "world"]`. This happens because `d.get_words()` returns a mutable reference to the words array in `d`. Pervasive, implicit mutable references can easily lead to unpredictable bugs when data structures can leak their internals[^ownership-originally]. Here, it is probably not intended behavior that a change to `d2` can change `d`.
+2. **document `d`-এর বিষয়বস্তু কী?** 
+`d2`-তে যেহেতু `d`-এর মতো একই words array-র pointer আছে, তাই `d2.add_word("world")` document `d`-কেও mutate করে। ফলে এই উদাহরণে `d`-এর শব্দগুলো হলো `["Hello", "world"]`। এটি ঘটে, কারণ `d.get_words()` `d`-এর words array-র একটি mutable reference return করে। data structure যখন তার ভেতরের জিনিস বাইরে ফাঁস করে দিতে পারে, তখন সর্বব্যাপী, অন্তর্নিহিত mutable reference সহজেই অপ্রত্যাশিত বাগের জন্ম দেয়[^ownership-originally]। এখানে `d2`-এর পরিবর্তন `d`-কেও বদলে দিতে পারে, এটা সম্ভবত কাঙ্ক্ষিত আচরণ নয়।
 
-This problem is not unique to Python &mdash; you can encounter similar behavior in C#, Java, Javascript, and so on. In fact, most programming languages actually have a concept of pointers. It's just a question of how the language exposes pointers to the programmer. Garbage collection makes it difficult to see which variable points to which data. For example, it wasn't obvious that `d.get_words()` produced a pointer to data within `d`. 
+এই সমস্যা শুধু Python-এর নয় &mdash; C#, Java, Javascript ইত্যাদিতেও একই রকম আচরণের মুখোমুখি হতে পারেন। আসলে বেশিরভাগ প্রোগ্রামিং ভাষাতেই pointer-এর ধারণা আছে। প্রশ্ন শুধু ভাষাটি প্রোগ্রামারের কাছে pointer কীভাবে প্রকাশ করে। garbage collection কোন variable কোন ডেটাকে নির্দেশ করছে, তা দেখা কঠিন করে দেয়। যেমন, `d.get_words()` যে `d`-এর ভেতরের ডেটার একটি pointer তৈরি করেছে, তা স্পষ্ট ছিল না। 
 
-By contrast, Rust's ownership model puts pointers front-and-center. We can see that by translating the `Document` type into a Rust data structure. Normally we would use a `struct`, but we haven't covered those yet, so we'll just use a type alias:
+অন্যদিকে Rust-এর ownership মডেল pointer-কে একেবারে সামনে নিয়ে আসে। `Document` type-কে Rust-এর একটি data structure-এ রূপান্তর করে আমরা তা দেখতে পারি। সাধারণত আমরা একটি `struct` ব্যবহার করতাম, কিন্তু সেগুলো এখনো আলোচনা করিনি, তাই শুধু একটি type alias (কোনো type-এর বিকল্প নাম) ব্যবহার করব:
 
 ```rust
 type Document = Vec<String>;
@@ -65,43 +65,43 @@ fn get_words(this: &Document) -> &[String] {
 }
 ```
 
-This Rust API differs from the Python API in a few key ways:
+এই Rust API কয়েকটি মূল দিক থেকে Python API থেকে আলাদা:
 
-* The function `new_document` consumes ownership of the input vector `words`. That means the `Document` *owns* the word vector. The word vector will be predictably deallocated when its owning `Document` goes out of scope.
+* `new_document` function ইনপুট vector `words`-এর ownership নিয়ে নেয়। এর মানে `Document` word vector-টির *owner*। word vector-টি তার owner `Document` scope-এর বাইরে গেলে আগে থেকে বলা যায় এমনভাবে deallocate হবে।
 
-* The function `add_word` requires a mutable reference `&mut Document` to be able to mutate a document. It also consumes ownership of the input `word`, meaning no one else can mutate the individual words of the document.
+* document mutate করতে `add_word` function-এর একটি mutable reference `&mut Document` দরকার। এটি ইনপুট `word`-এর ownership-ও নিয়ে নেয়, অর্থাৎ document-এর আলাদা আলাদা শব্দ আর কেউ mutate করতে পারে না।
 
-* The function `get_words` returns an explicit immutable reference to strings within the document. The only way to create a new document from this word vector is to deep-copy its contents, like this:
+* `get_words` function document-এর ভেতরের string-গুলোর একটি স্পষ্ট immutable reference return করে। এই word vector থেকে নতুন document তৈরির একমাত্র উপায় হলো এর বিষয়বস্তু deep-copy করা, এভাবে:
 
 ```rust,ignore
 fn main() {
     let words = vec!["hello".to_string()];
     let d = new_document(words);
 
-    // .to_vec() converts &[String] to Vec<String> by cloning each string
+    // .to_vec() প্রতিটি string clone করে &[String]-কে Vec<String>-এ রূপান্তর করে
     let words_copy = get_words(&d).to_vec();
     let mut d2 = new_document(words_copy);
     add_word(&mut d2, "world".to_string());
 
-    // The modification to `d2` does not affect `d`
+    // `d2`-এর পরিবর্তন `d`-কে প্রভাবিত করে না
     assert!(!get_words(&d).contains(&"world".into()));
 }
 ```
 
-The point of this example is to say: if Rust is not your first language, then you already have experience working with memory and pointers! Rust just makes those concepts explicit. This has the dual benefit of (1) improving runtime performance by avoiding garbage collection, and (2) improving predictability by preventing accidental "leaks" of data.
+এই উদাহরণের মূল কথা হলো: Rust যদি আপনার প্রথম ভাষা না হয়, তাহলে মেমোরি আর pointer নিয়ে কাজ করার অভিজ্ঞতা আপনার আগে থেকেই আছে! Rust শুধু ধারণাগুলোকে স্পষ্ট করে দেয়। এর দ্বিমুখী সুবিধা হলো (1) garbage collection এড়িয়ে runtime পারফরম্যান্স বাড়ানো, এবং (2) ডেটার অনিচ্ছাকৃত "ফাঁস" আটকে আচরণ আগে থেকে বোঝা সহজ করা।
 
-### The Concepts of Ownership
+### ownership-এর ধারণাগুলো {#the-concepts-of-ownership}
 
-Next, let's review the concepts of ownership. This review will be quick &mdash; the goal is to remind you of the relevant concepts. If you realize you forgot or didn't understand a concept, then we will link you to the relevant chapters which you can review.
+এরপর চলুন ownership-এর ধারণাগুলো ঝালিয়ে নিই। এই পুনরালোচনা দ্রুত হবে &mdash; উদ্দেশ্য হলো প্রাসঙ্গিক ধারণাগুলো আপনাকে মনে করিয়ে দেওয়া। কোনো ধারণা ভুলে গেছেন বা বোঝেননি বলে মনে হলে আমরা প্রাসঙ্গিক অধ্যায়গুলোর লিংক দেব, যেগুলো আবার পড়ে নিতে পারেন।
 
-#### Ownership at Runtime
+#### runtime-এ ownership {#ownership-at-runtime}
 
-We'll start by reviewing how Rust uses memory at runtime: 
-* Rust allocates local variables in stack frames, which are allocated when a function is called and deallocated when the call ends. 
-* Local variables can hold either data (like numbers, booleans, tuples, etc.) or pointers. 
-* Pointers can be created either through boxes (pointers owning data on the heap) or references (non-owning pointers).
+শুরু করব Rust runtime-এ মেমোরি কীভাবে ব্যবহার করে তা ঝালিয়ে নিয়ে: 
+* Rust local variable allocate করে stack frame-এ, যা কোনো function call হলে allocate হয় এবং call শেষ হলে deallocate হয়। 
+* local variable-এ থাকতে পারে হয় ডেটা (যেমন সংখ্যা, boolean, tuple ইত্যাদি), নয়তো pointer। 
+* pointer তৈরি করা যায় হয় box (heap-এর ডেটার মালিক pointer) দিয়ে, নয়তো reference (non-owning pointer) দিয়ে।
 
-This diagram illustrates how each concept looks at runtime:
+এই ডায়াগ্রামটি দেখায় runtime-এ প্রতিটি ধারণা দেখতে কেমন:
 
 ```aquascope,interpreter,horizontal
 fn main() {
@@ -121,14 +121,14 @@ fn inner(x: &mut i32) {
 }
 ```
 
-Review this diagram and make sure you understand each part. For example, you should be able to answer:
-* Why does `a_box_stack_ref` point to the stack, while `a_box_heap_ref` point to the heap? 
-* Why is the value `2` no longer on the heap at L2? 
-* Why does `a_num` have the value `5` at L2?
+ডায়াগ্রামটি ভালো করে দেখুন এবং নিশ্চিত হোন যে এর প্রতিটি অংশ আপনি বুঝছেন। যেমন, আপনার এই প্রশ্নগুলোর উত্তর দিতে পারা উচিত:
+* `a_box_stack_ref` কেন stack-কে নির্দেশ করে, অথচ `a_box_heap_ref` heap-কে? 
+* L2-তে `2` মানটি কেন আর heap-এ নেই? 
+* L2-তে `a_num`-এর মান কেন `5`?
 
-If you want to review boxes, re-read [Chapter 4.1][ch04-01]. If you want to review references, re-read [Chapter 4.2][ch04-02]. If you want to see case studies involving boxes and references, re-read [Chapter 4.3][ch04-03].
+box ঝালিয়ে নিতে চাইলে [অধ্যায় 4.1][ch04-01] আবার পড়ুন। reference ঝালিয়ে নিতে চাইলে [অধ্যায় 4.2][ch04-02] আবার পড়ুন। box আর reference নিয়ে উদাহরণ-বিশ্লেষণ দেখতে চাইলে [অধ্যায় 4.3][ch04-03] আবার পড়ুন।
 
-Slices are a special kind of reference that refer to a contiguous sequence of data in memory. This diagram illustrates how a slice refers to a subsequence of characters in a string:
+slice হলো এক বিশেষ ধরনের reference, যা মেমোরিতে ডেটার একটি একটানা ক্রমকে নির্দেশ করে। এই ডায়াগ্রামটি দেখায়, একটি slice কীভাবে একটি string-এর অক্ষরগুলোর একটি উপ-ক্রমকে নির্দেশ করে:
 
 ```aquascope,interpreter
 fn main() {
@@ -137,12 +137,12 @@ fn main() {
 }
 ```
 
-If you want to review slices, re-read [Chapter 4.4][ch04-04].
+slice ঝালিয়ে নিতে চাইলে [অধ্যায় 4.4][ch04-04] আবার পড়ুন।
 
 
-#### Ownership at Compile-time
+#### compile-time-এ ownership {#ownership-at-compile-time}
 
-Rust tracks @Perm{read} (read), @Perm{write} (write), and @Perm{own} (own) permissions on each variable. Rust requires that a variable has appropriate permissions to perform a given operation. As a basic example, if a variable is not declared as `let mut`, then it is missing the @Perm{write} permission and cannot be mutated:
+Rust প্রতিটি variable-এর @Perm{read} (read), @Perm{write} (write) আর @Perm{own} (own) permission (অনুমতি)-এর হিসাব রাখে। কোনো operation করতে Rust চায় variable-টির উপযুক্ত permission থাকুক। একটি সাধারণ উদাহরণ হিসেবে, কোনো variable `let mut` হিসেবে ঘোষণা করা না থাকলে তার @Perm{write} permission থাকে না, তাই সেটি mutate করা যায় না:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 fn main() {
@@ -151,7 +151,7 @@ fn main() {
 }
 ```
 
-A variable's permissions can be changed if it is **moved** or **borrowed**. A move of a variable with a non-copyable type (like `Box<T>` or `String`) requires the @Perm{read}@Perm{own} permissions, and the move eliminates all permissions on the variable. That rule prevents the use of moved variables:
+কোনো variable **move** বা **borrow** হলে তার permission বদলাতে পারে। non-copyable type (যেমন `Box<T>` বা `String`)-এর কোনো variable move করতে @Perm{read}@Perm{own} permission লাগে, আর move-এর ফলে variable-টির সব permission মুছে যায়। এই নিয়ম move হওয়া variable-এর ব্যবহার আটকায়:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 fn main() {
@@ -165,9 +165,9 @@ fn consume_a_string(_s: String) {
 }
 ```
 
-If you want to review how moves work, re-read [Chapter 4.1][ch04-01].
+move কীভাবে কাজ করে তা ঝালিয়ে নিতে চাইলে [অধ্যায় 4.1][ch04-01] আবার পড়ুন।
 
-Borrowing a variable (creating a reference to it) temporarily removes some of the variable's permissions. An immutable borrow creates an immutable reference, and also disables the borrowed data from being mutated or moved. For example, printing an immutable reference is ok:
+কোনো variable borrow করলে (অর্থাৎ এর একটি reference তৈরি করলে) সাময়িকভাবে variable-টির কিছু permission সরে যায়। একটি immutable borrow একটি immutable reference তৈরি করে, এবং borrow হওয়া ডেটা mutate বা move করা বন্ধ করে দেয়। যেমন, একটি immutable reference প্রিন্ট করা চলে:
 
 ```aquascope,permissions,stepper,boundaries
 #fn main() {
@@ -178,7 +178,7 @@ println!("{s}");
 #}
 ```
 
-But mutating an immutable reference is not ok:
+কিন্তু একটি immutable reference mutate করা চলে না:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 #fn main() {
@@ -189,7 +189,7 @@ println!("{s}");
 #}
 ```
 
-And mutating the immutably borrowed data is not ok:
+আর immutable-ভাবে borrow হওয়া ডেটা mutate করাও চলে না:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 #fn main() {
@@ -200,7 +200,7 @@ println!("{s_ref}");
 #}
 ```
 
-And moving data out of the reference is not ok:
+আর reference থেকে ডেটা move করে বের করাও চলে না:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 #fn main() {
@@ -211,7 +211,7 @@ println!("{s}");
 #}
 ```
 
-A mutable borrow creates a mutable reference, which disables the borrowed data from being read, written, or moved. For example, mutating a mutable reference is ok:
+একটি mutable borrow একটি mutable reference তৈরি করে, যা borrow হওয়া ডেটা পড়া, লেখা বা move করা বন্ধ করে দেয়। যেমন, একটি mutable reference mutate করা চলে:
 
 ```aquascope,permissions,stepper,boundaries
 #fn main() {
@@ -222,7 +222,7 @@ println!("{s}");
 #}
 ```
 
-But accessing the mutably borrowed data is not ok:
+কিন্তু mutable-ভাবে borrow হওয়া ডেটায় পৌঁছানো চলে না:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 #fn main() {
@@ -233,11 +233,11 @@ s_ref.push_str(" world");
 #}
 ```
 
-If you want to review permissions and references, re-read [Chapter 4.2][ch04-02].
+permission আর reference ঝালিয়ে নিতে চাইলে [অধ্যায় 4.2][ch04-02] আবার পড়ুন।
 
-#### Connecting Ownership between Compile-time and Runtime
+#### compile-time আর runtime-এর ownership-কে যুক্ত করা {#connecting-ownership-between-compile-time-and-runtime}
 
-Rust's permissions are designed to prevent undefined behavior. For example, one kind of undefined behavior is a **use-after-free** where freed memory is read or written. Immutable borrows remove the @Perm{write} permission to avoid use-after-free, like in this case:
+Rust-এর permission-গুলোর নকশা করা হয়েছে undefined behavior আটকানোর জন্য। যেমন, এক ধরনের undefined behavior হলো **use-after-free** (free করা মেমোরি আবার ব্যবহার করা), যেখানে free করা মেমোরি পড়া বা লেখা হয়। use-after-free এড়াতে immutable borrow @Perm{write} permission সরিয়ে নেয়, যেমন এই ক্ষেত্রে:
 
 ```aquascope,interpreter,shouldFail,horizontal
 #fn main() {
@@ -248,7 +248,7 @@ println!("{n}");`[]`
 #}
 ```
 
-Another kind of undefined behavior is a **double-free** where memory is freed twice. Dereferences of references to non-copyable data do not have the @Perm{own} permission to avoid double-frees, like in this case:
+আরেক ধরনের undefined behavior হলো **double-free** (একই মেমোরি দুবার free করা), যেখানে মেমোরি দুবার free হয়। double-free এড়াতে non-copyable ডেটার reference-এর dereference-এর @Perm{own} permission থাকে না, যেমন এই ক্ষেত্রে:
 
 ```aquascope,interpreter,shouldFail,horizontal
 #fn main() {
@@ -260,20 +260,20 @@ drop(v);`[]`
 #}
 ```
 
-If you want to review undefined behavior, re-read [Chapter 4.1][ch04-01] and [Chapter 4.3][ch04-03].
+undefined behavior ঝালিয়ে নিতে চাইলে [অধ্যায় 4.1][ch04-01] আর [অধ্যায় 4.3][ch04-03] আবার পড়ুন।
 
 
-### The Rest of Ownership
+### ownership-এর বাকি কথা {#the-rest-of-ownership}
 
-As we introduce additional features like structs, enums, and traits, those features will have specific interactions with ownership. This chapter provides the essential foundation for understanding those interactions &mdash; the concepts of memory, pointers, undefined behavior, and permissions will help us talk about the more advanced parts of Rust in future chapters.
+struct, enum আর trait-এর মতো আরও বৈশিষ্ট্যের সঙ্গে পরিচয় করানোর সময় দেখবেন, ownership-এর সঙ্গে সেই বৈশিষ্ট্যগুলোর নির্দিষ্ট কিছু মিথস্ক্রিয়া আছে। এই অধ্যায় সেই মিথস্ক্রিয়াগুলো বোঝার অপরিহার্য ভিত্তি দেয় &mdash; মেমোরি, pointer, undefined behavior আর permission-এর ধারণাগুলো ভবিষ্যতের অধ্যায়গুলোতে Rust-এর আরও উন্নত অংশ নিয়ে কথা বলতে আমাদের সাহায্য করবে।
 
-And don't forget to take the quizzes if you want to check your understanding!
+আর নিজের বোঝাপড়া যাচাই করতে চাইলে কুইজগুলো দিতে ভুলবেন না!
 
 {{#quiz ../quizzes/ch04-05-ownership-recap.toml}}
 
 
 
-[^ownership-originally]: In fact, the original invention of ownership types wasn't about memory safety at all. It was about preventing leaks of mutable references to data structure internals in Java-like languages. If you're curious to learn more about the history of ownership types, check out the paper ["Ownership Types for Flexible Alias Protection"](https://dl.acm.org/doi/abs/10.1145/286936.286947) (Clarke et al. 1998).
+[^ownership-originally]: আসলে ownership type-এর মূল উদ্ভাবন memory safety নিয়ে ছিলই না। এর উদ্দেশ্য ছিল Java-র মতো ভাষায় data structure-এর ভেতরের জিনিসের mutable reference ফাঁস হওয়া আটকানো। ownership type-এর ইতিহাস সম্পর্কে আরও জানতে আগ্রহী হলে ["Ownership Types for Flexible Alias Protection"](https://dl.acm.org/doi/abs/10.1145/286936.286947) (Clarke et al. 1998) গবেষণাপত্রটি দেখুন।
 
 [ch04-01]: ch04-01-what-is-ownership.html
 [ch04-02]: ch04-02-references-and-borrowing.html

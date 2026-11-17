@@ -2,11 +2,11 @@
 id = "1ec0098c-c5dc-46de-a889-b6659c0af757"
 type = "MultipleChoice"
 prompt.prompt = """
-Say you are writing a function with the following spec:
+ধরুন আপনি নিচের বিবরণ অনুযায়ী একটি function লিখছেন:
 
-> `round_all` takes as input a list of floating point numbers, and it rounds each number in-place to the nearest integer.
+> `round_all` ইনপুট হিসেবে floating-point সংখ্যার একটি তালিকা নেয়, এবং প্রতিটি সংখ্যাকে নিজ জায়গাতেই নিকটতম integer-এ round করে।
 
-Which of the following is the most appropriate type signature for a function implementing this spec?
+এই বিবরণ implement করা function-এর জন্য সবচেয়ে উপযুক্ত type signature নিচের কোনটি?
 """
 answer.answer = """
 ```
@@ -31,20 +31,20 @@ fn round_all(v: &Vec<f32>);
 """
 ]
 context = """
-The spec calls for the input to be mutated in-place, therefore the most appropriate type signature accepts a mutable reference to the input.
-An immutable reference or an owned vector are both inappropriate for this spec.
+বিবরণ অনুযায়ী ইনপুটকে নিজ জায়গাতেই mutate করতে হবে, তাই সবচেয়ে উপযুক্ত type signature ইনপুটের একটি mutable reference নেয়।
+এই বিবরণের জন্য একটি immutable reference বা একটি owned vector—দুটোই অনুপযুক্ত।
 """
 
 [[questions]]
 id = "f8ca5ab2-0e5d-4c0d-bca2-99e6763ba9c5"
 type = "MultipleChoice"
 prompt.prompt = """
-Say you are writing a function with the following spec:
+ধরুন আপনি নিচের বিবরণ অনুযায়ী একটি function লিখছেন:
 
-> `find_contains` takes as input a collection of strings and a target substring. 
-> It returns a list of all the strings in the collection that contain the target substring.
+> `find_contains` ইনপুট হিসেবে string-এর একটি collection আর একটি লক্ষ্য substring নেয়। 
+> এটি collection-এর সেই সব string-এর একটি তালিকা return করে, যেগুলোতে লক্ষ্য substring-টি আছে।
 
-Which of the following is the most appropriate type signature for a function implementing this spec?
+এই বিবরণ implement করা function-এর জন্য সবচেয়ে উপযুক্ত type signature নিচের কোনটি?
 """
 answer.answer = """
 ```
@@ -69,19 +69,19 @@ fn find_contains(haystack: &Vec<String>, needle: &str) -> &[String];
 """
 ]
 context = """
-For `haystack`, the slice type `&[String]` can accept more inputs than `&Vec<String>`, so it is preferred.
-For `needle`, the target substring does not need to be heap-allocated, so `&str` is preferred to `String`.
-For the return type, `Vec<String>` is not desirable because it would require cloning the input strings.
-`&[String]` is not desirable because it can only return a contiguous subsequence of the input.
-`Vec<&String>` is the most preferable because it only incurs the cost of allocating the vector, not the strings themselves.
+`haystack`-এর জন্য slice type `&[String]` `&Vec<String>`-এর চেয়ে বেশি ধরনের ইনপুট নিতে পারে, তাই এটিই পছন্দনীয়।
+`needle`-এর জন্য লক্ষ্য substring-টি heap-এ বরাদ্দ করার দরকার নেই, তাই `String`-এর চেয়ে `&str` পছন্দনীয়।
+return type-এর জন্য `Vec<String>` কাম্য নয়, কারণ এতে ইনপুট string-গুলো clone করতে হবে।
+`&[String]` কাম্য নয়, কারণ এটি শুধু ইনপুটের একটি একটানা উপ-ক্রম return করতে পারে।
+`Vec<&String>` সবচেয়ে পছন্দনীয়, কারণ এতে শুধু vector বরাদ্দের খরচ হয়, string-গুলোর নয়।
 """
 
 [[questions]]
 id = "868a4edf-16f0-4191-8aed-835c812b8b25"
 type = "MultipleChoice"
 prompt.prompt = """
-Rust normally disallows multiple mutable accesses to the same array, even when those accesses are disjoint. 
-For example, this function does not compile:
+Rust সাধারণত একই array-তে একাধিক mutable প্রবেশাধিকার নিষিদ্ধ করে, এমনকি সেই প্রবেশাধিকারগুলো পরস্পর-বিচ্ছিন্ন হলেও। 
+যেমন, এই function compile হয় না:
 
 ```
 fn main() {
@@ -92,7 +92,7 @@ fn main() {
 }
 ```
 
-However, the Rust standard library has a function `slice::split_at_mut` that does permit this functionality:
+তবে Rust-এর standard library-তে `slice::split_at_mut` নামে একটি function আছে, যা এই কাজের অনুমতি দেয়:
 
 ```
 fn main() {
@@ -103,17 +103,17 @@ fn main() {
 }
 ```
 
-Which of the following best describes how it's possible to implement `split_at_mut`?
+`split_at_mut` কীভাবে implement করা সম্ভব, তা নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
-answer.answer = "`split_at_mut` uses unsafe code to circumvent the borrow checker with raw pointers"
+answer.answer = "`split_at_mut` unsafe কোড ব্যবহার করে raw pointer দিয়ে borrow checker-কে পাশ কাটায়"
 prompt.distractors = [
-"`split_at_mut` is a special compiler primitive that cannot be implemented within the language",
-"`split_at_mut` uses unsafe code to disable the borrow checker from checking the safety of mutable references",
-"`split_at_mut` calls into a C library that can't be analyzed by Rust"
+"`split_at_mut` compiler-এর একটি বিশেষ মৌলিক উপাদান, যা ভাষার ভেতরে implement করা যায় না",
+"`split_at_mut` unsafe কোড ব্যবহার করে borrow checker-এর mutable reference-এর নিরাপত্তা যাচাই বন্ধ করে দেয়",
+"`split_at_mut` এমন একটি C library call করে, যা Rust বিশ্লেষণ করতে পারে না"
 ]
 context = """
-As discussed in [Chapter 4.3 "Fixing a Safe Program: Mutating Different Array Elements"](ch04-03-fixing-ownership-errors.html#fixing-a-safe-program-mutating-different-array-elements), functions like `split_at_mut` are implemented with the `unsafe` feature.
-This feature doesn't completely disable the borrow checker, but rather enables the use of specific unsafe features like raw pointers.
+[অধ্যায় 4.3 "একটি নিরাপদ প্রোগ্রাম ঠিক করা: array-র আলাদা উপাদান mutate করা"](ch04-03-fixing-ownership-errors.html#fixing-a-safe-program-mutating-different-array-elements)-এ যেমন আলোচনা করা হয়েছে, `split_at_mut`-এর মতো function implement করা হয় `unsafe` বৈশিষ্ট্য দিয়ে।
+এই বৈশিষ্ট্য borrow checker-কে পুরোপুরি বন্ধ করে না, বরং raw pointer-এর মতো নির্দিষ্ট কিছু অনিরাপদ বৈশিষ্ট্য ব্যবহারের সুযোগ দেয়।
 """
 
 
@@ -121,7 +121,7 @@ This feature doesn't completely disable the borrow checker, but rather enables t
 id = "ba32e57a-e5f2-42e4-8cfd-eb265990c690"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider the permissions in the following program:
+নিচের প্রোগ্রামের permission-গুলো দেখুন:
 
 ```aquascope,permissions,boundaries,stepper
 #fn main() {
@@ -131,38 +131,38 @@ let s_ref = &s;`(focus,paths:*s_ref)`
 #}
 ```
 
-Which of the following best explains why `*s_ref` does not have the @Perm{own} (own) permission?
+`*s_ref`-এর কেন @Perm{own} (own) permission নেই, তা নিচের কোনটি সবচেয়ে ভালোভাবে ব্যাখ্যা করে?
 """
-answer.answer = "Ownership permits moving, and moving out of a reference can cause a double-free"
+answer.answer = "ownership move করার অনুমতি দেয়, আর reference থেকে move করে বের করলে double-free ঘটতে পারে"
 prompt.distractors = [
-  "Ownership permits borrowing, and reborrowing `*s_ref` can cause a double-free",
-  "Ownership permits mutation, and mutating `*s_ref` can cause a use-after-free",
-  "Ownership permits reading, and reading `*s_ref` can cause a use-after-free"
+  "ownership borrow করার অনুমতি দেয়, আর `*s_ref` আবার borrow করলে double-free ঘটতে পারে",
+  "ownership mutation-এর অনুমতি দেয়, আর `*s_ref` mutate করলে use-after-free ঘটতে পারে",
+  "ownership পড়ার অনুমতি দেয়, আর `*s_ref` পড়লে use-after-free ঘটতে পারে"
 ]
 context = """
-The @Perm{own} permission represents ownership of an object. There can only exist one owner of an object, so it is important
-that references cannot transfer ownership of non-copyable types like `String`. If two variables thought they owned
-the same string, then they would both attempt to deallocate it, causing a double-free.
+@Perm{own} permission একটি বস্তুর ownership প্রকাশ করে। একটি বস্তুর শুধু একজন owner থাকতে পারে, তাই এটা জরুরি
+যে reference যেন `String`-এর মতো non-copyable type-এর ownership হস্তান্তর করতে না পারে। দুটি variable যদি মনে করত তারা
+একই string-এর owner, তাহলে দুজনেই সেটি deallocate করার চেষ্টা করত, ফলে double-free ঘটত।
 """
 
 [[questions]]
 id = "3a5f5de5-23a9-49fb-bdb4-acc9c3fbb4a6"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider the set of Rust programs that contain no `unsafe` code. 
-Select each of the following statements that is true about the kinds of programs accepted and rejected by the borrow checker:
+যেসব Rust প্রোগ্রামে কোনো `unsafe` কোড নেই, সেগুলোর সেট ভাবুন। 
+borrow checker কোন ধরনের প্রোগ্রাম গ্রহণ করে আর কোনগুলো বাতিল করে, সে সম্পর্কে নিচের প্রতিটি সত্য বক্তব্য বেছে নিন:
 """
 answer.answer = [
-  "The borrow checker always rejects programs with undefined behavior",
-  "The borrow checker sometimes rejects programs without undefined behavior",
+  "undefined behavior আছে এমন প্রোগ্রাম borrow checker সবসময় বাতিল করে",
+  "undefined behavior নেই এমন প্রোগ্রামও borrow checker কখনো কখনো বাতিল করে",
 ]
 prompt.distractors = [
-  "The borrow checker always accepts programs without undefined behavior",  
-  "The borrow checker sometimes accepts programs with undefined behavior"
+  "undefined behavior নেই এমন প্রোগ্রাম borrow checker সবসময় গ্রহণ করে",  
+  "undefined behavior আছে এমন প্রোগ্রামও borrow checker কখনো কখনো গ্রহণ করে"
 ]
 context = """
-The borrow checker always rejects programs with undefined behavior, but may sometimes reject programs without undefined behavior (i.e., are perfectly safe).
-In technical terms, the borrow checker is a sound and incomplete analysis.
+borrow checker undefined behavior আছে এমন প্রোগ্রাম সবসময় বাতিল করে, কিন্তু undefined behavior নেই এমন (অর্থাৎ সম্পূর্ণ নিরাপদ) প্রোগ্রামও কখনো কখনো বাতিল করতে পারে।
+প্রযুক্তিগত ভাষায়, borrow checker একটি sound (কখনো ভুল গ্রহণ করে না) এবং incomplete (কিছু সঠিক কোডও বাতিল করে) বিশ্লেষণ।
 """
 
 
@@ -170,7 +170,7 @@ In technical terms, the borrow checker is a sound and incomplete analysis.
 id = "208e0e38-a706-4d96-9809-f0e12f574136"
 type = "MultipleChoice"
 prompt.prompt = """
-The function `extract` is rejected by the borrow checker:
+borrow checker `extract` function বাতিল করে দেয়:
 
 ```rust
 fn extract(b: &Box<i32>) -> i32 {
@@ -179,13 +179,13 @@ fn extract(b: &Box<i32>) -> i32 {
 }
 ```
 
-Imagine that the borrow checker did not reject this function. 
-Determine whether there exists an input such that the function would cause undefined behavior if executed on that input.
+কল্পনা করুন, borrow checker এই function বাতিল করেনি। 
+এমন কোনো ইনপুট আছে কি না নির্ধারণ করুন, যা দিয়ে চালালে function-টি undefined behavior ঘটাত।
 """
-answer.answer = "This function COULD cause undefined behavior"
-prompt.distractors = ["This function could NOT cause undefined behavior"]
+answer.answer = "এই function undefined behavior ঘটাতে **পারত**"
+prompt.distractors = ["এই function undefined behavior ঘটাতে **পারত না**"]
 context = """
-This function would cause a double-free on any input.
+যেকোনো ইনপুটেই এই function একটি double-free ঘটাত।
 """
 
 
@@ -193,7 +193,7 @@ This function would cause a double-free on any input.
 id = "dcfd54f8-7fe6-4483-aefd-ea95ba5b5eb0"
 type = "MultipleChoice"
 prompt.prompt = """
-The function `transfer_string` is rejected by the borrow checker:
+borrow checker `transfer_string` function বাতিল করে দেয়:
 
 ```rust
 fn get_first(strs: &mut (String, String)) -> &mut String {
@@ -212,15 +212,15 @@ fn transfer_string(strs: &mut (String, String)) {
 }
 ```
 
-Imagine that the borrow checker did not reject this function. 
-Determine whether there exists an input such that the function would cause undefined behavior if executed on that input.
+কল্পনা করুন, borrow checker এই function বাতিল করেনি। 
+এমন কোনো ইনপুট আছে কি না নির্ধারণ করুন, যা দিয়ে চালালে function-টি undefined behavior ঘটাত।
 """
-answer.answer = "This function could NOT cause undefined behavior"
-prompt.distractors = ["This function COULD cause undefined behavior"]
+answer.answer = "এই function undefined behavior ঘটাতে **পারত না**"
+prompt.distractors = ["এই function undefined behavior ঘটাতে **পারত**"]
 context = """
-The borrow checker rejects this function because it assumes that `get_first` and `get_second` could return a mutable
-reference to either component of the tuple, and so `fst` and `snd` could possibly point to the same value. But they are
-always distinct in this program, so this function is actually safe.
+borrow checker এই function বাতিল করে, কারণ সে ধরে নেয় যে `get_first` আর `get_second` tuple-এর যেকোনো অংশের একটি mutable
+reference return করতে পারে, তাই `fst` আর `snd` হয়তো একই মানকে নির্দেশ করতে পারে। কিন্তু এই প্রোগ্রামে এরা
+সবসময় আলাদা, তাই এই function আসলে নিরাপদ।
 """
 
 

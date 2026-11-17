@@ -2,7 +2,7 @@
 id = "7fbda6e4-dca7-458e-ab52-fab03181f90b"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider the variables `s2` and `s3` in the following program. These two variables will be located in memory within the stack frame for `main`. Each variable has a size in memory on the stack, *not* including the size of pointed data. Which statement is true about the sizes of `s2` and `s3`?
+নিচের প্রোগ্রামের `s2` আর `s3` variable দুটি দেখুন। এই দুটি variable মেমোরিতে থাকবে `main`-এর stack frame-এর ভেতরে। stack-এ প্রতিটি variable-এর মেমোরিতে একটি আকার আছে, যার মধ্যে নির্দেশিত ডেটার আকার ধরা *হয় না*। `s2` আর `s3`-এর আকার সম্পর্কে কোন বক্তব্যটি সত্য?
 
 ```
 fn main() {
@@ -12,13 +12,13 @@ fn main() {
 }
 ```
 """
-answer.answer = "`s3` has more bytes than `s2`"
+answer.answer = "`s3`-এর byte সংখ্যা `s2`-এর চেয়ে বেশি"
 prompt.distractors = [
-  "`s3` has the same number of bytes as `s2`",
-  "`s3` has fewer bytes than `s2`"
+  "`s3`-এর byte সংখ্যা `s2`-এর সমান",
+  "`s3`-এর byte সংখ্যা `s2`-এর চেয়ে কম"
 ]
 context = """
-The type `&String` is a normal reference consisting of a single pointer, so 8 bytes on a 64-bit architecture. The type `&str` is a special slice reference which consists of a pointer *and* a length, so 16 bytes. Therefore `s3` of type `&str` uses more memory than `s2` of type `&String`. You can verify this yourself using [`std::mem::size_of`](https://doc.rust-lang.org/std/mem/fn.size_of.html), like so:
+`&String` type একটি সাধারণ reference, যা একটিমাত্র pointer দিয়ে গঠিত, তাই 64-bit architecture-এ 8 byte। `&str` type একটি বিশেষ slice reference, যা একটি pointer *এবং* একটি দৈর্ঘ্য দিয়ে গঠিত, তাই 16 byte। ফলে `&str` type-এর `s3` `&String` type-এর `s2`-এর চেয়ে বেশি মেমোরি ব্যবহার করে। আপনি নিজেই [`std::mem::size_of`](https://doc.rust-lang.org/std/mem/fn.size_of.html) ব্যবহার করে এটি যাচাই করতে পারেন, এভাবে:
 
 ```rust
 fn main() {
@@ -30,7 +30,7 @@ fn main() {
 }
 ```
 
-Also, note that Rust will implicitly convert string references to either `&String` or `&str` based on the context of the reference. So the expression `&s` produces two different values based on the expected type of `&s`.
+এছাড়া লক্ষ করুন, reference-এর প্রেক্ষাপট অনুযায়ী Rust নিজে থেকেই string reference-কে `&String` বা `&str`-এ রূপান্তর করে। তাই `&s`-এর প্রত্যাশিত type অনুযায়ী `&s` expression দুটি আলাদা মান তৈরি করে।
 """
 
 [[questions]]
@@ -50,5 +50,5 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 5
 context = """
-Because `s.as_bytes()` produces an immutable reference to `s`, it is illegal to mutate `s` (via `push_str`) inside the for-loop.
+`s.as_bytes()` যেহেতু `s`-এর একটি immutable reference তৈরি করে, তাই for-loop-এর ভেতরে (`push_str` দিয়ে) `s` mutate করা অবৈধ।
 """

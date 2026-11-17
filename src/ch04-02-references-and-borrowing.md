@@ -1,6 +1,6 @@
-## References and Borrowing
+## reference ও borrowing {#references-and-borrowing}
 
-Ownership, boxes, and moves provide a foundation for safely programming with the heap. However, move-only APIs can be inconvenient to use. For example, say you want to read some strings twice:
+ownership, box আর move মিলে heap নিয়ে নিরাপদে প্রোগ্রামিংয়ের একটি ভিত্তি তৈরি করে। তবে শুধু move-নির্ভর API ব্যবহার করা অসুবিধাজনক হতে পারে। যেমন, ধরুন আপনি কিছু string দুবার পড়তে চান:
 
 ```aquascope,interpreter,shouldFail,horizontal
 fn main() {
@@ -15,7 +15,7 @@ fn greet(g1: String, g2: String) {
 }
 ```
 
-In this example, calling `greet` moves the data from `m1` and `m2` into the parameters of `greet`. Both strings are dropped at the end of `greet`, and therefore cannot be used within `main`. If we try to read them like in the operation `format!(..)`, then that would be undefined behavior. The Rust compiler therefore rejects this program with the same error we saw last section:
+এই উদাহরণে `greet` call করলে `m1` আর `m2`-এর ডেটা `greet`-এর parameter-গুলোতে move হয়ে যায়। দুটি string-ই `greet`-এর শেষে drop হয়ে যায়, তাই `main`-এর ভেতরে আর ব্যবহার করা যায় না। `format!(..)` operation-এর মতো করে সেগুলো পড়ার চেষ্টা করলে তা হবে undefined behavior। তাই Rust compiler আগের অংশে দেখা একই error দিয়ে এই প্রোগ্রাম বাতিল করে দেয়:
 
 ```text
 error[E0382]: borrow of moved value: `m1`
@@ -23,7 +23,7 @@ error[E0382]: borrow of moved value: `m1`
  (...rest of the error...)
 ```
 
-This move behavior is extremely inconvenient. Programs often need to use a string more than once. An alternative `greet` could return ownership of the strings, like this:
+move-এর এই আচরণ ভীষণ অসুবিধাজনক। প্রোগ্রামে প্রায়ই একটি string একাধিকবার ব্যবহার করার দরকার হয়। একটি বিকল্প `greet` string-গুলোর ownership ফেরত দিতে পারে, এভাবে:
 
 ```aquascope,interpreter,horizontal
 fn main() {
@@ -39,11 +39,11 @@ fn greet(g1: String, g2: String) -> (String, String) {
 }
 ```
 
-However, this style of program is quite verbose. Rust provides a concise style of reading and writing without moves through references.
+তবে এ ধরনের প্রোগ্রাম বেশ লম্বা-চওড়া হয়ে যায়। reference-এর মাধ্যমে Rust move ছাড়াই পড়া আর লেখার একটি সংক্ষিপ্ত উপায় দেয়।
 
-### References Are Non-Owning Pointers
+### reference হলো non-owning pointer {#references-are-non-owning-pointers}
 
-A **reference** is a kind of pointer. Here's an example of a reference that rewrites our `greet` program in a more convenient manner:
+একটি **reference** (ডেটা কপি না করে তার দিকে নির্দেশ করার উপায়) হলো এক ধরনের pointer। এখানে reference-এর একটি উদাহরণ আছে, যা আমাদের `greet` প্রোগ্রামটিকে আরও সুবিধাজনকভাবে নতুন করে লেখে:
 
 ```aquascope,interpreter,horizontal
 fn main() {
@@ -58,21 +58,21 @@ fn greet(g1: &String, g2: &String) { // note the ampersands
 }
 ```
 
-The expression `&m1` uses the ampersand operator to create a reference to (or "borrow") `m1`. The type of the `greet` parameter `g1` is changed to `&String`, meaning "a reference to a `String`".
+`&m1` expression ampersand operator ব্যবহার করে `m1`-এর একটি reference তৈরি করে (বা একে "borrow" করে)। `greet`-এর parameter `g1`-এর type বদলে `&String` করা হয়েছে, যার মানে "একটি `String`-এর reference"।
 
 <!-- At runtime, the references look like this:
 
 <img src="img/experiment/ch04-02-stack1.jpg" class="center" width="350" /> -->
 
-Observe at L2 that there are two steps from `g1` to the string "Hello". `g1` is a reference that points to `m1` on the stack, and `m1` is a String containing a box that points to "Hello" on the heap.
+L2-তে লক্ষ করুন, `g1` থেকে "Hello" string পর্যন্ত যেতে দুটি ধাপ লাগে। `g1` একটি reference, যা stack-এ থাকা `m1`-কে নির্দেশ করে, আর `m1` হলো একটি String, যার ভেতরে একটি box আছে, যা heap-এ থাকা "Hello"-কে নির্দেশ করে।
 
-While `m1` owns the heap data "Hello", `g1` does _not_ own either `m1` or "Hello". Therefore after `greet` ends and the program reaches L3, no heap data has been deallocated. Only the stack frame for `greet` disappears. This fact is consistent with our *Box Deallocation Principle*. Because `g1` did not own "Hello", Rust did not deallocate "Hello" on behalf of `g1`.
+`m1` heap ডেটা "Hello"-এর owner হলেও `g1` `m1` বা "Hello" কোনোটিরই owner _নয়_। তাই `greet` শেষ হয়ে প্রোগ্রাম L3-তে পৌঁছানোর পরও কোনো heap ডেটা deallocate হয়নি। শুধু `greet`-এর stack frame মুছে যায়। এই ঘটনা আমাদের *box deallocation-এর নীতি*-র সঙ্গে সামঞ্জস্যপূর্ণ। `g1` "Hello"-এর owner ছিল না বলে Rust `g1`-এর হয়ে "Hello" deallocate করেনি।
 
-References are **non-owning pointers**, because they do not own the data they point to.
+reference হলো **non-owning pointer** (ডেটার মালিক নয় এমন pointer), কারণ এরা যে ডেটাকে নির্দেশ করে, তার owner নয়।
 
-### Dereferencing a Pointer Accesses Its Data
+### pointer dereference করলে তার ডেটায় পৌঁছানো যায় {#dereferencing-a-pointer-accesses-its-data}
 
-The previous examples using boxes and strings have not shown how Rust "follows" a pointer to its data. For example, the `println!` macro has mysteriously worked for both owned strings of type `String`, and for string references of type `&String`. The underlying mechanism is the **dereference** operator, written with an asterisk (`*`). For example, here's a program that uses dereferences in a few different ways:
+box আর string নিয়ে আগের উদাহরণগুলোতে দেখানো হয়নি, Rust কীভাবে একটি pointer "অনুসরণ" করে তার ডেটায় পৌঁছায়। যেমন, `println!` macro (কোড তৈরি করে এমন কোড) রহস্যজনকভাবে `String` type-এর owned string আর `&String` type-এর string reference—দুটোর জন্যই কাজ করেছে। এর পেছনের কৌশল হলো **dereference** (pointer ধরে তার ডেটায় পৌঁছানো) operator, যা লেখা হয় একটি তারকাচিহ্ন (`*`) দিয়ে। যেমন, এখানে একটি প্রোগ্রাম আছে, যা কয়েকটি আলাদা উপায়ে dereference ব্যবহার করে:
 
 ```aquascope,interpreter
 # fn main() {
@@ -89,49 +89,49 @@ let c: i32 = *r2;`[]`    // so only one dereference is needed to read it
 # }
 ```
 
-Observe the difference between `r1` pointing to `x` on the stack, and `r2` pointing to the heap value `2`.
+stack-এ থাকা `x`-কে নির্দেশ করা `r1` আর heap-এর মান `2`-কে নির্দেশ করা `r2`-এর পার্থক্য লক্ষ করুন।
 
-You probably won't see the dereference operator very often when you read Rust code. Rust implicitly inserts dereferences and references in certain cases, such as calling a method with the dot operator. For example, this program shows two equivalent ways of calling the [`i32::abs`](https://doc.rust-lang.org/std/primitive.i32.html#method.abs) (absolute value) and [`str::len`](https://doc.rust-lang.org/std/primitive.str.html#method.len) (string length) functions:
+Rust কোড পড়ার সময় আপনি হয়তো dereference operator খুব একটা দেখবেন না। কিছু কিছু ক্ষেত্রে Rust নিজে থেকেই dereference আর reference বসিয়ে দেয়, যেমন dot operator দিয়ে method call করার সময়। যেমন, এই প্রোগ্রাম [`i32::abs`](https://doc.rust-lang.org/std/primitive.i32.html#method.abs) (পরম মান) আর [`str::len`](https://doc.rust-lang.org/std/primitive.str.html#method.len) (string-এর দৈর্ঘ্য) function call করার দুটি সমতুল্য উপায় দেখায়:
 
 ```rust,ignore
 # fn main()  {
 let x: Box<i32> = Box::new(-1);
-let x_abs1 = i32::abs(*x); // explicit dereference
-let x_abs2 = x.abs();      // implicit dereference
+let x_abs1 = i32::abs(*x); // স্পষ্ট dereference
+let x_abs2 = x.abs();      // অন্তর্নিহিত dereference
 assert_eq!(x_abs1, x_abs2);
 
 let r: &Box<i32> = &x;
-let r_abs1 = i32::abs(**r); // explicit dereference (twice)
-let r_abs2 = r.abs();       // implicit dereference (twice)
+let r_abs1 = i32::abs(**r); // স্পষ্ট dereference (দুবার)
+let r_abs2 = r.abs();       // অন্তর্নিহিত dereference (দুবার)
 assert_eq!(r_abs1, r_abs2);
 
 let s = String::from("Hello");
-let s_len1 = str::len(&s); // explicit reference
-let s_len2 = s.len();      // implicit reference
+let s_len1 = str::len(&s); // স্পষ্ট reference
+let s_len2 = s.len();      // অন্তর্নিহিত reference
 assert_eq!(s_len1, s_len2);
 # }
 ```
 
-This example shows implicit conversions in three ways:
-1. The `i32::abs` function expects an input of type `i32`. To call `abs` with a `Box<i32>`, you can explicitly dereference the box like `i32::abs(*x)`. You can also implicitly dereference the box using method-call syntax like `x.abs()`. The dot syntax is syntactic sugar for the function-call syntax.
+এই উদাহরণ তিনভাবে অন্তর্নিহিত রূপান্তর দেখায়:
+1. `i32::abs` function `i32` type-এর ইনপুট আশা করে। `Box<i32>` দিয়ে `abs` call করতে হলে `i32::abs(*x)`-এর মতো করে box-টিকে স্পষ্টভাবে dereference করতে পারেন। আবার `x.abs()`-এর মতো method-call syntax ব্যবহার করে box-টিকে অন্তর্নিহিতভাবেও dereference করতে পারেন। dot syntax হলো function-call syntax-এর syntactic sugar (একই কাজের সহজতর লেখার রূপ)।
 
-2. This implicit conversion works for multiple layers of pointers. For example, calling `abs` on a reference to a box `r: &Box<i32>` will insert two dereferences.
+2. এই অন্তর্নিহিত রূপান্তর pointer-এর একাধিক স্তরেও কাজ করে। যেমন, box-এর একটি reference `r: &Box<i32>`-এর ওপর `abs` call করলে দুটি dereference বসে যাবে।
 
-3. This conversion also works the opposite direction. The function `str::len` expects a reference `&str`. If you call `len` on an owned `String`, then Rust will insert a single borrowing operator. (In fact, there is a further conversion from `String` to `str`!)
+3. এই রূপান্তর উল্টো দিকেও কাজ করে। `str::len` function একটি reference `&str` আশা করে। owned `String`-এর ওপর `len` call করলে Rust একটি borrowing operator বসিয়ে দেবে। (আসলে `String` থেকে `str`-এ আরও একটি রূপান্তর ঘটে!)
 
-We will say more about method calls and implicit conversions in later chapters. For now, the important takeaway is that these conversions are happening with method calls and some macros like `println`. We want to unravel all the "magic" of Rust so you can have a clear mental model of how Rust works.
+method call আর অন্তর্নিহিত রূপান্তর নিয়ে পরের অধ্যায়গুলোতে আরও বলব। আপাতত গুরুত্বপূর্ণ কথা হলো, এই রূপান্তরগুলো ঘটে method call আর `println`-এর মতো কিছু macro-র ক্ষেত্রে। আমরা Rust-এর সব "জাদু"-র রহস্য খুলে দিতে চাই, যাতে Rust কীভাবে কাজ করে তার একটি পরিষ্কার মানসিক মডেল আপনার থাকে।
 
 {{#quiz ../quizzes/ch04-02-references-sec1-basics.toml}}
 
-### Rust Avoids Simultaneous Aliasing and Mutation
+### Rust একসঙ্গে aliasing আর mutation এড়ায় {#rust-avoids-simultaneous-aliasing-and-mutation}
 
-Pointers are a powerful and dangerous feature because they enable **aliasing**. Aliasing is accessing the same data through different variables. On its own, aliasing is harmless. But combined with **mutation**, we have a recipe for disaster. One variable can "pull the rug out" from another variable in many ways, for example:
+pointer একটি শক্তিশালী কিন্তু বিপজ্জনক বৈশিষ্ট্য, কারণ এটি **aliasing** (একই ডেটা একাধিক variable দিয়ে ব্যবহার করা) সম্ভব করে। aliasing মানে একই ডেটা বিভিন্ন variable-এর মাধ্যমে ব্যবহার করা। আলাদাভাবে aliasing ক্ষতিকর নয়। কিন্তু **mutation**-এর সঙ্গে মিললে এটি বিপর্যয়ের রেসিপি। একটি variable নানা উপায়ে আরেকটি variable-এর "পায়ের তলার মাটি সরিয়ে দিতে" পারে, যেমন:
 
-- By deallocating the aliased data, leaving the other variable to point to deallocated memory.
-- By mutating the aliased data, invalidating runtime properties expected by the other variable.
-- By _concurrently_ mutating the aliased data, causing a data race with nondeterministic behavior for the other variable.
+- alias করা ডেটা deallocate করে, ফলে অন্য variable-টি deallocate হওয়া মেমোরিকে নির্দেশ করতে থাকে।
+- alias করা ডেটা mutate করে, ফলে অন্য variable-টি runtime-এ যেসব বৈশিষ্ট্য আশা করে, সেগুলো অবৈধ হয়ে যায়।
+- alias করা ডেটা _একসঙ্গে_ (concurrently) mutate করে, ফলে একটি data race (একাধিক thread একই ডেটা একসঙ্গে বদলালে হওয়া অনিশ্চিত আচরণ) ঘটে, আর অন্য variable-টির আচরণ অনিশ্চিত হয়ে যায়।
 
-As a running example, we are going to look at programs using the vector data structure, [`Vec`]. Unlike arrays which have a fixed length, vectors have a variable length by storing their elements in the heap. For example, [`Vec::push`] adds an element to the end of a vector, like this:
+চলমান উদাহরণ হিসেবে আমরা vector data structure [`Vec`] ব্যবহার করা প্রোগ্রাম দেখব। নির্দিষ্ট দৈর্ঘ্যের array-র বিপরীতে vector (পরিবর্তনশীল দৈর্ঘ্যের তালিকা)-এর দৈর্ঘ্য পরিবর্তনশীল, কারণ এরা উপাদানগুলো heap-এ রাখে। যেমন, [`Vec::push`] একটি vector-এর শেষে একটি উপাদান যোগ করে, এভাবে:
 
 ```aquascope,interpreter,horizontal
 #fn main() {
@@ -140,9 +140,9 @@ v.push(4);`[]`
 #}
 ```
 
-The macro `vec!` creates a vector with the elements between the brackets. The vector `v` has type `Vec<i32>`. The syntax `<i32>` means the elements of the vector have type `i32`.
+`vec!` macro ব্র্যাকেটের ভেতরের উপাদানগুলো দিয়ে একটি vector তৈরি করে। `v` vector-টির type হলো `Vec<i32>`। `<i32>` syntax-এর মানে vector-এর উপাদানগুলোর type `i32`।
 
-One important implementation detail is that `v` allocates a heap array of a certain *capacity*. We can peek into `Vec`'s internals and see this detail for ourselves:
+implementation-এর একটি গুরুত্বপূর্ণ খুঁটিনাটি হলো, `v` একটি নির্দিষ্ট *ধারণক্ষমতা*-র heap array allocate করে। `Vec`-এর ভেতরে উঁকি দিয়ে আমরা নিজেরাই এই খুঁটিনাটি দেখতে পারি:
 
 ```aquascope,interpreter,horizontal,concreteTypes
 #fn main() {
@@ -150,11 +150,11 @@ let mut v: Vec<i32> = vec![1, 2, 3];`[]`
 #}
 ```
 
-> *Note:* click the binocular icon in the top right of the diagram to toggle this detailed view in any runtime diagram.
+> *দ্রষ্টব্য:* যেকোনো runtime ডায়াগ্রামে এই বিস্তারিত দৃশ্য চালু বা বন্ধ করতে ডায়াগ্রামের ওপরের ডান কোণের দূরবিন আইকনে ক্লিক করুন।
 
-Notice that the vector has a length (`len`) of 3 and a capacity (`cap`) of 3. The vector is at capacity. So when we do a `push`, the vector has to create a new allocation with larger capacity, copy all the elements over, and deallocate the original heap array. In the diagram above, the array `1 2 3 4` is in a (potentially) different memory location than the original array `1 2 3`.
+লক্ষ করুন, vector-টির দৈর্ঘ্য (`len`) 3 এবং ধারণক্ষমতা (`cap`) 3। vector-টি পূর্ণ ধারণক্ষমতায় আছে। তাই আমরা যখন `push` করি, vector-টিকে বড় ধারণক্ষমতার একটি নতুন বরাদ্দ তৈরি করতে হয়, সব উপাদান সেখানে কপি করতে হয়, আর মূল heap array deallocate করতে হয়। ওপরের ডায়াগ্রামে `1 2 3 4` array-টি মূল `1 2 3` array থেকে (সম্ভবত) আলাদা মেমোরি-অবস্থানে আছে।
 
-To tie this back to memory safety, let's bring references into the mix. Say we created a reference to a vector's heap data. Then that reference can be invalidated by a push, as simulated below:
+memory safety-র সঙ্গে এটি মেলাতে চলুন reference-কে এর মধ্যে আনি। ধরুন আমরা একটি vector-এর heap ডেটার একটি reference তৈরি করলাম। তাহলে নিচের অনুকরণে যেমন দেখানো হয়েছে, একটি push সেই reference অবৈধ করে দিতে পারে:
 
 ```aquascope,interpreter,shouldFail,horizontal
 #fn main() {
@@ -165,30 +165,30 @@ println!("Third element is {}", *num);`[]`
 #}
 ```
 
-Initially, `v` points to an array with 3 elements on the heap. Then `num` is created as a reference to the third element, as seen at L1. However, the operation `v.push(4)` resizes `v`. The resize will deallocate the previous array and allocate a new, bigger array. In the process, `num` is left pointing to invalid memory. Therefore at L3, dereferencing `*num` reads invalid memory, causing undefined behavior.
+শুরুতে `v` heap-এ থাকা 3 উপাদানের একটি array-কে নির্দেশ করে। তারপর L1-এ যেমন দেখা যাচ্ছে, তৃতীয় উপাদানের একটি reference হিসেবে `num` তৈরি হয়। কিন্তু `v.push(4)` operation `v`-এর আকার বদলায়। আকার বদলানোর সময় আগের array deallocate হবে এবং একটি নতুন, বড় array allocate হবে। এই প্রক্রিয়ায় `num` অবৈধ মেমোরিকে নির্দেশ করতে থাকে। তাই L3-তে `*num` dereference করলে অবৈধ মেমোরি পড়া হয়, যা undefined behavior ঘটায়।
 
-In more abstract terms, the issue is that the vector `v` is both aliased (by the reference `num`) and mutated (by the operation `v.push(4)`). So to avoid these kinds of issues, Rust follows a basic principle:
+আরও বিমূর্তভাবে বললে, সমস্যা হলো `v` vector-টি একই সঙ্গে alias হয়েছে (reference `num` দিয়ে) এবং mutate হয়েছে (`v.push(4)` operation দিয়ে)। তাই এ ধরনের সমস্যা এড়াতে Rust একটি মৌলিক নীতি মেনে চলে:
 
-> **Pointer Safety Principle**: data should never be aliased and mutated at the same time.
+> **pointer নিরাপত্তার নীতি (Pointer Safety Principle)**: ডেটা কখনো একই সঙ্গে alias ও mutate হওয়া উচিত নয়।
 
-Data can be aliased. Data can be mutated. But data cannot be _both_ aliased _and_ mutated. For example, Rust enforces this principle for boxes (owned pointers) by disallowing aliasing. Assigning a box from one variable to another will move ownership, invalidating the previous variable. Owned data can only be accessed through the owner &mdash; no aliases.
+ডেটা alias হতে পারে। ডেটা mutate হতে পারে। কিন্তু ডেটা একই সঙ্গে alias _এবং_ mutate হতে পারে _না_। যেমন, box (owned pointer)-এর ক্ষেত্রে Rust aliasing নিষিদ্ধ করে এই নীতি বলবৎ করে। একটি variable থেকে আরেকটিতে box assign করলে ownership move হয়, ফলে আগের variable অবৈধ হয়ে যায়। owned ডেটায় শুধু owner-এর মাধ্যমেই পৌঁছানো যায় &mdash; কোনো alias নেই।
 
-However, because references are non-owning pointers, they need different rules than boxes to ensure the *Pointer Safety Principle*. By design, references are meant to temporarily create aliases. In the rest of this section, we will explain the basics of how Rust ensures the safety of references through the **borrow checker.**
+তবে reference যেহেতু non-owning pointer, তাই *pointer নিরাপত্তার নীতি* নিশ্চিত করতে এদের জন্য box-এর চেয়ে আলাদা নিয়ম দরকার। নকশাগতভাবেই reference-এর উদ্দেশ্য সাময়িকভাবে alias তৈরি করা। এই অংশের বাকিটায় আমরা ব্যাখ্যা করব, **borrow checker** (borrow-এর নিয়ম যাচাই করা compiler-এর অংশ)-এর মাধ্যমে Rust কীভাবে reference-এর নিরাপত্তা নিশ্চিত করে, তার মূল কথাগুলো।
 
-### References Change Permissions on Places
+### reference place-এর permission বদলায় {#references-change-permissions-on-places}
 
-The core idea behind the borrow checker is that variables have three kinds of **permissions** on their data:
+borrow checker-এর পেছনের মূল ভাবনা হলো, variable-এর তার ডেটার ওপর তিন ধরনের **permission** (অনুমতি) থাকে:
 
-- **Read** (@Perm{read}): data can be copied to another location.
-- **Write** (@Perm{write}): data can be mutated.
-- **Own** (@Perm{own}): data can be moved or dropped.
+- **Read** (পড়া) (@Perm{read}): ডেটা অন্য জায়গায় কপি করা যায়।
+- **Write** (লেখা/বদলানো) (@Perm{write}): ডেটা mutate করা যায়।
+- **Own** (মালিকানা) (@Perm{own}): ডেটা move বা drop করা যায়।
 
-These permissions don't exist at runtime, only within the compiler. They describe how the compiler "thinks" about your program before the program is executed.
+এই permission-গুলো runtime-এ থাকে না, শুধু compiler-এর ভেতরে থাকে। প্রোগ্রাম চালানোর আগে compiler আপনার প্রোগ্রাম নিয়ে কীভাবে "ভাবে", এগুলো তা বর্ণনা করে।
 
-By default, a variable has read/own permissions (@Perm{read}@Perm{own}) on its data. If a variable is annotated with `let mut`, then it also has the write permission (@Perm{write}). The key idea is
-that **references can temporarily remove these permissions.**
+ডিফল্টভাবে একটি variable-এর তার ডেটার ওপর read/own permission (@Perm{read}@Perm{own}) থাকে। কোনো variable `let mut` দিয়ে annotate করা থাকলে তার write permission (@Perm{write})-ও থাকে। মূল ভাবনাটি হলো
+**reference সাময়িকভাবে এই permission-গুলো সরিয়ে নিতে পারে।**
 
-To illustrate this idea, let's look at the permissions on a variation of the program above that is actually safe. The `push` has been moved after the `println!`. The permissions in this program are visualized with a new kind of diagram. The diagram shows the changes in permissions on each line.
+এই ভাবনাটি দেখাতে চলুন ওপরের প্রোগ্রামের এমন একটি রূপের permission দেখি, যা আসলে নিরাপদ। `push`-কে `println!`-এর পরে সরিয়ে দেওয়া হয়েছে। এই প্রোগ্রামের permission-গুলো একটি নতুন ধরনের ডায়াগ্রাম দিয়ে দেখানো হয়েছে। ডায়াগ্রামটি প্রতিটি লাইনে permission-এর পরিবর্তন দেখায়।
 
 ```aquascope,permissions,stepper
 #fn main() {
@@ -199,19 +199,19 @@ v.push(4);
 #}
 ```
 
-Let's walk through each line:
+চলুন প্রতিটি লাইন ধরে দেখি:
 
-1. After `let mut v = (...)`, the variable `v` has been initialized (indicated by <i class="fa fa-arrow-turn-up"></i>). It gains @Perm[gained]{read}@Perm[gained]{write}@Perm[gained]{own} permissions (the plus sign indicates gain).
-2. After `let num = &v[2]`, the data in `v` has been **borrowed** by `num` (indicated by <i class="fa fa-arrow-right"></i>). Three things happen:
-   - The borrow removes @Perm[lost]{write}@Perm[lost]{own} permissions from `v` (the slash indicates loss). `v` cannot be written or owned, but it can still be read.
-   - The variable `num` has gained @Perm{read}@Perm{own} permissions. `num` is not writable (the missing @Perm{write} permission is shown as a dash <span class="perm write">‒</span>) because it was not marked `let mut`.
-   - The **place** `*num` has gained the @Perm{read} permission.
-3. After `println!(...)`, then `num` is no longer in use, so `v` is no longer borrowed. Therefore:
-   - `v` regains its @Perm{write}@Perm{own} permissions (indicated by <i class="fa fa-rotate-left"></i>).
-   - `num` and `*num` have lost all of their permissions (indicated by <i class="fa fa-arrow-turn-down"></i>).
-4. After `v.push(4)`, then `v` is no longer in use, and it loses all of its permissions.
+1. `let mut v = (...)`-এর পরে `v` variable-টি initialize হয়েছে (<i class="fa fa-arrow-turn-up"></i> দিয়ে দেখানো)। এটি @Perm[gained]{read}@Perm[gained]{write}@Perm[gained]{own} permission পায় (যোগচিহ্ন পাওয়া বোঝায়)।
+2. `let num = &v[2]`-এর পরে `v`-এর ডেটা `num` দ্বারা **borrow** হয়েছে (<i class="fa fa-arrow-right"></i> দিয়ে দেখানো)। তিনটি জিনিস ঘটে:
+   - borrow-টি `v` থেকে @Perm[lost]{write}@Perm[lost]{own} permission সরিয়ে নেয় (স্ল্যাশ হারানো বোঝায়)। `v`-তে লেখা যায় না, এর মালিকানাও নেওয়া যায় না, তবে এখনো পড়া যায়।
+   - `num` variable-টি @Perm{read}@Perm{own} permission পেয়েছে। `num`-এ লেখা যায় না (অনুপস্থিত @Perm{write} permission একটি ড্যাশ <span class="perm write">‒</span> দিয়ে দেখানো হয়েছে), কারণ এটি `let mut` হিসেবে চিহ্নিত করা হয়নি।
+   - **place** `*num` @Perm{read} permission পেয়েছে।
+3. `println!(...)`-এর পরে `num` আর ব্যবহার হচ্ছে না, তাই `v` আর borrow অবস্থায় নেই। ফলে:
+   - `v` তার @Perm{write}@Perm{own} permission ফিরে পায় (<i class="fa fa-rotate-left"></i> দিয়ে দেখানো)।
+   - `num` আর `*num` তাদের সব permission হারিয়েছে (<i class="fa fa-arrow-turn-down"></i> দিয়ে দেখানো)।
+4. `v.push(4)`-এর পরে `v` আর ব্যবহার হচ্ছে না, আর এটি তার সব permission হারায়।
 
-Next, let's explore a few nuances of the diagram. First, why do you see both `num` and `*num`? Because accessing data through a reference is not the same as manipulating the reference itself. For example, say we declared a reference to a number with `let mut`:
+এরপর ডায়াগ্রামটির কয়েকটি সূক্ষ্ম দিক দেখা যাক। প্রথমত, `num` আর `*num` দুটোই কেন দেখছেন? কারণ reference-এর মাধ্যমে ডেটায় পৌঁছানো আর reference-টিকেই নাড়াচাড়া করা এক জিনিস নয়। যেমন, ধরুন আমরা `let mut` দিয়ে একটি সংখ্যার reference ঘোষণা করলাম:
 
 ```aquascope,permissions,stepper
 #fn main() {
@@ -221,18 +221,18 @@ let mut x_ref = &x;
 #}
 ```
 
-Notice that `x_ref` has the @Perm{write} permission, while `*x_ref` does not. That means we can assign a different reference to the `x_ref` variable (e.g. `x_ref = &y`), but we cannot mutate the data it points to (e.g. `*x_ref += 1`).
+লক্ষ করুন, `x_ref`-এর @Perm{write} permission আছে, কিন্তু `*x_ref`-এর নেই। এর মানে আমরা `x_ref` variable-এ অন্য একটি reference assign করতে পারি (যেমন `x_ref = &y`), কিন্তু এটি যে ডেটাকে নির্দেশ করে, তা mutate করতে পারি না (যেমন `*x_ref += 1`)।
 
-More generally, permissions are defined on **places** and not just variables. A place is anything you can put on the left-hand side of an assignment. Places include:
+আরও সাধারণভাবে বললে, permission শুধু variable-এর ওপর নয়, **place**-এর ওপর সংজ্ঞায়িত। place হলো এমন যেকোনো কিছু, যা একটি assignment-এর বাঁ পাশে বসানো যায়। place-এর মধ্যে আছে:
 
-- Variables, like `a`.
-- Dereferences of places, like `*a`.
-- Array accesses of places, like `a[0]`.
-- Fields of places, like `a.0` for tuples or `a.field` for structs (discussed next chapter).
-- Any combination of the above, like `*((*a)[0].1)`.
+- variable, যেমন `a`।
+- place-এর dereference, যেমন `*a`।
+- place-এর array access, যেমন `a[0]`।
+- place-এর field (struct বা tuple-এর একেকটি অংশ), যেমন tuple-এর জন্য `a.0` বা struct (নিজস্ব গঠনের ডেটা টাইপ)-এর জন্য `a.field` (পরের অধ্যায়ে আলোচিত)।
+- ওপরের যেকোনোটির সমন্বয়, যেমন `*((*a)[0].1)`।
 
 
-Second, why do places lose permissions when they become unused? Because some permissions are mutually exclusive. If you write `num = &v[2]`, then `v` cannot be mutated or dropped while `num` is in use. But that doesn't mean it's invalid to use `num` again. For example, if we add another `println!` to the above program, then `num` simply loses its permissions one line later:
+দ্বিতীয়ত, অব্যবহৃত হয়ে গেলে place-গুলো permission হারায় কেন? কারণ কিছু permission পরস্পর-বর্জনশীল। আপনি `num = &v[2]` লিখলে `num` ব্যবহারে থাকা অবস্থায় `v` mutate বা drop করা যায় না। কিন্তু তার মানে এই নয় যে `num` আবার ব্যবহার করা অবৈধ। যেমন, ওপরের প্রোগ্রামে আরেকটি `println!` যোগ করলে `num` শুধু এক লাইন পরে তার permission হারায়:
 
 ```aquascope,permissions,stepper
 #fn main() {
@@ -244,14 +244,14 @@ v.push(4);
 #}
 ```
 
-It's only a problem if you attempt to use `num` again *after* mutating `v`. Let's look at this in more detail.
+সমস্যা হয় কেবল তখনই, যখন `v` mutate করার *পরে* আবার `num` ব্যবহারের চেষ্টা করেন। চলুন এটি আরও বিস্তারিত দেখি।
 
 
-### The Borrow Checker Finds Permission Violations
+### borrow checker permission-এর লঙ্ঘন খুঁজে বের করে {#the-borrow-checker-finds-permission-violations}
 
-Recall the *Pointer Safety Principle*: data should not be aliased and mutated. The goal of these permissions is to ensure that data cannot be mutated if it is aliased. Creating a reference to data ("borrowing" it) causes that data to be temporarily read-only until the reference is no longer in use.
+*pointer নিরাপত্তার নীতি* মনে করুন: ডেটা একই সঙ্গে alias আর mutate হওয়া উচিত নয়। এই permission-গুলোর উদ্দেশ্য হলো নিশ্চিত করা যে ডেটা alias হলে তা mutate করা যাবে না। কোনো ডেটার reference তৈরি করলে (ডেটাটিকে "borrow" করলে) reference-টি ব্যবহার শেষ না হওয়া পর্যন্ত সেই ডেটা সাময়িকভাবে শুধু-পড়ার উপযোগী হয়ে যায়।
 
-Rust uses these permissions in its **borrow checker**. The borrow checker looks for potentially unsafe operations involving references. Let's return to the unsafe program we saw earlier, where `push` invalidates a reference. This time we'll add another aspect to the permissions diagram:
+Rust এই permission-গুলো ব্যবহার করে তার **borrow checker**-এ। borrow checker reference-জড়িত সম্ভাব্য অনিরাপদ operation খোঁজে। চলুন আগে দেখা সেই অনিরাপদ প্রোগ্রামে ফিরে যাই, যেখানে `push` একটি reference অবৈধ করে দেয়। এবার permission-এর ডায়াগ্রামে আরেকটি দিক যোগ করব:
 
 ```aquascope,permissions,boundaries,stepper,shouldFail
 #fn main() {
@@ -262,11 +262,11 @@ println!("Third element is {}", *num);
 #}
 ```
 
-Any time a place is used, Rust expects that place to have certain permissions depending on the operation. For example, the borrow `&v[2]` requires that `v` is readable. Therefore the @Perm{read} permission is shown between the operation `&` and the place `v`. The letter is filled-in because `v` has the read permission at that line.
+যখনই একটি place ব্যবহার করা হয়, operation অনুযায়ী Rust আশা করে সেই place-এর নির্দিষ্ট কিছু permission থাকবে। যেমন, `&v[2]` borrow-এর জন্য `v`-কে পড়ার উপযোগী হতে হবে। তাই `&` operation আর place `v`-এর মাঝখানে @Perm{read} permission দেখানো হয়েছে। অক্ষরটি ভরাট, কারণ ওই লাইনে `v`-এর read permission আছে।
 
-By contrast, the mutating operation `v.push(4)` requires that `v` is readable and writable. Both @Perm{read} and @Perm{write} are shown. However, `v` does not have write permissions (it is borrowed by `num`). So the letter @Perm[missing]{write} is hollow, indicating that the write permission is *expected* but `v` does not have it.
+অন্যদিকে mutate করা operation `v.push(4)`-এর জন্য `v`-কে পড়া ও লেখা দুটোরই উপযোগী হতে হবে। @Perm{read} আর @Perm{write} দুটোই দেখানো হয়েছে। কিন্তু `v`-এর write permission নেই (এটি `num` দ্বারা borrow হয়ে আছে)। তাই @Perm[missing]{write} অক্ষরটি ফাঁপা, যা বোঝায় write permission-টি *প্রত্যাশিত*, কিন্তু `v`-এর তা নেই।
 
-If you try to compile this program, then the Rust compiler will return the following error:
+এই প্রোগ্রাম compile করার চেষ্টা করলে Rust compiler নিচের error দেবে:
 
 ```text
 error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immutable
@@ -280,14 +280,14 @@ error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immuta
   |                                 ---- immutable borrow later used here
 ```
 
-The error message explains that `v` cannot be mutated while the reference `num` is in use. That's the surface-level reason &mdash; the underlying issue is that `num` could be invalidated by `push`. Rust catches that potential violation of memory safety.
+error message ব্যাখ্যা করছে যে reference `num` ব্যবহারে থাকা অবস্থায় `v` mutate করা যায় না। এটি ওপর-ওপর কারণ &mdash; আসল সমস্যা হলো `push` `num`-কে অবৈধ করে দিতে পারে। Rust memory safety-র সেই সম্ভাব্য লঙ্ঘন ধরে ফেলে।
 
 
-### Mutable References Provide Unique and Non-Owning Access to Data
+### mutable reference ডেটায় একক ও non-owning প্রবেশাধিকার দেয় {#mutable-references-provide-unique-and-non-owning-access-to-data}
 
-The references we have seen so far are read-only **immutable references** (also called **shared references**). Immutable references permit aliasing but disallow mutation. However, it is also useful to temporarily provide mutable access to data without moving it.
+এ পর্যন্ত আমরা যেসব reference দেখেছি, সেগুলো শুধু-পড়ার **immutable reference** (শুধু পড়ার reference; এদের **shared reference**-ও বলা হয়)। immutable reference aliasing-এর অনুমতি দেয়, কিন্তু mutation নিষিদ্ধ করে। তবে ডেটা move না করে সাময়িকভাবে তাতে mutate করার প্রবেশাধিকার দেওয়াও কাজের।
 
-The mechanism for this is **mutable references** (also called **unique references**). Here's a simple example of a mutable reference with the accompanying permissions changes:
+এর কৌশল হলো **mutable reference** (বদলানোর অনুমতিসহ একক reference; এদের **unique reference**-ও বলা হয়)। এখানে mutable reference-এর একটি সহজ উদাহরণ, সঙ্গে permission-এর পরিবর্তন:
 
 ```aquascope,permissions,stepper,boundaries
 #fn main() {
@@ -299,18 +299,18 @@ println!("Vector is now {:?}", v);
 #}
 ```
 
-<blockquote><div style="margin-block-start: 1em; margin-block-end: 1em"><i>Note:</i> when the expected permissions are not strictly relevant to an example, we will abbreviate them as dots like <div class="permission-stack stack-size-2"><div class="perm read"><div class="small">•</div><div class="big">R</div></div><div class="perm write"><div class="small">•</div><div class="big">W</div></div></div>. You can hover your mouse over the circles (or tap on a touchscreen) to see the corresponding permission letters.</div></blockquote>
+<blockquote><div style="margin-block-start: 1em; margin-block-end: 1em"><i>দ্রষ্টব্য:</i> কোনো উদাহরণের জন্য প্রত্যাশিত permission-গুলো খুব প্রাসঙ্গিক না হলে আমরা সেগুলো সংক্ষেপে বিন্দু দিয়ে দেখাব, যেমন <div class="permission-stack stack-size-2"><div class="perm read"><div class="small">•</div><div class="big">R</div></div><div class="perm write"><div class="small">•</div><div class="big">W</div></div></div>। সংশ্লিষ্ট permission-এর অক্ষর দেখতে বৃত্তগুলোর ওপর মাউস রাখুন (বা টাচস্ক্রিনে ট্যাপ করুন)।</div></blockquote>
 
-A mutable reference is created with the `&mut` operator. The type of `num` is written as `&mut i32`. Compared to immutable references, you can see two important differences in the permissions:
+mutable reference তৈরি হয় `&mut` operator দিয়ে। `num`-এর type লেখা হয় `&mut i32`। immutable reference-এর তুলনায় permission-এ দুটি গুরুত্বপূর্ণ পার্থক্য দেখতে পাবেন:
 
-1. When `num` was an immutable reference, `v` still had the @Perm{read} permission. Now that `num` is a mutable reference, `v` has lost _all_ permissions while `num` is in use.
-2. When `num` was an immutable reference, the place `*num` only had the @Perm{read} permission. Now that `num` is a mutable reference, `*num` has also gained the @Perm{write} permission.
+1. `num` যখন immutable reference ছিল, তখনও `v`-এর @Perm{read} permission ছিল। এখন `num` একটি mutable reference, তাই `num` ব্যবহারে থাকা অবস্থায় `v` তার _সব_ permission হারিয়েছে।
+2. `num` যখন immutable reference ছিল, তখন place `*num`-এর শুধু @Perm{read} permission ছিল। এখন `num` একটি mutable reference, তাই `*num` @Perm{write} permission-ও পেয়েছে।
 
-The first observation is what makes mutable references *safe*. Mutable references allow mutation but prevent aliasing. The borrowed place `v` becomes temporarily unusable, so effectively not an alias.
+প্রথম পর্যবেক্ষণটিই mutable reference-কে *নিরাপদ* করে। mutable reference mutation-এর অনুমতি দেয়, কিন্তু aliasing আটকায়। borrow হওয়া place `v` সাময়িকভাবে ব্যবহারের অযোগ্য হয়ে যায়, তাই কার্যত এটি আর alias নয়।
 
-The second observation is what makes mutable references *useful*. `v[2]` can be mutated through `*num`. For example, `*num += 1` mutates `v[2]`. Note that `*num` has the @Perm{write} permission, but `num` does not. `num` refers to the mutable reference itself, e.g. `num` cannot be reassigned to a *different* mutable reference.
+দ্বিতীয় পর্যবেক্ষণটিই mutable reference-কে *কাজের* করে। `*num`-এর মাধ্যমে `v[2]` mutate করা যায়। যেমন, `*num += 1` `v[2]`-কে mutate করে। লক্ষ করুন, `*num`-এর @Perm{write} permission আছে, কিন্তু `num`-এর নেই। `num` বোঝায় mutable reference-টিকেই, যেমন `num`-এ একটি *ভিন্ন* mutable reference আবার assign করা যায় না।
 
-Mutable references can also be temporarily "downgraded" to read-only references. For example:
+mutable reference-কে সাময়িকভাবে শুধু-পড়ার reference-এ "নামিয়ে আনা"-ও যায়। যেমন:
 
 ```aquascope,permissions,stepper,boundaries
 #fn main() {
@@ -321,16 +321,16 @@ println!("{} {}", *num, *num2);
 #}
 ```
 
-> *Note:* when permission changes are not relevant to an example, we will hide them. You can view hidden steps by clicking "»", and you can view hidden permissions within a step by clicking "● ● ●".
+> *দ্রষ্টব্য:* কোনো উদাহরণের জন্য permission-এর পরিবর্তন প্রাসঙ্গিক না হলে আমরা সেগুলো লুকিয়ে রাখব। লুকানো ধাপগুলো দেখতে "»"-এ ক্লিক করুন, আর কোনো ধাপের ভেতরের লুকানো permission দেখতে "● ● ●"-এ ক্লিক করুন।
 
-In this program, the borrow `&*num` removes the @Perm{write} permission from `*num` but _not_ the @Perm{read} permission, so `println!(..)` can read both `*num` and `*num2`.
+এই প্রোগ্রামে `&*num` borrow-টি `*num` থেকে @Perm{write} permission সরিয়ে নেয়, কিন্তু @Perm{read} permission _নয়_, তাই `println!(..)` `*num` আর `*num2` দুটোই পড়তে পারে।
 
 
-### Permissions Are Returned At The End of a Reference's Lifetime
+### reference-এর lifetime শেষে permission ফিরে আসে {#permissions-are-returned-at-the-end-of-a-references-lifetime}
 
-We said above that a reference changes permissions while it is "in use". The phrase "in use" is describing a reference's **lifetime**, or the range of code spanning from its birth (where the reference is created) to its death (the last time(s) the reference is used).
+ওপরে আমরা বলেছি, একটি reference "ব্যবহারে থাকা" অবস্থায় permission বদলায়। "ব্যবহারে থাকা" কথাটি একটি reference-এর **lifetime** (reference কতক্ষণ বৈধ থাকে) বর্ণনা করে, অর্থাৎ এর জন্ম (যেখানে reference তৈরি হয়) থেকে মৃত্যু (শেষবার(গুলো) যেখানে reference ব্যবহার হয়) পর্যন্ত কোডের পরিসর।
 
-For example, in this program, the lifetime of `y` starts with `let y = &x`, and ends with `let z = *y`:
+যেমন, এই প্রোগ্রামে `y`-এর lifetime শুরু হয় `let y = &x` দিয়ে, আর শেষ হয় `let z = *y` দিয়ে:
 
 ```aquascope,permissions,stepper,boundaries
 #fn main() {
@@ -341,9 +341,9 @@ x += z;
 #}
 ```
 
-The @Perm{write} permission on `x` is returned to `x` after the lifetime of `y` has ended, like we have seen before.
+আগে যেমন দেখেছি, `y`-এর lifetime শেষ হওয়ার পর `x`-এর @Perm{write} permission `x`-এর কাছে ফিরে আসে।
 
-In the previous examples, a lifetime has been a contiguous region of code. However, once we introduce control flow, this is not necessarily the case. For example, here is a function that capitalizes the first character in a vector of ASCII characters:
+আগের উদাহরণগুলোতে lifetime ছিল কোডের একটানা একটি অংশ। তবে control flow (কোড চলার ক্রম নিয়ন্ত্রণ) এলে তা আর সবসময় হয় না। যেমন, এখানে একটি function আছে, যা ASCII অক্ষরের একটি vector-এর প্রথম অক্ষরটিকে বড় হাতের করে:
 
 ```aquascope,permissions,stepper,boundaries
 fn ascii_capitalize(v: &mut Vec<char>) {
@@ -357,16 +357,16 @@ fn ascii_capitalize(v: &mut Vec<char>) {
 }
 ```
 
-The variable `c` has a different lifetime in each branch of the if-statement. In the then-block, `c` is used in the expression `c.to_ascii_uppercase()`. Therefore `*v` does not regain the @Perm{write} permission until after that line.
+if-statement-এর প্রতিটি শাখায় `c` variable-এর lifetime আলাদা। then-block-এ `c` ব্যবহার হয় `c.to_ascii_uppercase()` expression-এ। তাই ওই লাইনের পরে না যাওয়া পর্যন্ত `*v` @Perm{write} permission ফিরে পায় না।
 
-However, in the else-block, `c` is not used. `*v` immediately regains the @Perm{write} permission on entry to the else-block.
+তবে else-block-এ `c` ব্যবহার হয় না। else-block-এ ঢোকামাত্রই `*v` @Perm{write} permission ফিরে পায়।
 
 {{#quiz ../quizzes/ch04-02-references-sec2-perms.toml}}
 
 
-### Data Must Outlive All Of Its References
+### ডেটাকে তার সব reference-এর চেয়ে বেশিদিন টিকে থাকতে হবে {#data-must-outlive-all-of-its-references}
 
-As a part of the *Pointer Safety Principle*, the borrow checker enforces that **data must outlive any references to it.** Rust enforces this property in two ways. The first way deals with references that are created and dropped within the scope of a single function. For example, say we tried to drop a string while holding a reference to it:
+*pointer নিরাপত্তার নীতি*-র অংশ হিসেবে borrow checker বলবৎ করে যে **ডেটাকে তার যেকোনো reference-এর চেয়ে বেশিদিন টিকে থাকতে হবে।** Rust এই বৈশিষ্ট্য দুইভাবে বলবৎ করে। প্রথম উপায়টি এমন reference নিয়ে, যা একটিমাত্র function-এর scope-এর ভেতরেই তৈরি ও drop হয়। যেমন, ধরুন আমরা একটি string-এর reference ধরে রাখা অবস্থায় string-টি drop করার চেষ্টা করলাম:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 #fn main() {
@@ -377,9 +377,9 @@ println!("{}", s_ref);
 #}
 ```
 
-To catch these kinds of errors, Rust uses the permissions we've already discussed. The borrow `&s` removes the @Perm{own} permission from `s`. However, `drop` expects the @Perm{own} permission, leading to a permission mismatch.
+এ ধরনের error ধরতে Rust আগে আলোচিত permission-গুলোই ব্যবহার করে। `&s` borrow `s` থেকে @Perm{own} permission সরিয়ে নেয়। কিন্তু `drop` @Perm{own} permission আশা করে, ফলে permission মেলে না।
 
-The key idea is that in this example, Rust knows how long `s_ref` lives. But Rust needs a different enforcement mechanism when it doesn't know how long a reference lives. Specifically, when references are either input to a function, or output from a function. For example, here is a safe function that returns a reference to the first element in a vector:
+মূল কথা হলো, এই উদাহরণে Rust জানে `s_ref` কতক্ষণ টিকে থাকে। কিন্তু কোনো reference কতক্ষণ টিকে থাকে Rust যখন তা জানে না, তখন তার আলাদা একটি বলবৎ-কৌশল দরকার। নির্দিষ্ট করে বললে, যখন reference কোনো function-এর ইনপুট, অথবা কোনো function-এর আউটপুট। যেমন, এখানে একটি নিরাপদ function আছে, যা একটি vector-এর প্রথম উপাদানের একটি reference return করে:
 
 ```aquascope,permissions,boundaries,showFlows
 fn first(strings: &Vec<String>) -> &String {
@@ -388,9 +388,9 @@ fn first(strings: &Vec<String>) -> &String {
 }
 ```
 
-This snippet introduces a new kind of permission, the flow permission @Perm{flow}. The @Perm{flow} permission is expected whenever an expression uses an input reference (like `&strings[0]`), or returns an output reference (like `return s_ref`).
+এই কোড-অংশ একটি নতুন ধরনের permission-এর সঙ্গে পরিচয় করিয়ে দেয়: flow permission @Perm{flow}, বা **Flow** (প্রবাহ)। কোনো expression যখনই একটি ইনপুট reference ব্যবহার করে (যেমন `&strings[0]`), অথবা একটি আউটপুট reference return করে (যেমন `return s_ref`), তখনই @Perm{flow} permission প্রত্যাশিত।
 
-Unlike the @Perm{read}@Perm{write}@Perm{own} permissions, @Perm{flow} does not change throughout the body of a function. A reference has the @Perm{flow} permission if it's allowed to be used (that is, to *flow*) in a particular expression. For example, let's say we change `first` to a new function `first_or` that includes a `default` parameter:
+@Perm{read}@Perm{write}@Perm{own} permission-এর বিপরীতে @Perm{flow} একটি function-এর body জুড়ে বদলায় না। কোনো নির্দিষ্ট expression-এ একটি reference ব্যবহার করার (অর্থাৎ *প্রবাহিত* হওয়ার) অনুমতি থাকলে সেই reference-এর @Perm{flow} permission থাকে। যেমন, ধরুন আমরা `first`-কে বদলে `first_or` নামের একটি নতুন function বানালাম, যাতে একটি `default` parameter আছে:
 
 ```aquascope,permissions,boundaries,showFlows,shouldFail
 fn first_or<'a, 'b, 'c>(strings: &'a Vec<String>, default: &'b String) -> &'c String {
@@ -402,7 +402,7 @@ fn first_or<'a, 'b, 'c>(strings: &'a Vec<String>, default: &'b String) -> &'c St
 }
 ```
 
-This function no longer compiles, because the expressions `&strings[0]` and `default` lack the necessary @Perm{flow} permission to be returned. But why? Rust gives the following error:
+এই function আর compile হয় না, কারণ `&strings[0]` আর `default` expression-এর return হওয়ার জন্য প্রয়োজনীয় @Perm{flow} permission নেই। কিন্তু কেন? Rust নিচের error দেয়:
 
 ```text
 error[E0106]: missing lifetime specifier
@@ -414,7 +414,7 @@ error[E0106]: missing lifetime specifier
   = help: this function's return type contains a borrowed value, but the signature does not say whether it is borrowed from `strings` or `default`
 ```
 
-The message "missing lifetime specifier" is a bit mysterious, but the help message provides some useful context. If Rust *just* looks at the function signature, it doesn't know whether the output `&String` is a reference to either `strings` or `default`. To understand why that matters, let's say we used `first_or` like this:
+"missing lifetime specifier" বার্তাটি একটু রহস্যময়, তবে help বার্তাটি কিছু কাজের প্রেক্ষাপট দেয়। Rust যদি *শুধু* function signature দেখে, তাহলে সে জানে না আউটপুট `&String` `strings`-এর reference নাকি `default`-এর। এটা কেন গুরুত্বপূর্ণ, তা বুঝতে ধরুন আমরা `first_or` এভাবে ব্যবহার করলাম:
 
 ```rust,ignore
 fn main() {
@@ -426,11 +426,11 @@ fn main() {
 }
 ```
 
-This program is unsafe if `first_or` allows `default` to *flow* into the return value. Like the previous example, `drop` could invalidate `s`. Rust would only allow this program to compile if it was *certain* that `default` cannot flow into the return value.
+`first_or` যদি `default`-কে return মানে *প্রবাহিত* হতে দেয়, তাহলে এই প্রোগ্রামটি অনিরাপদ। আগের উদাহরণের মতোই `drop` `s`-কে অবৈধ করে দিতে পারে। Rust এই প্রোগ্রাম compile হতে দেবে কেবল তখনই, যদি সে *নিশ্চিত* হয় যে `default` return মানে প্রবাহিত হতে পারে না।
 
-To specify whether `default` can be returned, Rust provides a mechanism called *lifetime parameters*. We will explain that feature later in Chapter 10.3, ["Validating References with Lifetimes"](ch10-03-lifetime-syntax.html). For now, it's enough to know that: (1) input/output references are treated differently than references within a function body, and (2) Rust uses a different mechanism, the @Perm{flow} permission, to check the safety of those references.
+`default` return করা যাবে কি না তা নির্দিষ্ট করতে Rust *lifetime parameter* (reference-এর lifetime বোঝানোর parameter) নামের একটি কৌশল দেয়। এই বৈশিষ্ট্যটি আমরা পরে অধ্যায় 10.3-এর ["Validating References with Lifetimes"](ch10-03-lifetime-syntax.html)-এ ব্যাখ্যা করব। আপাতত এটুকু জানলেই চলবে: (1) ইনপুট/আউটপুট reference-কে function body-র ভেতরের reference থেকে আলাদাভাবে দেখা হয়, এবং (2) সেই reference-গুলোর নিরাপত্তা যাচাইয়ে Rust একটি আলাদা কৌশল, @Perm{flow} permission, ব্যবহার করে।
 
-To see the @Perm{flow} permission in another context, say you tried to return a reference to a variable on the stack like this:
+আরেকটি প্রেক্ষাপটে @Perm{flow} permission দেখতে ধরুন আপনি stack-এ থাকা একটি variable-এর reference return করার চেষ্টা করলেন, এভাবে:
 
 ```aquascope,permissions,boundaries,showFlows,shouldFail
 fn return_a_string() -> &String {
@@ -440,24 +440,24 @@ fn return_a_string() -> &String {
 }
 ```
 
-This program is unsafe because the reference `&s` will be invalidated when `return_a_string` returns. And Rust will reject this program with a similar `missing lifetime specifier` error. Now you can understand that error means that `s_ref` is missing the appropriate flow permissions.
+এই প্রোগ্রামটি অনিরাপদ, কারণ `return_a_string` return করলেই `&s` reference অবৈধ হয়ে যাবে। আর Rust একই রকম `missing lifetime specifier` error দিয়ে এই প্রোগ্রাম বাতিল করবে। এখন আপনি বুঝতে পারছেন, ওই error-এর মানে হলো `s_ref`-এর উপযুক্ত flow permission নেই।
 
 
 {{#quiz ../quizzes/ch04-02-references-sec3-safety.toml}}
 
 
-### Summary
+### সারসংক্ষেপ {#summary}
 
-References provide the ability to read and write data without consuming ownership of it. References are created with borrows (`&` and `&mut`) and used with dereferences (`*`), often implicitly.
+reference ownership না নিয়েই ডেটা পড়া ও লেখার সুযোগ দেয়। reference তৈরি হয় borrow (`&` আর `&mut`) দিয়ে, আর ব্যবহার হয় dereference (`*`) দিয়ে, প্রায়ই অন্তর্নিহিতভাবে।
 
-However, references can be easily misused. Rust's borrow checker enforces a system of permissions that ensures references are used safely:
+তবে reference-এর অপব্যবহার সহজেই হতে পারে। Rust-এর borrow checker permission-এর এমন একটি ব্যবস্থা বলবৎ করে, যা নিশ্চিত করে reference নিরাপদে ব্যবহার হচ্ছে:
 
-- All variables can read, own, and (optionally) write their data.
-- Creating a reference will transfer permissions from the borrowed place to the reference.
-- Permissions are returned once the reference's lifetime has ended.
-- Data must outlive all references that point to it.
+- সব variable তার ডেটা পড়তে, own করতে এবং (ঐচ্ছিকভাবে) লিখতে পারে।
+- একটি reference তৈরি করলে borrow হওয়া place থেকে permission reference-টির কাছে হস্তান্তর হয়।
+- reference-এর lifetime শেষ হলে permission ফিরে আসে।
+- ডেটাকে তার সব reference-এর চেয়ে বেশিদিন টিকে থাকতে হবে।
 
-In this section, it probably feels like we've described more of what Rust _cannot_ do than what Rust _can_ do. That is intentional! One of Rust's core features is allowing you to use pointers without garbage collection, while also avoiding undefined behavior. Understanding these safety rules now will help you avoid frustration with the compiler later.
+এই অংশে হয়তো মনে হচ্ছে, Rust কী _পারে_ তার চেয়ে কী _পারে না_ সেটাই বেশি বলেছি। এটা ইচ্ছাকৃত! Rust-এর একটি মূল বৈশিষ্ট্য হলো garbage collection ছাড়াই pointer ব্যবহারের সুযোগ দেওয়া, আবার একই সঙ্গে undefined behavior এড়ানো। এই নিরাপত্তার নিয়মগুলো এখন বুঝে নিলে পরে compiler নিয়ে বিরক্তি এড়াতে পারবেন।
 
 [`String::push_str`]: https://doc.rust-lang.org/std/string/struct.String.html#method.push_str
 [`Vec`]: https://doc.rust-lang.org/std/vec/struct.Vec.html

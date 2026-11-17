@@ -1,10 +1,10 @@
-## What Is Ownership?
+## ownership কী? {#what-is-ownership}
 
-Ownership is a discipline for ensuring the **safety** of Rust programs. To understand ownership, we first need to understand what makes a Rust program safe (or unsafe).
+ownership হলো Rust প্রোগ্রামের **নিরাপত্তা** নিশ্চিত করার একটি নিয়মশৃঙ্খলা। ownership বুঝতে হলে আগে বুঝতে হবে, কোন জিনিস একটি Rust প্রোগ্রামকে নিরাপদ (বা অনিরাপদ) করে।
 
-### Safety is the Absence of Undefined Behavior
+### নিরাপত্তা মানে undefined behavior-এর অনুপস্থিতি {#safety-is-the-absence-of-undefined-behavior}
 
-Let's start with an example. This program is safe to execute:
+একটি উদাহরণ দিয়ে শুরু করা যাক। এই প্রোগ্রামটি চালানো নিরাপদ:
 
 ```rust
 fn read(y: bool) {
@@ -19,7 +19,7 @@ fn main() {
 }
 ```
 
-We can make this program unsafe to execute by moving the call to `read` before the definition of `x`:
+`read` call-টি `x`-এর সংজ্ঞার আগে সরিয়ে নিলে এই প্রোগ্রাম চালানো অনিরাপদ হয়ে যায়:
 
 ```rust,ignore,does_not_compile
 fn read(y: bool) {
@@ -34,13 +34,13 @@ fn main() {
 }
 ```
 
-> *Note*: in this chapter, we will use many code examples that do not compile. Make sure to look for the question mark crab if you are not sure whether a program should compile or not.
+> *দ্রষ্টব্য*: এই অধ্যায়ে আমরা এমন অনেক কোডের উদাহরণ ব্যবহার করব, যেগুলো compile হয় না। কোনো প্রোগ্রাম compile হওয়ার কথা কি না, তা নিয়ে নিশ্চিত না হলে প্রশ্নবোধক চিহ্নওয়ালা কাঁকড়াটি খুঁজে দেখবেন।
 
-This second program is unsafe because `read(x)` expects `x` to have a value of type `bool`, but `x` doesn't have a value yet.
+দ্বিতীয় প্রোগ্রামটি অনিরাপদ, কারণ `read(x)` আশা করে `x`-এর একটি `bool` type-এর মান থাকবে, কিন্তু `x`-এর এখনো কোনো মানই নেই।
 
-When a program like this is executed by an interpreter, then reading `x` before it's defined would raise an exception such as Python's [`NameError`] or Javascript's [`ReferenceError`]. But exceptions come at a cost. Each time an interpreted program reads a variable, then the interpreter must check whether that variable is defined.
+এমন একটি প্রোগ্রাম যখন একটি interpreter (কোড লাইন ধরে ধরে চালানোর প্রোগ্রাম) চালায়, তখন সংজ্ঞায়িত হওয়ার আগে `x` পড়লে একটি exception (চলার সময় ঘটা error-এর সংকেত) ঘটবে, যেমন Python-এর [`NameError`] বা Javascript-এর [`ReferenceError`]। কিন্তু exception-এর একটা দাম আছে। interpreter-এ চলা প্রোগ্রাম যতবার কোনো variable পড়ে, ততবার interpreter-কে যাচাই করতে হয় variable-টি সংজ্ঞায়িত কি না।
 
-Rust's goal is to compile programs into efficient binaries that require as few runtime checks as possible. Therefore Rust does not check at *runtime* whether a variable is defined before being used. Instead, Rust checks at *compile-time*. If you try to compile the unsafe program, you will get this error:
+Rust-এর লক্ষ্য হলো প্রোগ্রামকে এমন দক্ষ binary-তে compile করা, যাতে runtime-এ যত কম সম্ভব যাচাই লাগে। তাই কোনো variable ব্যবহারের আগে সংজ্ঞায়িত হয়েছে কি না, তা Rust *runtime*-এ যাচাই করে না। বরং Rust তা যাচাই করে *compile-time*-এ। অনিরাপদ প্রোগ্রামটি compile করার চেষ্টা করলে এই error পাবেন:
 
 ```text
 error[E0425]: cannot find value `x` in this scope
@@ -50,9 +50,9 @@ error[E0425]: cannot find value `x` in this scope
   |          ^ not found in this scope
 ```
 
-You probably have the intuition that it's good for Rust to ensure that variables are defined before they are used. But why? To justify the rule, we have to ask: **what would happen if Rust allowed a rejected program to compile?**
+আপনার হয়তো মনে হচ্ছে, variable ব্যবহারের আগে সেটি সংজ্ঞায়িত কি না Rust তা নিশ্চিত করলে ভালোই হয়। কিন্তু কেন? নিয়মটির যৌক্তিকতা বুঝতে আমাদের প্রশ্ন করতে হবে: **Rust যদি একটি বাতিল করা প্রোগ্রামকেও compile হতে দিত, তাহলে কী ঘটত?**
 
-Let's first consider how the safe program compiles and executes. On a computer with a processor using an [x86](https://en.wikipedia.org/wiki/X86) architecture, Rust generates the following assembly code for the `main` function in the safe program ([see the full assembly code here](https://rust.godbolt.org/z/xnT1fzsqv)):
+প্রথমে দেখা যাক নিরাপদ প্রোগ্রামটি কীভাবে compile হয় এবং চলে। [x86](https://en.wikipedia.org/wiki/X86) architecture-এর প্রসেসরযুক্ত কম্পিউটারে Rust নিরাপদ প্রোগ্রামের `main` function-এর জন্য নিচের assembly code (প্রসেসরের নির্দেশের মানুষের পড়ার উপযোগী রূপ) তৈরি করে ([পুরো assembly code এখানে দেখুন](https://rust.godbolt.org/z/xnT1fzsqv)):
 
 ```x86asm
 main:
@@ -62,14 +62,14 @@ main:
     ; ...
 ```
 
-> _Note_: if you aren't familiar with assembly code, that's ok! This section contains a few examples of assembly just to show you how Rust actually works under the hood. You don't generally need to know assembly to understand Rust.
+> _দ্রষ্টব্য_: assembly code-এর সঙ্গে পরিচিত না হলেও কোনো সমস্যা নেই! Rust ভেতরে ভেতরে আসলে কীভাবে কাজ করে, শুধু তা দেখাতে এই অংশে assembly-র কয়েকটি উদাহরণ আছে। Rust বুঝতে সাধারণত assembly জানার দরকার নেই।
 
-This assembly code will:
+এই assembly code যা করবে:
 
-- Move the number 1, representing `true`, into a "register" (a kind of assembly variable) called `edi`.
-- Call the `read` function, which expects its first argument `y` to be in the `edi` register.
+- `true` বোঝানো সংখ্যা 1-কে `edi` নামের একটি "register" (এক ধরনের assembly variable)-এ রাখবে।
+- `read` function call করবে, যা আশা করে তার প্রথম argument `y` থাকবে `edi` register-এ।
 
-If the unsafe function was allowed to compile, its assembly might look like this:
+অনিরাপদ function-টি compile হতে দিলে তার assembly হয়তো এরকম দেখাত:
 
 ```x86asm
 main:
@@ -79,39 +79,39 @@ main:
     ; ...
 ```
 
-This program is unsafe because `read` will expect `edi` to be a boolean, which is either the number `0` or `1`. But `edi` could be anything: `2`, `100`, `0x1337BEEF`. When `read` wants to use its argument `y` for any purpose, it will immediately cause _**UNDEFINED BEHAVIOR!**_
+এই প্রোগ্রামটি অনিরাপদ, কারণ `read` আশা করবে `edi` একটি boolean হবে, অর্থাৎ হয় সংখ্যা `0` নয়তো `1`। কিন্তু `edi`-তে যা খুশি থাকতে পারে: `2`, `100`, `0x1337BEEF`। `read` যখনই কোনো কাজে তার argument `y` ব্যবহার করতে চাইবে, সঙ্গে সঙ্গে ঘটবে _**UNDEFINED BEHAVIOR!**_ (অনির্ধারিত আচরণ!)
 
-Rust doesn't specify what happens if you try to run `if y { .. }` when `y` isn't `true` or `false`. That *behavior*, or what happens after executing the instruction, is *undefined*. Something will happen, for example:
+`y` যখন `true` বা `false` কোনোটাই নয়, তখন `if y { .. }` চালাতে গেলে কী ঘটবে, Rust তা নির্দিষ্ট করে না। ওই *আচরণ*, অর্থাৎ নির্দেশটি চালানোর পর কী ঘটে, তা *অনির্ধারিত*। কিছু একটা ঘটবেই, যেমন:
 
-- The code executes without crashing, and no one notices a problem.
-- The code immediately crashes due to a [segmentation fault](https://en.wikipedia.org/wiki/Segmentation_fault) or another kind of operating system error.
-- The code executes without crashing, until a malicious actor creates the right input to delete your production database, overwrite your backups, and steal your lunch money.
+- কোড ক্র্যাশ না করে চলে, আর কেউ কোনো সমস্যা টেরই পায় না।
+- [segmentation fault](https://en.wikipedia.org/wiki/Segmentation_fault) (অবৈধ মেমোরিতে ঢোকার ফলে হওয়া error) বা অপারেটিং সিস্টেমের অন্য কোনো error-এর কারণে কোড সঙ্গে সঙ্গে ক্র্যাশ করে।
+- কোড ক্র্যাশ না করে চলতে থাকে, যতক্ষণ না কোনো অসৎ উদ্দেশ্যের লোক ঠিক এমন ইনপুট তৈরি করে, যা দিয়ে আপনার production database মুছে দেওয়া যায়, ব্যাকআপ মুছে নতুন করে লেখা যায়, আর আপনার টিফিনের টাকাও চুরি হয়ে যায়।
 
-**A foundational goal of Rust is to ensure that your programs never have undefined behavior.** That is the meaning of "safety." Undefined behavior is especially dangerous for low-level programs with direct access to memory. About [70% of reported security vulnerabilities](https://msrc.microsoft.com/blog/2019/07/a-proactive-approach-to-more-secure-code/) in low-level systems are caused by memory corruption, which is one form of undefined behavior.
+**Rust-এর একটি মৌলিক লক্ষ্য হলো নিশ্চিত করা যে আপনার প্রোগ্রামে কখনো undefined behavior (অনির্ধারিত আচরণ, যার ফল ভাষা নির্দিষ্ট করে না) থাকবে না।** "নিরাপত্তা" বলতে এটিই বোঝায়। মেমোরিতে সরাসরি প্রবেশাধিকার থাকা low-level (নিম্ন-স্তরের) প্রোগ্রামের জন্য undefined behavior বিশেষভাবে বিপজ্জনক। low-level সিস্টেমে [রিপোর্ট হওয়া নিরাপত্তা-দুর্বলতার প্রায় 70%](https://msrc.microsoft.com/blog/2019/07/a-proactive-approach-to-more-secure-code/)-এর কারণ memory corruption (মেমোরির ডেটা অবৈধভাবে নষ্ট হওয়া), যা undefined behavior-এরই একটি রূপ।
 
-A secondary goal of Rust is to prevent undefined behavior at _compile-time_ instead of _run-time_. This goal has two motivations:
+Rust-এর একটি দ্বিতীয় লক্ষ্য হলো undefined behavior _run-time_-এর বদলে _compile-time_-এ আটকানো। এই লক্ষ্যের পেছনে দুটি কারণ আছে:
 
-1. Catching bugs at compile-time means avoiding those bugs in production, improving the reliability of your software.
-2. Catching bugs at compile-time means fewer runtime checks for those bugs, improving the performance of your software.
+1. compile-time-এ বাগ ধরা মানে production-এ সেই বাগগুলো এড়ানো, ফলে আপনার সফটওয়্যারের নির্ভরযোগ্যতা বাড়ে।
+2. compile-time-এ বাগ ধরা মানে সেই বাগগুলোর জন্য runtime-এ কম যাচাই, ফলে আপনার সফটওয়্যারের পারফরম্যান্স বাড়ে।
 
-Rust cannot prevent all bugs. If an application exposes a public and unauthenticated `/delete-production-database` endpoint, then a malicious actor doesn't need a suspicious if-statement to delete the database. But Rust's protections are still likely to make programs safer versus using a language with fewer protections, e.g. as found by [Google's Android team](https://security.googleblog.com/2022/12/memory-safe-languages-in-android-13.html).
+Rust সব বাগ আটকাতে পারে না। কোনো অ্যাপ্লিকেশন যদি সবার জন্য খোলা, পরিচয় যাচাইহীন একটি `/delete-production-database` endpoint (API-র একটি নির্দিষ্ট ঠিকানা) রেখে দেয়, তাহলে database মুছতে অসৎ লোকের কোনো সন্দেহজনক if-statement-এর দরকার নেই। তবু কম সুরক্ষাযুক্ত ভাষার তুলনায় Rust-এর সুরক্ষাগুলো সম্ভবত প্রোগ্রামকে বেশি নিরাপদ করে, যেমনটি দেখেছে [Google-এর Android টিম](https://security.googleblog.com/2022/12/memory-safe-languages-in-android-13.html)।
 
-### Ownership as a Discipline for Memory Safety
+### memory safety-র নিয়মশৃঙ্খলা হিসেবে ownership {#ownership-as-a-discipline-for-memory-safety}
 
-Since safety is the absence of undefined behavior, and since ownership is about safety, then we need to understand ownership in terms of the undefined behaviors it prevents. The Rust Reference maintains a large list of ["Behavior considered undefined"](https://doc.rust-lang.org/reference/behavior-considered-undefined.html). For now, we will focus on one category: operations on memory.
+নিরাপত্তা যেহেতু undefined behavior-এর অনুপস্থিতি, আর ownership যেহেতু নিরাপত্তা নিয়েই, তাই ownership বুঝতে হবে সেটি কোন কোন undefined behavior আটকায় তার ভিত্তিতে। Rust Reference ["Behavior considered undefined"](https://doc.rust-lang.org/reference/behavior-considered-undefined.html)-এর একটি বড় তালিকা রাখে। আপাতত আমরা একটি শ্রেণিতে মনোযোগ দেব: মেমোরির ওপর operation।
 
-Memory is the space where data is stored during the execution of a program. There are many ways to think about memory:
+মেমোরি হলো সেই জায়গা, যেখানে প্রোগ্রাম চলার সময় ডেটা রাখা হয়। মেমোরি নিয়ে ভাবার অনেক উপায় আছে:
 
-- If you are unfamiliar with systems programming, you might think of memory at a high level like "memory is the RAM in my computer" or "memory is the thing that runs out if I load too much data".
-- If you are familiar with systems programming, you might think of memory at a low level like "memory is an array of bytes" or "memory is the pointers I get back from `malloc`".
+- systems programming (সিস্টেম-স্তরের প্রোগ্রামিং)-এর সঙ্গে পরিচিত না হলে আপনি হয়তো মেমোরিকে high-level (উচ্চ-স্তরের) দৃষ্টিতে ভাবেন, যেমন "মেমোরি মানে আমার কম্পিউটারের RAM" বা "মেমোরি হলো সেই জিনিস, যা বেশি ডেটা লোড করলে ফুরিয়ে যায়"।
+- systems programming-এর সঙ্গে পরিচিত হলে আপনি হয়তো মেমোরিকে low-level দৃষ্টিতে ভাবেন, যেমন "মেমোরি হলো byte-এর একটি array" বা "মেমোরি হলো `malloc` থেকে ফিরে পাওয়া pointer-গুলো"।
 
-Both of these memory models are _valid_, but they are not _useful_ ways to think about how Rust works. The high-level model is too abstract to explain how Rust works. You will need to understand the concept of a pointer, for instance. The low-level model is too concrete to explain how Rust works. Rust does not allow you to interpret memory as an array of bytes, for instance.
+মেমোরির এই দুটি মডেলই _সঠিক_, কিন্তু Rust কীভাবে কাজ করে তা ভাবার জন্য _কাজের_ নয়। high-level মডেলটি Rust-এর কাজ ব্যাখ্যা করার জন্য অতিরিক্ত বিমূর্ত। যেমন, আপনাকে pointer-এর ধারণা বুঝতে হবে। আর low-level মডেলটি Rust-এর কাজ ব্যাখ্যা করার জন্য অতিরিক্ত বাস্তব। যেমন, Rust আপনাকে মেমোরিকে byte-এর array হিসেবে ব্যাখ্যা করতে দেয় না।
 
-Rust provides a particular way to think about memory. Ownership is a discipline for safely using memory within that way of thinking. The rest of this chapter will explain the Rust model of memory.
+Rust মেমোরি নিয়ে ভাবার একটি নির্দিষ্ট উপায় দেয়। সেই চিন্তাধারার ভেতরে নিরাপদে মেমোরি ব্যবহারের নিয়মশৃঙ্খলাই হলো ownership। এই অধ্যায়ের বাকি অংশে Rust-এর মেমোরি-মডেল ব্যাখ্যা করা হবে।
 
-### Variables Live in the Stack
+### variable থাকে stack-এ {#variables-live-in-the-stack}
 
-Here's a program like the one you saw in Section 3.3 that defines a number `n` and calls a function `plus_one` on `n`. Beneath the program is a new kind of diagram. This diagram visualizes the contents of memory during the program's execution at the three marked points.
+এখানে অধ্যায় 3.3-এ দেখা প্রোগ্রামের মতো একটি প্রোগ্রাম আছে, যা একটি সংখ্যা `n` সংজ্ঞায়িত করে এবং `n`-এর ওপর `plus_one` function call করে। প্রোগ্রামের নিচে একটি নতুন ধরনের ডায়াগ্রাম আছে। এই ডায়াগ্রাম প্রোগ্রাম চলার সময় চিহ্নিত তিনটি জায়গায় মেমোরিতে কী আছে, তা দেখায়।
 
 ```aquascope,interpreter,horizontal
 fn main() {
@@ -125,17 +125,17 @@ fn plus_one(x: i32) -> i32 {
 }
 ```
 
-Variables live in **frames**. A frame is a mapping from variables to values within a single scope, such as a function. For example:
+variable থাকে **frame**-এ। frame হলো একটি scope (কোডের যে অংশে একটি নাম ব্যবহার করা যায়)-এর ভেতরে variable থেকে মানের একটি ম্যাপিং, যেমন একটি function-এর ভেতরে। যেমন:
 
-- The frame for `main` at location L1 holds `n = 5`.
-- The frame for `plus_one` at L2 holds `x = 5`.
-- The frame for `main` at location L3 holds `n = 5; y = 6`.
+- L1 অবস্থানে `main`-এর frame-এ আছে `n = 5`।
+- L2-তে `plus_one`-এর frame-এ আছে `x = 5`।
+- L3 অবস্থানে `main`-এর frame-এ আছে `n = 5; y = 6`।
 
-Frames are organized into a **stack** of currently-called-functions. For example, at L2 the frame for `main` sits above the frame for the called function `plus_one`. After a function returns, Rust deallocates the function's frame. (Deallocation is also called **freeing** or **dropping**, and we use those terms interchangeably.) This sequence of frames is called a stack because the most recent frame added is always the next frame freed.
+frame-গুলো সাজানো থাকে বর্তমানে call হওয়া function-গুলোর একটি **stack** (ক্রমানুসারে মান রাখার মেমোরি-অংশ)-এ। যেমন, L2-তে `main`-এর frame-টি call হওয়া function `plus_one`-এর frame-এর ওপরে বসে আছে। একটি function return করার পর Rust সেই function-এর frame deallocate (বরাদ্দ করা মেমোরি ফেরত দেওয়া) করে। (deallocation-কে **freeing** বা **dropping**-ও বলা হয়, আর আমরা এই শব্দগুলো অদলবদল করে ব্যবহার করি।) frame-এর এই ক্রমকে stack বলা হয়, কারণ সবচেয়ে শেষে যোগ হওয়া frame-টিই সবসময় সবার আগে free হয়।
 
-> _Note:_ this memory model does not fully describe how Rust actually works! As we saw earlier with the assembly code, the Rust compiler might put `n` or `x` into a register rather than a stack frame. But that distinction is an implementation detail. It shouldn't change your understanding of safety in Rust, so we can focus on the simpler case of frame-only variables.
+> _দ্রষ্টব্য:_ এই মেমোরি-মডেল Rust আসলে কীভাবে কাজ করে তার পুরোটা বর্ণনা করে না! assembly code-এ আগে যেমন দেখেছি, Rust compiler `n` বা `x`-কে stack frame-এর বদলে একটি register-এ রাখতে পারে। তবে এই পার্থক্যটি implementation-এর খুঁটিনাটি। এটি Rust-এর নিরাপত্তা সম্পর্কে আপনার বোঝাপড়া বদলানোর কথা নয়, তাই আমরা শুধু frame-এ থাকা variable-এর সহজ ক্ষেত্রটিতে মনোযোগ দিতে পারি।
 
-When an expression reads a variable, the variable's value is copied from its slot in the stack frame. For example, if we run this program:
+কোনো expression যখন একটি variable পড়ে, তখন variable-টির মান stack frame-এ তার ঘর থেকে কপি করা হয়। যেমন, এই প্রোগ্রামটি চালালে:
 
 ```aquascope,interpreter,horizontal
 #fn main() {
@@ -145,11 +145,11 @@ b += 1;`[]`
 #}
 ```
 
-The value of `a` is copied into `b`, and `a` is left unchanged, even after changing `b`.
+`a`-এর মান `b`-তে কপি হয়, আর `b` বদলানোর পরও `a` অপরিবর্তিত থাকে।
 
-### Boxes Live in the Heap
+### box থাকে heap-এ {#boxes-live-in-the-heap}
 
-However, copying data can take up a lot of memory. For example, here's a slightly different program. This program copies an array with 1 million elements:
+তবে ডেটা কপি করতে অনেক মেমোরি লাগতে পারে। যেমন, এখানে একটু আলাদা একটি প্রোগ্রাম। এই প্রোগ্রামটি 10 লাখ উপাদানের একটি array কপি করে:
 
 ```aquascope,interpreter
 #fn main() {
@@ -158,9 +158,9 @@ let b = a;`[]`
 #}
 ```
 
-Observe that copying `a` into `b` causes the `main` frame to contain 2 million elements. 
+লক্ষ করুন, `a`-কে `b`-তে কপি করার ফলে `main` frame-এ 20 লাখ উপাদান জমা হয়েছে। 
 
-To transfer access to data without copying it, Rust uses **pointers**. A pointer is a value that describes a location in memory. The value that a pointer points-to is called its **pointee.** One common way to make a pointer is to allocate memory in the **heap**.  The heap is a separate region of memory where data can live indefinitely. Heap data is not tied to a specific stack frame. Rust provides a construct called [`Box`](https://doc.rust-lang.org/std/boxed/index.html) for putting data on the heap. For example, we can wrap the million-element array in `Box::new` like this:
+ডেটা কপি না করে তার প্রবেশাধিকার হস্তান্তর করতে Rust **pointer** ব্যবহার করে। pointer (মেমোরির একটি অবস্থান নির্দেশকারী মান) হলো এমন একটি মান, যা মেমোরির একটি অবস্থান বর্ণনা করে। pointer যে মানটিকে নির্দেশ করে, তাকে বলা হয় তার **pointee।** pointer তৈরির একটি প্রচলিত উপায় হলো **heap** (প্রয়োজনমতো জায়গা বরাদ্দের মেমোরি-অংশ)-এ মেমোরি allocate (মেমোরিতে জায়গা বরাদ্দ) করা।  heap হলো মেমোরির একটি আলাদা অংশ, যেখানে ডেটা অনির্দিষ্টকাল থাকতে পারে। heap-এর ডেটা কোনো নির্দিষ্ট stack frame-এর সঙ্গে বাঁধা নয়। heap-এ ডেটা রাখার জন্য Rust [`Box`](https://doc.rust-lang.org/std/boxed/index.html) নামের একটি গঠন দেয়। যেমন, 10 লাখ উপাদানের array-টিকে আমরা `Box::new` দিয়ে মুড়ে দিতে পারি, এভাবে:
 
 ```aquascope,interpreter
 #fn main() {
@@ -169,15 +169,15 @@ let b = a;`[]`
 #}
 ```
 
-Observe that now, there is only ever a single array at a time. At L1, the value of `a` is a pointer (represented by dot with an arrow) to the array inside the heap. The statement `let b = a` copies the pointer from `a` into `b`, but the pointed-to data is not copied. Note that `a` is now grayed out because it has been *moved* &mdash; we will see what that means in a moment.
+লক্ষ করুন, এখন যেকোনো সময়ে একটিমাত্র array থাকে। L1-এ `a`-এর মান হলো heap-এর ভেতরের array-টির দিকে একটি pointer (তীরসহ একটি বিন্দু দিয়ে দেখানো)। `let b = a` statement pointer-টিকে `a` থেকে `b`-তে কপি করে, কিন্তু যে ডেটাকে নির্দেশ করা হচ্ছে, তা কপি হয় না। লক্ষ করুন, `a` এখন ধূসর হয়ে গেছে, কারণ এটি *move* হয়েছে &mdash; এর অর্থ কী, তা আমরা একটু পরেই দেখব।
 
 {{#quiz ../quizzes/ch04-01-ownership-sec1-stackheap.toml}}
 
-### Rust Does Not Permit Manual Memory Management
+### Rust নিজ হাতে memory management করতে দেয় না {#rust-does-not-permit-manual-memory-management}
 
-Memory management is the process of allocating memory and deallocating memory. In other words, it's the process of finding unused memory and later returning that memory when it is no longer used. Stack frames are automatically managed by Rust. When a function is called, Rust allocates a stack frame for the called function. When the call ends, Rust deallocates the stack frame.
+memory management (মেমোরি বরাদ্দ ও ফেরতের ব্যবস্থাপনা) হলো মেমোরি allocate আর deallocate করার প্রক্রিয়া। অন্যভাবে বললে, এটি অব্যবহৃত মেমোরি খুঁজে বের করা, আর পরে সেই মেমোরির ব্যবহার শেষ হলে তা ফেরত দেওয়ার প্রক্রিয়া। stack frame-গুলো Rust আপনা-আপনিই সামলায়। কোনো function call হলে Rust call হওয়া function-টির জন্য একটি stack frame allocate করে। call শেষ হলে Rust সেই stack frame deallocate করে।
 
-As we saw above, heap data is allocated when calling `Box::new(..)`. But when is heap data deallocated? Imagine that Rust had a `free()` function that frees a heap allocation. Imagine that Rust let a programmer call `free` whenever they wanted. This kind of "manual" memory management easily leads to bugs. For example, we could read a pointer to freed memory:
+ওপরে যেমন দেখেছি, `Box::new(..)` call করলে heap-এর ডেটা allocate হয়। কিন্তু heap-এর ডেটা deallocate হয় কখন? কল্পনা করুন, Rust-এ একটি `free()` function আছে, যা heap-এর একটি বরাদ্দ মুক্ত করে। কল্পনা করুন, Rust প্রোগ্রামারকে যখন খুশি `free` call করতে দেয়। এ ধরনের "নিজ হাতে" memory management সহজেই বাগের জন্ম দেয়। যেমন, আমরা free করা মেমোরির একটি pointer পড়ে ফেলতে পারি:
 
 ```aquascope,interpreter,shouldFail
 #fn free<T>(_t: T) {}
@@ -188,21 +188,21 @@ assert!(b[0] == 0);`[]`
 #}
 ```
 
-> *Note:* you may wonder how we are executing this Rust program that doesn't compile. We use [special tools](https://github.com/cognitive-engineering-lab/aquascope) to simulate Rust as if the borrow checker were disabled, for educational purposes. That way we can answer what-if questions, like: what if Rust let this unsafe program compile?
+> *দ্রষ্টব্য:* আপনি হয়তো ভাবছেন, compile হয় না এমন এই Rust প্রোগ্রামটি আমরা চালাচ্ছি কীভাবে। শেখানোর উদ্দেশ্যে আমরা [বিশেষ টুল](https://github.com/cognitive-engineering-lab/aquascope) ব্যবহার করি, যা borrow checker বন্ধ থাকলে Rust কেমন চলত তা অনুকরণ করে দেখায়। এভাবে আমরা "যদি এমন হতো" ধরনের প্রশ্নের উত্তর দিতে পারি, যেমন: Rust যদি এই অনিরাপদ প্রোগ্রামটিকে compile হতে দিত, তাহলে কী হতো?
 
-Here, we allocate an array on the heap. Then we call `free(b)`, which deallocates the heap memory of `b`. Therefore the value of `b` is a pointer to invalid memory, which we represent as the "⦻" icon. No undefined behavior has happened yet! The program is still safe at L2. It's not necessarily a problem to have an invalid pointer.
+এখানে আমরা heap-এ একটি array allocate করি। তারপর `free(b)` call করি, যা `b`-এর heap মেমোরি deallocate করে। ফলে `b`-এর মান হয়ে যায় অবৈধ মেমোরির দিকে একটি pointer, যা আমরা "⦻" আইকন দিয়ে দেখাই। এখনো কোনো undefined behavior ঘটেনি! L2-তে প্রোগ্রামটি এখনো নিরাপদ। একটি অবৈধ pointer থাকা মানেই সমস্যা, এমন নয়।
 
-The undefined behavior happens when we try to *use* the pointer by reading `b[0]`. That would attempt to access invalid memory, which could cause the program to crash. Or worse, it could not crash and return arbitrary data. Therefore this program is **unsafe**.
+undefined behavior ঘটে তখন, যখন আমরা `b[0]` পড়ে pointer-টি *ব্যবহার* করার চেষ্টা করি। এতে অবৈধ মেমোরিতে ঢোকার চেষ্টা হবে, যার ফলে প্রোগ্রাম ক্র্যাশ করতে পারে। অথবা আরও খারাপ, ক্র্যাশ না করে এলোমেলো ডেটা ফেরত দিতে পারে। তাই এই প্রোগ্রামটি **অনিরাপদ**।
 
-Rust does not allow programs to manually deallocate memory. That policy avoids the kinds of undefined behaviors shown above.
+Rust প্রোগ্রামকে নিজ হাতে মেমোরি deallocate করতে দেয় না। এই নীতি ওপরে দেখানো ধরনের undefined behavior এড়ায়।
 
-### A Box's Owner Manages Deallocation
+### box-এর owner deallocation সামলায় {#a-boxs-owner-manages-deallocation}
 
-Instead, Rust _automatically_ frees a box's heap memory. Here is an _almost_ correct description of Rust's policy for freeing boxes:
+বরং Rust _আপনা-আপনিই_ একটি box (heap-এর ডেটার মালিক এমন pointer)-এর heap মেমোরি free করে। box free করার Rust-এর নীতির একটি _প্রায়_ সঠিক বর্ণনা এখানে দেওয়া হলো:
 
-> **Box deallocation principle (almost correct):** If a variable is bound to a box, when Rust deallocates the variable's frame, then Rust deallocates the box's heap memory.
+> **box deallocation-এর নীতি (Box deallocation principle, প্রায় সঠিক):** কোনো variable যদি একটি box-এর সঙ্গে bind থাকে, তাহলে Rust যখন variable-টির frame deallocate করে, তখন Rust box-টির heap মেমোরিও deallocate করে।
 
-For example, let's trace through a program that allocates and frees a box:
+যেমন, চলুন এমন একটি প্রোগ্রাম ধাপে ধাপে দেখি, যা একটি box allocate করে আবার free করে:
 
 ```aquascope,interpreter,horizontal
 fn main() {
@@ -215,9 +215,9 @@ fn make_and_drop() {
 }
 ```
 
-At L1, before calling `make_and_drop`, the state of memory is just the stack frame for `main`. Then at L2, while calling `make_and_drop`, `a_box` points to `5` on the heap. Once `make_and_drop` is finished, Rust deallocates its stack frame. `make_and_drop` contains the variable `a_box`, so Rust also deallocates the heap data in `a_box`. Therefore the heap is empty at L3.
+L1-এ, `make_and_drop` call করার আগে, মেমোরির অবস্থা বলতে শুধু `main`-এর stack frame। তারপর L2-তে, `make_and_drop` call হওয়ার সময়, `a_box` heap-এর `5`-কে নির্দেশ করে। `make_and_drop` শেষ হলে Rust এর stack frame deallocate করে। `make_and_drop`-এ `a_box` variable-টি আছে, তাই Rust `a_box`-এর heap ডেটাও deallocate করে। ফলে L3-তে heap খালি।
 
-The box's heap memory has been successfully managed. But what if we abused this system? Returning to our earlier example, what happens when we bind two variables to a box?
+box-এর heap মেমোরি সফলভাবে সামলানো হয়েছে। কিন্তু আমরা যদি এই ব্যবস্থার অপব্যবহার করি? আগের উদাহরণে ফিরে যাই: একটি box-এর সঙ্গে দুটি variable bind করলে কী ঘটে?
 
 ```rust,ignore
 # fn main() {
@@ -226,18 +226,18 @@ let b = a;
 # }
 ```
 
-The boxed array has now been bound to both `a` and `b`. By our "almost correct" principle, Rust would try to free the box's heap memory *twice* on behalf of both variables. That's undefined behavior too!
+box-এ রাখা array-টি এখন `a` আর `b` দুটোর সঙ্গেই bind হয়েছে। আমাদের "প্রায় সঠিক" নীতি অনুযায়ী, Rust দুটি variable-এর হয়ে box-এর heap মেমোরি *দুবার* free করার চেষ্টা করবে। সেটাও undefined behavior!
 
-To avoid this situation, we finally arrive at ownership. When `a` is bound to `Box::new([0; 1_000_000])`, we say that `a` **owns** the box. The statement `let b = a` **moves** ownership of the box from `a` to `b`. Given these concepts, Rust's policy for freeing boxes is more accurately described as:
+এই পরিস্থিতি এড়াতে আমরা শেষ পর্যন্ত পৌঁছাই ownership-এ। `a` যখন `Box::new([0; 1_000_000])`-এর সঙ্গে bind হয়, তখন আমরা বলি `a` box-টিকে **own** করে, অর্থাৎ এটি box-টির **owner** (মালিক)। `let b = a` statement box-টির ownership `a` থেকে `b`-তে **move** (ownership এক variable থেকে আরেকটিতে সরানো) করে। এই ধারণাগুলোর আলোকে box free করার Rust-এর নীতিকে আরও সঠিকভাবে বর্ণনা করা যায় এভাবে:
 
-> **Box deallocation principle (fully correct):** If a variable owns a box, when Rust deallocates the variable's frame, then Rust deallocates the box's heap memory.
+> **box deallocation-এর নীতি (সম্পূর্ণ সঠিক):** কোনো variable যদি একটি box own করে, তাহলে Rust যখন variable-টির frame deallocate করে, তখন Rust box-টির heap মেমোরিও deallocate করে।
 
-In the example above, `b` owns the boxed array. Therefore when the scope ends, Rust deallocates the box only once on behalf of `b`, not `a`.
+ওপরের উদাহরণে `b` box-এ রাখা array-টি own করে। তাই scope শেষ হলে Rust box-টি মাত্র একবার deallocate করে, `a`-এর হয়ে নয়, `b`-এর হয়ে।
 
 
-### Collections Use Boxes
+### collection box ব্যবহার করে {#collections-use-boxes}
 
-Boxes are used by Rust data structures[^boxed-data-structures] like [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html), [`String`](https://doc.rust-lang.org/std/string/struct.String.html), and [`HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html) to hold a variable number of elements. For example, here's a program that creates, moves, and mutates a string:
+Rust-এর data structure (ডেটা সাজানোর কাঠামো)[^boxed-data-structures], যেমন [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html), [`String`](https://doc.rust-lang.org/std/string/struct.String.html) আর [`HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html), পরিবর্তনশীল সংখ্যক উপাদান রাখতে box ব্যবহার করে। যেমন, এখানে একটি প্রোগ্রাম আছে, যা একটি string তৈরি করে, move করে এবং mutate (ডেটা বদলানো) করে:
 
 ```aquascope,interpreter,horizontal
 fn main() {
@@ -252,17 +252,17 @@ fn add_suffix(mut name: String) -> String {
 }
 ```
 
-This program is more involved, so make sure you follow each step:
+এই প্রোগ্রামটি একটু জটিল, তাই প্রতিটি ধাপ ভালো করে খেয়াল করুন:
 
-1. At L1, the string "Ferris" has been allocated on the heap. It is owned by `first`.
-2. At L2, the function `add_suffix(first)` has been called. This moves ownership of the string from `first` to `name`. The string data is not copied, but the pointer to the data is copied.
-3. At L3, the function `name.push_str(" Jr.")` resizes the string's heap allocation. This does three things. First, it creates a new larger allocation. Second, it writes "Ferris Jr." into the new allocation. Third, it frees the original heap memory. `first` now points to deallocated memory.
-4. At L4, the frame for `add_suffix` is gone. This function returned `name`, transferring ownership of the string to `full`.
+1. L1-এ "Ferris" string-টি heap-এ allocate হয়েছে। এর owner `first`।
+2. L2-তে `add_suffix(first)` function call হয়েছে। এটি string-টির ownership `first` থেকে `name`-এ move করে। string-এর ডেটা কপি হয় না, কিন্তু ডেটার pointer-টি কপি হয়।
+3. L3-তে `name.push_str(" Jr.")` function string-টির heap বরাদ্দের আকার বদলায়। এতে তিনটি জিনিস ঘটে। প্রথমত, এটি আরও বড় একটি নতুন বরাদ্দ তৈরি করে। দ্বিতীয়ত, নতুন বরাদ্দে "Ferris Jr." লেখে। তৃতীয়ত, মূল heap মেমোরি free করে। `first` এখন deallocate হওয়া মেমোরিকে নির্দেশ করে।
+4. L4-এ `add_suffix`-এর frame আর নেই। এই function `name` return করেছে, ফলে string-টির ownership `full`-এ হস্তান্তর হয়েছে।
 
 
-### Variables Cannot Be Used After Being Moved
+### move হওয়ার পর variable ব্যবহার করা যায় না {#variables-cannot-be-used-after-being-moved}
 
-The string program helps illustrate a key safety principle for ownership. Imagine that `first` was used in `main` after calling `add_suffix`. We can simulate such a program and see the undefined behavior that results:
+string-এর এই প্রোগ্রামটি ownership-এর একটি মূল নিরাপত্তা-নীতি বুঝতে সাহায্য করে। কল্পনা করুন, `add_suffix` call করার পর `main`-এ `first` ব্যবহার করা হলো। এমন একটি প্রোগ্রাম অনুকরণ করে দেখা যাক, এর ফলে কী undefined behavior ঘটে:
 
 ```aquascope,interpreter,shouldFail
 fn main() {
@@ -277,9 +277,9 @@ fn add_suffix(mut name: String) -> String {
 }
 ```
 
-`first` points to deallocated memory after calling `add_suffix`. Reading `first` in `println!` would therefore be a violation of memory safety (undefined behavior). Remember: it's not a problem that `first` points to deallocated memory. It's a problem that we tried to *use* `first` after it became invalid.
+`add_suffix` call করার পর `first` deallocate হওয়া মেমোরিকে নির্দেশ করে। তাই `println!`-এ `first` পড়া হবে memory safety-র লঙ্ঘন (undefined behavior)। মনে রাখবেন: `first` deallocate হওয়া মেমোরিকে নির্দেশ করছে, এটা সমস্যা নয়। সমস্যা হলো, অবৈধ হয়ে যাওয়ার পর আমরা `first`-কে *ব্যবহার* করার চেষ্টা করেছি।
 
-Thankfully, Rust will refuse to compile this program, giving the following error:
+সৌভাগ্যক্রমে, Rust এই প্রোগ্রাম compile করতে রাজি হবে না, আর নিচের error দেবে:
 
 ```text
 error[E0382]: borrow of moved value: `first`
@@ -293,17 +293,17 @@ error[E0382]: borrow of moved value: `first`
   |                                   ^^^^^ value borrowed here after move
 ```
 
-Let's walk through the steps of this error. Rust says that `first` is moved when we called `add_suffix(first)` on line 3. The error clarifies that `first` is moved because it has type `String`, which does not implement `Copy`. We will discuss `Copy` soon &mdash; in brief, you would not get this error if you used an `i32` instead of `String`. Finally, the error says that we use `first` after being moved (it's "borrowed", which we discuss next section).
+চলুন error-টির ধাপগুলো দেখি। Rust বলছে, লাইন 3-এ `add_suffix(first)` call করার সময় `first` move হয়েছে। error-টি স্পষ্ট করে দিচ্ছে যে `first` move হয়েছে, কারণ এর type `String`, যা `Copy` implement করে না। `Copy` নিয়ে আমরা শিগগিরই আলোচনা করব &mdash; সংক্ষেপে, `String`-এর বদলে `i32` ব্যবহার করলে এই error পেতেন না। সবশেষে error বলছে যে move হওয়ার পর আমরা `first` ব্যবহার করেছি (এটি "borrowed" হয়েছে, যা নিয়ে পরের অংশে আলোচনা করব)।
 
-So if you move a variable, Rust will stop you from using that variable later. More generally, the compiler will enforce this principle:
+তাহলে আপনি একটি variable move করলে Rust পরে সেই variable ব্যবহার করতে দেবে না। আরও সাধারণভাবে, compiler এই নীতি বলবৎ করবে:
 
-> **Moved heap data principle:** if a variable `x` moves ownership of heap data to another variable `y`, then `x` cannot be used after the move.
+> **move হওয়া heap ডেটার নীতি (Moved heap data principle):** কোনো variable `x` যদি heap ডেটার ownership অন্য একটি variable `y`-তে move করে, তাহলে move-এর পর `x` আর ব্যবহার করা যাবে না।
 
-Now you should start to see the relationship between ownership, moves, and safety. Moving ownership of heap data avoids undefined behavior from reading deallocated memory.
+এখন ownership, move আর নিরাপত্তার সম্পর্কটি আপনার চোখে পড়তে শুরু করার কথা। heap ডেটার ownership move করলে deallocate হওয়া মেমোরি পড়ার ফলে ঘটা undefined behavior এড়ানো যায়।
 
-### Cloning Avoids Moves
+### clone করলে move এড়ানো যায় {#cloning-avoids-moves}
 
-One way to avoid moving data is to *clone* it using the `.clone()` method. For example, we can fix the safety issue in the previous program with a clone:
+ডেটা move করা এড়ানোর একটি উপায় হলো `.clone()` method দিয়ে সেটিকে *clone* (ডেটার হুবহু নতুন কপি তৈরি) করা। যেমন, আগের প্রোগ্রামের নিরাপত্তার সমস্যাটি আমরা একটি clone দিয়ে ঠিক করতে পারি:
 
 ```aquascope,interpreter
 fn main() {
@@ -319,24 +319,24 @@ fn add_suffix(mut name: String) -> String {
 }
 ```
 
-Observe that at L1, `first_clone` did not "shallow" copy the pointer in `first`, but instead "deep" copied the string data into a new heap allocation. Therefore at L2, while `first_clone` has been moved and invalidated by `add_suffix`, the original `first` variable is unchanged. It is safe to continue using `first`.
+লক্ষ করুন, L1-এ `first_clone` `first`-এর pointer-টি "shallow" কপি (শুধু pointer কপি) করেনি, বরং string-এর ডেটা একটি নতুন heap বরাদ্দে "deep" কপি (পুরো ডেটা কপি) করেছে। তাই L2-তে `first_clone` `add_suffix`-এর কারণে move ও অবৈধ হয়ে গেলেও মূল `first` variable অপরিবর্তিত থাকে। `first` ব্যবহার চালিয়ে যাওয়া নিরাপদ।
 
 {{#quiz ../quizzes/ch04-01-ownership-sec2-moves.toml}}
 
-### Summary
+### সারসংক্ষেপ {#summary}
 
-Ownership is primarily a discipline of heap management:[^pointer-management]
+ownership মূলত heap ব্যবস্থাপনার একটি নিয়মশৃঙ্খলা:[^pointer-management]
 
-- All heap data must be owned by exactly one variable.
-- Rust deallocates heap data once its owner goes out of scope.
-- Ownership can be transferred by moves, which happen on assignments and function calls.
-- Heap data can only be accessed through its current owner, not a previous owner.
+- heap-এর সব ডেটার ঠিক একটি করে variable owner থাকতে হবে।
+- owner scope-এর বাইরে চলে গেলে Rust heap-এর ডেটা deallocate করে।
+- move-এর মাধ্যমে ownership হস্তান্তর করা যায়, আর move ঘটে assignment ও function call-এর সময়।
+- heap-এর ডেটায় শুধু তার বর্তমান owner-এর মাধ্যমেই পৌঁছানো যায়, আগের কোনো owner-এর মাধ্যমে নয়।
 
-We have emphasized not just _how_ Rust's safeguards work, but _why_ they avoid undefined behavior. When you get an error message from the Rust compiler, it's easy to get frustrated if you don't understand why Rust is complaining. These conceptual foundations should help you with interpreting Rust's error messages.  They should also help you design more Rustic APIs.
+আমরা শুধু Rust-এর সুরক্ষাগুলো _কীভাবে_ কাজ করে তা নয়, সেগুলো _কেন_ undefined behavior এড়ায়, তাতেও জোর দিয়েছি। Rust compiler থেকে কোনো error message পেলে Rust কেন আপত্তি করছে তা না বুঝলে সহজেই বিরক্তি আসে। এই ধারণাগত ভিত্তিগুলো Rust-এর error message বুঝতে আপনাকে সাহায্য করবে।  আরও Rust-সুলভ API নকশা করতেও এগুলো সাহায্য করবে।
 
-[^boxed-data-structures]: These data structures don't use the literal `Box` type. For example, `String` is implemented with `Vec`, and `Vec` is implemented with [`RawVec`](https://doc.rust-lang.org/nomicon/vec/vec-raw.html) rather than `Box`. But types like `RawVec` are still box-like: they own memory in the heap.
+[^boxed-data-structures]: এই data structure-গুলো সরাসরি `Box` type ব্যবহার করে না। যেমন, `String` implement করা হয়েছে `Vec` দিয়ে, আর `Vec` implement করা হয়েছে `Box`-এর বদলে [`RawVec`](https://doc.rust-lang.org/nomicon/vec/vec-raw.html) দিয়ে। তবে `RawVec`-এর মতো type-গুলোও box-এর মতোই: এরা heap-এর মেমোরি own করে।
 
-[^pointer-management]: In another sense, ownership is a discipline of *pointer* management. But we haven't described yet about how to create pointers to anywhere other than the heap. We'll get there in the next section.
+[^pointer-management]: আরেক অর্থে ownership হলো *pointer* ব্যবস্থাপনার একটি নিয়মশৃঙ্খলা। তবে heap ছাড়া অন্য কোথাও pointer কীভাবে তৈরি করতে হয়, তা আমরা এখনো বলিনি। পরের অংশে সেখানে পৌঁছাব।
 
 [`NameError`]: https://docs.python.org/3/library/exceptions.html#NameError
 [`ReferenceError`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError

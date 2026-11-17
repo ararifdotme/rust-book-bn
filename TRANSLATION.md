@@ -100,6 +100,16 @@ translated, including comments inside `console`/`cmd` blocks (those are part
 of a command line). Comments inside ```` ```rust ```` blocks in chapter text
 may be translated, the same as under `listings/`.
 
+**Comments quoted in compiler output stay in English.** If a code comment's
+line also appears in an error message shown in the book (a `text` block in the
+chapter, or the listing's `output.txt`), leave that comment untranslated, e.g.
+`// oh no! x isn't defined!` (ch04-01) and `// error!`
+(`no-listing-19-slice-error`). Otherwise the example and the output disagree.
+
+**Named principles** (chapter 4): give a Bengali name with the English in
+parentheses at first mention, e.g. "pointer নিরাপত্তার নীতি (Pointer Safety
+Principle)", then the Bengali name alone.
+
 **Aquascope blocks** (```` ```aquascope,interpreter ````,
 ```` ```aquascope,permissions,stepper ```` and other option combinations) are
 programs that Aquascope compiles and analyses to draw diagrams. Do not edit
@@ -308,6 +318,51 @@ tested with this repo's build.
 | Unicode scalar value | Unicode scalar value | Unicode-এর একটি একক অক্ষর-মান | 3 |
 | unit / unit type | unit / unit type | খালি মান ও তার type, `()` | 3 |
 | wrapping | wrapping | সীমা পেরোলে আবার শুরুর দিকে ঘুরে আসা | 3 |
+| aliasing / alias | aliasing / alias | একই ডেটা একাধিক variable দিয়ে ব্যবহার করা | 4 |
+| assembly code | assembly code | প্রসেসরের নির্দেশের মানুষের পড়ার উপযোগী রূপ | 4 |
+| borrow | borrow করা | ধার নেওয়া (reference তৈরি করা) | 4 |
+| borrow checker | borrow checker | borrow-এর নিয়ম যাচাই করা compiler-এর অংশ | 4 |
+| box (`Box`) | box | heap-এর ডেটার মালিক এমন pointer | 4 |
+| clone | clone করা | ডেটার হুবহু নতুন কপি তৈরি করা | 4 |
+| copyable (`Copy`) | copyable | move ছাড়াই কপি করা যায় এমন | 4 |
+| data race | data race | একাধিক thread একই ডেটা একসঙ্গে বদলালে হওয়া অনিশ্চিত আচরণ | 4 |
+| deallocate / free / drop | deallocate করা (free, drop) | বরাদ্দ করা মেমোরি ফেরত দেওয়া | 4 |
+| dereference | dereference করা | pointer ধরে তার ডেটায় পৌঁছানো | 4 |
+| deref coercion | deref coercion | স্বয়ংক্রিয় dereference-রূপান্তর | 4 |
+| double-free | double-free | একই মেমোরি দুবার free করা | 4 |
+| endpoint | endpoint | API-র একটি নির্দিষ্ট ঠিকানা | 4 |
+| exception | exception | চলার সময় ঘটা error-এর সংকেত | 4 |
+| fat pointer | fat pointer | metadata-সহ pointer | 4 |
+| field | field | struct বা tuple-এর একেকটি অংশ | 4 |
+| frame / stack frame | frame | একটি function-এর variable-গুলোর মেমোরি-অংশ | 4 |
+| garbage collection | garbage collection (garbage collector) | অব্যবহৃত মেমোরি আপনা-আপনি মুক্ত করার ব্যবস্থা | 4 |
+| immutable reference | immutable reference (shared reference) | শুধু পড়ার reference | 4 |
+| interpreter | interpreter | কোড লাইন ধরে ধরে চালানোর প্রোগ্রাম | 4 |
+| lifetime parameter | lifetime parameter | reference-এর lifetime বোঝানোর parameter | 4 |
+| local variable | local variable | শুধু একটি function-এর ভেতরে থাকা variable | 4 |
+| memory corruption | memory corruption | মেমোরির ডেটা অবৈধভাবে নষ্ট হওয়া | 4 |
+| memory management | memory management | মেমোরি বরাদ্দ ও ফেরতের ব্যবস্থাপনা | 4 |
+| move | move করা | ownership এক variable থেকে আরেকটিতে সরানো | 4 |
+| mutable reference | mutable reference (unique reference) | বদলানোর অনুমতিসহ একক reference | 4 |
+| mutate / mutation | mutate করা / mutation | ডেটা বদলানো | 4 |
+| non-owning pointer | non-owning pointer | ডেটার মালিক নয় এমন pointer | 4 |
+| owner / own | owner / own করা | মালিক / মালিক হওয়া | 4 |
+| permission | permission | অনুমতি; নামগুলো ইংরেজিতে: Read (পড়া), Write (লেখা/বদলানো), Own (মালিকানা), Flow (প্রবাহ) | 4 |
+| place | place | যা assignment-এর বাঁ পাশে বসতে পারে (variable, `*a`, `a[0]` ইত্যাদি) | 4 |
+| pointer / pointee | pointer / pointee | মেমোরির একটি অবস্থান নির্দেশকারী মান / pointer যে ডেটাকে নির্দেশ করে | 4 |
+| raw pointer | raw pointer | borrow checker যাচাই করে না এমন pointer | 4 |
+| reference counting | reference counting | কতগুলো reference আছে গুনে মেমোরি ফেরতের ব্যবস্থা | 4 |
+| register | register | প্রসেসরের ভেতরের ছোট মেমোরি-ঘর | 4 |
+| segmentation fault | segmentation fault | অবৈধ মেমোরিতে ঢোকার ফলে হওয়া error | 4 |
+| shallow copy / deep copy | shallow copy / deep copy | শুধু pointer কপি / পুরো ডেটা কপি | 4 |
+| slice | slice | collection-এর একটানা একটি অংশের reference | 4 |
+| sound / incomplete (analysis) | sound / incomplete | কখনো ভুল গ্রহণ করে না / কিছু সঠিক কোডও বাতিল করে | 4 |
+| string slice | string slice | string-এর একটি অংশের reference (`&str`) | 4 |
+| syntactic sugar | syntactic sugar | একই কাজের সহজতর লেখার রূপ | 4 |
+| type alias | type alias | কোনো type-এর বিকল্প নাম | 4 |
+| undefined behavior | undefined behavior | অনির্ধারিত আচরণ (যার ফল ভাষা নির্দিষ্ট করে না) | 4 |
+| `unsafe` block | `unsafe` block | নিরাপত্তা-যাচাই শিথিল করা কোড-অংশ | 4 |
+| use-after-free | use-after-free | free করা মেমোরি আবার ব্যবহার করা | 4 |
 
 ### Everyday computing words
 
@@ -354,6 +409,12 @@ Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
 | emoji | ইমোজি | 3 |
 | precision | নির্ভুলতা | 3 |
 | semantics | অর্থ ও আচরণ | 3 |
+| buffer | বাফার | 4 |
+| capacity | ধারণক্ষমতা | 4 |
+| in-place | নিজ জায়গাতেই | 4 |
+| metadata | মেটাডেটা | 4 |
+| safe / unsafe (adjectives) | নিরাপদ / অনিরাপদ | 4 |
+| security vulnerability | নিরাপত্তা-দুর্বলতা | 4 |
 
 ## Progress
 
@@ -369,7 +430,7 @@ use.
 - [x] Chapter 1: Getting Started (ch01-*)
 - [x] Chapter 2: Programming a Guessing Game (ch02-*)
 - [x] Chapter 3: Common Programming Concepts (ch03-*)
-- [ ] Chapter 4: Understanding Ownership (ch04-*)
+- [x] Chapter 4: Understanding Ownership (ch04-*)
 - [ ] Chapter 5: Using Structs to Structure Related Data (ch05-*)
 - [ ] Chapter 6: Enums and Pattern Matching (ch06-*)
 - [ ] Chapter 7: Packages, Crates, and Modules (ch07-*)

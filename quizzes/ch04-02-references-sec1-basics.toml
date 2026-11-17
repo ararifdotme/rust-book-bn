@@ -2,7 +2,7 @@
 id = "0b8dbb4f-7c56-4b6e-8358-95c7b46f90c3"
 type = "ShortAnswer"
 prompt.prompt = """
-Consider the following program, showing the state of memory after the last line:
+নিচের প্রোগ্রামটি দেখুন, শেষ লাইনের পরে মেমোরির অবস্থা দেখানো হয়েছে:
 ```aquascope,interpreter
 #fn main() {
 let x = Box::new(0);
@@ -10,20 +10,20 @@ let y = Box::new(&x);`[]`
 #}
 ```
 
-If you wanted to copy out the number `0` through `y`, how many dereferences would you need to use? 
-Write your answer as a digit. For example, if the correct expression is `*y`, then the answer is 1. 
+`y`-এর মাধ্যমে সংখ্যা `0`-কে কপি করে বের করতে চাইলে আপনাকে কয়টি dereference ব্যবহার করতে হবে? 
+উত্তর একটি অঙ্ক হিসেবে লিখুন। যেমন, সঠিক expression যদি `*y` হয়, তাহলে উত্তর 1। 
 """
 answer.answer = "3"
 context = """
-`***y` is the correct expression. `y` has the type `Box<&Box<i32>>`. It is a heap pointer to a stack reference 
-to a heap pointer. Therefore `y` must be dereferenced three times, once for each layer of indirection.
+সঠিক expression হলো `***y`। `y`-এর type হলো `Box<&Box<i32>>`। এটি একটি heap pointer, যা একটি stack reference-কে নির্দেশ করে, 
+আর সেটি নির্দেশ করে একটি heap pointer-কে। তাই `y`-কে তিনবার dereference করতে হবে, পরোক্ষতার প্রতিটি স্তরের জন্য একবার।
 """
 
 [[questions]]
 id = "7cf19153-3647-4afc-953a-f9392ddb96fb"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider the following program, showing the state of memory after the last line:
+নিচের প্রোগ্রামটি দেখুন, শেষ লাইনের পরে মেমোরির অবস্থা দেখানো হয়েছে:
  
 ```aquascope,interpreter
 fn get_first(vr: &Vec<i32>) -> i32 {
@@ -37,15 +37,15 @@ fn main() {
 }
 ```
 
-Which of the following best explains why `v` is not deallocated after calling `get_first`?
+`get_first` call করার পর `v` কেন deallocate হয় না, তা নিচের কোনটি সবচেয়ে ভালোভাবে ব্যাখ্যা করে?
 """
-answer.answer = "`vr` is a reference which does not own the vector it points to"
+answer.answer = "`vr` একটি reference, যা যে vector-কে নির্দেশ করে তার owner নয়"
 prompt.distractors = [
-  "`vr` is not mutated within `get_first`",
-  "`get_first` returns a value of type `i32`, not the vector itself",
-  "`v` is used after calling `get_first` in the `println`"
+  "`get_first`-এর ভেতরে `vr` mutate করা হয়নি",
+  "`get_first` vector-টি নয়, বরং `i32` type-এর একটি মান return করে",
+  "`get_first` call করার পর `println`-এ `v` ব্যবহার করা হয়েছে"
 ]
 context = """
-References are non-owning pointers. Therefore passing `&v` to `get_first` does not move ownership of `v` into `get_first`,
-and subsequently `v` is not deallocated after `get_first` ends.
+reference হলো non-owning pointer। তাই `get_first`-এ `&v` পাঠালে `v`-এর ownership `get_first`-এ move হয় না,
+আর ফলে `get_first` শেষ হওয়ার পর `v` deallocate হয় না।
 """

@@ -15,8 +15,8 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 7
 context = """
-Although `n` is marked as `mut`, the reference to `n` must also be marked as `mut`. 
-So a valid version of this program would say `incr(&mut n)`.
+`n` `mut` হিসেবে চিহ্নিত হলেও `n`-এর reference-কেও `mut` হিসেবে চিহ্নিত করতে হবে। 
+তাই এই প্রোগ্রামের একটি বৈধ সংস্করণে লেখা থাকত `incr(&mut n)`।
 """
 
 
@@ -35,15 +35,15 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 6
 context = """
-It is illegal to use a mutable reference to a value (`s3`) while an immutable reference 
-is live (`s2`).
+কোনো মানের একটি immutable reference (`s2`) সক্রিয় থাকা অবস্থায় তার একটি mutable reference (`s3`) 
+ব্যবহার করা অবৈধ।
 """
 
 [[questions]]
 id = "80f6bcd6-b74a-4da3-a014-d423c82ce405"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider this Rust function that pushes a number onto the end of a vector, and then removes and returns the number from the front of the vector:
+এই Rust function-টি দেখুন, যা একটি vector-এর শেষে একটি সংখ্যা push করে, তারপর vector-এর সামনে থেকে একটি সংখ্যা সরিয়ে সেটি return করে:
 
 ```
 fn give_and_take(v: &Vec<i32>, n: i32) -> i32 {
@@ -52,7 +52,7 @@ fn give_and_take(v: &Vec<i32>, n: i32) -> i32 {
 }
 ```
 
-Normally, if you try to compile this function, the compiler returns the following error:
+সাধারণত এই function compile করার চেষ্টা করলে compiler নিচের error দেয়:
 
 ```text
 error[E0596]: cannot borrow `*v` as mutable, as it is behind a `&` reference
@@ -64,9 +64,9 @@ error[E0596]: cannot borrow `*v` as mutable, as it is behind a `&` reference
   |     ^^^^^^^^^ `v` is a `&` reference, so the data it refers to cannot be borrowed as mutable
 ```
 
-Assume that the compiler did NOT reject this function. Select each (if any) of the following programs that could
-possibly cause undefined behavior if executed. If none of these programs could cause undefined behavior, 
-then check "None of these programs" .
+ধরে নিন, compiler এই function বাতিল **করেনি**। নিচের প্রোগ্রামগুলোর মধ্যে চালালে যেগুলো (যদি থাকে)
+undefined behavior ঘটাতে পারে, সেগুলোর প্রতিটি বেছে নিন। কোনো প্রোগ্রামই undefined behavior ঘটাতে না পারলে 
+"এগুলোর কোনোটিই নয়" বেছে নিন।
 """
 answer.answer = [
 """
@@ -95,14 +95,14 @@ let k = give_and_take(&v, 4);
 println!("{}", k);
 ```
 """,
-"None of these programs"
+"এগুলোর কোনোটিই নয়"
 ]
 context = """
-As we saw earlier in the section, `v.push(n)` can cause `v` to reallocate its internal contents, invalidating any references to the elements of `v` on the heap.
-Therefore calling `give_and_take(&v, 4)` will cause previously-created element references to point to invalid memory. The two programs that bind `let n = &v[0]`
-before `give_and_take` are candidates for undefined behavior. `let v2 = &v` is not a candidate because a reference to the container `v` is not actually invalidated 
-by mutating `v`.
+এই অংশে আগে যেমন দেখেছি, `v.push(n)`-এর ফলে `v` তার ভেতরের বিষয়বস্তু নতুন করে বরাদ্দ করতে পারে, ফলে heap-এ থাকা `v`-এর উপাদানগুলোর সব reference অবৈধ হয়ে যায়।
+তাই `give_and_take(&v, 4)` call করলে আগে তৈরি উপাদান-reference-গুলো অবৈধ মেমোরিকে নির্দেশ করবে। যে দুটি প্রোগ্রাম `give_and_take`-এর আগে `let n = &v[0]`
+bind করে, সেগুলো undefined behavior-এর সম্ভাব্য প্রার্থী। `let v2 = &v` প্রার্থী নয়, কারণ ধারক `v`-এর reference আসলে `v` mutate করলে 
+অবৈধ হয় না।
 
-The program that does `println!("{}", n)` will cause undefined behavior by reading the invalid memory. The program that does `println!("{}", k)` will not cause undefined
-behavior, because it does not use the invalidated reference.
+যে প্রোগ্রামটি `println!("{}", n)` করে, সেটি অবৈধ মেমোরি পড়ে undefined behavior ঘটাবে। যে প্রোগ্রামটি `println!("{}", k)` করে, সেটি undefined
+behavior ঘটাবে না, কারণ এটি অবৈধ হয়ে যাওয়া reference ব্যবহার করে না।
 """

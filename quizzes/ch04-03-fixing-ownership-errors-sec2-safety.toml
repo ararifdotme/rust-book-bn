@@ -2,24 +2,24 @@
 id = "cbe8ef63-4f7e-45fd-b11f-e6eba40587b0"
 type = "MultipleChoice"
 prompt.prompt = """
-Which of the following best explains why an `i32` can be copied without a move, but a `String` cannot?
+একটি `i32` move ছাড়াই কপি করা যায়, কিন্তু একটি `String` যায় না—কেন, তা নিচের কোনটি সবচেয়ে ভালোভাবে ব্যাখ্যা করে?
 """
-answer.answer = "A `String` owns data on the heap, while an `i32` does not"
+answer.answer = "একটি `String` heap-এর ডেটার owner, কিন্তু একটি `i32` নয়"
 prompt.distractors = [
-    "An `i32` is smaller in memory than a `String`",
-    "An `i32` is a primitive type in Rust, while a `String` is not",
-    "A `String` can be placed on the heap, while an `i32` can only be placed on the stack"
+    "মেমোরিতে একটি `i32` একটি `String`-এর চেয়ে ছোট",
+    "Rust-এ `i32` একটি primitive type, কিন্তু `String` নয়",
+    "একটি `String` heap-এ রাখা যায়, কিন্তু একটি `i32` শুধু stack-এ রাখা যায়"
 ]
 context = """
-If a `String` could be copied without a move, then two variables could think they own
-the same string, leading to a double-free.
+একটি `String` যদি move ছাড়াই কপি করা যেত, তাহলে দুটি variable মনে করতে পারত তারা
+একই string-এর owner, যার ফলে double-free ঘটত।
 """
 
 [[questions]]
 id = "512e1ec0-cd7b-4a90-949b-d7b08b4009a8"
 type = "MultipleChoice"
 prompt.prompt = """
-The following code snippet does not compile:
+নিচের কোড-অংশটি compile হয় না:
 
 ```rust
 let s = String::from("Hello world");
@@ -28,25 +28,25 @@ let s2 = *s_ref;
 println!("{s2}");
 ```
 
-Which of the following best describes the undefined behavior that could occur if this program were allowed to execute?
+এই প্রোগ্রামটিকে চলতে দিলে যে undefined behavior ঘটতে পারত, তা নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
-answer.answer = "The string is freed twice at the end of the program"
+answer.answer = "প্রোগ্রামের শেষে string-টি দুবার free হয়"
 prompt.distractors = [
-  "The read of `s2` in `println` is a use of freed memory",
-  "The dereference `*s_ref` is a use of freed memory",
-  "There is no undefined behavior in this program"
+  "`println`-এ `s2` পড়া মানে free করা মেমোরি ব্যবহার করা",
+  "`*s_ref` dereference মানে free করা মেমোরি ব্যবহার করা",
+  "এই প্রোগ্রামে কোনো undefined behavior নেই"
 ]
 context = """
-The `println` is technically safe, since the string won't be deallocated until the end
-of the current scope. But then undefined behavior occurs, when the string is freed twice
-on behalf of `s` and `s2`.
+`println` প্রযুক্তিগতভাবে নিরাপদ, কারণ বর্তমান scope শেষ না হওয়া পর্যন্ত string-টি
+deallocate হবে না। কিন্তু তারপর undefined behavior ঘটে, যখন `s` আর `s2`-এর হয়ে
+string-টি দুবার free হয়।
 """
 
 [[questions]]
 id = "1e31e163-5bd4-4385-b222-33c19058bf6a"
 type = "MultipleChoice"
 prompt.prompt = """
-The following program does not compile:
+নিচের প্রোগ্রামটি compile হয় না:
 
 ```rust
 fn copy_to_prev(v: &mut Vec<i32>, i: usize) {
@@ -59,19 +59,19 @@ fn main() {
 }
 ```
 
-Which of the following best describes the undefined behavior that could occur if this program were allowed to execute?
+এই প্রোগ্রামটিকে চলতে দিলে যে undefined behavior ঘটতে পারত, তা নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
-answer.answer = "There is no undefined behavior in this program"
+answer.answer = "এই প্রোগ্রামে কোনো undefined behavior নেই"
 prompt.distractors = [
-  "The assignment `*n` is a use of freed memory",
-  "The borrow `&mut v[i]` creates a pointer to freed memory",
-  "The read of `v[i - 1]` is a use of freed memory"
+  "`*n` assignment মানে free করা মেমোরি ব্যবহার করা",
+  "`&mut v[i]` borrow free করা মেমোরির একটি pointer তৈরি করে",
+  "`v[i - 1]` পড়া মানে free করা মেমোরি ব্যবহার করা"
 ]
 context = """
-This program is safe. No undefined behavior could occur if it were executed. (If `i` was outside
-the bounds of `v`, then Rust will panic at runtime rather than cause undefined behavior.)
+এই প্রোগ্রামটি নিরাপদ। এটি চালালে কোনো undefined behavior ঘটত না। (`i` যদি `v`-এর সীমার
+বাইরে হতো, তাহলে Rust undefined behavior ঘটানোর বদলে runtime-এ panic করত।)
 
-The issue is that Rust doesn't know for sure that `v[i]` and `v[i - 1]` are referring to different elements.
+সমস্যা হলো, `v[i]` আর `v[i - 1]` যে আলাদা উপাদান নির্দেশ করছে, তা Rust নিশ্চিতভাবে জানে না।
 """
 
 
@@ -79,7 +79,7 @@ The issue is that Rust doesn't know for sure that `v[i]` and `v[i - 1]` are refe
 id = "4df75888-2cd5-4259-8629-46a307429fd0"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider this function that is a simplified variant of the function from the previous quiz:
+আগের কুইজের function-টির একটি সরলীকৃত রূপ, এই function-টি দেখুন:
 
 ```
 /// Adds "Ph.D." to a person's name
@@ -89,7 +89,7 @@ fn award_phd(name: &String) {
 }
 ```
 
-The Rust compiler rejects this function with the following error:
+Rust compiler নিচের error দিয়ে এই function বাতিল করে দেয়:
 
 ```text
 error[E0507]: cannot move out of `*name` which is behind a shared reference
@@ -102,9 +102,9 @@ error[E0507]: cannot move out of `*name` which is behind a shared reference
   |                    help: consider borrowing here: `&*name`
 ```
 
-Assume that the compiler did NOT reject this function. Select each (if any) of the following programs that could
-possibly cause undefined behavior if executed. If none of these programs could cause undefined behavior, 
-then check "None of these programs" .
+ধরে নিন, compiler এই function বাতিল **করেনি**। নিচের প্রোগ্রামগুলোর মধ্যে চালালে যেগুলো (যদি থাকে)
+undefined behavior ঘটাতে পারে, সেগুলোর প্রতিটি বেছে নিন। কোনো প্রোগ্রামই undefined behavior ঘটাতে না পারলে 
+"এগুলোর কোনোটিই নয়" বেছে নিন।
 """
 answer.answer = [
 """
@@ -131,14 +131,14 @@ println!("{}", name_ref);
 
 ]
 prompt.distractors = [
-  "None of these programs"
+  "এগুলোর কোনোটিই নয়"
 ]
 context = """
-The statement `let mut name = *name` makes `name` take ownership of the input string.
-However, the caller also still retains ownership of the string. Therefore after `award_phd`
-finishes, the string is deallocated. Therefore every program above has undefined behavior, 
-because `name` will eventually be deallocated a second time. It does not matter whether `name`
-or a reference to `name` is read after calling `award_phd`.
+`let mut name = *name` statement-এর ফলে `name` ইনপুট string-এর ownership নিয়ে নেয়।
+কিন্তু caller-ও তখনো string-টির ownership ধরে রাখে। তাই `award_phd`
+শেষ হওয়ার পর string-টি deallocate হয়। ফলে ওপরের প্রতিটি প্রোগ্রামেই undefined behavior আছে, 
+কারণ শেষ পর্যন্ত `name` দ্বিতীয়বার deallocate হবে। `award_phd` call করার পর `name`
+নাকি `name`-এর কোনো reference পড়া হলো, তাতে কিছু যায় আসে না।
 """
 
 [[questions]]
@@ -157,6 +157,6 @@ fn main() {
 answer.doesCompile = true
 answer.stdout = "0 2"
 context = """
-This program does compile, as the binding of `x` copies `point[0]`, allowing `y` to mutably borrow `point[1]`.
-The mutation `x += 1` does not affect `point`, while the mutation `*y += 1` does, so the final result is `0 2`.
+এই প্রোগ্রামটি compile হয়, কারণ `x`-এর binding `point[0]` কপি করে, ফলে `y` `point[1]`-কে mutable-ভাবে borrow করতে পারে।
+`x += 1` mutation `point`-কে প্রভাবিত করে না, কিন্তু `*y += 1` mutation করে, তাই চূড়ান্ত ফলাফল `0 2`।
 """

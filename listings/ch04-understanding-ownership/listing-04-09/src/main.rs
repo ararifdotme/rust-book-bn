@@ -16,22 +16,22 @@ fn first_word(s: &str) -> &str {
 fn main() {
     let my_string = String::from("hello world");
 
-    // `first_word` works on slices of `String`s, whether partial or whole.
+    // `first_word` `String`-এর slice-এর ওপর কাজ করে, আংশিক হোক বা পুরো।
     let word = first_word(&my_string[0..6]);
     let word = first_word(&my_string[..]);
-    // `first_word` also works on references to `String`s, which are equivalent
-    // to whole slices of `String`s.
+    // `first_word` `String`-এর reference-এর ওপরও কাজ করে, যা `String`-এর
+    // পুরো slice-এর সমতুল্য।
     let word = first_word(&my_string);
 
     let my_string_literal = "hello world";
 
-    // `first_word` works on slices of string literals, whether partial or
-    // whole.
+    // `first_word` string literal-এর slice-এর ওপর কাজ করে, আংশিক হোক বা
+    // পুরো।
     let word = first_word(&my_string_literal[0..6]);
     let word = first_word(&my_string_literal[..]);
 
-    // Because string literals *are* string slices already,
-    // this works too, without the slice syntax!
+    // string literal যেহেতু আগে থেকেই string slice, তাই
+    // slice syntax ছাড়াও এটি কাজ করে!
     let word = first_word(my_string_literal);
 }
 // ANCHOR_END: usage

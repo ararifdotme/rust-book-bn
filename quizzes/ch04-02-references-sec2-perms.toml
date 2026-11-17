@@ -2,7 +2,7 @@
 id = "2e273ac2-6f06-4c19-a831-1d44eed89323"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider the permissions in the following program:
+নিচের প্রোগ্রামের permission-গুলো দেখুন:
 
 ```aquascope,permissions,stepper
 #fn main() {
@@ -14,21 +14,21 @@ println!("{}", s);
 #}
 ```
 
-At the point marked `/* here */`, what are the permissions on the path `s`? Select each permission below, or select "no permissions" 
-if the path has no permissions.
+`/* here */` চিহ্নিত জায়গায় path `s`-এর permission কী কী? নিচের প্রতিটি permission বেছে নিন, অথবা path-টির কোনো permission না থাকলে 
+"কোনো permission নেই" বেছে নিন।
 """
-answer.answer = ["No permissions"]
+answer.answer = ["কোনো permission নেই"]
 prompt.distractors = ["R", "W", "O"]
 prompt.answerIndex = 3
 context = """
-The mutable borrow `t = &mut s` removes all permissions on `s` while `t` is live.
+`t` সক্রিয় থাকা অবস্থায় mutable borrow `t = &mut s` `s`-এর সব permission সরিয়ে নেয়।
 """
 
 [[questions]]
 id = "b431f43e-9a6f-4715-ae88-8896fca6ff3b"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider the permissions in the following program:
+নিচের প্রোগ্রামের permission-গুলো দেখুন:
 
 ```aquascope,permissions,stepper,boundaries
 fn get_first(v: &Vec<String>) -> &String {
@@ -46,24 +46,24 @@ fn main() {
 }
 ```
 
-Which of the following best explains why `strs` loses and regains write permissions?
+`strs` কেন write permission হারায় এবং আবার ফিরে পায়, তা নিচের কোনটি সবচেয়ে ভালোভাবে ব্যাখ্যা করে?
 """
-answer.answer = "`get_first` returns an immutable reference to data within `strs`, so `strs` is not writable while `first` is live"
+answer.answer = "`get_first` `strs`-এর ভেতরের ডেটার একটি immutable reference return করে, তাই `first` সক্রিয় থাকা অবস্থায় `strs`-এ লেখা যায় না"
 prompt.distractors = [
-  "`strs` is not writable while the immutable reference `&strs` passed to `get_first` is live",
-  "`strs` does not need write permissions until the `strs.push(..)` operation, so it only regains write permissions at that statement",
-  "Because `first` refers to `strs`, then `strs` can only be mutated within a nested scope like the if-statement"
+  "`get_first`-এ পাঠানো immutable reference `&strs` সক্রিয় থাকা অবস্থায় `strs`-এ লেখা যায় না",
+  "`strs.push(..)` operation-এর আগে `strs`-এর write permission দরকার নেই, তাই শুধু ওই statement-এ এটি write permission ফিরে পায়",
+  "`first` যেহেতু `strs`-কে নির্দেশ করে, তাই `strs` শুধু if-statement-এর মতো ভেতরের কোনো scope-এ mutate করা যায়"
 ]
 context = """
-When `get_first` is called, Rust recognizes that the returned string `first` could point to data within `strs`, so `strs` loses 
-write permissions. Once the `first` variable is no longer used (after the if-condition), then `strs` regains write permissions.
+`get_first` call হলে Rust বুঝতে পারে যে return হওয়া string `first` `strs`-এর ভেতরের ডেটাকে নির্দেশ করতে পারে, তাই `strs` 
+write permission হারায়। `first` variable আর ব্যবহার না হলে (if-এর শর্তের পরে) `strs` আবার write permission ফিরে পায়।
 """
 
 [[questions]]
 id = "652e596c-7cc9-42e6-a7f8-701879cd9a2b"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider this unsafe program:
+এই অনিরাপদ প্রোগ্রামটি দেখুন:
 ```aquascope,interpreter,shouldFail
 #fn main() {
 let v1 = vec![1, 2, 3];
@@ -73,16 +73,16 @@ println!("{}", v1[0]);`[]`
 #}
 ```
 
-Which of the following best describes the point at which undefined behavior occurs in this program?
+এই প্রোগ্রামে ঠিক কোন জায়গায় undefined behavior ঘটে, তা নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
-answer.answer = "`v1[0]` reads `v1`, which points to deallocated memory"
+answer.answer = "`v1[0]` `v1` পড়ে, যা deallocate হওয়া মেমোরিকে নির্দেশ করে"
 prompt.distractors = [
-  "`v2` owns the vector data on the heap, while `v1` does not",
-  "`v1` has been moved into `v2` on line 2",
-  "`v1` has its pointer invalidated by the `push` on line 3"
+  "heap-এর vector ডেটার owner `v2`, `v1` নয়",
+  "লাইন 2-এ `v1` `v2`-তে move হয়েছে",
+  "লাইন 3-এর `push` `v1`-এর pointer অবৈধ করে দিয়েছে"
 ]
 context = """
-The undefined behavior arises because `v1` is read after being freed. Note that the other three options are correct statements
-about the program, but they do not explain why the undefined behavior actually occurs. For example, if the `println` were deleted,
-then the other three options are still true, but the program no longer has undefined behavior.
+undefined behavior ঘটে, কারণ free হওয়ার পর `v1` পড়া হয়। লক্ষ করুন, বাকি তিনটি বিকল্পও প্রোগ্রামটি সম্পর্কে সঠিক বক্তব্য,
+কিন্তু undefined behavior আসলে কেন ঘটে, তা ব্যাখ্যা করে না। যেমন, `println` মুছে দিলেও
+বাকি তিনটি বিকল্প সত্য থাকে, কিন্তু প্রোগ্রামটিতে আর undefined behavior থাকে না।
 """
