@@ -220,6 +220,51 @@ tested with this repo's build.
 | stable (version/release) | stable সংস্করণ | স্থিতিশীল সংস্করণ | 1 |
 | variable | variable | মান রাখার নাম | 1 |
 | version control system | version control system | কোডের পরিবর্তনের ইতিহাস রাখার ব্যবস্থা | 1 |
+| annotation | annotation (verb: annotate করা) | type স্পষ্ট করে লিখে দেওয়া | 2 |
+| arm (of `match`) | arm | `match`-এর একেকটি শাখা | 2 |
+| artifact | artifact | build-এর ফলে তৈরি ফাইল | 2 |
+| associated function | associated function | কোনো type-এর সঙ্গে যুক্ত function | 2 |
+| binary crate | binary crate | চালানো যায় এমন crate | 2 |
+| bind | bind করা | কোনো নামের সঙ্গে মান জুড়ে দেওয়া | 2 |
+| carriage return | carriage return | লাইনের শুরুতে ফেরার অক্ষর | 2 |
+| catch-all | catch-all | বাকি সব কিছুর সঙ্গে মিলে যায় এমন | 2 |
+| enumeration | enumeration | enum-এর পূর্ণ নাম | 2 |
+| error | error | ত্রুটি | 2 |
+| evaluate | evaluate করা | মান নির্ণয় করা | 2 |
+| format string | format string | placeholder-সহ string | 2 |
+| handle | handle | কোনো resource ব্যবহারের মাধ্যম | 2 |
+| immutable | immutable | অপরিবর্তনীয় | 2 |
+| implement | implement করা | বাস্তবায়ন করা | 2 |
+| infinite loop | infinite loop | কখনো না থামা loop | 2 |
+| instance | instance | কোনো type-এর একটি নির্দিষ্ট মান | 2 |
+| integer | integer | পূর্ণসংখ্যা | 2 |
+| iteration | iteration | loop-এর একেকবার চলা | 2 |
+| library crate | library crate | অন্য প্রোগ্রামে ব্যবহারের জন্য লেখা crate | 2 |
+| loop | loop | বারবার চলতে থাকা কোড-অংশ | 2 |
+| mutability | mutability | পরিবর্তনযোগ্যতা | 2 |
+| mutable | mutable | পরিবর্তনযোগ্য | 2 |
+| newline | newline | নতুন লাইনের অক্ষর | 2 |
+| patch release | patch release | ছোটখাটো সংশোধনী সংস্করণ | 2 |
+| placeholder | placeholder | মান বসানোর জন্য রাখা জায়গা | 2 |
+| prelude | prelude | প্রতিটি প্রোগ্রামে আপনা-আপনি আসা জিনিসের সেট | 2 |
+| random number generator | random number generator | র‍্যান্ডম সংখ্যা তৈরির ব্যবস্থা | 2 |
+| range | range | একটি সীমার ভেতরের মানগুলো | 2 |
+| reference | reference | ডেটা কপি না করে তার দিকে নির্দেশ করার উপায় | 2 |
+| registry | registry | crate-এর তথ্যভান্ডার | 2 |
+| regression | regression | আগে কাজ করা কিছু নতুন সংস্করণে ভেঙে যাওয়া | 2 |
+| reproducible build | reproducible build | প্রতিবার হুবহু একই ফল দেয় এমন build | 2 |
+| return | return করা | ফেরত দেওয়া | 2 |
+| scope | scope ("scope-এ আনা") | কোডের যে অংশে একটি নাম ব্যবহার করা যায় | 2 |
+| seed | seed করা | র‍্যান্ডম সংখ্যার শুরুর মান দেওয়া | 2 |
+| Semantic Versioning (SemVer) | Semantic Versioning (SemVer) | সংস্করণ নম্বর লেখার একটি মানদণ্ড | 2 |
+| shadowing | shadowing (verb: shadow করা) | একই নামে নতুন variable দিয়ে আগেরটিকে আড়াল করা | 2 |
+| standard input | standard input | কিবোর্ড থেকে আসা ইনপুটের ধারা | 2 |
+| statement | statement | কাজ করে কিন্তু মান তৈরি করে না এমন কোড-নির্দেশ | 2 |
+| static type system | static type system | compile-এর সময়েই type নির্দিষ্ট হয় এমন ব্যবস্থা | 2 |
+| type inference | type inference (verb: infer করা) | type অনুমান করে নেওয়া | 2 |
+| unsigned | unsigned | চিহ্নহীন (ঋণাত্মক হতে পারে না) | 2 |
+| variant | variant | enum-এর সম্ভাব্য একটি রূপ | 2 |
+| version specifier | version specifier | সংস্করণ নির্ধারক | 2 |
 
 ### Everyday computing words
 
@@ -248,6 +293,17 @@ Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
 | source file / source code | সোর্স ফাইল / সোর্স কোড | 0 |
 | terminal | টার্মিনাল | 1 |
 | text editor | টেক্সট এডিটর | 1 |
+| character (letter) | অক্ষর | 2 |
+| comment (in code) | কমেন্ট | 2 |
+| crash | ক্র্যাশ করা | 2 |
+| indent | ইনডেন্ট | 2 |
+| input / output | ইনপুট / আউটপুট | 2 |
+| keyboard shortcut / sidebar | কিবোর্ড শর্টকাট / সাইডবার | 2 |
+| memory | মেমোরি | 2 |
+| random | র‍্যান্ডম | 2 |
+| tutorial | টিউটোরিয়াল | 2 |
+| warning | সতর্কবার্তা | 1 |
+| whitespace | ফাঁকা অক্ষর | 2 |
 
 ## Progress
 
@@ -261,7 +317,7 @@ use.
 
 - [x] Chapter 0: Front matter (experiment-intro, title-page, foreword, ch00-00-introduction)
 - [x] Chapter 1: Getting Started (ch01-*)
-- [ ] Chapter 2: Programming a Guessing Game (ch02-*)
+- [x] Chapter 2: Programming a Guessing Game (ch02-*)
 - [ ] Chapter 3: Common Programming Concepts (ch03-*)
 - [ ] Chapter 4: Understanding Ownership (ch04-*)
 - [ ] Chapter 5: Using Structs to Structure Related Data (ch05-*)
