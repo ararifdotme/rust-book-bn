@@ -14,14 +14,14 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 6
 context = """ 
-Rust does not have null pointers, so the `null` keyword does not exist. An Option type should be used to represent the possibility of an object being null.
+Rust-এ null pointer নেই, তাই `null` keyword-এর অস্তিত্বই নেই। কোনো বস্তুর null হওয়ার সম্ভাবনা প্রকাশ করতে একটি Option type ব্যবহার করা উচিত।
 """
 
 [[questions]]
 id = "6226be11-31c3-4cac-b97c-515514a70af2"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider these two representations of a `Result` type that contains a value `T` if a computation succeeds, or an error `E` if it fails.
+একটি `Result` type-এর এই দুটি রূপ দেখুন, যাতে কোনো হিসাব সফল হলে একটি মান `T` থাকে, আর ব্যর্থ হলে একটি error `E` থাকে।
 
 ```
 struct Result1<T, E> {
@@ -35,19 +35,19 @@ enum Result2<T, E> {
 }
 ```
 
-The enum `Result2` is considered more idiomatic than the struct `Result1` in Rust. 
-Which statement below is **NOT** a valid reason why?
+Rust-এ struct `Result1`-এর চেয়ে enum `Result2`-কে বেশি Rust-সুলভ মনে করা হয়। 
+নিচের কোন বক্তব্যটি এর বৈধ কারণ **নয়**?
 """
-answer.answer = "The struct contains `Option` types, which are only intended to wrap structs"
+answer.answer = "struct-টিতে `Option` type আছে, যা শুধু struct মোড়ানোর জন্য তৈরি"
 prompt.distractors = [
-  "The struct uses more space in memory at runtime than the enum",
-  "The struct could have `ok` and `err` both be `None`, while the enum must have at least one of them",
-  "The struct is more syntactically verbose to construct than the enum"
+  "runtime-এ struct-টি enum-এর চেয়ে মেমোরিতে বেশি জায়গা নেয়",
+  "struct-টিতে `ok` আর `err` দুটোই `None` হতে পারে, অথচ enum-এ অন্তত একটি থাকতেই হবে",
+  "enum-এর চেয়ে struct-টি তৈরি করতে syntax-এর দিক থেকে বেশি লম্বা-চওড়া লিখতে হয়"
 ]
 context = """
-It's perfectly fine to have structs contain `Option` types as fields (the question asked for which is **NOT** a valid reason).
-But if your data structure has invariants like "exactly one of two optional fields should be `Some`",
-then that invariant is better ensured by use of an enum.
+struct-এর field হিসেবে `Option` type রাখা সম্পূর্ণ ঠিক আছে (প্রশ্নে জানতে চাওয়া হয়েছিল কোনটি বৈধ কারণ **নয়**)।
+তবে আপনার data structure-এ যদি "দুটি ঐচ্ছিক field-এর ঠিক একটিকে `Some` হতে হবে"-এর মতো invariant থাকে,
+তাহলে একটি enum ব্যবহার করলে সেই invariant আরও ভালোভাবে নিশ্চিত হয়।
 """
 
 

@@ -106,6 +106,16 @@ chapter, or the listing's `output.txt`), leave that comment untranslated, e.g.
 `// oh no! x isn't defined!` (ch04-01) and `// error!`
 (`no-listing-19-slice-error`). Otherwise the example and the output disagree.
 
+**Quiz options that quote compiler messages stay in English** (chapter 6
+onwards), e.g. "cannot return reference to local variable `default`". They
+imitate what rustc prints; the question text around them is translated.
+
+**"Ownership Inventory #N"** (chapters 6, 8, 10, 18) keeps its English series
+name in the heading; the rest of the page is translated.
+
+**Quotations from people** are translated inside the same blockquote; titles of
+talks or papers stay in English.
+
 **Named principles** (chapter 4): give a Bengali name with the English in
 parentheses at first mention, e.g. "pointer নিরাপত্তার নীতি (Pointer Safety
 Principle)", then the Bengali name alone.
@@ -386,6 +396,21 @@ tested with this repo's build.
 | tuple struct | tuple struct | field-এর নাম ছাড়া tuple-এর মতো struct | 5 |
 | type checking | type checking | type ঠিক আছে কি না যাচাই | 5 |
 | unit-like struct | unit-like struct | কোনো field নেই এমন struct | 5 |
+| anti-pattern | anti-pattern | এড়িয়ে চলা উচিত এমন প্রচলিত ধরন | 6 |
+| binding mode | binding mode | pattern-এ মান move না reference হিসেবে bind হবে, তার নিয়ম | 6 |
+| boilerplate | boilerplate | বারবার লিখতে হয় এমন গৎবাঁধা কোড | 6 |
+| clone-on-write | clone-on-write | দরকার হলে তবেই clone করার ব্যবস্থা (`Cow`) | 6 |
+| dangling pointer | dangling pointer | অবৈধ মেমোরিকে নির্দেশ করা pointer | 6 |
+| exhaustive | exhaustive | সব সম্ভাবনা সামলানো | 6 |
+| generic type parameter | generic type parameter | যেকোনো type বসানো যায় এমন জায়গা-রাখা নাম (`T`) | 6 |
+| happy path | happy path | সব ঠিকঠাক থাকলে কোড যে পথে চলে | 6 |
+| invariant | invariant | সবসময় সত্য থাকতে হবে এমন শর্ত | 6 |
+| null | null | "কোনো মান নেই" বোঝানো বিশেষ মান | 6 |
+| substring | substring | একটি string-এর ভেতরের অংশ | 4 |
+| type safety | type safety | type-এর নিয়ম মানার নিশ্চয়তা | 6 |
+| type system | type system | ভাষার type-সংক্রান্ত নিয়মের ব্যবস্থা | 2 |
+| unwrap | unwrap করা | `Option`/`Result`-এর ভেতরের মান বের করা | 6 |
+| wildcard | wildcard | যেকোনো মানের সঙ্গে মেলে এমন pattern | 6 |
 
 ### Everyday computing words
 
@@ -444,6 +469,11 @@ Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
 | end user | শেষ ব্যবহারকারী | 5 |
 | format / formatting | ফরম্যাট / ফরম্যাটিং | 1 |
 | pixel | পিক্সেল | 5 |
+| browser | ব্রাউজার | 6 |
+| cent / quarter / penny (US coins) | সেন্ট / quarter (25 সেন্টের মুদ্রা) / penny (1 সেন্টের মুদ্রা) | 6 |
+| cursor / scrollbar | কার্সর / স্ক্রলবার | 6 |
+| enumerate | একে একে তালিকাভুক্ত করা | 6 |
+| hover (the mouse) | মাউস রাখা | 6 |
 
 ## Progress
 
@@ -461,7 +491,7 @@ use.
 - [x] Chapter 3: Common Programming Concepts (ch03-*)
 - [x] Chapter 4: Understanding Ownership (ch04-*)
 - [x] Chapter 5: Using Structs to Structure Related Data (ch05-*)
-- [ ] Chapter 6: Enums and Pattern Matching (ch06-*)
+- [x] Chapter 6: Enums and Pattern Matching (ch06-*)
 - [ ] Chapter 7: Packages, Crates, and Modules (ch07-*)
 - [ ] Chapter 8: Common Collections (ch08-*)
 - [ ] Chapter 9: Error Handling (ch09-*)

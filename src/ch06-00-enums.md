@@ -1,11 +1,11 @@
-# Enums and Pattern Matching
+# enum ও pattern matching {#enums-and-pattern-matching}
 
-In this chapter, we’ll look at enumerations, also referred to as _enums_.
-Enums allow you to define a type by enumerating its possible variants. First
-we’ll define and use an enum to show how an enum can encode meaning along with
-data. Next, we’ll explore a particularly useful enum, called `Option`, which
-expresses that a value can be either something or nothing. Then, we’ll look at
-how pattern matching in the `match` expression makes it easy to run different
-code for different values of an enum. Finally, we’ll cover how the `if let`
-construct is another convenient and concise idiom available to handle enums in
-your code.
+এই অধ্যায়ে আমরা enumeration দেখব, যাদের _enum_ (কয়েকটি সম্ভাব্য রূপের একটি নিতে পারে
+এমন টাইপ)-ও বলা হয়। enum দিয়ে একটি type-এর সম্ভাব্য variant (enum-এর সম্ভাব্য একটি রূপ)
+একে একে তালিকাভুক্ত করে সেই type সংজ্ঞায়িত করা যায়। প্রথমে আমরা একটি enum সংজ্ঞায়িত ও
+ব্যবহার করে দেখাব, কীভাবে একটি enum ডেটার পাশাপাশি অর্থও প্রকাশ করতে পারে। এরপর আমরা
+`Option` নামের একটি বিশেষ কাজের enum দেখব, যা প্রকাশ করে যে একটি মান হয় কিছু একটা হতে
+পারে, নয়তো কিছুই না। তারপর দেখব, `match` expression-এ pattern matching (নকশার সঙ্গে
+মেলানো) কীভাবে একটি enum-এর বিভিন্ন মানের জন্য বিভিন্ন কোড চালানো সহজ করে দেয়। সবশেষে
+দেখব, আপনার কোডে enum সামলানোর আরেকটি সুবিধাজনক ও সংক্ষিপ্ত idiom (Rust-এর প্রচলিত
+লেখার ধরন) হলো `if let` গঠন।

@@ -21,7 +21,7 @@ fn main() {
 answer.doesCompile = true
 answer.stdout = "5"
 context = """ 
-Each match is tried from top to bottom. Both the second and third pattern are applicable, so the second one is used.
+প্রতিটি match ওপর থেকে নিচে চেষ্টা করা হয়। দ্বিতীয় আর তৃতীয় দুটি pattern-ই প্রযোজ্য, তাই দ্বিতীয়টি ব্যবহার হয়।
 """
 
 
@@ -29,7 +29,7 @@ Each match is tried from top to bottom. Both the second and third pattern are ap
 id = "f7c361e0-733a-4d48-9809-736e3c1e2b67"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider this method implemented for the `Option` type:
+`Option` type-এর জন্য implement করা এই method-টি দেখুন:
 
 ```
 impl<T> Option<T> {
@@ -42,17 +42,17 @@ impl<T> Option<T> {
 }
 ```
 
-Which sentence best describes the behavior of this function?
+এই function-এর আচরণ কোন বাক্যটি সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
-answer.answer = "Returns the object inside `self` if it exists, and `other` otherwise"
+answer.answer = "`self`-এর ভেতরের বস্তুটি থাকলে সেটি return করে, অন্যথায় `other`"
 prompt.distractors = [
-  "Returns a new option containing the object inside `self` if it exists, and `other` otherwise",
-  "Inserts `other` into `self` if `self` does not already contain a value",
-  "Returns a reference to the object inside `self` if it exists, and `other` otherwise"
+  "`self`-এর ভেতরের বস্তুটি থাকলে সেটিসহ একটি নতুন option return করে, অন্যথায় `other`",
+  "`self`-এ আগে থেকে কোনো মান না থাকলে `other`-কে `self`-এ ঢুকিয়ে দেয়",
+  "`self`-এর ভেতরের বস্তুটি থাকলে তার একটি reference return করে, অন্যথায় `other`"
 ]
 context = """
-This function "unwraps" the option by consuming ownership of it and retrieving the value inside, but if no value exists then it falls back by returning `other`.
-This is a real function in the standard library!
+এই function option-টির ownership নিয়ে ভেতরের মানটি বের করে এনে option-টিকে "unwrap" করে, কিন্তু কোনো মান না থাকলে বিকল্প হিসেবে `other` return করে।
+এটি standard library-র একটি আসল function!
 """
 
 
@@ -78,7 +78,7 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 13
 context = """
-The match arm `Either::Right(s)` moves the field `s`, so `x` cannot be used in the `println`.
+`Either::Right(s)` match arm `s` field-টি move করে, তাই `println`-এ `x` ব্যবহার করা যায় না।
 """
 
 
@@ -86,7 +86,7 @@ The match arm `Either::Right(s)` moves the field `s`, so `x` cannot be used in t
 id = "6e012d34-5c59-443e-85d9-385f0d7dee13"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider these two implementations of a function to decrement an unsigned number twice.
+একটি unsigned সংখ্যাকে দুবার এক করে কমানোর function-এর এই দুটি implementation দেখুন।
 
 ```
 fn decr_twice_v1(n: u32) -> Option<u32> {
@@ -108,10 +108,10 @@ fn decr_twice_v2(n: u32) -> Option<u32> {
 }
 ```
 
-The functions have the same behavior for:
+function দুটির আচরণ একই হয়:
 """
-answer.answer = "All inputs"
-prompt.distractors = [ "No inputs", "Some, but not all inputs" ]
+answer.answer = "সব ইনপুটের জন্য"
+prompt.distractors = [ "কোনো ইনপুটের জন্যই নয়", "কিছু ইনপুটের জন্য, তবে সবগুলোর জন্য নয়" ]
 context = """
-The `match` and `if` perform the same function here. A match is like a specialized `if` that checks for equality of the matched object.
+এখানে `match` আর `if` একই কাজ করে। match হলো এক ধরনের বিশেষায়িত `if`, যা match করা বস্তুর সমতা যাচাই করে।
 """

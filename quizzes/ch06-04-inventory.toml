@@ -2,7 +2,7 @@
 id = "6e5e193e-579d-4a46-aae4-d35336b77b68"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 1:**
+**প্রোগ্রাম 1:**
 
 ```ide
 /// Makes a string to separate lines of text, 
@@ -17,7 +17,7 @@ fn make_separator(user_str: &str) -> &str {
 }
 ```
 
-If you tried to compile this function, which of the following best describes the compiler error you would get?
+এই function compile করার চেষ্টা করলে আপনি যে compiler error পেতেন, নিচের কোনটি তা সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
 answer.answer = "cannot return reference to local variable `default`"
 prompt.distractors = [
@@ -26,15 +26,15 @@ prompt.distractors = [
   "function `make_separator` cannot return two different references"
 ]
 context = """
-Because `default` lives on the stack within `make_separator`, it will be deallocated once a call to `make_separator` ends.
-This leaves `&default` pointing to deallocated memory. Rust therefore complains that you cannot return a reference to a local variable.
+`default` যেহেতু `make_separator`-এর ভেতরে stack-এ থাকে, তাই `make_separator`-এর একটি call শেষ হলেই এটি deallocate হয়ে যাবে।
+ফলে `&default` deallocate হওয়া মেমোরিকে নির্দেশ করতে থাকে। তাই Rust আপত্তি জানায় যে একটি local variable-এর reference return করা যায় না।
 """
 
 [[questions]]
 id = "44a2eb01-b49a-497b-a9d2-207814d1db1e"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 1:**
+**প্রোগ্রাম 1:**
 
 ```ide
 /// Makes a string to separate lines of text, 
@@ -49,7 +49,7 @@ fn make_separator(user_str: &str) -> &str {
 }
 ```
 
-Normally if you try to compile this function, the compiler returns the following error:
+সাধারণত এই function compile করার চেষ্টা করলে compiler নিচের error দেয়:
 
 ```text
 error[E0515]: cannot return reference to local variable `default`
@@ -59,9 +59,9 @@ error[E0515]: cannot return reference to local variable `default`
   |         ^^^^^^^^ returns a reference to data owned by the current function
 ```
 
-Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
-(1) pass the compiler, and (2) possibly cause undefined behavior if executed?
-Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
+ধরে নিন, compiler এই function বাতিল **করেনি**। নিচের প্রোগ্রামগুলোর মধ্যে কোনগুলো (যদি থাকে)
+(1) compiler পেরিয়ে যাবে, এবং (2) চালালে undefined behavior ঘটাতে পারে?
+দুটি শর্তই পূরণ করে এমন প্রতিটি প্রোগ্রাম বেছে নিন, অথবা কোনোটিই পূরণ না করলে "এগুলোর কোনোটিই নয়" বেছে নিন।
 """
 answer.answer = ["""
 ```
@@ -75,17 +75,17 @@ prompt.distractors = [
 println!("{}", make_separator("Hello world!"));
 ```
 """,
-"None of these programs",
+"এগুলোর কোনোটিই নয়",
 ]
 context = """
-The caller must pass an empty string to trigger the problematic if-condition. This returns a dangling pointer.
+সমস্যাজনক if-শর্তটি চালু করতে caller-কে একটি খালি string পাঠাতে হবে। এটি একটি dangling pointer (অবৈধ মেমোরিকে নির্দেশ করা pointer) return করে।
 """
 
 [[questions]]
 id = "815ae4cd-0f23-4da5-9dc2-0e81c664cc28"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 1:**
+**প্রোগ্রাম 1:**
 
 ```ide
 /// Makes a string to separate lines of text, 
@@ -100,10 +100,10 @@ fn make_separator(user_str: &str) -> &str {
 }
 ```
 
-Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
-1. The fixed function passes the Rust compiler,
-2. The fixed function preserves the intention of the original code, and
-3. The fixed function does not introduce unnecessary inefficiencies
+নিচের সমাধানগুলোর (হলুদ রঙে হাইলাইট করা) মধ্যে কোনটি এই তিনটি শর্ত সবচেয়ে ভালোভাবে পূরণ করে:
+1. ঠিক করা function-টি Rust compiler পেরিয়ে যায়,
+2. ঠিক করা function-টি মূল কোডের উদ্দেশ্য বজায় রাখে, এবং
+3. ঠিক করা function-টি অপ্রয়োজনীয় অদক্ষতা যোগ করে না
 """
 answer.answer = """
 ```ide
@@ -144,20 +144,20 @@ fn make_separator(user_str: `[String]`) -> `[String]` {
 """,
 ]
 context = """
-There is no valid way to return a pointer to a stack-allocated variable. The simple solution is therefore to change the return type to `String`
-and copy the input `user_str` into an owned string. However, requiring `user_str` to be a `String` would reduce the flexibility of the API, e.g.
-a caller could not call `make_separator` on a substring of a bigger string. It would also require callers to heap-allocate strings, e.g.
-they could not use a string literal like `make_separator("Rust")`.
+stack-এ বরাদ্দ করা variable-এর pointer return করার কোনো বৈধ উপায় নেই। তাই সহজ সমাধান হলো return type বদলে `String` করা
+এবং ইনপুট `user_str`-কে একটি owned string-এ কপি করা। তবে `user_str`-কে `String` হতে বাধ্য করলে API-র নমনীয়তা কমে যাবে, যেমন
+caller একটি বড় string-এর substring-এর ওপর `make_separator` call করতে পারবে না। এতে caller-দের string heap-এ বরাদ্দ করতেও বাধ্য করা হবে, যেমন
+তারা `make_separator("Rust")`-এর মতো string literal ব্যবহার করতে পারবে না।
 
-The most idiomatic solution to this problem uses a construct you haven't seen yet: [`Cow`](https://doc.rust-lang.org/std/borrow/enum.Cow.html).
-The clone-on-write smart pointer would enable this function to return *either* an owned string *or* a string reference without a type error.
+এই সমস্যার সবচেয়ে Rust-সুলভ সমাধানে এমন একটি গঠন ব্যবহার হয়, যা আপনি এখনো দেখেননি: [`Cow`](https://doc.rust-lang.org/std/borrow/enum.Cow.html)।
+clone-on-write (দরকার হলে তবেই clone করার ব্যবস্থা) smart pointer এই function-কে কোনো type error ছাড়াই *হয়* একটি owned string *নয়তো* একটি string reference return করতে দেবে।
 """
 
 [[questions]]
 id = "1f4e5c06-ecdf-481d-9cae-8a25dafe9cfd"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 2:**
+**প্রোগ্রাম 2:**
 
 ```ide
 /// Gets the string out of an option if it exists,
@@ -171,7 +171,7 @@ fn get_or_default(arg: &Option<String>) -> String {
 }
 ```
 
-If you tried to compile this function, which of the following best describes the compiler error you would get?
+এই function compile করার চেষ্টা করলে আপনি যে compiler error পেতেন, নিচের কোনটি তা সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
 answer.answer = "cannot move out of `arg` in `arg.unwrap()`"
 prompt.distractors = [
@@ -180,9 +180,9 @@ prompt.distractors = [
   "cannot return `s.clone()` which does not live long enough"
 ]
 context = """
-The function `Option::unwrap` expects `self`, meaning it expects ownership of `arg`. However `arg` is an immutable
-reference to an option, so it cannot provide ownership of the option. Therefore the compiler complains that we 
-cannot move out of `arg` via `unwrap`.
+`Option::unwrap` function `self` আশা করে, অর্থাৎ এটি `arg`-এর ownership আশা করে। কিন্তু `arg` একটি option-এর immutable
+reference, তাই এটি option-টির ownership দিতে পারে না। তাই compiler আপত্তি জানায় যে আমরা 
+`unwrap`-এর মাধ্যমে `arg` থেকে move করে বের করতে পারি না।
 """
 
 
@@ -190,7 +190,7 @@ cannot move out of `arg` via `unwrap`.
 id = "989670b2-b038-47c4-9975-a93d6ee193e5"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 2:**
+**প্রোগ্রাম 2:**
 
 ```ide
 /// Gets the string out of an option if it exists,
@@ -204,7 +204,7 @@ fn get_or_default(arg: &Option<String>) -> String {
 }
 ```
 
-Normally if you try to compile this function, the compiler returns the following error:
+সাধারণত এই function compile করার চেষ্টা করলে compiler নিচের error দেয়:
 
 ```text
 error[E0507]: cannot move out of `*arg` which is behind a shared reference
@@ -218,9 +218,9 @@ error[E0507]: cannot move out of `*arg` which is behind a shared reference
     |             move occurs because `*arg` has type `Option<String>`, which does not implement the `Copy` trait
 ```
 
-Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
-(1) pass the compiler, and (2) possibly cause undefined behavior if executed?
-Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
+ধরে নিন, compiler এই function বাতিল **করেনি**। নিচের প্রোগ্রামগুলোর মধ্যে কোনগুলো (যদি থাকে)
+(1) compiler পেরিয়ে যাবে, এবং (2) চালালে undefined behavior ঘটাতে পারে?
+দুটি শর্তই পূরণ করে এমন প্রতিটি প্রোগ্রাম বেছে নিন, অথবা কোনোটিই পূরণ না করলে "এগুলোর কোনোটিই নয়" বেছে নিন।
 """
 answer.answer = [
 """
@@ -245,20 +245,20 @@ get_or_default(&opt);
 """, 
 ]
 prompt.distractors = [
-"None of these programs",
+"এগুলোর কোনোটিই নয়",
 ]
 context = """
-All of these programs violate memory safety due to a double-free. If `arg.unwrap()` were permitted, then
-ownership of the string `String::from("Rust")` would be assumed by `s`. After `get_or_default` returns,
-then the string would be freed. However, `opt` also believes it owns the string, so 
-the string would be freed a second time on behalf of `opt`.
+এই সব প্রোগ্রামই একটি double-free-এর কারণে memory safety লঙ্ঘন করে। `arg.unwrap()`-এর অনুমতি থাকলে
+`String::from("Rust")` string-টির ownership নিয়ে নিত `s`। `get_or_default` return করার পর
+string-টি free হয়ে যেত। কিন্তু `opt`-ও মনে করে সে string-টির owner, তাই 
+`opt`-এর হয়ে string-টি দ্বিতীয়বার free হতো।
 """
 
 [[questions]]
 id = "3a8d5bb8-a204-43e6-b50a-d17c803dbe37"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 2:**
+**প্রোগ্রাম 2:**
 
 ```ide
 /// Gets the string out of an option if it exists,
@@ -272,10 +272,10 @@ fn get_or_default(arg: &Option<String>) -> String {
 }
 ```
 
-Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
-1. The fixed function passes the Rust compiler,
-2. The fixed function preserves the intention of the original code, and
-3. The fixed function does not introduce unnecessary inefficiencies
+নিচের সমাধানগুলোর (হলুদ রঙে হাইলাইট করা) মধ্যে কোনটি এই তিনটি শর্ত সবচেয়ে ভালোভাবে পূরণ করে:
+1. ঠিক করা function-টি Rust compiler পেরিয়ে যায়,
+2. ঠিক করা function-টি মূল কোডের উদ্দেশ্য বজায় রাখে, এবং
+3. ঠিক করা function-টি অপ্রয়োজনীয় অদক্ষতা যোগ করে না
 """
 answer.answer = """
 ```ide
@@ -323,10 +323,10 @@ fn get_or_default(arg: &Option<`[&str]`>) -> String {
 """,
 ]
 context = """
-The combination of `is_none` and `unwrap` here is a Rust anti-pattern, since a `match` combines the two functionalities and
-automatically deals with pushing the reference `&Option` into the interior to produce `&String`. Therefore the `match` solution
-is the most idiomatic, and passes the compiler without changing the intended type signature of the function.
+এখানে `is_none` আর `unwrap`-এর সমন্বয় একটি Rust anti-pattern (এড়িয়ে চলা উচিত এমন প্রচলিত ধরন), কারণ একটি `match` দুটি কাজই একসঙ্গে করে এবং
+`&String` তৈরি করতে reference `&Option`-কে আপনা-আপনি ভেতরে নামিয়ে দেয়। তাই `match` সমাধানটি
+সবচেয়ে Rust-সুলভ, আর function-এর উদ্দিষ্ট type signature না বদলেই compiler পেরিয়ে যায়।
 
-The solution of changing `&Option` to `Option` is not desirable because it requires the caller to provide ownership of their option,
-which is a far more restrictive API.
+`&Option`-কে `Option`-এ বদলানোর সমাধান কাম্য নয়, কারণ এতে caller-কে তার option-এর ownership দিতে হয়,
+যা অনেক বেশি সীমাবদ্ধ একটি API।
 """

@@ -1,13 +1,13 @@
-## Ownership Inventory #1
+## Ownership Inventory #1 {#ownership-inventory-1}
 
-The Ownership Inventory is a series of quizzes that check your understanding of ownership in real-world scenarios. These scenarios are inspired by common StackOverflow questions about Rust. You can use these questions to test how well you understand ownership so far.
+Ownership Inventory হলো একগুচ্ছ কুইজ, যা বাস্তব পরিস্থিতিতে ownership (মালিকানা) সম্পর্কে আপনার বোঝাপড়া যাচাই করে। এই পরিস্থিতিগুলো Rust নিয়ে StackOverflow-এ প্রচলিত প্রশ্ন থেকে অনুপ্রাণিত। এ পর্যন্ত ownership আপনি কতটা ভালো বুঝেছেন, তা পরীক্ষা করতে এই প্রশ্নগুলো ব্যবহার করতে পারেন।
 
-### A new technology: the in-browser IDE
+### একটি নতুন প্রযুক্তি: ব্রাউজারের ভেতরের IDE {#a-new-technology-the-in-browser-ide}
 
-These questions will involve Rust programs which use functions you haven't seen before. Therefore we will use an experimental technology that supports IDE features in the browser. The IDE lets you get information about unfamiliar functions and types. For example, try doing the following actions in the program below:
+এই প্রশ্নগুলোতে এমন Rust প্রোগ্রাম থাকবে, যেগুলো এমন function ব্যবহার করে, যা আপনি আগে দেখেননি। তাই আমরা একটি পরীক্ষামূলক প্রযুক্তি ব্যবহার করব, যা ব্রাউজারের ভেতরেই IDE-র সুবিধা দেয়। এই IDE দিয়ে অপরিচিত function আর type সম্পর্কে তথ্য পাওয়া যায়। যেমন, নিচের প্রোগ্রামে এই কাজগুলো করে দেখুন:
 
-* Hover your mouse over `replace` to see its type and description.
-* Hover your mouse over `s2` to see its inferred type.
+* `replace`-এর type আর বর্ণনা দেখতে এর ওপর মাউস রাখুন।
+* `s2`-এর infer করা type দেখতে এর ওপর মাউস রাখুন।
 
 ---------
 
@@ -25,16 +25,16 @@ fn make_exciting(s: &str) -> String {
 
 ---------
 
-A few important caveats about this experimental technology:
+এই পরীক্ষামূলক প্রযুক্তি নিয়ে কয়েকটি গুরুত্বপূর্ণ সতর্কতা:
 
-**PLATFORM COMPATIBILITY:** the in-browser IDE does not work on touch-screens. The in-browser IDE has only been tested to work on Google Chrome 109 and Firefox 107. It might not work in older versions of Safari.
+**প্ল্যাটফর্মের সামঞ্জস্য:** ব্রাউজারের ভেতরের IDE টাচস্ক্রিনে কাজ করে না। এটি শুধু Google Chrome 109 আর Firefox 107-এ কাজ করে বলে পরীক্ষা করা হয়েছে। Safari-র পুরোনো সংস্করণে এটি কাজ না-ও করতে পারে।
 
-**MEMORY USAGE:** the in-browser IDE uses a [WebAssembly](https://rustwasm.github.io/book/) build of [rust-analyzer](https://github.com/rust-lang/rust-analyzer), which can take up a fair amount of memory. Each instance of the IDE appears to take around ~300 MB. (Note: we have also received some reports of >10GB memory usage.)
+**মেমোরির ব্যবহার:** ব্রাউজারের ভেতরের IDE [rust-analyzer](https://github.com/rust-lang/rust-analyzer)-এর একটি [WebAssembly](https://rustwasm.github.io/book/) build ব্যবহার করে, যা বেশ খানিকটা মেমোরি নিতে পারে। IDE-র প্রতিটি instance প্রায় ~300 MB নেয় বলে দেখা যায়। (দ্রষ্টব্য: আমরা >10GB মেমোরি ব্যবহারের কিছু রিপোর্টও পেয়েছি।)
 
-**SCROLLING:** the in-browser IDE will "eat" your cursor if your cursor intersects with the editor while scrolling. If you're having trouble scrolling the page, try moving your cursor onto the rightmost scrollbar.
+**স্ক্রল করা:** স্ক্রল করার সময় আপনার কার্সর এডিটরের ওপর দিয়ে গেলে ব্রাউজারের ভেতরের IDE আপনার কার্সর "গিলে ফেলবে"। পাতা স্ক্রল করতে সমস্যা হলে কার্সরটি একেবারে ডান পাশের স্ক্রলবারের ওপর নিয়ে চেষ্টা করুন।
 
-**LOAD TIMES:** the IDE may take up to 15 seconds to initialize for a new program. It will say "Loading..." as you interact with code in the editor.
+**লোড হওয়ার সময়:** নতুন কোনো প্রোগ্রামের জন্য IDE চালু হতে 15 সেকেন্ড পর্যন্ত লাগতে পারে। এডিটরের কোডের সঙ্গে কাজ করার সময় এতে "Loading..." লেখা দেখাবে।
 
-### The Quiz
+### কুইজ {#the-quiz}
 
 {{#quiz ../quizzes/ch06-04-inventory.toml}}

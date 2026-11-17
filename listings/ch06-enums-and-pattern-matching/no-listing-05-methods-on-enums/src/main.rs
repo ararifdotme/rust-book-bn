@@ -9,7 +9,7 @@ fn main() {
     // ANCHOR: here
     impl Message {
         fn call(&self) {
-            // method body would be defined here
+            // method-এর body এখানে সংজ্ঞায়িত হবে
         }
     }
 
