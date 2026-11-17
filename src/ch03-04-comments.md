@@ -1,35 +1,34 @@
-## Comments
+## কমেন্ট {#comments}
 
-All programmers strive to make their code easy to understand, but sometimes
-extra explanation is warranted. In these cases, programmers leave _comments_ in
-their source code that the compiler will ignore but that people reading the
-source code may find useful.
+সব প্রোগ্রামারই চেষ্টা করেন নিজের কোড সহজবোধ্য করতে, তবে কখনো কখনো বাড়তি ব্যাখ্যার
+দরকার হয়। এসব ক্ষেত্রে প্রোগ্রামাররা তাদের সোর্স কোডে _কমেন্ট_ রেখে দেন, যা compiler
+উপেক্ষা করবে, কিন্তু সোর্স কোড যারা পড়বেন, তাদের কাজে লাগতে পারে।
 
-Here’s a simple comment:
-
-```rust
-// hello, world
-```
-
-In Rust, the idiomatic comment style starts a comment with two slashes, and the
-comment continues until the end of the line. For comments that extend beyond a
-single line, you’ll need to include `//` on each line, like this:
+এখানে একটি সাধারণ কমেন্ট:
 
 ```rust
-// So we're doing something complicated here, long enough that we need
-// multiple lines of comments to do it! Whew! Hopefully, this comment will
-// explain what's going on.
+// হ্যালো, ওয়ার্ল্ড
 ```
 
-Or you can use the multiline comment syntax with `/*` and `*/`:
+Rust-এ প্রচলিত কমেন্ট লেখার ধরন হলো দুটি স্ল্যাশ দিয়ে কমেন্ট শুরু করা, আর কমেন্টটি
+লাইনের শেষ পর্যন্ত চলে। এক লাইনের বেশি লম্বা কমেন্টের জন্য প্রতিটি লাইনে `//` দিতে
+হবে, এভাবে:
 
 ```rust
-/* So we’re doing something complicated here, long enough that we need
-   multiple lines of comments to do it! Whew! Hopefully, this comment will
-   explain what’s going on. */
+// এখানে আমরা একটু জটিল কিছু করছি, এতটাই লম্বা যে এটি করতে কমেন্টের
+// একাধিক লাইন লাগছে! উফ! আশা করি এই কমেন্ট ব্যাখ্যা করবে
+// এখানে কী ঘটছে।
 ```
 
-Comments can also be placed at the end of lines containing code:
+অথবা `/*` আর `*/` দিয়ে একাধিক লাইনের কমেন্টের syntax ব্যবহার করতে পারেন:
+
+```rust
+/* এখানে আমরা একটু জটিল কিছু করছি, এতটাই লম্বা যে এটি করতে কমেন্টের
+   একাধিক লাইন লাগছে! উফ! আশা করি এই কমেন্ট ব্যাখ্যা করবে
+   এখানে কী ঘটছে। */
+```
+
+কোড থাকা লাইনের শেষেও কমেন্ট রাখা যায়:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -37,8 +36,8 @@ Comments can also be placed at the end of lines containing code:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-24-comments-end-of-line/src/main.rs}}
 ```
 
-But you’ll more often see them used in this format, with the comment on a
-separate line above the code it’s annotating:
+তবে বেশিরভাগ সময় আপনি এগুলো এই ধরনে দেখবেন, যেখানে কমেন্টটি থাকে যে কোডের ব্যাখ্যা
+দিচ্ছে, তার ওপরের একটি আলাদা লাইনে:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -46,8 +45,8 @@ separate line above the code it’s annotating:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-25-comments-above-line/src/main.rs}}
 ```
 
-Rust also has another kind of comment, documentation comments, which we’ll
-discuss in the [“Publishing a Crate to Crates.io”][publishing]<!-- ignore -->
-section of Chapter 14.
+Rust-এ আরেক ধরনের কমেন্টও আছে, documentation comment (ডকুমেন্টেশন তৈরির জন্য লেখা
+কমেন্ট), যা নিয়ে আমরা অধ্যায় 14-এর [“Crates.io-তে একটি crate
+প্রকাশ করা”][publishing]<!-- ignore --> অংশে আলোচনা করব।
 
 [publishing]: ch14-02-publishing-to-crates-io.html

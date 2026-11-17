@@ -1,138 +1,140 @@
-## Data Types
+## data type {#data-types}
 
-Every value in Rust is of a certain _data type_, which tells Rust what kind of
-data is being specified so that it knows how to work with that data. We’ll look
-at two data type subsets: scalar and compound.
+Rust-এর প্রতিটি মানই কোনো না কোনো _data type_ (ডেটার ধরন)-এর। data type Rust-কে
+জানায় কী ধরনের ডেটা দেওয়া হচ্ছে, যাতে সে বোঝে ওই ডেটা নিয়ে কীভাবে কাজ করতে হবে।
+আমরা data type-এর দুটি ভাগ দেখব: scalar আর compound।
 
-Keep in mind that Rust is a _statically typed_ language, which means that it
-must know the types of all variables at compile time. The compiler can usually
-infer what type we want to use based on the value and how we use it. In cases
-when many types are possible, such as when we converted a `String` to a numeric
-type using `parse` in the [“Comparing the Guess to the Secret
-Number”][comparing-the-guess-to-the-secret-number]<!-- ignore --> section in
-Chapter 2, we must add a type annotation, like this:
+মনে রাখবেন, Rust একটি _statically typed_ ভাষা, অর্থাৎ compile time-এই এটিকে সব
+variable-এর type জানতে হয়। মান আর সেটি কীভাবে ব্যবহার করা হচ্ছে, তার ভিত্তিতে
+compiler সাধারণত infer (type অনুমান করে নেওয়া) করতে পারে আমরা কোন type ব্যবহার করতে
+চাই। যেখানে একাধিক type সম্ভব, যেমন অধ্যায় 2-এর [“আন্দাজের সঙ্গে গোপন সংখ্যা
+মেলানো”][comparing-the-guess-to-the-secret-number]<!-- ignore --> অংশে আমরা যখন
+`parse` দিয়ে একটি `String`-কে সংখ্যার type-এ রূপান্তর করেছিলাম, সেখানে আমাদের একটি
+type annotation যোগ করতে হয়, এভাবে:
 
 ```rust
 let guess: u32 = "42".parse().expect("Not a number!");
 ```
 
-If we don’t add the `: u32` type annotation shown in the preceding code, Rust
-will display the following error, which means the compiler needs more
-information from us to know which type we want to use:
+ওপরের কোডে দেখানো `: u32` type annotation যোগ না করলে Rust নিচের error দেখাবে, যার
+মানে হলো আমরা কোন type ব্যবহার করতে চাই, তা জানতে compiler-এর আমাদের কাছ থেকে আরও
+তথ্য দরকার:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/output-only-01-no-type-annotations/output.txt}}
 ```
 
-You’ll see different type annotations for other data types.
+অন্যান্য data type-এর জন্য আলাদা আলাদা type annotation দেখতে পাবেন।
 
-### Scalar Types
+### scalar type {#scalar-types}
 
-A _scalar_ type represents a single value. Rust has four primary scalar types:
-integers, floating-point numbers, Booleans, and characters. You may recognize
-these from other programming languages. Let’s jump into how they work in Rust.
+একটি _scalar_ type (একটিমাত্র মান প্রকাশ করে এমন type) একটিমাত্র মান প্রকাশ করে।
+Rust-এ চারটি প্রধান scalar type আছে: integer (পূর্ণসংখ্যা), floating-point সংখ্যা
+(দশমিক বিন্দুযুক্ত সংখ্যা), Boolean (সত্য বা মিথ্যা মান) আর অক্ষর। অন্য প্রোগ্রামিং
+ভাষা থেকে হয়তো এগুলো চেনেন। চলুন দেখি Rust-এ এগুলো কীভাবে কাজ করে।
 
-#### Integer Types
+#### integer type {#integer-types}
 
-An _integer_ is a number without a fractional component. We used one integer
-type in Chapter 2, the `u32` type. This type declaration indicates that the
-value it’s associated with should be an unsigned integer (signed integer types
-start with `i` instead of `u`) that takes up 32 bits of space. Table 3-1 shows
-the built-in integer types in Rust. We can use any of these variants to declare
-the type of an integer value.
+_integer_ হলো এমন সংখ্যা, যার কোনো ভগ্নাংশ অংশ নেই। অধ্যায় 2-এ আমরা একটি integer
+type ব্যবহার করেছিলাম, `u32` type। এই type ঘোষণা বোঝায় যে এর সঙ্গে যুক্ত মানটি
+হবে একটি unsigned (চিহ্নহীন) integer (signed integer type-গুলো `u`-এর বদলে `i` দিয়ে
+শুরু হয়), যা 32 bit জায়গা নেয়। Table 3-1-এ Rust-এর বিল্ট-ইন integer type-গুলো
+দেখানো হয়েছে। কোনো integer মানের type ঘোষণা করতে এই variant-গুলোর যেকোনোটি
+ব্যবহার করতে পারি।
 
-<span class="caption">Table 3-1: Integer Types in Rust</span>
+<span class="caption">Table 3-1: Rust-এর integer type</span>
 
-| Length  | Signed  | Unsigned |
+| দৈর্ঘ্য  | Signed  | Unsigned |
 | ------- | ------- | -------- |
 | 8-bit   | `i8`    | `u8`     |
 | 16-bit  | `i16`   | `u16`    |
 | 32-bit  | `i32`   | `u32`    |
 | 64-bit  | `i64`   | `u64`    |
 | 128-bit | `i128`  | `u128`   |
-| Architecture-dependent | `isize` | `usize`  |
+| architecture-নির্ভর | `isize` | `usize`  |
 
-Each variant can be either signed or unsigned and has an explicit size.
-_Signed_ and _unsigned_ refer to whether it’s possible for the number to be
-negative—in other words, whether the number needs to have a sign with it
-(signed) or whether it will only ever be positive and can therefore be
-represented without a sign (unsigned). It’s like writing numbers on paper: When
-the sign matters, a number is shown with a plus sign or a minus sign; however,
-when it’s safe to assume the number is positive, it’s shown with no sign.
-Signed numbers are stored using [two’s complement][twos-complement]<!-- ignore
---> representation.
+প্রতিটি variant হয় signed নয়তো unsigned, এবং প্রতিটির একটি নির্দিষ্ট আকার আছে।
+_signed_ (চিহ্নযুক্ত) আর _unsigned_ বোঝায় সংখ্যাটি ঋণাত্মক হতে পারে কি না—অন্যভাবে
+বললে, সংখ্যাটির সঙ্গে একটি চিহ্ন থাকা দরকার কি না (signed), নাকি এটি সবসময় ধনাত্মক
+হবে এবং তাই চিহ্ন ছাড়াই প্রকাশ করা যায় (unsigned)। এটা কাগজে সংখ্যা লেখার মতো:
+চিহ্ন গুরুত্বপূর্ণ হলে সংখ্যাটি যোগ বা বিয়োগ চিহ্নসহ লেখা হয়; কিন্তু সংখ্যাটি ধনাত্মক
+বলে নিশ্চিন্তে ধরে নেওয়া গেলে কোনো চিহ্ন ছাড়াই লেখা হয়। signed সংখ্যা রাখা হয়
+[two’s complement][twos-complement]<!-- ignore
+--> (ঋণাত্মক সংখ্যা বাইনারিতে রাখার একটি পদ্ধতি) রূপে।
 
-Each signed variant can store numbers from −(2<sup>n − 1</sup>) to 2<sup>n −
-1</sup> − 1 inclusive, where _n_ is the number of bits that variant uses. So, an
-`i8` can store numbers from −(2<sup>7</sup>) to 2<sup>7</sup> − 1, which equals
-−128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> − 1,
-so a `u8` can store numbers from 0 to 2<sup>8</sup> − 1, which equals 0 to 255.
+প্রতিটি signed variant −(2<sup>n − 1</sup>) থেকে 2<sup>n −
+1</sup> − 1 পর্যন্ত (দুই সীমাসহ) সংখ্যা রাখতে পারে, যেখানে _n_ হলো ওই variant-এর
+ব্যবহৃত bit-এর সংখ্যা। তাই একটি
+`i8` রাখতে পারে −(2<sup>7</sup>) থেকে 2<sup>7</sup> − 1 পর্যন্ত, অর্থাৎ
+−128 থেকে 127 পর্যন্ত সংখ্যা। unsigned variant রাখতে পারে 0 থেকে 2<sup>n</sup> − 1
+পর্যন্ত, তাই একটি `u8` রাখতে পারে 0 থেকে 2<sup>8</sup> − 1, অর্থাৎ 0 থেকে 255 পর্যন্ত।
 
-Additionally, the `isize` and `usize` types depend on the architecture of the
-computer your program is running on: 64 bits if you’re on a 64-bit architecture
-and 32 bits if you’re on a 32-bit architecture.
+এছাড়া `isize` আর `usize` type নির্ভর করে আপনার প্রোগ্রাম যে কম্পিউটারে চলছে, তার
+architecture (প্রসেসরের গঠন)-এর ওপর: 64-bit architecture-এ 64 bit, আর 32-bit
+architecture-এ 32 bit।
 
-You can write integer literals in any of the forms shown in Table 3-2. Note
-that number literals that can be multiple numeric types allow a type suffix,
-such as `57u8`, to designate the type. Number literals can also use `_` as a
-visual separator to make the number easier to read, such as `1_000`, which will
-have the same value as if you had specified `1000`.
+integer literal (কোডে সরাসরি লেখা মান) Table 3-2-এ দেখানো যেকোনো রূপে লিখতে পারেন।
+লক্ষ করুন, যেসব সংখ্যার literal একাধিক সংখ্যার type হতে পারে, সেগুলোতে type নির্দিষ্ট
+করতে একটি type suffix (সংখ্যার শেষে জুড়ে দেওয়া type-এর নাম) দেওয়া যায়, যেমন `57u8`।
+সংখ্যা সহজে পড়ার জন্য সংখ্যার literal-এ দেখার সুবিধার্থে বিভাজক হিসেবে `_`-ও ব্যবহার
+করা যায়, যেমন `1_000`, যার মান হবে ঠিক `1000` লেখার মতোই।
 
-<span class="caption">Table 3-2: Integer Literals in Rust</span>
+<span class="caption">Table 3-2: Rust-এর integer literal</span>
 
-| Number literals  | Example       |
+| সংখ্যার literal  | উদাহরণ       |
 | ---------------- | ------------- |
-| Decimal          | `98_222`      |
-| Hex              | `0xff`        |
-| Octal            | `0o77`        |
-| Binary           | `0b1111_0000` |
-| Byte (`u8` only) | `b'A'`        |
+| দশমিক          | `98_222`      |
+| হেক্সাডেসিমাল              | `0xff`        |
+| অক্টাল            | `0o77`        |
+| বাইনারি           | `0b1111_0000` |
+| বাইট (শুধু `u8`) | `b'A'`        |
 
-So how do you know which type of integer to use? If you’re unsure, Rust’s
-defaults are generally good places to start: Integer types default to `i32`.
-The primary situation in which you’d use `isize` or `usize` is when indexing
-some sort of collection.
+তাহলে কোন integer type ব্যবহার করবেন, তা কীভাবে বুঝবেন? নিশ্চিত না হলে Rust-এর
+ডিফল্টগুলো দিয়ে শুরু করাই সাধারণত ভালো: integer type-এর ডিফল্ট হলো `i32`। `isize` বা
+`usize` ব্যবহারের প্রধান ক্ষেত্র হলো কোনো ধরনের collection (একাধিক মান রাখার কাঠামো)-এ
+index (ক্রমিক অবস্থান নম্বর) দিয়ে উপাদান নেওয়া।
 
-> ##### Integer Overflow
+> ##### integer overflow {#integer-overflow}
 >
-> Let’s say you have a variable of type `u8` that can hold values between 0 and
-> 255. If you try to change the variable to a value outside that range, such as
-> 256, _integer overflow_ will occur, which can result in one of two behaviors.
-> When you’re compiling in debug mode, Rust includes checks for integer overflow
-> that cause your program to _panic_ at runtime if this behavior occurs. Rust
-> uses the term _panicking_ when a program exits with an error; we’ll discuss
-> panics in more depth in the [“Unrecoverable Errors with
-> `panic!`”][unrecoverable-errors-with-panic]<!-- ignore --> section in Chapter
-> 9.
+> ধরুন আপনার কাছে `u8` type-এর একটি variable আছে, যা 0 থেকে 255-এর মধ্যের মান রাখতে
+> পারে। variable-টিকে যদি সেই সীমার বাইরের কোনো মানে বদলানোর চেষ্টা করেন, যেমন
+> 256, তাহলে _integer overflow_ (type-এর ধারণক্ষমতার বাইরে মান চলে যাওয়া) ঘটবে, যার
+> ফলে দুটি আচরণের যেকোনো একটি হতে পারে। debug mode (ডিবাগের জন্য compile)-এ compile
+> করার সময় Rust integer overflow-এর জন্য এমন যাচাই যোগ করে, যার ফলে এই ঘটনা ঘটলে
+> runtime-এ আপনার প্রোগ্রাম _panic_ (প্রোগ্রামের হঠাৎ থেমে যাওয়া) করে। কোনো প্রোগ্রাম
+> error নিয়ে বন্ধ হয়ে গেলে Rust _panicking_ শব্দটি ব্যবহার করে; panic নিয়ে আমরা
+> অধ্যায় 9-এর [“`panic!` দিয়ে অপূরণীয়
+> error”][unrecoverable-errors-with-panic]<!-- ignore --> অংশে আরও গভীরভাবে আলোচনা
+> করব।
 >
-> When you’re compiling in release mode with the `--release` flag, Rust does
-> _not_ include checks for integer overflow that cause panics. Instead, if
-> overflow occurs, Rust performs _two’s complement wrapping_. In short, values
-> greater than the maximum value the type can hold “wrap around” to the minimum
-> of the values the type can hold. In the case of a `u8`, the value 256 becomes
-> 0, the value 257 becomes 1, and so on. The program won’t panic, but the
-> variable will have a value that probably isn’t what you were expecting it to
-> have. Relying on integer overflow’s wrapping behavior is considered an error.
+> `--release` flag দিয়ে release mode (চূড়ান্ত, optimize করা compile)-এ compile করার
+> সময় Rust panic ঘটানো integer overflow-এর যাচাইগুলো যোগ করে _না_। বরং overflow
+> ঘটলে Rust _two’s complement wrapping_ করে। সংক্ষেপে, type যত বড় মান রাখতে পারে,
+> তার চেয়ে বড় মান “ঘুরে” type-এর রাখা যায় এমন সবচেয়ে ছোট মানের দিকে চলে যায়। `u8`-এর
+> ক্ষেত্রে 256 মানটি হয়ে যায় 0, 257 হয়ে যায় 1, এভাবে চলতে থাকে। প্রোগ্রাম panic করবে
+> না, তবে variable-টির মান সম্ভবত আপনার প্রত্যাশামতো হবে না। integer overflow-এর
+> wrapping (সীমা পেরোলে আবার শুরুর দিকে ঘুরে আসা) আচরণের ওপর নির্ভর করাকে একটি ভুল
+> হিসেবে গণ্য করা হয়।
 >
-> To explicitly handle the possibility of overflow, you can use these families
-> of methods provided by the standard library for primitive numeric types:
+> overflow-এর সম্ভাবনা স্পষ্টভাবে সামলাতে চাইলে primitive (ভাষায় সরাসরি থাকা মৌলিক)
+> সংখ্যার type-গুলোর জন্য standard library (আদর্শ লাইব্রেরি)-র দেওয়া এই method
+> (টাইপের সঙ্গে যুক্ত function)-পরিবারগুলো ব্যবহার করতে পারেন:
 >
-> - Wrap in all modes with the `wrapping_*` methods, such as `wrapping_add`.
-> - Return the `None` value if there is overflow with the `checked_*` methods.
-> - Return the value and a Boolean indicating whether there was overflow with
->   the `overflowing_*` methods.
-> - Saturate at the value’s minimum or maximum values with the `saturating_*`
->   methods.
+> - `wrapping_*` method দিয়ে সব mode-এ wrap করুন, যেমন `wrapping_add`।
+> - `checked_*` method দিয়ে overflow হলে `None` মান return (ফেরত দেওয়া) করুন।
+> - `overflowing_*` method দিয়ে মানটি আর overflow হয়েছে কি না তা জানানো একটি Boolean
+>   return করুন।
+> - `saturating_*` method দিয়ে মানটিকে type-এর সর্বনিম্ন বা সর্বোচ্চ মানে saturate
+>   (সীমায় পৌঁছে আটকে থাকা) করুন।
 
-#### Floating-Point Types
+#### floating-point type {#floating-point-types}
 
-Rust also has two primitive types for _floating-point numbers_, which are
-numbers with decimal points. Rust’s floating-point types are `f32` and `f64`,
-which are 32 bits and 64 bits in size, respectively. The default type is `f64`
-because on modern CPUs, it’s roughly the same speed as `f32` but is capable of
-more precision. All floating-point types are signed.
+_floating-point সংখ্যা_, অর্থাৎ দশমিক বিন্দুযুক্ত সংখ্যার জন্যও Rust-এ দুটি primitive
+type আছে। Rust-এর floating-point type হলো `f32` আর `f64`, যাদের আকার যথাক্রমে
+32 bit আর 64 bit। ডিফল্ট type হলো `f64`, কারণ আধুনিক CPU-তে এটি মোটামুটি `f32`-এর
+সমান গতিতে চলে, কিন্তু বেশি নির্ভুলতা দিতে পারে। সব floating-point type-ই signed।
 
-Here’s an example that shows floating-point numbers in action:
+floating-point সংখ্যার ব্যবহার দেখানো একটি উদাহরণ:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -140,14 +142,13 @@ Here’s an example that shows floating-point numbers in action:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-06-floating-point/src/main.rs}}
 ```
 
-Floating-point numbers are represented according to the IEEE-754 standard.
+floating-point সংখ্যা IEEE-754 মানদণ্ড অনুযায়ী প্রকাশ করা হয়।
 
-#### Numeric Operations
+#### সংখ্যার operation {#numeric-operations}
 
-Rust supports the basic mathematical operations you’d expect for all the number
-types: addition, subtraction, multiplication, division, and remainder. Integer
-division truncates toward zero to the nearest integer. The following code shows
-how you’d use each numeric operation in a `let` statement:
+সব সংখ্যার type-এর জন্য Rust প্রত্যাশিত মৌলিক গাণিতিক operation-গুলো সমর্থন করে:
+যোগ, বিয়োগ, গুণ, ভাগ আর ভাগশেষ। integer ভাগের ফল শূন্যের দিকে ছেঁটে নিকটতম integer-এ
+নেওয়া হয়। নিচের কোডে দেখানো হয়েছে, একটি `let` statement-এ প্রতিটি সংখ্যার operation কীভাবে ব্যবহার করবেন:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -155,16 +156,16 @@ how you’d use each numeric operation in a `let` statement:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-07-numeric-operations/src/main.rs}}
 ```
 
-Each expression in these statements uses a mathematical operator and evaluates
-to a single value, which is then bound to a variable. [Appendix
-B][appendix_b]<!-- ignore --> contains a list of all operators that Rust
-provides.
+এই statement-গুলোর প্রতিটি expression (মান তৈরি করে এমন কোড-অংশ) একটি গাণিতিক
+operator (অপারেটর-চিহ্ন) ব্যবহার করে এবং একটিমাত্র মানে evaluate হয়, যা তারপর একটি
+variable-এর সঙ্গে bind হয়। Rust-এর সব operator-এর তালিকা আছে [পরিশিষ্ট
+B][appendix_b]<!-- ignore -->-তে।
 
-#### The Boolean Type
+#### Boolean type {#the-boolean-type}
 
-As in most other programming languages, a Boolean type in Rust has two possible
-values: `true` and `false`. Booleans are one byte in size. The Boolean type in
-Rust is specified using `bool`. For example:
+অন্যান্য বেশিরভাগ প্রোগ্রামিং ভাষার মতোই Rust-এ Boolean type-এর দুটি সম্ভাব্য মান
+আছে: `true` আর `false`। Boolean-এর আকার এক byte। Rust-এ Boolean type লেখা হয়
+`bool` দিয়ে। যেমন:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -172,14 +173,14 @@ Rust is specified using `bool`. For example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-08-boolean/src/main.rs}}
 ```
 
-The main way to use Boolean values is through conditionals, such as an `if`
-expression. We’ll cover how `if` expressions work in Rust in the [“Control
-Flow”][control-flow]<!-- ignore --> section.
+Boolean মান ব্যবহারের প্রধান উপায় হলো conditional (শর্তের ওপর নির্ভর করে চলা কোড),
+যেমন একটি `if` expression। Rust-এ `if` expression কীভাবে কাজ করে, তা আমরা
+[“control flow”][control-flow]<!-- ignore --> অংশে দেখব।
 
-#### The Character Type
+#### character type {#the-character-type}
 
-Rust’s `char` type is the language’s most primitive alphabetic type. Here are
-some examples of declaring `char` values:
+Rust-এর `char` type হলো ভাষাটির সবচেয়ে মৌলিক বর্ণভিত্তিক type। `char` মান ঘোষণার
+কয়েকটি উদাহরণ:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -187,34 +188,34 @@ some examples of declaring `char` values:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-09-char/src/main.rs}}
 ```
 
-Note that we specify `char` literals with single quotation marks, as opposed to
-string literals, which use double quotation marks. Rust’s `char` type is 4
-bytes in size and represents a Unicode scalar value, which means it can
-represent a lot more than just ASCII. Accented letters; Chinese, Japanese, and
-Korean characters; emojis; and zero-width spaces are all valid `char` values in
-Rust. Unicode scalar values range from `U+0000` to `U+D7FF` and `U+E000` to
-`U+10FFFF` inclusive. However, a “character” isn’t really a concept in Unicode,
-so your human intuition for what a “character” is may not match up with what a
-`char` is in Rust. We’ll discuss this topic in detail in [“Storing UTF-8
-Encoded Text with Strings”][strings]<!-- ignore --> in Chapter 8.
+লক্ষ করুন, `char` literal আমরা লিখি একক উদ্ধৃতিচিহ্ন দিয়ে, আর string literal
+(উদ্ধৃতিচিহ্নের ভেতরে সরাসরি লেখা string) লেখা হয় জোড়া উদ্ধৃতিচিহ্ন দিয়ে। Rust-এর
+`char` type-এর আকার 4 byte এবং এটি একটি Unicode scalar value (Unicode-এর একটি একক
+অক্ষর-মান) প্রকাশ করে, অর্থাৎ এটি শুধু ASCII-র চেয়ে অনেক বেশি কিছু প্রকাশ করতে পারে।
+উচ্চারণ-চিহ্নযুক্ত বর্ণ; চীনা, জাপানি ও কোরিয়ান অক্ষর; ইমোজি; আর শূন্য-প্রস্থের ফাঁকা
+অক্ষর—এগুলোর সবই Rust-এ বৈধ `char` মান। Unicode
+scalar value-র পরিসর হলো `U+0000` থেকে `U+D7FF` এবং `U+E000` থেকে
+`U+10FFFF` পর্যন্ত (দুই সীমাসহ)। তবে Unicode-এ “অক্ষর” আসলে কোনো ধারণা নয়, তাই
+“অক্ষর” বলতে আপনার স্বাভাবিক বোধ Rust-এর `char`-এর সঙ্গে না-ও মিলতে পারে। এ বিষয়ে
+আমরা অধ্যায় 8-এর [“string দিয়ে UTF-8
+এনকোড করা লেখা রাখা”][strings]<!-- ignore --> অংশে বিস্তারিত আলোচনা করব।
 
 {{#quiz ../quizzes/ch03-02-data-types-sec1-scalar.toml}}
 
-### Compound Types
+### compound type {#compound-types}
 
-_Compound types_ can group multiple values into one type. Rust has two
-primitive compound types: tuples and arrays.
+_compound type_ (একাধিক মান মিলিয়ে তৈরি type) একাধিক মানকে একটি type-এ একত্র করতে
+পারে। Rust-এ দুটি primitive compound type আছে: tuple আর array।
 
-#### The Tuple Type
+#### tuple type {#the-tuple-type}
 
-A _tuple_ is a general way of grouping together a number of values with a
-variety of types into one compound type. Tuples have a fixed length: Once
-declared, they cannot grow or shrink in size.
+_tuple_ (বিভিন্ন type-এর নির্দিষ্টসংখ্যক মানের একটি দল) হলো বিভিন্ন type-এর কয়েকটি
+মানকে একটি compound type-এ একত্র করার একটি সাধারণ উপায়। tuple-এর দৈর্ঘ্য নির্দিষ্ট:
+একবার ঘোষণা করার পর এর আকার বাড়ানো বা কমানো যায় না।
 
-We create a tuple by writing a comma-separated list of values inside
-parentheses. Each position in the tuple has a type, and the types of the
-different values in the tuple don’t have to be the same. We’ve added optional
-type annotations in this example:
+বন্ধনীর ভেতরে কমা দিয়ে আলাদা করা মানের একটি তালিকা লিখে আমরা tuple তৈরি করি। tuple-এর
+প্রতিটি অবস্থানের একটি type আছে, আর tuple-এর বিভিন্ন মানের type একই হওয়ার দরকার নেই।
+এই উদাহরণে আমরা ঐচ্ছিক type annotation যোগ করেছি:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -222,9 +223,10 @@ type annotations in this example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-10-tuples/src/main.rs}}
 ```
 
-The variable `tup` binds to the entire tuple because a tuple is considered a
-single compound element. To get the individual values out of a tuple, we can
-use pattern matching to destructure a tuple value, like this:
+`tup` variable-টি পুরো tuple-এর সঙ্গে bind হয়, কারণ একটি tuple-কে একটিমাত্র compound
+উপাদান হিসেবে গণ্য করা হয়। tuple থেকে আলাদা আলাদা মান বের করে আনতে আমরা pattern
+matching (নকশার সঙ্গে মেলানো) দিয়ে একটি tuple মানকে destructure (একটি মানকে ভেঙে
+আলাদা আলাদা অংশে নেওয়া) করতে পারি, এভাবে:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -232,14 +234,13 @@ use pattern matching to destructure a tuple value, like this:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-11-destructuring-tuples/src/main.rs}}
 ```
 
-This program first creates a tuple and binds it to the variable `tup`. It then
-uses a pattern with `let` to take `tup` and turn it into three separate
-variables, `x`, `y`, and `z`. This is called _destructuring_ because it breaks
-the single tuple into three parts. Finally, the program prints the value of
-`y`, which is `6.4`.
+এই প্রোগ্রামটি প্রথমে একটি tuple তৈরি করে সেটিকে `tup` variable-এর সঙ্গে bind করে।
+তারপর `let`-এর সঙ্গে একটি pattern ব্যবহার করে `tup`-কে তিনটি আলাদা variable-এ পরিণত
+করে: `x`, `y` আর `z`। একে বলা হয় _destructuring_, কারণ এটি একটিমাত্র tuple-কে তিনটি
+অংশে ভেঙে দেয়। সবশেষে প্রোগ্রামটি `y`-এর মান প্রিন্ট করে, যা হলো `6.4`।
 
-We can also access a tuple element directly by using a period (`.`) followed by
-the index of the value we want to access. For example:
+একটি পূর্ণবিরাম (`.`) এবং তারপর যে মানটি নিতে চাই তার index লিখে আমরা tuple-এর কোনো
+উপাদান সরাসরি নিতেও পারি। যেমন:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -247,16 +248,15 @@ the index of the value we want to access. For example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-12-tuple-indexing/src/main.rs}}
 ```
 
-This program creates the tuple `x` and then accesses each element of the tuple
-using their respective indices. As with most programming languages, the first
-index in a tuple is 0.
+এই প্রোগ্রামটি `x` tuple তৈরি করে, তারপর প্রতিটি উপাদানের নিজ নিজ index দিয়ে tuple-এর
+প্রতিটি উপাদান নেয়। বেশিরভাগ প্রোগ্রামিং ভাষার মতোই tuple-এর প্রথম index হলো 0।
 
-The tuple without any values has a special name, _unit_. This value and its
-corresponding type are both written `()` and represent an empty value or an
-empty return type. Expressions implicitly return the unit value if they don’t
-return any other value.
+কোনো মান নেই এমন tuple-এর একটি বিশেষ নাম আছে: _unit_ (খালি মান)। এই মান আর এর
+type—দুটোই লেখা হয় `()`, এবং এরা একটি খালি মান বা একটি খালি return type (function যে
+type-এর মান ফেরত দেয়) প্রকাশ করে। কোনো expression অন্য কোনো মান return না করলে
+নিজে থেকেই unit মান return করে।
 
-Additionally, we can modify individual elements of a mutable tuple. For example:
+এছাড়া একটি mutable tuple-এর আলাদা আলাদা উপাদান বদলাতেও পারি। যেমন:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -268,17 +268,17 @@ fn main() {
 }
 ```
 
-This program sets the first element to zero and adds five to the second element.
-The final value of `x` is `(0, 7)`.
+এই প্রোগ্রামটি প্রথম উপাদানকে শূন্য করে এবং দ্বিতীয় উপাদানের সঙ্গে পাঁচ যোগ করে।
+`x`-এর চূড়ান্ত মান হয় `(0, 7)`।
 
-#### The Array Type
+#### array type {#the-array-type}
 
-Another way to have a collection of multiple values is with an _array_. Unlike
-a tuple, every element of an array must have the same type. Unlike arrays in
-some other languages, arrays in Rust have a fixed length.
+একাধিক মানের একটি সংগ্রহ রাখার আরেকটি উপায় হলো _array_ (একই type-এর নির্দিষ্টসংখ্যক
+মানের সারি)। tuple-এর বিপরীতে, array-এর প্রতিটি উপাদানের type একই হতে হবে। অন্য কিছু
+ভাষার array-র বিপরীতে Rust-এর array-র দৈর্ঘ্য নির্দিষ্ট।
 
-We write the values in an array as a comma-separated list inside square
-brackets:
+array-র মানগুলো আমরা লিখি তৃতীয় বন্ধনী (square bracket)-র ভেতরে কমা দিয়ে আলাদা করা
+একটি তালিকা হিসেবে:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -286,56 +286,54 @@ brackets:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-13-arrays/src/main.rs}}
 ```
 
-Arrays are useful when you want your data allocated on the stack, the same as
-the other types we have seen so far, rather than the heap (we will discuss the
-stack and the heap more in [Chapter 4][stack-and-heap]<!-- ignore -->) or when
-you want to ensure that you always have a fixed number of elements. An array
-isn’t as flexible as the vector type, though. A vector is a similar collection
-type provided by the standard library that _is_ allowed to grow or shrink in
-size because its contents live on the heap. If you’re unsure whether to use an
-array or a vector, chances are you should use a vector. [Chapter
-8][vectors]<!-- ignore --> discusses vectors in more detail.
+array কাজে আসে যখন আপনি চান আপনার ডেটা heap-এ না রেখে stack-এ allocate (মেমোরিতে
+জায়গা বরাদ্দ) করা হোক, এ পর্যন্ত দেখা অন্যান্য type-এর মতোই (stack (ক্রমানুসারে মান
+রাখার মেমোরি-অংশ) আর heap (প্রয়োজনমতো জায়গা বরাদ্দের মেমোরি-অংশ) নিয়ে আমরা
+[অধ্যায় 4][stack-and-heap]<!-- ignore -->-এ আরও আলোচনা করব), অথবা যখন নিশ্চিত হতে
+চান যে আপনার কাছে সবসময় একটি নির্দিষ্টসংখ্যক উপাদান থাকবে। তবে array, vector type-এর
+মতো নমনীয় নয়। vector (পরিবর্তনশীল দৈর্ঘ্যের তালিকা) হলো standard library-র দেওয়া
+একই ধরনের একটি collection type, যার আকার বাড়ানো বা কমানো _যায়_, কারণ এর বিষয়বস্তু
+থাকে heap-এ। array নাকি vector ব্যবহার করবেন তা নিয়ে নিশ্চিত না হলে, খুব সম্ভবত
+vector-ই ব্যবহার করা উচিত। [অধ্যায়
+8][vectors]<!-- ignore -->-এ vector নিয়ে আরও বিস্তারিত আলোচনা আছে।
 
-However, arrays are more useful when you know the number of elements will not
-need to change. For example, if you were using the names of the month in a
-program, you would probably use an array rather than a vector because you know
-it will always contain 12 elements:
+তবে যখন জানেন উপাদানের সংখ্যা বদলানোর দরকার হবে না, তখন array বেশি কাজের। যেমন,
+কোনো প্রোগ্রামে মাসের নামগুলো ব্যবহার করলে সম্ভবত vector-এর বদলে array ব্যবহার
+করবেন, কারণ আপনি জানেন এতে সবসময় 12টি উপাদানই থাকবে:
 
 ```rust
 let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 ```
 
-You write an array’s type using square brackets with the type of each element,
-a semicolon, and then the number of elements in the array, like so:
+array-র type লেখা হয় তৃতীয় বন্ধনীর ভেতরে প্রতিটি উপাদানের type, একটি সেমিকোলন, আর
+তারপর array-তে উপাদানের সংখ্যা দিয়ে, এভাবে:
 
 ```rust
 let a: [i32; 5] = [1, 2, 3, 4, 5];
 ```
 
-Here, `i32` is the type of each element. After the semicolon, the number `5`
-indicates the array contains five elements.
+এখানে `i32` হলো প্রতিটি উপাদানের type। সেমিকোলনের পরের সংখ্যা `5` বোঝায় যে array-তে
+পাঁচটি উপাদান আছে।
 
-You can also initialize an array to contain the same value for each element by
-specifying the initial value, followed by a semicolon, and then the length of
-the array in square brackets, as shown here:
+প্রতিটি উপাদানে একই মান রেখে একটি array initialize (প্রথম মান দেওয়া)-ও করতে পারেন:
+তৃতীয় বন্ধনীর ভেতরে শুরুর মানটি, তারপর একটি সেমিকোলন, আর তারপর array-র দৈর্ঘ্য
+লিখে, এখানে যেমন দেখানো হয়েছে:
 
 ```rust
 let a = [3; 5];
 ```
 
-The array named `a` will contain `5` elements that will all be set to the value
-`3` initially. This is the same as writing `let a = [3, 3, 3, 3, 3];` but in a
-more concise way.
+`a` নামের array-তে `5`টি উপাদান থাকবে, যাদের প্রতিটির শুরুর মান হবে `3`। এটি
+`let a = [3, 3, 3, 3, 3];` লেখার মতোই, তবে আরও সংক্ষেপে।
 
 <!-- Old headings. Do not remove or links may break. -->
 <a id="accessing-array-elements"></a>
 
-#### Array Element Access
+#### array-র উপাদান নেওয়া {#array-element-access}
 
-An array is a single chunk of memory of a known, fixed size that can be
-allocated on the stack. You can access elements of an array using indexing,
-like this:
+array হলো জানা, নির্দিষ্ট আকারের একটিমাত্র মেমোরি-খণ্ড, যা stack-এ allocate করা যায়।
+index ব্যবহার করে array-র উপাদান নিতে পারেন, এভাবে:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -343,15 +341,14 @@ like this:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-14-array-indexing/src/main.rs}}
 ```
 
-In this example, the variable named `first` will get the value `1` because that
-is the value at index `[0]` in the array. The variable named `second` will get
-the value `2` from index `[1]` in the array.
+এই উদাহরণে `first` নামের variable-টি মান পাবে `1`, কারণ array-র `[0]` index-এ
+সেই মানটিই আছে। `second` নামের variable-টি array-র `[1]` index থেকে মান পাবে `2`।
 
-#### Invalid Array Element Access
+#### array-র উপাদান নেওয়ার ভুল চেষ্টা {#invalid-array-element-access}
 
-Let’s see what happens if you try to access an element of an array that is past
-the end of the array. Say you run this code, similar to the guessing game in
-Chapter 2, to get an array index from the user:
+চলুন দেখি, array-র শেষের পরের কোনো উপাদান নেওয়ার চেষ্টা করলে কী হয়। ধরুন, অধ্যায়
+2-এর সংখ্যা আন্দাজের খেলার মতো করে ব্যবহারকারীর কাছ থেকে একটি array index নিতে আপনি
+এই কোডটি চালালেন:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -359,10 +356,9 @@ Chapter 2, to get an array index from the user:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/src/main.rs}}
 ```
 
-This code compiles successfully. If you run this code using `cargo run` and
-enter `0`, `1`, `2`, `3`, or `4`, the program will print out the corresponding
-value at that index in the array. If you instead enter a number past the end of
-the array, such as `10`, you’ll see output like this:
+এই কোড সফলভাবে compile হয়। `cargo run` দিয়ে কোডটি চালিয়ে `0`, `1`, `2`, `3` বা `4`
+লিখলে প্রোগ্রামটি array-র ওই index-এর মানটি প্রিন্ট করবে। আর যদি তার বদলে array-র শেষের
+পরের কোনো সংখ্যা লেখেন, যেমন `10`, তাহলে এরকম আউটপুট দেখবেন:
 
 <!-- manual-regeneration
 cd listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access
@@ -376,21 +372,20 @@ index out of bounds: the len is 5 but the index is 10
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-The program resulted in a runtime error at the point of using an invalid
-value in the indexing operation. The program exited with an error message and
-didn’t execute the final `println!` statement. When you attempt to access an
-element using indexing, Rust will check that the index you’ve specified is less
-than the array length. If the index is greater than or equal to the length,
-Rust will panic. This check has to happen at runtime, especially in this case,
-because the compiler can’t possibly know what value a user will enter when they
-run the code later.
+index operation-এ একটি অবৈধ মান ব্যবহারের জায়গায় প্রোগ্রামটিতে একটি runtime error
+হয়েছে। প্রোগ্রামটি একটি error message দিয়ে বন্ধ হয়ে গেছে এবং শেষের `println!`
+statement-টি চালায়নি। index দিয়ে কোনো উপাদান নেওয়ার চেষ্টা করলে Rust যাচাই করে দেখে যে
+আপনার দেওয়া index array-র দৈর্ঘ্যের চেয়ে ছোট কি না। index দৈর্ঘ্যের সমান বা তার চেয়ে
+বড় হলে Rust panic করবে। এই যাচাই runtime-এই হতে হয়, বিশেষ করে এই ক্ষেত্রে, কারণ পরে
+কোড চালানোর সময় ব্যবহারকারী কোন মান লিখবেন, তা compiler-এর পক্ষে জানা সম্ভব নয়।
 
-This is an example of Rust’s memory safety principles in action. In many
-low-level languages, this kind of check is not done, and when you provide an
-incorrect index, invalid memory can be accessed. Rust protects you against this
-kind of error by immediately exiting instead of allowing the memory access and
-continuing. Chapter 9 discusses more of Rust’s error handling and how you can
-write readable, safe code that neither panics nor allows invalid memory access.
+এটি কাজের মধ্যে Rust-এর memory safety (মেমোরি-নিরাপত্তা) নীতির একটি উদাহরণ। অনেক
+low-level (নিম্ন-স্তরের) ভাষায় এ ধরনের যাচাই করা হয় না, আর ভুল index দিলে অবৈধ
+মেমোরিতে ঢুকে পড়া সম্ভব হয়। Rust এ ধরনের error থেকে আপনাকে রক্ষা করে: মেমোরিতে
+ঢোকার অনুমতি দিয়ে কাজ চালিয়ে যাওয়ার বদলে সঙ্গে সঙ্গে বন্ধ হয়ে যায়। অধ্যায় 9-এ
+Rust-এর error handling (ত্রুটি সামলানো) নিয়ে আরও আলোচনা আছে, আর কীভাবে এমন পাঠযোগ্য,
+নিরাপদ কোড লিখবেন, যা panic-ও করে না, অবৈধ মেমোরিতে ঢোকার সুযোগও দেয় না, তা-ও
+দেখানো হয়েছে।
 
 {{#quiz ../quizzes/ch03-02-data-types-sec2-compound.toml}}
 

@@ -1,19 +1,18 @@
-## Control Flow
+## control flow {#control-flow}
 
-The ability to run some code depending on whether a condition is `true` and the
-ability to run some code repeatedly while a condition is `true` are basic
-building blocks in most programming languages. The most common constructs that
-let you control the flow of execution of Rust code are `if` expressions and
-loops.
+কোনো শর্ত `true` কি না তার ওপর নির্ভর করে কিছু কোড চালানোর ক্ষমতা, আর কোনো শর্ত
+`true` থাকা পর্যন্ত কিছু কোড বারবার চালানোর ক্ষমতা—এ দুটি বেশিরভাগ প্রোগ্রামিং ভাষার
+মৌলিক ভিত্তি। Rust কোড চলার ক্রম নিয়ন্ত্রণ করার সবচেয়ে প্রচলিত গঠনগুলো হলো `if`
+expression আর loop (বারবার চলতে থাকা কোড-অংশ)।
 
-### `if` Expressions
+### `if` expression {#if-expressions}
 
-An `if` expression allows you to branch your code depending on conditions. You
-provide a condition and then state, “If this condition is met, run this block
-of code. If the condition is not met, do not run this block of code.”
+একটি `if` expression শর্তের ওপর নির্ভর করে আপনার কোডকে আলাদা আলাদা পথে চালাতে দেয়।
+আপনি একটি শর্ত দেন, তারপর বলেন, “এই শর্ত পূরণ হলে কোডের এই block চালাও। শর্ত পূরণ না
+হলে কোডের এই block চালিও না।”
 
-Create a new project called _branches_ in your _projects_ directory to explore
-the `if` expression. In the _src/main.rs_ file, input the following:
+`if` expression খুঁটিয়ে দেখতে আপনার _projects_ ডিরেক্টরিতে _branches_ নামে একটি
+নতুন প্রজেক্ট তৈরি করুন। _src/main.rs_ ফাইলে নিচের কোডটি লিখুন:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -21,43 +20,40 @@ the `if` expression. In the _src/main.rs_ file, input the following:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-26-if-true/src/main.rs}}
 ```
 
-All `if` expressions start with the keyword `if`, followed by a condition. In
-this case, the condition checks whether or not the variable `number` has a
-value less than 5. We place the block of code to execute if the condition is
-`true` immediately after the condition inside curly brackets. Blocks of code
-associated with the conditions in `if` expressions are sometimes called _arms_,
-just like the arms in `match` expressions that we discussed in the [“Comparing
-the Guess to the Secret Number”][comparing-the-guess-to-the-secret-number]<!--
-ignore --> section of Chapter 2.
+সব `if` expression শুরু হয় `if` keyword দিয়ে, তারপর থাকে একটি শর্ত। এই ক্ষেত্রে শর্তটি
+যাচাই করে `number` variable-এর মান 5-এর চেয়ে কম কি না। শর্ত `true` হলে যে কোডের block
+চলবে, সেটি আমরা শর্তের ঠিক পরেই কার্লি ব্র্যাকেটের ভেতরে বসাই। `if` expression-এর
+শর্তগুলোর সঙ্গে যুক্ত কোডের block-গুলোকে কখনো কখনো _arm_ (শাখা)
+বলা হয়, ঠিক `match` expression-এর arm-এর মতো, যা নিয়ে আমরা অধ্যায় 2-এর [“আন্দাজের সঙ্গে
+গোপন সংখ্যা মেলানো”][comparing-the-guess-to-the-secret-number]<!--
+ignore --> অংশে আলোচনা করেছিলাম।
 
-Optionally, we can also include an `else` expression, which we chose to do
-here, to give the program an alternative block of code to execute should the
-condition evaluate to `false`. If you don’t provide an `else` expression and
-the condition is `false`, the program will just skip the `if` block and move on
-to the next bit of code.
+ঐচ্ছিকভাবে আমরা একটি `else` expression-ও যোগ করতে পারি, যা এখানে আমরা করেছি; শর্তটি
+`false` evaluate হলে প্রোগ্রাম যাতে বিকল্প একটি কোডের block চালাতে পারে, সেজন্য। আপনি
+`else` expression না দিলে এবং শর্তটি `false` হলে প্রোগ্রাম শুধু `if` block-টি এড়িয়ে
+পরের কোডে চলে যাবে।
 
-Try running this code; you should see the following output:
+কোডটি চালিয়ে দেখুন; নিচের আউটপুট দেখার কথা:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-26-if-true/output.txt}}
 ```
 
-Let’s try changing the value of `number` to a value that makes the condition
-`false` to see what happens:
+চলুন `number`-এর মান বদলে এমন একটি মান দিই, যাতে শর্তটি `false` হয়, আর দেখি কী
+ঘটে:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-27-if-false/src/main.rs:here}}
 ```
 
-Run the program again, and look at the output:
+প্রোগ্রামটি আবার চালান, আর আউটপুটটি দেখুন:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-27-if-false/output.txt}}
 ```
 
-It’s also worth noting that the condition in this code _must_ be a `bool`. If
-the condition isn’t a `bool`, we’ll get an error. For example, try running the
-following code:
+এটাও উল্লেখ করার মতো যে এই কোডের শর্তটি _অবশ্যই_ একটি `bool` হতে হবে। শর্তটি `bool`
+না হলে error পাব। যেমন, নিচের কোডটি চালিয়ে দেখুন:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -65,19 +61,17 @@ following code:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-28-if-condition-must-be-bool/src/main.rs}}
 ```
 
-The `if` condition evaluates to a value of `3` this time, and Rust throws an
-error:
+এবার `if` শর্তটি evaluate হয়ে `3` মান দেয়, আর Rust একটি error দেখায়:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-28-if-condition-must-be-bool/output.txt}}
 ```
 
-The error indicates that Rust expected a `bool` but got an integer. Unlike
-languages such as Ruby and JavaScript, Rust will not automatically try to
-convert non-Boolean types to a Boolean. You must be explicit and always provide
-`if` with a Boolean as its condition. If we want the `if` code block to run
-only when a number is not equal to `0`, for example, we can change the `if`
-expression to the following:
+error-টি বোঝায় যে Rust একটি `bool` আশা করেছিল, কিন্তু পেয়েছে একটি integer। Ruby বা
+JavaScript-এর মতো ভাষার বিপরীতে Rust নিজে থেকে Boolean নয় এমন type-কে Boolean-এ
+রূপান্তরের চেষ্টা করবে না। আপনাকে স্পষ্ট হতে হবে এবং সবসময় `if`-কে শর্ত হিসেবে একটি
+Boolean দিতে হবে। যেমন, শুধু কোনো সংখ্যা `0`-এর সমান না হলে `if` কোড block চালাতে চাইলে
+`if` expression-টি এভাবে বদলাতে পারি:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -85,12 +79,11 @@ expression to the following:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-29-if-not-equal-0/src/main.rs}}
 ```
 
-Running this code will print `number was something other than zero`.
+এই কোড চালালে প্রিন্ট হবে `number was something other than zero`।
 
-#### Handling Multiple Conditions with `else if`
+#### `else if` দিয়ে একাধিক শর্ত সামলানো {#handling-multiple-conditions-with-else-if}
 
-You can use multiple conditions by combining `if` and `else` in an `else if`
-expression. For example:
+`else if` expression-এ `if` আর `else` মিলিয়ে একাধিক শর্ত ব্যবহার করতে পারেন। যেমন:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -98,30 +91,29 @@ expression. For example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-30-else-if/src/main.rs}}
 ```
 
-This program has four possible paths it can take. After running it, you should
-see the following output:
+এই প্রোগ্রাম চারটি সম্ভাব্য পথের যেকোনো একটিতে যেতে পারে। চালানোর পর নিচের আউটপুট
+দেখার কথা:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-30-else-if/output.txt}}
 ```
 
-When this program executes, it checks each `if` expression in turn and executes
-the first body for which the condition evaluates to `true`. Note that even
-though 6 is divisible by 2, we don’t see the output `number is divisible by 2`,
-nor do we see the `number is not divisible by 4, 3, or 2` text from the `else`
-block. That’s because Rust only executes the block for the first `true`
-condition, and once it finds one, it doesn’t even check the rest.
+এই প্রোগ্রাম চলার সময় একে একে প্রতিটি `if` expression যাচাই করে এবং যার শর্ত প্রথম
+`true` evaluate হয়, সেই body চালায়। লক্ষ করুন, 6 যদিও 2 দিয়ে বিভাজ্য, তবু আমরা
+`number is divisible by 2` আউটপুট দেখি না, আবার `else` block-এর
+`number is not divisible by 4, 3, or 2` লেখাটিও দেখি না। কারণ Rust শুধু প্রথম `true`
+শর্তের block-টিই চালায়, আর একটি পেয়ে গেলে বাকিগুলো আর যাচাই-ও করে না।
 
-Using too many `else if` expressions can clutter your code, so if you have more
-than one, you might want to refactor your code. Chapter 6 describes a powerful
-Rust branching construct called `match` for these cases.
+খুব বেশি `else if` expression ব্যবহার করলে কোড এলোমেলো হয়ে যেতে পারে, তাই একটির বেশি
+থাকলে হয়তো আপনার কোড refactor (আচরণ না বদলে কোড পুনর্গঠন) করতে চাইবেন। এসব ক্ষেত্রের
+জন্য অধ্যায় 6-এ `match` নামের Rust-এর একটি শক্তিশালী শাখা-বিভাজন গঠন বর্ণনা করা হয়েছে।
 
-#### Using `if` in a `let` Statement
+#### `let` statement-এ `if` ব্যবহার {#using-if-in-a-let-statement}
 
-Because `if` is an expression, we can use it on the right side of a `let`
-statement to assign the outcome to a variable, as in Listing 3-2.
+`if` যেহেতু একটি expression, তাই ফলাফলটি একটি variable-এ assign করতে আমরা একে একটি
+`let` statement-এর ডান পাশে ব্যবহার করতে পারি, Listing 3-2-এর মতো।
 
-<Listing number="3-2" file-name="src/main.rs" caption="Assigning the result of an `if` expression to a variable">
+<Listing number="3-2" file-name="src/main.rs" caption="একটি `if` expression-এর ফলাফল একটি variable-এ assign করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-02/src/main.rs}}
@@ -129,20 +121,18 @@ statement to assign the outcome to a variable, as in Listing 3-2.
 
 </Listing>
 
-The `number` variable will be bound to a value based on the outcome of the `if`
-expression. Run this code to see what happens:
+`if` expression-এর ফলাফলের ভিত্তিতে `number` variable একটি মানের সঙ্গে bind হবে। কী
+ঘটে দেখতে কোডটি চালান:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/listing-03-02/output.txt}}
 ```
 
-Remember that blocks of code evaluate to the last expression in them, and
-numbers by themselves are also expressions. In this case, the value of the
-whole `if` expression depends on which block of code executes. This means the
-values that have the potential to be results from each arm of the `if` must be
-the same type; in Listing 3-2, the results of both the `if` arm and the `else`
-arm were `i32` integers. If the types are mismatched, as in the following
-example, we’ll get an error:
+মনে রাখবেন, কোডের block evaluate হয় তার ভেতরের শেষ expression-এ, আর সংখ্যা নিজেও
+একটি expression। এই ক্ষেত্রে পুরো `if` expression-এর মান নির্ভর করে কোন কোডের block
+চলে তার ওপর। এর মানে, `if`-এর প্রতিটি arm থেকে যেসব মান ফলাফল হতে পারে, সেগুলোর type
+একই হতে হবে; Listing 3-2-এ `if` arm আর `else` arm—দুটোরই ফলাফল ছিল `i32` integer।
+নিচের উদাহরণের মতো type না মিললে error পাব:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -150,41 +140,37 @@ example, we’ll get an error:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-31-arms-must-return-same-type/src/main.rs}}
 ```
 
-When we try to compile this code, we’ll get an error. The `if` and `else` arms
-have value types that are incompatible, and Rust indicates exactly where to
-find the problem in the program:
+এই কোড compile করার চেষ্টা করলে error পাব। `if` আর `else` arm-এর মানের type
+পরস্পরের সঙ্গে খাপ খায় না, আর Rust প্রোগ্রামের ঠিক কোথায় সমস্যাটি আছে তা দেখিয়ে দেয়:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-31-arms-must-return-same-type/output.txt}}
 ```
 
-The expression in the `if` block evaluates to an integer, and the expression in
-the `else` block evaluates to a string. This won’t work, because variables must
-have a single type, and Rust needs to know definitively at compile time what
-type the `number` variable is. Knowing the type of `number` lets the compiler
-verify the type is valid everywhere we use `number`. Rust wouldn’t be able to
-do that if the type of `number` was only determined at runtime; the compiler
-would be more complex and would make fewer guarantees about the code if it had
-to keep track of multiple hypothetical types for any variable.
+`if` block-এর expression evaluate হয় একটি integer-এ, আর `else` block-এর expression
+evaluate হয় একটি string-এ। এটি কাজ করবে না, কারণ variable-এর একটিমাত্র type থাকতে
+হবে, আর `number` variable-টি কোন type-এর, তা Rust-কে compile time-এই নিশ্চিতভাবে জানতে
+হবে। `number`-এর type জানা থাকলে compiler যাচাই করতে পারে যে আমরা যেখানেই `number`
+ব্যবহার করি, সেখানেই type-টি বৈধ। `number`-এর type যদি শুধু runtime-এ নির্ধারিত হতো,
+তাহলে Rust তা পারত না; যেকোনো variable-এর জন্য একাধিক সম্ভাব্য type-এর হিসাব রাখতে
+হলে compiler আরও জটিল হতো এবং কোড সম্পর্কে কম নিশ্চয়তা দিতে পারত।
 
 {{#quiz ../quizzes/ch03-05-control-flow-sec1-if.toml}}
 
-### Repetition with Loops
+### loop দিয়ে পুনরাবৃত্তি {#repetition-with-loops}
 
-It’s often useful to execute a block of code more than once. For this task,
-Rust provides several _loops_, which will run through the code inside the loop
-body to the end and then start immediately back at the beginning. To experiment
-with loops, let’s make a new project called _loops_.
+কোনো কোডের block একাধিকবার চালানো প্রায়ই কাজে লাগে। এই কাজের জন্য Rust কয়েক ধরনের
+_loop_ দেয়, যা loop body-র ভেতরের কোড শেষ পর্যন্ত চালিয়ে আবার সঙ্গে সঙ্গে শুরু থেকে
+চালাতে থাকে। loop নিয়ে পরীক্ষা-নিরীক্ষা করতে চলুন _loops_ নামে একটি নতুন প্রজেক্ট বানাই।
 
-Rust has three kinds of loops: `loop`, `while`, and `for`. Let’s try each one.
+Rust-এ তিন ধরনের loop আছে: `loop`, `while` আর `for`। চলুন প্রতিটি চেষ্টা করে দেখি।
 
-#### Repeating Code with `loop`
+#### `loop` দিয়ে কোড বারবার চালানো {#repeating-code-with-loop}
 
-The `loop` keyword tells Rust to execute a block of code over and over again
-either forever or until you explicitly tell it to stop.
+`loop` keyword Rust-কে বলে একটি কোডের block বারবার চালাতে থাকতে—হয় চিরকাল, নয়তো
+আপনি স্পষ্টভাবে থামতে না বলা পর্যন্ত।
 
-As an example, change the _src/main.rs_ file in your _loops_ directory to look
-like this:
+উদাহরণ হিসেবে, আপনার _loops_ ডিরেক্টরির _src/main.rs_ ফাইলটি বদলে এরকম করুন:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -192,10 +178,9 @@ like this:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-loop/src/main.rs}}
 ```
 
-When we run this program, we’ll see `again!` printed over and over continuously
-until we stop the program manually. Most terminals support the keyboard shortcut
-<kbd>ctrl</kbd>-<kbd>C</kbd> to interrupt a program that is stuck in a continual
-loop. Give it a try:
+এই প্রোগ্রাম চালালে আমরা নিজ হাতে প্রোগ্রামটি না থামানো পর্যন্ত `again!` একটানা বারবার
+প্রিন্ট হতে দেখব। বেশিরভাগ টার্মিনালে অবিরাম loop-এ আটকে থাকা কোনো প্রোগ্রাম থামাতে
+<kbd>ctrl</kbd>-<kbd>C</kbd> কিবোর্ড শর্টকাট কাজ করে। একবার চেষ্টা করে দেখুন:
 
 <!-- manual-regeneration
 cd listings/ch03-common-programming-concepts/no-listing-32-loop
@@ -215,70 +200,70 @@ again!
 ^Cagain!
 ```
 
-The symbol `^C` represents where you pressed <kbd>ctrl</kbd>-<kbd>C</kbd>.
+`^C` চিহ্নটি দেখায় আপনি কোথায় <kbd>ctrl</kbd>-<kbd>C</kbd> চেপেছেন।
 
-You may or may not see the word `again!` printed after the `^C`, depending on
-where the code was in the loop when it received the interrupt signal.
+থামানোর সংকেত পাওয়ার সময় কোড loop-এর কোন জায়গায় ছিল, তার ওপর নির্ভর করে `^C`-এর পরে
+`again!` শব্দটি প্রিন্ট হতেও পারে, না-ও হতে পারে।
 
-Fortunately, Rust also provides a way to break out of a loop using code. You
-can place the `break` keyword within the loop to tell the program when to stop
-executing the loop. Recall that we did this in the guessing game in the
-[“Quitting After a Correct Guess”][quitting-after-a-correct-guess]<!-- ignore
---> section of Chapter 2 to exit the program when the user won the game by
-guessing the correct number.
+সৌভাগ্যক্রমে, কোড দিয়ে loop থেকে বেরিয়ে আসার উপায়ও Rust দেয়। loop কখন থামাতে হবে,
+তা প্রোগ্রামকে জানাতে loop-এর ভেতরে `break` keyword বসাতে পারেন। মনে আছে, অধ্যায় 2-এর
+[“সঠিক আন্দাজের পর খেলা শেষ করা”][quitting-after-a-correct-guess]<!-- ignore
+--> অংশে সংখ্যা আন্দাজের খেলায় আমরা এটি করেছিলাম, যাতে ব্যবহারকারী সঠিক সংখ্যা আন্দাজ
+করে খেলায় জিতলে প্রোগ্রাম থেকে বেরিয়ে যাওয়া যায়।
 
-We also used `continue` in the guessing game, which in a loop tells the program
-to skip over any remaining code in this iteration of the loop and go to the
-next iteration.
+সংখ্যা আন্দাজের খেলায় আমরা `continue`-ও ব্যবহার করেছিলাম, যা loop-এর ভেতরে প্রোগ্রামকে
+বলে loop-এর এই iteration (loop-এর একেকবার চলা)-এর বাকি কোড এড়িয়ে পরের iteration-এ
+যেতে।
 
-#### Returning Values from Loops
+#### loop থেকে মান return করা {#returning-values-from-loops}
 
-One of the uses of a `loop` is to retry an operation you know might fail, such
-as checking whether a thread has completed its job. You might also need to pass
-the result of that operation out of the loop to the rest of your code. To do
-this, you can add the value you want returned after the `break` expression you
-use to stop the loop; that value will be returned out of the loop so that you
-can use it, as shown here:
+`loop`-এর একটি ব্যবহার হলো এমন কোনো কাজ আবার চেষ্টা করা, যা ব্যর্থ হতে পারে বলে আপনি
+জানেন, যেমন কোনো thread (প্রোগ্রামের ভেতরের আলাদা কাজের ধারা) তার কাজ শেষ করেছে কি না
+তা যাচাই করা। সেই কাজের ফলাফল loop-এর বাইরে আপনার বাকি কোডে পাঠানোরও দরকার হতে পারে।
+এটি করতে loop থামানোর জন্য ব্যবহৃত `break` expression-এর পরে যে মানটি return করতে চান,
+তা যোগ করতে পারেন; সেই মানটি loop থেকে বেরিয়ে আসবে, যাতে আপনি সেটি ব্যবহার করতে পারেন,
+এখানে যেমন দেখানো হয়েছে:
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-33-return-value-from-loop/src/main.rs}}
 ```
 
-Before the loop, we declare a variable named `counter` and initialize it to
-`0`. Then, we declare a variable named `result` to hold the value returned from
-the loop. On every iteration of the loop, we add `1` to the `counter` variable,
-and then check whether the `counter` is equal to `10`. 
-When it is, we use the `break` keyword with the value `counter * 2`. 
-After the loop, we use a semicolon to end the statement that assigns the value to `result`. Finally, we
-print the value in `result`, which in this case is `20`.
+loop-এর আগে আমরা `counter` নামে একটি variable ঘোষণা করে সেটিকে `0` দিয়ে initialize
+করি। তারপর loop থেকে return হওয়া মান রাখার জন্য `result` নামে একটি variable ঘোষণা
+করি। loop-এর প্রতিটি iteration-এ আমরা `counter` variable-এ `1` যোগ করি, তারপর যাচাই
+করি `counter` `10`-এর সমান কি না। 
+সমান হলে আমরা `counter * 2` মানসহ `break` keyword ব্যবহার করি। 
+loop-এর পরে `result`-এ মান assign করা statement-টি শেষ করতে আমরা একটি সেমিকোলন দিই। সবশেষে আমরা
+`result`-এর মান প্রিন্ট করি, যা এই ক্ষেত্রে `20`।
 
-You can also `return` from inside a loop. While `break` only exits the current
-loop, `return` always exits the current function.
+loop-এর ভেতর থেকে `return`-ও করা যায়। `break` শুধু বর্তমান loop থেকে বেরোয়, কিন্তু
+`return` সবসময় বর্তমান function থেকে বেরিয়ে যায়।
 
-> *Note:* the semicolon after `break counter * 2` is technically optional. `break` is very similar to `return`,
-> in that both can optionally take an expression as an argument, both cause a change in control flow.
-> Code after a `break` or `return` is never executed, so the Rust compiler treats a `break` expression and
-> a `return` expression as having the value unit, or `()`.
+> *দ্রষ্টব্য:* `break counter * 2`-এর পরের সেমিকোলনটি প্রযুক্তিগতভাবে ঐচ্ছিক। `break` অনেকটা `return`-এর মতো:
+> দুটোই ঐচ্ছিকভাবে argument হিসেবে একটি expression নিতে পারে, দুটোই control flow বদলে দেয়।
+> `break` বা `return`-এর পরের কোড কখনো চলে না, তাই Rust compiler একটি `break` expression আর
+> একটি `return` expression-কে unit মান, অর্থাৎ `()` হিসেবে গণ্য করে।
 
 <!-- Old headings. Do not remove or links may break. -->
 <a id="loop-labels-to-disambiguate-between-multiple-loops"></a>
 
-#### Disambiguating with Loop Labels
+#### loop label দিয়ে দ্ব্যর্থতা দূর করা {#disambiguating-with-loop-labels}
 
-If you have loops within loops, `break` and `continue` apply to the innermost
-loop at that point. You can optionally specify a _loop label_ on a loop that
-you can then use with `break` or `continue` to specify that those keywords
-apply to the labeled loop instead of the innermost loop. Loop labels must begin
-with a single quote. Here’s an example with two nested loops:
+loop-এর ভেতরে loop থাকলে `break` আর `continue` ওই জায়গার সবচেয়ে ভেতরের loop-এর ওপর
+কাজ করে। চাইলে কোনো loop-এ একটি _loop label_ (loop-কে চেনানোর নাম-চিহ্ন) দিতে পারেন,
+তারপর `break` বা `continue`-এর সঙ্গে সেটি ব্যবহার করে জানাতে পারেন যে keyword-গুলো
+সবচেয়ে ভেতরের loop-এর বদলে label দেওয়া loop-টির ওপর কাজ করবে। loop label-কে অবশ্যই
+একটি একক উদ্ধৃতিচিহ্ন দিয়ে শুরু হতে হবে। একটির ভেতরে আরেকটি, এমন দুটি loop-এর একটি
+উদাহরণ:
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/src/main.rs}}
 ```
 
-The outer loop has the label `'counting_up`, and it will count up from 0 to 2.
-The inner loop without a label counts down from 10 to 9. The first `break` that
-doesn’t specify a label will exit the inner loop only. The `break
-'counting_up;` statement will exit the outer loop. This code prints:
+বাইরের loop-টির label হলো `'counting_up`, আর এটি 0 থেকে 2 পর্যন্ত গুনবে। label ছাড়া
+ভেতরের loop-টি 10 থেকে 9 পর্যন্ত উল্টো দিকে গোনে। label উল্লেখ না করা প্রথম `break`
+শুধু ভেতরের loop থেকে বেরোবে। `break
+'counting_up;` statement বাইরের loop থেকে বেরিয়ে যাবে। এই কোড প্রিন্ট করে:
 
 ```console
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/output.txt}}
@@ -287,18 +272,17 @@ doesn’t specify a label will exit the inner loop only. The `break
 <!-- Old headings. Do not remove or links may break. -->
 <a id="conditional-loops-with-while"></a>
 
-#### Streamlining Conditional Loops with while
+#### while দিয়ে শর্তসাপেক্ষ loop সহজ করা {#streamlining-conditional-loops-with-while}
 
-A program will often need to evaluate a condition within a loop. While the
-condition is `true`, the loop runs. When the condition ceases to be `true`, the
-program calls `break`, stopping the loop. It’s possible to implement behavior
-like this using a combination of `loop`, `if`, `else`, and `break`; you could
-try that now in a program, if you’d like. However, this pattern is so common
-that Rust has a built-in language construct for it, called a `while` loop. In
-Listing 3-3, we use `while` to loop the program three times, counting down each
-time, and then, after the loop, to print a message and exit.
+প্রোগ্রামকে প্রায়ই loop-এর ভেতরে একটি শর্ত evaluate করতে হয়। শর্তটি `true` থাকা
+পর্যন্ত loop চলে। শর্তটি আর `true` না থাকলে প্রোগ্রাম `break` call করে loop থামিয়ে দেয়।
+`loop`, `if`, `else` আর `break` মিলিয়ে এমন আচরণ implement (বাস্তবায়ন) করা সম্ভব; চাইলে
+এখনই কোনো প্রোগ্রামে সেটা চেষ্টা করে দেখতে পারেন। তবে এই ধরনটি এত প্রচলিত যে Rust-এ এর
+জন্য একটি বিল্ট-ইন গঠন আছে, যার নাম `while` loop। Listing 3-3-এ আমরা `while` ব্যবহার করে
+প্রোগ্রামটিকে তিনবার loop করাই, প্রতিবার এক করে উল্টো দিকে গুনে, তারপর loop-এর পরে একটি
+বার্তা প্রিন্ট করে বেরিয়ে যাই।
 
-<Listing number="3-3" file-name="src/main.rs" caption="Using a `while` loop to run code while a condition evaluates to `true`">
+<Listing number="3-3" file-name="src/main.rs" caption="একটি শর্ত `true` evaluate হওয়া পর্যন্ত কোড চালাতে `while` loop ব্যবহার">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-03/src/main.rs}}
@@ -306,17 +290,17 @@ time, and then, after the loop, to print a message and exit.
 
 </Listing>
 
-This construct eliminates a lot of nesting that would be necessary if you used
-`loop`, `if`, `else`, and `break`, and it’s clearer. While a condition
-evaluates to `true`, the code runs; otherwise, it exits the loop.
+`loop`, `if`, `else` আর `break` ব্যবহার করলে যে অনেক স্তরের ভেতরে-ভেতরে লেখা দরকার হতো,
+এই গঠন তা দূর করে, আর এটি আরও স্পষ্ট। শর্ত `true` evaluate হওয়া পর্যন্ত কোড চলে;
+অন্যথায় loop থেকে বেরিয়ে যায়।
 
-#### Looping Through a Collection with `for`
+#### `for` দিয়ে collection-এর ওপর loop চালানো {#looping-through-a-collection-with-for}
 
-You can also use the `while` construct to loop over the elements of a
-collection, such as an array. For example, the loop in Listing 3-4 prints each
-element in the array `a`.
+array-র মতো কোনো collection-এর উপাদানগুলোর ওপর loop চালাতেও
+`while` গঠন ব্যবহার করতে পারেন। যেমন, Listing 3-4-এর loop-টি `a` array-র প্রতিটি উপাদান
+প্রিন্ট করে।
 
-<Listing number="3-4" file-name="src/main.rs" caption="Looping through each element of a collection using a `while` loop">
+<Listing number="3-4" file-name="src/main.rs" caption="`while` loop ব্যবহার করে collection-এর প্রতিটি উপাদানের ওপর loop চালানো">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-04/src/main.rs}}
@@ -324,30 +308,27 @@ element in the array `a`.
 
 </Listing>
 
-Here, the code counts up through the elements in the array. It starts at index
-`0` and then loops until it reaches the final index in the array (that is,
-when `index < 5` is no longer `true`). Running this code will print every
-element in the array:
+এখানে কোডটি array-র উপাদানগুলো ধরে ধরে গুনে এগোয়। এটি index
+`0` থেকে শুরু করে array-র শেষ index-এ পৌঁছানো পর্যন্ত loop চালায় (অর্থাৎ যখন
+`index < 5` আর `true` থাকে না)। এই কোড চালালে array-র প্রতিটি উপাদান প্রিন্ট হবে:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/listing-03-04/output.txt}}
 ```
 
-All five array values appear in the terminal, as expected. Even though `index`
-will reach a value of `5` at some point, the loop stops executing before trying
-to fetch a sixth value from the array.
+প্রত্যাশামতোই array-র পাঁচটি মানই টার্মিনালে দেখা যায়। `index` কোনো এক সময় `5` মানে
+পৌঁছালেও array থেকে ষষ্ঠ মান আনার চেষ্টার আগেই loop চলা বন্ধ হয়ে যায়।
 
-However, this approach is error-prone; we could cause the program to panic if
-the index value or test condition is incorrect. For example, if you changed the
-definition of the `a` array to have four elements but forgot to update the
-condition to `while index < 4`, the code would panic. It’s also slow, because
-the compiler adds runtime code to perform the conditional check of whether the
-index is within the bounds of the array on every iteration through the loop.
+তবে এই পদ্ধতিতে ভুল হওয়ার সম্ভাবনা বেশি; index মান বা পরীক্ষার শর্ত ভুল হলে আমরা
+প্রোগ্রামকে panic করাতে পারি। যেমন, আপনি যদি `a` array-র
+সংজ্ঞা বদলে চারটি উপাদান রাখেন, কিন্তু শর্তটি `while index < 4`-এ আপডেট করতে ভুলে যান,
+তাহলে কোডটি panic করবে। এটি ধীরও, কারণ loop-এর প্রতিটি iteration-এ index array-র সীমার
+মধ্যে আছে কি না, সেই শর্ত যাচাইয়ের জন্য compiler runtime-এর কোড যোগ করে।
 
-As a more concise alternative, you can use a `for` loop and execute some code
-for each item in a collection. A `for` loop looks like the code in Listing 3-5.
+আরও সংক্ষিপ্ত বিকল্প হিসেবে একটি `for` loop ব্যবহার করে collection-এর প্রতিটি আইটেমের
+জন্য কিছু কোড চালাতে পারেন। একটি `for` loop দেখতে Listing 3-5-এর কোডের মতো।
 
-<Listing number="3-5" file-name="src/main.rs" caption="Looping through each element of a collection using a `for` loop">
+<Listing number="3-5" file-name="src/main.rs" caption="`for` loop ব্যবহার করে collection-এর প্রতিটি উপাদানের ওপর loop চালানো">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-05/src/main.rs}}
@@ -355,27 +336,23 @@ for each item in a collection. A `for` loop looks like the code in Listing 3-5.
 
 </Listing>
 
-When we run this code, we’ll see the same output as in Listing 3-4. More
-importantly, we’ve now increased the safety of the code and eliminated the
-chance of bugs that might result from going beyond the end of the array or not
-going far enough and missing some items. Machine code generated from `for`
-loops can be more efficient as well because the index doesn’t need to be
-compared to the length of the array at every iteration.
+এই কোড চালালে Listing 3-4-এর মতোই আউটপুট দেখব। আরও গুরুত্বপূর্ণ হলো, এখন আমরা কোডের
+নিরাপত্তা বাড়িয়েছি এবং array-র শেষ পেরিয়ে যাওয়া, কিংবা যথেষ্ট দূর না গিয়ে কিছু আইটেম
+বাদ পড়ে যাওয়া থেকে যেসব বাগ হতে পারত, সেগুলোর সম্ভাবনা দূর করেছি। `for` loop থেকে তৈরি
+machine code (প্রসেসর সরাসরি চালাতে পারে এমন কোড)-ও আরও দক্ষ হতে পারে, কারণ প্রতিটি
+iteration-এ index-কে array-র দৈর্ঘ্যের সঙ্গে তুলনা করতে হয় না।
 
-Using the `for` loop, you wouldn’t need to remember to change any other code if
-you changed the number of values in the array, as you would with the method
-used in Listing 3-4.
+`for` loop ব্যবহার করলে array-তে মানের সংখ্যা বদলালে অন্য কোনো কোড বদলানোর কথা মনে রাখতে
+হবে না, যেমনটি Listing 3-4-এ ব্যবহৃত পদ্ধতিতে হতো।
 
-The safety and conciseness of `for` loops make them the most commonly used loop
-construct in Rust. Even in situations in which you want to run some code a
-certain number of times, as in the countdown example that used a `while` loop
-in Listing 3-3, most Rustaceans would use a `for` loop. The way to do that
-would be to use a `Range`, provided by the standard library, which generates
-all numbers in sequence starting from one number and ending before another
-number.
+নিরাপত্তা আর সংক্ষিপ্ততার কারণে `for` loop-ই Rust-এ সবচেয়ে বেশি ব্যবহৃত loop গঠন।
+এমনকি যেসব পরিস্থিতিতে আপনি কিছু কোড নির্দিষ্টসংখ্যকবার চালাতে চান, যেমন Listing 3-3-এ
+`while` loop ব্যবহার করা উল্টো গোনার উদাহরণে, সেখানেও বেশিরভাগ Rustacean একটি `for` loop
+ব্যবহার করবেন। এর উপায় হলো standard library-র দেওয়া একটি `Range` ব্যবহার করা, যা একটি
+সংখ্যা থেকে শুরু করে আরেকটি সংখ্যার আগ পর্যন্ত ক্রমানুসারে সব সংখ্যা তৈরি করে।
 
-Here’s what the countdown would look like using a `for` loop and another method
-we’ve not yet talked about, `rev`, to reverse the range:
+`for` loop আর এখনো আলোচনা না করা আরেকটি method `rev` দিয়ে range উল্টে দিলে উল্টো গোনাটি
+দেখতে এরকম হবে:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -383,24 +360,23 @@ we’ve not yet talked about, `rev`, to reverse the range:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-34-for-range/src/main.rs}}
 ```
 
-This code is a bit nicer, isn’t it?
+এই কোডটি একটু বেশি সুন্দর, তাই না?
 
 {{#quiz ../quizzes/ch03-05-control-flow-sec2-loops.toml}}
 
-## Summary
+## সারসংক্ষেপ {#summary}
 
-You made it! This was a sizable chapter: You learned about variables, scalar
-and compound data types, functions, comments, `if` expressions, and loops! To
-practice with the concepts discussed in this chapter, try building programs to
-do the following:
+পেরে গেছেন! এটি বেশ বড় একটি অধ্যায় ছিল: আপনি শিখেছেন variable, scalar ও compound
+data type, function, কমেন্ট, `if` expression আর loop! এই অধ্যায়ে আলোচিত ধারণাগুলো
+অনুশীলন করতে নিচের কাজগুলো করে এমন প্রোগ্রাম বানানোর চেষ্টা করুন:
 
-- Convert temperatures between Fahrenheit and Celsius.
-- Generate the *n*th Fibonacci number.
-- Print the lyrics to the Christmas carol “The Twelve Days of Christmas,”
-  taking advantage of the repetition in the song.
+- ফারেনহাইট আর সেলসিয়াসের মধ্যে তাপমাত্রা রূপান্তর করা।
+- *n*-তম ফিবোনাচি সংখ্যা তৈরি করা।
+- গানের পুনরাবৃত্তির সুবিধা নিয়ে বড়দিনের গান “The Twelve Days of Christmas”-এর কথাগুলো
+  প্রিন্ট করা।
 
-When you’re ready to move on, we’ll talk about a concept in Rust that _doesn’t_
-commonly exist in other programming languages: ownership.
+পরের ধাপে যাওয়ার জন্য প্রস্তুত হলে আমরা Rust-এর এমন একটি ধারণা নিয়ে কথা বলব, যা অন্যান্য
+প্রোগ্রামিং ভাষায় সাধারণত _থাকে না_: ownership (মালিকানা)।
 
 [comparing-the-guess-to-the-secret-number]: ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [quitting-after-a-correct-guess]: ch02-00-guessing-game-tutorial.html#quitting-after-a-correct-guess

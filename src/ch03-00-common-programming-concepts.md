@@ -1,23 +1,24 @@
-# Common Programming Concepts
+# প্রোগ্রামিংয়ের সাধারণ ধারণা {#common-programming-concepts}
 
-This chapter covers concepts that appear in almost every programming language
-and how they work in Rust. Many programming languages have much in common at
-their core. None of the concepts presented in this chapter are unique to Rust,
-but we’ll discuss them in the context of Rust and explain the conventions
-around using them.
+এই অধ্যায়ে এমন ধারণাগুলো নিয়ে কথা বলা হয়েছে, যা প্রায় প্রতিটি প্রোগ্রামিং
+ভাষাতেই আছে, আর Rust-এ সেগুলো কীভাবে কাজ করে, তা-ও দেখানো হয়েছে। অনেক
+প্রোগ্রামিং ভাষার মূলে অনেক মিল আছে। এই অধ্যায়ের কোনো ধারণাই শুধু Rust-এর
+নিজস্ব নয়, তবে আমরা সেগুলো Rust-এর প্রেক্ষাপটে আলোচনা করব এবং সেগুলো ব্যবহারের
+প্রচলিত রীতিগুলো ব্যাখ্যা করব।
 
-Specifically, you’ll learn about variables, basic types, functions, comments,
-and control flow. These foundations will be in every Rust program, and learning
-them early will give you a strong core to start from.
+নির্দিষ্ট করে বললে, আপনি শিখবেন variable (মান রাখার নাম), মৌলিক type (ডেটার
+ধরন), function (ফাংশন), কমেন্ট আর control flow (কোড চলার ক্রম নিয়ন্ত্রণ) নিয়ে।
+প্রতিটি Rust প্রোগ্রামেই এই ভিত্তিগুলো থাকবে, আর শুরুতেই এগুলো শিখে নিলে আপনার
+ভিত শক্ত হবে।
 
-> #### Keywords
+> #### Keyword {#keywords}
 >
-> The Rust language has a set of _keywords_ that are reserved for use by the
-> language only, much as in other languages. Keep in mind that you cannot use
-> these words as names of variables or functions. Most of the keywords have
-> special meanings, and you’ll be using them to do various tasks in your Rust
-> programs; a few have no current functionality associated with them but have
-> been reserved for functionality that might be added to Rust in the future. You
-> can find the list of the keywords in [Appendix A][appendix_a]<!-- ignore -->.
+> অন্যান্য ভাষার মতোই Rust ভাষায় কিছু _keyword_ (ভাষার সংরক্ষিত শব্দ) আছে, যেগুলো
+> শুধু ভাষাটির নিজের ব্যবহারের জন্য সংরক্ষিত। মনে রাখবেন, এই শব্দগুলো আপনি
+> variable বা function-এর নাম হিসেবে ব্যবহার করতে পারবেন না। বেশিরভাগ keyword-এর
+> বিশেষ অর্থ আছে, আর আপনার Rust প্রোগ্রামে নানা কাজে সেগুলো ব্যবহার করবেন; কয়েকটির
+> সঙ্গে এখন কোনো কাজ জড়িত নেই, তবে ভবিষ্যতে Rust-এ যোগ হতে পারে এমন সুবিধার জন্য
+> সেগুলো সংরক্ষিত রাখা হয়েছে। keyword-গুলোর তালিকা পাবেন
+> [পরিশিষ্ট A][appendix_a]<!-- ignore -->-তে।
 
 [appendix_a]: appendix-01-keywords.md

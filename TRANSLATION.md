@@ -265,6 +265,49 @@ tested with this repo's build.
 | unsigned | unsigned | চিহ্নহীন (ঋণাত্মক হতে পারে না) | 2 |
 | variant | variant | enum-এর সম্ভাব্য একটি রূপ | 2 |
 | version specifier | version specifier | সংস্করণ নির্ধারক | 2 |
+| allocate | allocate করা | মেমোরিতে জায়গা বরাদ্দ করা | 3 |
+| architecture | architecture | প্রসেসরের গঠন (32-bit বা 64-bit) | 3 |
+| array | array | একই type-এর নির্দিষ্টসংখ্যক মানের সারি | 3 |
+| assign | assign করা | মান বসানো | 3 |
+| block | block | `{}` দিয়ে ঘেরা কোড-অংশ | 3 |
+| Boolean | Boolean | সত্য বা মিথ্যা মান | 3 |
+| call | call করা | (function বা macro) চালানোর নির্দেশ দেওয়া | 3 |
+| caller | caller | যে কোড function-টি call করে | 3 |
+| character type | character type | একটি অক্ষর রাখার type (`char`) | 3 |
+| compound type | compound type | একাধিক মান মিলিয়ে তৈরি type | 3 |
+| conditional | conditional | শর্তের ওপর নির্ভর করে চলা কোড | 3 |
+| constant | constant | ধ্রুবক (কখনো বদলায় না এমন মান) | 3 |
+| constant expression | constant expression | compile-এর সময়েই মান নির্ণয় করা যায় এমন expression | 3 |
+| data type | data type | ডেটার ধরন | 3 |
+| debug mode | debug mode | ডিবাগের জন্য compile | 3 |
+| destructuring | destructuring (verb: destructure করা) | একটি মানকে ভেঙে আলাদা আলাদা অংশে নেওয়া | 3 |
+| documentation comment | documentation comment | ডকুমেন্টেশন তৈরির জন্য লেখা কমেন্ট | 3 |
+| expression-based language | expression-based language | expression-কেন্দ্রিক ভাষা | 3 |
+| floating-point number | floating-point সংখ্যা | দশমিক বিন্দুযুক্ত সংখ্যা | 3 |
+| global scope | global scope | পুরো প্রোগ্রামজুড়ে দৃশ্যমান scope | 3 |
+| hardcoded value | hardcoded মান | কোডে সরাসরি লিখে দেওয়া মান | 3 |
+| index | index | ক্রমিক অবস্থান নম্বর (0 থেকে শুরু) | 3 |
+| initialize | initialize করা | প্রথম মান দেওয়া | 3 |
+| integer overflow | integer overflow | type-এর ধারণক্ষমতার বাইরে মান চলে যাওয়া | 3 |
+| literal | literal | কোডে সরাসরি লেখা মান | 3 |
+| loop label | loop label | loop-কে চেনানোর নাম-চিহ্ন | 3 |
+| machine code | machine code | প্রসেসর সরাসরি চালাতে পারে এমন কোড | 3 |
+| primitive type | primitive type | ভাষায় সরাসরি থাকা মৌলিক type | 3 |
+| release mode | release mode | চূড়ান্ত, optimize করা compile | 3 |
+| return type | return type | function যে type-এর মান ফেরত দেয় | 3 |
+| saturate | saturate করা | সীমায় পৌঁছে আটকে থাকা | 3 |
+| scalar type | scalar type | একটিমাত্র মান প্রকাশ করে এমন type | 3 |
+| signature | signature | function-এর নাম, parameter ও return type-এর ঘোষণা | 3 |
+| signed | signed | চিহ্নযুক্ত | 3 |
+| snake case | snake case | ছোট হাতের অক্ষর আর আন্ডারস্কোর দিয়ে নাম লেখার রীতি | 3 |
+| stack / heap | stack / heap | ক্রমানুসারে মান রাখার মেমোরি-অংশ / প্রয়োজনমতো জায়গা বরাদ্দের মেমোরি-অংশ | 3 |
+| string literal | string literal | উদ্ধৃতিচিহ্নের ভেতরে সরাসরি লেখা string | 3 |
+| tuple | tuple | বিভিন্ন type-এর নির্দিষ্টসংখ্যক মানের একটি দল | 3 |
+| two’s complement | two’s complement | ঋণাত্মক সংখ্যা বাইনারিতে রাখার একটি পদ্ধতি | 3 |
+| type suffix | type suffix | সংখ্যার শেষে জুড়ে দেওয়া type-এর নাম | 3 |
+| Unicode scalar value | Unicode scalar value | Unicode-এর একটি একক অক্ষর-মান | 3 |
+| unit / unit type | unit / unit type | খালি মান ও তার type, `()` | 3 |
+| wrapping | wrapping | সীমা পেরোলে আবার শুরুর দিকে ঘুরে আসা | 3 |
 
 ### Everyday computing words
 
@@ -304,6 +347,13 @@ Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
 | tutorial | টিউটোরিয়াল | 2 |
 | warning | সতর্কবার্তা | 1 |
 | whitespace | ফাঁকা অক্ষর | 2 |
+| condition | শর্ত | 3 |
+| decimal / hex / octal / binary / byte | দশমিক / হেক্সাডেসিমাল / অক্টাল / বাইনারি / বাইট | 3 |
+| define / definition | সংজ্ঞায়িত করা / সংজ্ঞা | 1 |
+| element (of an array/tuple) | উপাদান | 3 |
+| emoji | ইমোজি | 3 |
+| precision | নির্ভুলতা | 3 |
+| semantics | অর্থ ও আচরণ | 3 |
 
 ## Progress
 
@@ -318,7 +368,7 @@ use.
 - [x] Chapter 0: Front matter (experiment-intro, title-page, foreword, ch00-00-introduction)
 - [x] Chapter 1: Getting Started (ch01-*)
 - [x] Chapter 2: Programming a Guessing Game (ch02-*)
-- [ ] Chapter 3: Common Programming Concepts (ch03-*)
+- [x] Chapter 3: Common Programming Concepts (ch03-*)
 - [ ] Chapter 4: Understanding Ownership (ch04-*)
 - [ ] Chapter 5: Using Structs to Structure Related Data (ch05-*)
 - [ ] Chapter 6: Enums and Pattern Matching (ch06-*)

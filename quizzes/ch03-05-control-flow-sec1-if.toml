@@ -2,14 +2,14 @@
 id = "5ae11501-25d9-4b94-8e88-aa1c2122779f"
 type = "MultipleChoice"
 prompt.prompt = """
-True/false: executing these two pieces of code results in the same value for `x`.
+সত্য/মিথ্যা: এই দুটি কোড-অংশ চালালে `x`-এর মান একই হয়।
 
-Snippet 1:
+কোড-অংশ 1:
 ```
 let x = if cond { 1 } else { 2 };
 ```
 
-Snippet 2:
+কোড-অংশ 2:
 ```
 let x;
 if cond {
@@ -19,16 +19,16 @@ if cond {
 }
 ```
 
-(Note: both of these snippets compile!)
+(দ্রষ্টব্য: দুটি কোড-অংশই compile হয়!)
 """
-answer.answer = "True"
-prompt.distractors = [ "False" ]
+answer.answer = "সত্য"
+prompt.distractors = [ "মিথ্যা" ]
 context = """
-The first if-expression is a more concise way of representing the behavior of the second if-statement.
+প্রথম if-expression-টি দ্বিতীয় if-statement-এর আচরণ প্রকাশের আরও সংক্ষিপ্ত একটি উপায়।
 
-Note that Rust **does not** require `x` to be initially declared with `let mut` in the second snippet.
-This is because Rust can determine that `x` is only ever assigned once, since only one branch of the 
-if-statement will ever execute.
+লক্ষ করুন, দ্বিতীয় কোড-অংশে `x`-কে শুরুতে `let mut` দিয়ে ঘোষণা করা Rust-এর কাছে **বাধ্যতামূলক নয়**।
+কারণ Rust বুঝতে পারে যে `x`-এ কেবল একবারই মান assign হয়, যেহেতু if-statement-এর 
+শুধু একটি শাখাই কখনো চলবে।
 """
 
 [[questions]]
@@ -44,5 +44,5 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 3
 context = """
-The condition to an if-expression must be a boolean. Rust does not have a concept of "truthy" or "falsy" values.
+if-expression-এর শর্ত অবশ্যই একটি boolean হতে হবে। Rust-এ "truthy" বা "falsy" মানের কোনো ধারণা নেই।
 """
