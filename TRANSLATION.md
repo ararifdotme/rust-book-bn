@@ -363,6 +363,29 @@ tested with this repo's build.
 | undefined behavior | undefined behavior | অনির্ধারিত আচরণ (যার ফল ভাষা নির্দিষ্ট করে না) | 4 |
 | `unsafe` block | `unsafe` block | নিরাপত্তা-যাচাই শিথিল করা কোড-অংশ | 4 |
 | use-after-free | use-after-free | free করা মেমোরি আবার ব্যবহার করা | 4 |
+| attribute | attribute | কোডের সঙ্গে জুড়ে দেওয়া বাড়তি নির্দেশ (`#[...]`) | 5 |
+| constructor | constructor | নতুন instance তৈরি করে এমন function | 5 |
+| derive | derive করা | trait-এর implementation আপনা-আপনি তৈরি করা | 5 |
+| desugar | desugar করা | syntactic sugar খুলে মূল রূপে লেখা | 5 |
+| dot notation | dot notation | `.` দিয়ে field বা method-এ পৌঁছানোর লিখনরীতি | 5 |
+| field init shorthand | field init shorthand | variable আর field-এর নাম এক হলে সংক্ষিপ্ত লেখা | 5 |
+| getter | getter | শুধু একটি field-এর মান ফেরত দেয় এমন method | 5 |
+| `impl` block | `impl` block | একটি type-এর method ও associated function সংজ্ঞায়িত করার block | 5 |
+| instantiate | instantiate করা | একটি instance তৈরি করা | 5 |
+| lifetime specifier | lifetime specifier | lifetime নির্দেশক | 5 |
+| namespace | namespace | নামগুলোর আলাদা একটি পরিসর | 5 |
+| object | object | বস্তু (object-oriented ভাষায় ডেটা ও আচরণের একক) | 5 |
+| outer attribute | outer attribute | যে item-এর ঠিক আগে বসে, তার ওপর প্রযোজ্য attribute | 5 |
+| owned type | owned type | নিজের ডেটার মালিক এমন type (যেমন `String`) | 5 |
+| public / private | public / private | বাইরে থেকে ব্যবহার করা যায় / যায় না | 5 |
+| reborrow | reborrow করা | একটি reference থেকে আবার borrow করা | 5 |
+| receiver (method receiver) | receiver | যে মানের ওপর method call করা হয় | 5 |
+| standard output / standard error | standard output / standard error | সাধারণ আউটপুটের ধারা / error-বার্তার আউটপুটের ধারা | 5 |
+| struct update syntax | struct update syntax | অন্য instance থেকে বাকি field-এর মান নেওয়ার syntax | 5 |
+| trait object | trait object | trait-এর মাধ্যমে বিভিন্ন type ব্যবহার করার মান | 5 |
+| tuple struct | tuple struct | field-এর নাম ছাড়া tuple-এর মতো struct | 5 |
+| type checking | type checking | type ঠিক আছে কি না যাচাই | 5 |
+| unit-like struct | unit-like struct | কোনো field নেই এমন struct | 5 |
 
 ### Everyday computing words
 
@@ -415,6 +438,12 @@ Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
 | metadata | মেটাডেটা | 4 |
 | safe / unsafe (adjectives) | নিরাপদ / অনিরাপদ | 4 |
 | security vulnerability | নিরাপত্তা-দুর্বলতা | 4 |
+| client code | ব্যবহারকারী কোড | 5 |
+| console | কনসোল | 5 |
+| debug / debugging / debugger | ডিবাগ করা / ডিবাগিং / ডিবাগার | 1 |
+| end user | শেষ ব্যবহারকারী | 5 |
+| format / formatting | ফরম্যাট / ফরম্যাটিং | 1 |
+| pixel | পিক্সেল | 5 |
 
 ## Progress
 
@@ -431,7 +460,7 @@ use.
 - [x] Chapter 2: Programming a Guessing Game (ch02-*)
 - [x] Chapter 3: Common Programming Concepts (ch03-*)
 - [x] Chapter 4: Understanding Ownership (ch04-*)
-- [ ] Chapter 5: Using Structs to Structure Related Data (ch05-*)
+- [x] Chapter 5: Using Structs to Structure Related Data (ch05-*)
 - [ ] Chapter 6: Enums and Pattern Matching (ch06-*)
 - [ ] Chapter 7: Packages, Crates, and Modules (ch07-*)
 - [ ] Chapter 8: Common Collections (ch08-*)

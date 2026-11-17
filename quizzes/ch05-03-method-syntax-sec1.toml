@@ -1,17 +1,17 @@
 [[questions]]
 id = "ae4e06f6-5fdc-43d9-929c-85eba3559a82"
 type = "MultipleChoice"
-prompt.prompt = "What is the keyword for constructor functions in Rust?"
-answer.answer = "None of the above"
+prompt.prompt = "Rust-এ constructor function-এর keyword কোনটি?"
+answer.answer = "ওপরের কোনোটিই নয়"
 prompt.distractors = [
   "`constructor`",
   "`new`",
-  "The name of the type being constructed",
+  "যে type তৈরি করা হচ্ছে, তার নাম",
 ]
 prompt.answerIndex = 3
 context = """
-Rust does not have a keyword for constructor functions. The idiomatic way to define a constructor function is to make an associated function called `new`, 
-but that is not enforced by the language.
+Rust-এ constructor function-এর কোনো keyword নেই। constructor function সংজ্ঞায়িত করার Rust-সুলভ উপায় হলো `new` নামে একটি associated function বানানো, 
+তবে ভাষা তা বাধ্যতামূলক করে না।
 """
 
 [[questions]]
@@ -32,5 +32,5 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 5
 context = """ 
-Methods can only be implemented for types (e.g. `impl Point`), not variables (like `p`).
+method শুধু type-এর জন্য implement করা যায় (যেমন `impl Point`), variable-এর জন্য নয় (যেমন `p`)।
 """

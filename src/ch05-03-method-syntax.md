@@ -1,25 +1,26 @@
-## Methods
+## method {#methods}
 
-Methods are similar to functions: We declare them with the `fn` keyword and a
-name, they can have parameters and a return value, and they contain some code
-that’s run when the method is called from somewhere else. Unlike functions,
-methods are defined within the context of a struct (or an enum or a trait
-object, which we cover in [Chapter 6][enums]<!-- ignore --> and [Chapter
-18][trait-objects]<!-- ignore -->, respectively), and their first parameter is
-always `self`, which represents the instance of the struct the method is being
-called on.
+method (টাইপের সঙ্গে যুক্ত function) অনেকটা function-এর মতো: আমরা এগুলো `fn` keyword আর
+একটি নাম দিয়ে ঘোষণা করি, এদের parameter আর return মান থাকতে পারে, আর এদের ভেতরে এমন
+কিছু কোড থাকে, যা অন্য কোথাও থেকে method-টি call করা হলে চলে। তবে function-এর বিপরীতে,
+method সংজ্ঞায়িত হয় একটি struct (বা একটি enum বা একটি trait object (trait-এর মাধ্যমে
+বিভিন্ন type ব্যবহার করার মান), যেগুলো নিয়ে আমরা যথাক্রমে [অধ্যায় 6][enums]<!-- ignore -->
+আর [অধ্যায়
+18][trait-objects]<!-- ignore -->-এ আলোচনা করব)-এর প্রেক্ষাপটে, আর এদের প্রথম parameter
+সবসময় `self`, যা struct-এর সেই instance-টিকে প্রকাশ করে, যার ওপর method-টি call করা
+হচ্ছে।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="defining-methods"></a>
 
-### Method Syntax
+### method syntax {#method-syntax}
 
-Let’s change the `area` function that has a `Rectangle` instance as a parameter
-and instead make an `area` method defined on the `Rectangle` struct, as shown
-in Listing 5-13.
+চলুন `Rectangle` instance-কে parameter হিসেবে নেওয়া `area` function-টি বদলে, তার বদলে
+`Rectangle` struct-এর ওপর সংজ্ঞায়িত একটি `area` method বানাই, Listing 5-13-এ যেমন
+দেখানো হয়েছে।
 
-<Listing number="5-13" file-name="src/main.rs" caption="Defining an `area` method on the `Rectangle` struct">
+<Listing number="5-13" file-name="src/main.rs" caption="`Rectangle` struct-এর ওপর একটি `area` method সংজ্ঞায়িত করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-13/src/main.rs}}
@@ -27,45 +28,41 @@ in Listing 5-13.
 
 </Listing>
 
-To define the function within the context of `Rectangle`, we start an `impl`
-(implementation) block for `Rectangle`. Everything within this `impl` block
-will be associated with the `Rectangle` type. Then, we move the `area` function
-within the `impl` curly brackets and change the first (and in this case, only)
-parameter to be `self` in the signature and everywhere within the body. In
-`main`, where we called the `area` function and passed `rect1` as an argument,
-we can instead use _method syntax_ to call the `area` method on our `Rectangle`
-instance. The method syntax goes after an instance: We add a dot followed by
-the method name, parentheses, and any arguments.
+`Rectangle`-এর প্রেক্ষাপটে function-টি সংজ্ঞায়িত করতে আমরা `Rectangle`-এর জন্য একটি
+`impl` (implementation) block (একটি type-এর method ও associated function সংজ্ঞায়িত করার block) শুরু করি। এই `impl` block-এর ভেতরের সবকিছু `Rectangle`
+type-এর সঙ্গে যুক্ত হবে। তারপর `area` function-টি `impl`-এর কার্লি ব্র্যাকেটের ভেতরে
+সরিয়ে আনি, আর signature-এ ও body-র সবখানে প্রথম (এবং এই ক্ষেত্রে একমাত্র) parameter-টি
+বদলে `self` করি। `main`-এ, যেখানে আমরা `area` function call করে `rect1` argument হিসেবে
+পাঠাতাম, সেখানে এর বদলে _method syntax_ ব্যবহার করে আমাদের `Rectangle` instance-এর ওপর
+`area` method call করতে পারি। method syntax বসে একটি instance-এর পরে: আমরা একটি বিন্দু,
+তারপর method-এর নাম, বন্ধনী আর যেকোনো argument যোগ করি।
 
-In the signature for `area`, we use `&self` instead of `rectangle: &Rectangle`.
-The `&self` is actually short for `self: &Self`. Within an `impl` block, the
-type `Self` is an alias for the type that the `impl` block is for. Methods must
-have a parameter named `self` of type `Self` for their first parameter, so Rust
-lets you abbreviate this with only the name `self` in the first parameter spot.
-Note that we still need to use the `&` in front of the `self` shorthand to
-indicate that this method borrows the `Self` instance, just as we did in
-`rectangle: &Rectangle`. Methods can take ownership of `self`, borrow `self`
-immutably, as we’ve done here, or borrow `self` mutably, just as they can any
-other parameter.
+`area`-এর signature-এ আমরা `rectangle: &Rectangle`-এর বদলে `&self` ব্যবহার করি।
+`&self` আসলে `self: &Self`-এর সংক্ষিপ্ত রূপ। একটি `impl` block-এর ভেতরে `Self` type হলো
+যে type-এর জন্য `impl` block-টি লেখা, তার একটি alias (বিকল্প নাম)। method-এর প্রথম
+parameter হিসেবে `Self` type-এর `self` নামের একটি parameter থাকতেই হবে, তাই Rust প্রথম
+parameter-এর জায়গায় শুধু `self` নাম লিখে এটি সংক্ষেপ করতে দেয়। লক্ষ করুন, এই
+method যে `Self` instance-টিকে borrow করে, তা বোঝাতে `self` সংক্ষিপ্ত রূপের সামনে আমাদের
+তবু `&` বসাতে হয়, ঠিক যেমন `rectangle: &Rectangle`-এ করেছিলাম। অন্য যেকোনো
+parameter-এর মতোই method `self`-এর ownership নিতে পারে, এখানে যেমন করেছি সেভাবে `self`-কে
+immutable-ভাবে borrow করতে পারে, অথবা `self`-কে mutable-ভাবে borrow করতে পারে।
 
-We chose `&self` here for the same reason we used `&Rectangle` in the function
-version: We don’t want to take ownership, and we just want to read the data in
-the struct, not write to it. If we wanted to change the instance that we’ve
-called the method on as part of what the method does, we’d use `&mut self` as
-the first parameter. Having a method that takes ownership of the instance by
-using just `self` as the first parameter is rare; this technique is usually
-used when the method transforms `self` into something else and you want to
-prevent the caller from using the original instance after the transformation.
+function সংস্করণে `&Rectangle` যে কারণে ব্যবহার করেছিলাম, এখানে `&self` বেছে নিয়েছি
+সেই একই কারণে: আমরা ownership নিতে চাই না, আর struct-এর ডেটা শুধু পড়তে চাই, তাতে লিখতে
+চাই না। method-এর কাজের অংশ হিসেবে যদি সেই instance-টি বদলাতে চাইতাম, যার ওপর method
+call করেছি, তাহলে প্রথম parameter হিসেবে `&mut self` ব্যবহার করতাম। প্রথম parameter
+হিসেবে শুধু `self` ব্যবহার করে instance-এর ownership নেয় এমন method বিরল; এই কৌশল সাধারণত
+তখন ব্যবহার হয়, যখন method `self`-কে অন্য কিছুতে রূপান্তর করে এবং আপনি চান রূপান্তরের
+পর caller (যে কোড function-টি call করে) যেন মূল instance-টি আর ব্যবহার করতে না পারে।
 
-The main reason for using methods instead of functions, in addition to
-providing method syntax and not having to repeat the type of `self` in every
-method’s signature, is for organization. We’ve put all the things we can do
-with an instance of a type in one `impl` block rather than making future users
-of our code search for capabilities of `Rectangle` in various places in the
-library we provide.
+function-এর বদলে method ব্যবহারের প্রধান কারণ, method syntax পাওয়া আর প্রতিটি method-এর
+signature-এ `self`-এর type বারবার লিখতে না হওয়ার পাশাপাশি, হলো কোড গুছিয়ে রাখা। একটি
+type-এর instance দিয়ে যা যা করা যায়, তার সবকিছু আমরা একটি `impl` block-এ রেখেছি, যাতে
+ভবিষ্যতে আমাদের কোড যারা ব্যবহার করবেন, তাদের আমাদের দেওয়া library-র নানা জায়গায়
+`Rectangle`-এর সক্ষমতাগুলো খুঁজে বেড়াতে না হয়।
 
-Note that we can choose to give a method the same name as one of the struct’s
-fields. For example, we can define a method on `Rectangle` that is also named
+লক্ষ করুন, struct-এর কোনো একটি field-এর নামেই একটি method-এর নাম রাখা যায়। যেমন,
+`Rectangle`-এর ওপর আমরা এমন একটি method সংজ্ঞায়িত করতে পারি, যার নামও
 `width`:
 
 <Listing file-name="src/main.rs">
@@ -76,32 +73,31 @@ fields. For example, we can define a method on `Rectangle` that is also named
 
 </Listing>
 
-Here, we’re choosing to make the `width` method return `true` if the value in
-the instance’s `width` field is greater than `0` and `false` if the value is
-`0`: We can use a field within a method of the same name for any purpose. In
-`main`, when we follow `rect1.width` with parentheses, Rust knows we mean the
-method `width`. When we don’t use parentheses, Rust knows we mean the field
-`width`.
+এখানে আমরা ঠিক করেছি, instance-এর `width` field-এর মান `0`-এর চেয়ে বড় হলে `width`
+method `true` return করবে, আর মান `0` হলে `false`: একই নামের method-এর ভেতরে আমরা
+যেকোনো উদ্দেশ্যে field ব্যবহার করতে পারি। `main`-এ যখন `rect1.width`-এর পরে বন্ধনী দিই,
+Rust বোঝে আমরা `width` method বোঝাচ্ছি। বন্ধনী না দিলে Rust বোঝে আমরা `width` field
+বোঝাচ্ছি।
 
-Often, but not always, when we give a method the same name as a field we want
-it to only return the value in the field and do nothing else. Methods like this
-are called _getters_, and Rust does not implement them automatically for struct
-fields as some other languages do. Getters are useful because you can make the
-field private but the method public and thus enable read-only access to that
-field as part of the type’s public API. We will discuss what public and private
-are and how to designate a field or method as public or private in [Chapter
-7][public]<!-- ignore -->.
+প্রায়ই, তবে সবসময় নয়, যখন কোনো method-এর নাম একটি field-এর নামে রাখি, তখন চাই এটি শুধু
+field-এর মানটি return করুক, আর কিছু না করুক। এ ধরনের method-কে বলা হয় _getter_ (শুধু
+একটি field-এর মান ফেরত দেয় এমন method), আর অন্য কিছু ভাষার মতো Rust struct-এর field-এর
+জন্য এগুলো আপনা-আপনি implement করে না। getter কাজের, কারণ field-টিকে private (বাইরে থেকে ব্যবহার করা যায় না) আর
+method-টিকে public (বাইরে থেকে ব্যবহার করা যায়) করে type-এর public API-র অংশ
+হিসেবে ওই field-এ শুধু-পড়ার প্রবেশাধিকার দেওয়া যায়। public আর private কী, আর কীভাবে
+একটি field বা method-কে public বা private হিসেবে চিহ্নিত করতে হয়, তা আমরা [অধ্যায়
+7][public]<!-- ignore -->-এ আলোচনা করব।
 
-### Methods with More Parameters
+### আরও parameter-সহ method {#methods-with-more-parameters}
 
-Let’s practice using methods by implementing a second method on the `Rectangle`
-struct. This time we want an instance of `Rectangle` to take another instance
-of `Rectangle` and return `true` if the second `Rectangle` can fit completely
-within `self` (the first `Rectangle`); otherwise, it should return `false`.
-That is, once we’ve defined the `can_hold` method, we want to be able to write
-the program shown in Listing 5-14.
+`Rectangle` struct-এ দ্বিতীয় একটি method implement করে চলুন method ব্যবহার অনুশীলন করি।
+এবার আমরা চাই `Rectangle`-এর একটি instance `Rectangle`-এর আরেকটি instance নেবে এবং দ্বিতীয়
+`Rectangle`-টি যদি পুরোপুরি `self` (প্রথম `Rectangle`)-এর ভেতরে এঁটে যায়, তাহলে `true`
+return করবে; অন্যথায় `false` return করবে।
+অর্থাৎ `can_hold` method সংজ্ঞায়িত করার পর আমরা Listing 5-14-এ দেখানো প্রোগ্রামটি লিখতে
+চাই।
 
-<Listing number="5-14" file-name="src/main.rs" caption="Using the as-yet-unwritten `can_hold` method">
+<Listing number="5-14" file-name="src/main.rs" caption="এখনো না লেখা `can_hold` method ব্যবহার করা">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-14/src/main.rs}}
@@ -109,30 +105,26 @@ the program shown in Listing 5-14.
 
 </Listing>
 
-The expected output would look like the following because both dimensions of
-`rect2` are smaller than the dimensions of `rect1`, but `rect3` is wider than
-`rect1`:
+প্রত্যাশিত আউটপুট নিচের মতো হবে, কারণ `rect2`-এর দুটি মাপই `rect1`-এর মাপের চেয়ে ছোট,
+কিন্তু `rect3` `rect1`-এর চেয়ে বেশি চওড়া:
 
 ```text
 Can rect1 hold rect2? true
 Can rect1 hold rect3? false
 ```
 
-We know we want to define a method, so it will be within the `impl Rectangle`
-block. The method name will be `can_hold`, and it will take an immutable borrow
-of another `Rectangle` as a parameter. We can tell what the type of the
-parameter will be by looking at the code that calls the method:
-`rect1.can_hold(&rect2)` passes in `&rect2`, which is an immutable borrow to
-`rect2`, an instance of `Rectangle`. This makes sense because we only need to
-read `rect2` (rather than write, which would mean we’d need a mutable borrow),
-and we want `main` to retain ownership of `rect2` so that we can use it again
-after calling the `can_hold` method. The return value of `can_hold` will be a
-Boolean, and the implementation will check whether the width and height of
-`self` are greater than the width and height of the other `Rectangle`,
-respectively. Let’s add the new `can_hold` method to the `impl` block from
-Listing 5-13, shown in Listing 5-15.
+আমরা জানি একটি method সংজ্ঞায়িত করতে চাই, তাই এটি থাকবে `impl Rectangle` block-এর
+ভেতরে। method-এর নাম হবে `can_hold`, আর এটি parameter হিসেবে আরেকটি `Rectangle`-এর
+একটি immutable borrow নেবে। method-টি call করা কোড দেখে parameter-এর type কী হবে, তা
+আমরা বলতে পারি: `rect1.can_hold(&rect2)` পাঠায় `&rect2`, যা `Rectangle`-এর একটি instance
+`rect2`-এর একটি immutable borrow। এটা যুক্তিসংগত, কারণ আমাদের শুধু `rect2` পড়তে হবে
+(লেখার দরকার হলে mutable borrow লাগত), আর আমরা চাই `main` `rect2`-এর ownership ধরে রাখুক,
+যাতে `can_hold` method call করার পরও আবার এটি ব্যবহার করতে পারি। `can_hold`-এর return
+মান হবে একটি Boolean, আর implementation যাচাই করবে `self`-এর প্রস্থ ও উচ্চতা যথাক্রমে অন্য
+`Rectangle`-টির প্রস্থ ও উচ্চতার চেয়ে বড় কি না। চলুন Listing 5-13-এর `impl` block-এ নতুন
+`can_hold` method যোগ করি, যা Listing 5-15-এ দেখানো হয়েছে।
 
-<Listing number="5-15" file-name="src/main.rs" caption="Implementing the `can_hold` method on `Rectangle` that takes another `Rectangle` instance as a parameter">
+<Listing number="5-15" file-name="src/main.rs" caption="`Rectangle`-এর ওপর `can_hold` method implement করা, যা parameter হিসেবে আরেকটি `Rectangle` instance নেয়">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-15/src/main.rs:here}}
@@ -140,28 +132,26 @@ Listing 5-13, shown in Listing 5-15.
 
 </Listing>
 
-When we run this code with the `main` function in Listing 5-14, we’ll get our
-desired output. Methods can take multiple parameters that we add to the
-signature after the `self` parameter, and those parameters work just like
-parameters in functions.
+Listing 5-14-এর `main` function দিয়ে এই কোড চালালে আমরা কাঙ্ক্ষিত আউটপুট পাব। method
+একাধিক parameter নিতে পারে, যেগুলো আমরা signature-এ `self` parameter-এর পরে যোগ করি, আর
+সেই parameter-গুলো function-এর parameter-এর মতোই কাজ করে।
 
 
-### Associated Functions
+### associated function {#associated-functions}
 
-All functions defined within an `impl` block are called _associated functions_
-because they’re associated with the type named after the `impl`. We can define
-associated functions as functions that don’t have `self` as their first parameter (and thus
-are not methods) because they don’t need an instance of the type to work with.
-We’ve already used one function like this: the `String::from` function that’s
-defined on the `String` type.
+একটি `impl` block-এর ভেতরে সংজ্ঞায়িত সব function-কে বলা হয় _associated function_,
+কারণ এরা `impl`-এর পরে নাম লেখা type-টির সঙ্গে যুক্ত। আমরা এমন associated function-ও
+সংজ্ঞায়িত করতে পারি, যাদের প্রথম parameter `self` নয় (এবং তাই এরা
+method নয়), কারণ কাজ করার জন্য এদের type-টির কোনো instance দরকার হয় না।
+এমন একটি function আমরা আগেই ব্যবহার করেছি: `String` type-এর ওপর সংজ্ঞায়িত `String::from`
+function।
 
-Associated functions that aren’t methods are often used for constructors that
-will return a new instance of the struct. These are often called `new`, but
-`new` isn’t a special name and isn’t built into the language. For example, we
-could choose to provide an associated function named `square` that would have
-one dimension parameter and use that as both width and height, thus making it
-easier to create a square `Rectangle` rather than having to specify the same
-value twice:
+method নয় এমন associated function প্রায়ই constructor (নতুন instance তৈরি করে এমন
+function) হিসেবে ব্যবহার হয়, যা struct-এর একটি নতুন instance return করে। এগুলোর নাম প্রায়ই
+`new` রাখা হয়, কিন্তু `new` কোনো বিশেষ নাম নয় এবং ভাষার মধ্যে বিল্ট-ইন নয়। যেমন, আমরা
+`square` নামে একটি associated function দিতে পারি, যার একটি মাপের parameter থাকবে এবং সেটিই
+প্রস্থ ও উচ্চতা দুটো হিসেবে ব্যবহার করবে, ফলে একই মান দুবার নির্দিষ্ট না করে সহজেই একটি
+বর্গাকার `Rectangle` তৈরি করা যাবে:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -169,23 +159,22 @@ value twice:
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-03-associated-functions/src/main.rs:here}}
 ```
 
-The `Self` keywords in the return type and in the body of the function are
-aliases for the type that appears after the `impl` keyword, which in this case
-is `Rectangle`.
+return type আর function-এর body-তে থাকা `Self` keyword-গুলো হলো `impl` keyword-এর পরে
+থাকা type-টির alias, যা এই ক্ষেত্রে `Rectangle`।
 
-To call this associated function, we use the `::` syntax with the struct name;
-`let sq = Rectangle::square(3);` is an example. This function is namespaced by
-the struct: The `::` syntax is used for both associated functions and
-namespaces created by modules. We’ll discuss modules in [Chapter
-7][modules]<!-- ignore -->.
+এই associated function call করতে আমরা struct-এর নামের সঙ্গে `::` syntax ব্যবহার করি;
+`let sq = Rectangle::square(3);` একটি উদাহরণ। এই function struct-টির namespace (নামগুলোর
+আলাদা একটি পরিসর)-এর ভেতরে থাকে: `::` syntax associated function আর module-এর তৈরি
+namespace দুটোর জন্যই ব্যবহার হয়। module নিয়ে আমরা [অধ্যায়
+7][modules]<!-- ignore -->-এ আলোচনা করব।
 
-### Multiple `impl` Blocks
+### একাধিক `impl` block {#multiple-impl-blocks}
 
-Each struct is allowed to have multiple `impl` blocks. For example, Listing
-5-15 is equivalent to the code shown in Listing 5-16, which has each method in
-its own `impl` block.
+প্রতিটি struct-এর একাধিক `impl` block থাকতে পারে। যেমন, Listing
+5-15 Listing 5-16-এ দেখানো কোডের সমতুল্য, যেখানে প্রতিটি method নিজের আলাদা `impl`
+block-এ আছে।
 
-<Listing number="5-16" caption="Rewriting Listing 5-15 using multiple `impl` blocks">
+<Listing number="5-16" caption="একাধিক `impl` block ব্যবহার করে Listing 5-15 নতুন করে লেখা">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-16/src/main.rs:here}}
@@ -193,13 +182,13 @@ its own `impl` block.
 
 </Listing>
 
-There’s no reason to separate these methods into multiple `impl` blocks here,
-but this is valid syntax. We’ll see a case in which multiple `impl` blocks are
-useful in Chapter 10, where we discuss generic types and traits.
+এখানে এই method-গুলোকে একাধিক `impl` block-এ আলাদা করার কোনো কারণ নেই, তবে এটি বৈধ
+syntax। একাধিক `impl` block কাজে আসে এমন একটি ক্ষেত্র আমরা অধ্যায় 10-এ দেখব, যেখানে
+generic type আর trait নিয়ে আলোচনা করব।
 
-### Method Calls are Syntactic Sugar for Function Calls
+### method call হলো function call-এর syntactic sugar {#method-calls-are-syntactic-sugar-for-function-calls}
 
-Using the concepts we've discussed so far, we can now see how method calls are syntactic sugar for function calls. For example, let's say we have a rectangle struct with an `area` method and a `set_width` method:
+এ পর্যন্ত আলোচিত ধারণাগুলো ব্যবহার করে এখন আমরা দেখতে পারি, method call কীভাবে function call-এর syntactic sugar (একই কাজের সহজতর লেখার রূপ)। যেমন, ধরুন আমাদের কাছে একটি rectangle struct আছে, যার একটি `area` method আর একটি `set_width` method আছে:
 
 ```rust,ignore
 # struct Rectangle {
@@ -218,7 +207,7 @@ impl Rectangle {
 }
 ```
 
-And let's say we have a rectangle `r`. Then the method calls `r.area()` and `r.set_width(2)` are equivalent to this:
+আর ধরুন আমাদের কাছে একটি rectangle `r` আছে। তাহলে `r.area()` আর `r.set_width(2)` method call দুটি এর সমতুল্য:
 
 ```rust
 # struct Rectangle {
@@ -250,13 +239,13 @@ Rectangle::set_width(&mut r, 2);
 # }
 ```
 
-The method call `r.area()` becomes `Rectangle::area(&r)`. The function name is the associated function `Rectangle::area`. The function argument is the `&self` parameter. Rust automatically inserts the borrowing operator `&`.
+`r.area()` method call হয়ে যায় `Rectangle::area(&r)`। function-এর নাম হলো associated function `Rectangle::area`। function-এর argument হলো `&self` parameter। Rust আপনা-আপনি borrowing operator `&` বসিয়ে দেয়।
 
-> *Note:* if you are familiar with C or C++, you are used to two different syntaxes for method calls: `r.area()` and `r->area()`. Rust does not have an equivalent to the arrow operator `->`. Rust will automatically reference and dereference the method receiver when you use the dot operator.
+> *দ্রষ্টব্য:* আপনি যদি C বা C++-এর সঙ্গে পরিচিত হন, তাহলে method call-এর দুটি আলাদা syntax-এ অভ্যস্ত: `r.area()` আর `r->area()`। Rust-এ তীর operator `->`-এর কোনো সমতুল্য নেই। dot operator ব্যবহার করলে Rust আপনা-আপনিই method receiver (যে মানের ওপর method call করা হয়)-কে reference ও dereference করে।
 
-The method call `r.set_width(2)` similarly becomes `Rectangle::set_width(&mut r, 2)`. This method expects `&mut self`, so the first argument is a mutable borrow `&mut r`. The second argument is exactly the same, the number 2.
+`r.set_width(2)` method call-ও একইভাবে হয়ে যায় `Rectangle::set_width(&mut r, 2)`। এই method `&mut self` আশা করে, তাই প্রথম argument হলো একটি mutable borrow `&mut r`। দ্বিতীয় argument হুবহু একই, সংখ্যা 2।
 
-As we described in Chapter 4.2 ["Dereferencing a Pointer Accesses Its Data"](ch04-02-references-and-borrowing.html#dereferencing-a-pointer-accesses-its-data), Rust will insert as many references and dereferences as needed to make the types match up for the `self` parameter. For example, here are two equivalent calls to `area` for a mutable reference to a boxed rectangle:
+অধ্যায় 4.2-এর ["pointer dereference করলে তার ডেটায় পৌঁছানো যায়"](ch04-02-references-and-borrowing.html#dereferencing-a-pointer-accesses-its-data)-এ যেমন বর্ণনা করেছি, `self` parameter-এর type মেলাতে Rust যত দরকার তত reference আর dereference বসিয়ে দেবে। যেমন, box-এ রাখা একটি rectangle-এর mutable reference-এর জন্য `area`-এর দুটি সমতুল্য call এখানে দেওয়া হলো:
 
 ```rust
 # struct Rectangle {
@@ -284,14 +273,14 @@ assert_eq!(area1, area2);
 # }
 ```
 
-Rust will add two dereferences (once for the mutable reference, once for the box) and then one immutable borrow because `area` expects `&Rectangle`. Note that this is also a situation where a mutable reference is "downgraded" into a shared reference, like we discussed in [Chapter 4.2](ch04-02-references-and-borrowing.html#mutable-references-provide-unique-and-non-owning-access-to-data). Conversely, you would not be allowed to call `set_width` on a value of type `&Rectangle` or `&Box<Rectangle>`.
+Rust দুটি dereference যোগ করবে (একবার mutable reference-এর জন্য, একবার box-এর জন্য), তারপর একটি immutable borrow, কারণ `area` `&Rectangle` আশা করে। লক্ষ করুন, এটিও এমন একটি পরিস্থিতি, যেখানে একটি mutable reference-কে একটি shared reference-এ "নামিয়ে আনা" হয়, যেমনটি আমরা [অধ্যায় 4.2](ch04-02-references-and-borrowing.html#mutable-references-provide-unique-and-non-owning-access-to-data)-এ আলোচনা করেছি। উল্টোভাবে, `&Rectangle` বা `&Box<Rectangle>` type-এর মানের ওপর `set_width` call করার অনুমতি আপনি পাবেন না।
 
 {{#quiz ../quizzes/ch05-03-method-syntax-sec1.toml}}
 
 
-### Methods and Ownership
+### method ও ownership {#methods-and-ownership}
 
-Like we discussed in Chapter 4.2 ["References and Borrowing"](ch04-02-references-and-borrowing.html), methods must be called on structs that have the necessary permissions. As a running example, we will use these three methods that take `&self`, `&mut self`, and `self`, respectively.
+অধ্যায় 4.2-এর ["reference ও borrowing"](ch04-02-references-and-borrowing.html)-এ যেমন আলোচনা করেছি, method call করতে হয় এমন struct-এর ওপর, যার প্রয়োজনীয় permission (অনুমতি) আছে। চলমান উদাহরণ হিসেবে আমরা এই তিনটি method ব্যবহার করব, যেগুলো যথাক্রমে `&self`, `&mut self` আর `self` নেয়।
 
 ```rust,ignore
 impl Rectangle {    
@@ -312,9 +301,9 @@ impl Rectangle {
 }
 ```
 
-#### Reads and Writes with `&self` and `&mut self`
+#### `&self` আর `&mut self` দিয়ে পড়া ও লেখা {#reads-and-writes-with-self-and-mut-self}
 
-If we make an owned rectangle with `let rect = Rectangle { ... }`, then `rect` has @Perm{read} and @Perm{own} permissions. With those permissions, it is permissible to call the `area` and `max` methods:
+`let rect = Rectangle { ... }` দিয়ে আমরা যদি একটি owned rectangle তৈরি করি, তাহলে `rect`-এর @Perm{read} আর @Perm{own} permission থাকে। এই permission-গুলো থাকায় `area` আর `max` method call করা চলে:
 
 ```aquascope,permissions,boundaries,stepper
 #struct Rectangle {
@@ -351,7 +340,7 @@ let max_rect = rect.max(other_rect);`{}`
 #}
 ```
 
-However, if we try to call `set_width`, we are missing the @Perm{write} permission:
+তবে `set_width` call করার চেষ্টা করলে দেখা যায়, আমাদের @Perm{write} permission নেই:
 
 ```aquascope,permissions,boundaries,shouldFail
 #struct Rectangle {
@@ -385,7 +374,7 @@ rect.set_width(0);`{}`
 #}
 ```
 
-Rust will reject this program with the corresponding error:
+Rust সংশ্লিষ্ট error দিয়ে এই প্রোগ্রাম বাতিল করবে:
 
 ```text
 error[E0596]: cannot borrow `rect` as mutable, as it is not declared as mutable
@@ -398,7 +387,7 @@ error[E0596]: cannot borrow `rect` as mutable, as it is not declared as mutable
    | ^^^^^^^^^^^^^^^^^ cannot borrow as mutable
 ```
 
-We will get a similar error if we try to call `set_width` on an immutable reference to a `Rectangle`, even if the underlying rectangle is mutable:
+একটি `Rectangle`-এর immutable reference-এর ওপর `set_width` call করার চেষ্টা করলেও একই রকম error পাব, এমনকি মূল rectangle-টি mutable হলেও:
 
 ```aquascope,permissions,boundaries,stepper,shouldFail
 #struct Rectangle {
@@ -436,9 +425,9 @@ rect_ref.set_width(2);`{}` // but this is still not ok
 #}
 ```
 
-#### Moves with `self`
+#### `self` দিয়ে move {#moves-with-self}
 
-Calling a method that expects `self` will move the input struct (unless the struct implements `Copy`). For example, we cannot use a `Rectangle` after passing it to `max`:
+`self` আশা করে এমন method call করলে ইনপুট struct-টি move হয়ে যাবে (যদি না struct-টি `Copy` implement করে)। যেমন, `max`-এ পাঠানোর পর আমরা একটি `Rectangle` আর ব্যবহার করতে পারি না:
 
 ```aquascope,permissions,boundaries,stepper,shouldFail
 #struct Rectangle {
@@ -477,7 +466,7 @@ println!("{}", rect.area());`{}`
 #}
 ```
 
-Once we call `rect.max(..)`, we move `rect` and so lose all permissions on it. Trying to compile this program would give us the following error:
+`rect.max(..)` call করার সঙ্গে সঙ্গে আমরা `rect` move করে ফেলি, ফলে এর ওপর সব permission হারাই। এই প্রোগ্রাম compile করার চেষ্টা করলে নিচের error পাব:
 
 ```text
 error[E0382]: borrow of moved value: `rect`
@@ -492,7 +481,7 @@ error[E0382]: borrow of moved value: `rect`
    |                ^^^^^^^^^^^ value borrowed here after move
 ```
 
-A similar situation arises if we try to call a `self` method on a reference. For instance, say we tried to make a method `set_to_max` that assigns `self` to the output of `self.max(..)`:
+একটি reference-এর ওপর একটি `self` method call করার চেষ্টা করলেও একই রকম পরিস্থিতি তৈরি হয়। যেমন, ধরুন আমরা `set_to_max` নামে একটি method বানানোর চেষ্টা করলাম, যা `self.max(..)`-এর আউটপুট `self`-এ assign করে:
 
 ```aquascope,permissions,boundaries,stepper,shouldFail
 #struct Rectangle {
@@ -522,7 +511,7 @@ impl Rectangle {
 }
 ```
 
-Then we can see that `self` is missing @Perm{own} permissions in the operation `self.max(..)`. Rust therefore rejects this program with the following error:
+তখন দেখতে পাই, `self.max(..)` operation-এ `self`-এর @Perm{own} permission নেই। তাই Rust নিচের error দিয়ে এই প্রোগ্রাম বাতিল করে:
 
 ```text
 error[E0507]: cannot move out of `*self` which is behind a mutable reference
@@ -536,11 +525,11 @@ error[E0507]: cannot move out of `*self` which is behind a mutable reference
    |
 ```
 
-This is the same kind of error we discussed in Chapter 4.3 ["Copying vs. Moving Out of a Collection"](ch04-03-fixing-ownership-errors.html#fixing-an-unsafe-program-copying-vs-moving-out-of-a-collection).
+এটি সেই একই ধরনের error, যা আমরা অধ্যায় 4.3-এর ["collection থেকে কপি বনাম move করা"](ch04-03-fixing-ownership-errors.html#fixing-an-unsafe-program-copying-vs-moving-out-of-a-collection)-এ আলোচনা করেছি।
 
-#### Good Moves and Bad Moves
+#### ভালো move আর খারাপ move {#good-moves-and-bad-moves}
 
-You might wonder: why does it matter if we move out of `*self`? In fact, for the case of `Rectangle`, it actually is safe to move out of `*self`, even though Rust doesn't let you do it. For example, if we simulate a program that calls the rejected `set_to_max`, you can see how nothing unsafe occurs:
+আপনি হয়তো ভাবছেন: `*self` থেকে move করে বের করলে কী এসে যায়? আসলে `Rectangle`-এর ক্ষেত্রে `*self` থেকে move করে বের করা সত্যিই নিরাপদ, যদিও Rust আপনাকে তা করতে দেয় না। যেমন, বাতিল হওয়া `set_to_max` call করে এমন একটি প্রোগ্রাম অনুকরণ করলে দেখতে পাবেন, কোনো অনিরাপদ কিছুই ঘটে না:
 
 ```aquascope,interpreter,shouldFail,horizontal
 #struct Rectangle {
@@ -569,8 +558,8 @@ fn main() {
 }
 ```
 
-The reason it's safe to move out of `*self` is because `Rectangle` does not own any heap data.
-In fact, we can actually get Rust to compile `set_to_max` by simply adding `#[derive(Copy, Clone)]` to the definition of `Rectangle`:
+`*self` থেকে move করে বের করা নিরাপদ হওয়ার কারণ হলো, `Rectangle` কোনো heap ডেটার owner নয়।
+আসলে শুধু `Rectangle`-এর সংজ্ঞায় `#[derive(Copy, Clone)]` যোগ করেই আমরা Rust-কে দিয়ে `set_to_max` compile করাতে পারি:
 
 ```aquascope,permissions,boundaries,stepper
 \#[derive(Copy, Clone)]
@@ -594,11 +583,11 @@ impl Rectangle {
 }
 ```
 
-Notice that unlike before, `self.max(other)` no longer requires the @Perm{own} permission on `*self` or `other`. Remember that `self.max(other)` desugars to `Rectangle::max(*self, other)`. The dereference `*self` does not require ownership over `*self` if `Rectangle` is copyable.
+লক্ষ করুন, আগের বিপরীতে `self.max(other)`-এর জন্য এখন আর `*self` বা `other`-এর ওপর @Perm{own} permission লাগে না। মনে রাখবেন, `self.max(other)` desugar (syntactic sugar খুলে মূল রূপে লেখা) হয়ে দাঁড়ায় `Rectangle::max(*self, other)`। `Rectangle` copyable হলে `*self` dereference-এর জন্য `*self`-এর ওপর ownership লাগে না।
 
-You might wonder: why doesn't Rust automatically derive `Copy` for `Rectangle`? Rust does not auto-derive `Copy` for stability across API changes. Imagine that the author of the `Rectangle` type decided to add a `name: String` field. Then all client code that relies on `Rectangle` being `Copy` would suddenly get rejected by the compiler. To avoid that issue, API authors must explicitly add `#[derive(Copy)]` to indicate that they expect their struct to always be `Copy`.
+আপনি হয়তো ভাবছেন: Rust তাহলে `Rectangle`-এর জন্য আপনা-আপনি `Copy` derive করে না কেন? API বদলালেও যাতে স্থিতিশীলতা থাকে, সেজন্য Rust আপনা-আপনি `Copy` derive করে না। কল্পনা করুন, `Rectangle` type-এর লেখক একটি `name: String` field যোগ করার সিদ্ধান্ত নিলেন। তাহলে `Rectangle`-এর `Copy` হওয়ার ওপর নির্ভর করা সব ব্যবহারকারী কোড হঠাৎ compiler-এর কাছে বাতিল হয়ে যেত। এই সমস্যা এড়াতে API-র লেখকদের স্পষ্টভাবে `#[derive(Copy)]` যোগ করতে হয়, যাতে বোঝা যায় তারা আশা করেন তাদের struct সবসময় `Copy` থাকবে।
 
-To better understand the issue, let's run a simulation. Say we added `name: String` to `Rectangle`. What would happen if Rust allowed `set_to_max` to compile?
+সমস্যাটি আরও ভালোভাবে বুঝতে চলুন একটি অনুকরণ চালাই। ধরুন আমরা `Rectangle`-এ `name: String` যোগ করলাম। Rust যদি `set_to_max`-কে compile হতে দিত, তাহলে কী হতো?
 
 ```aquascope,interpreter,shouldFail,horizontal
 struct Rectangle {
@@ -640,24 +629,23 @@ fn main() {
 }
 ```
 
-In this program, we call `set_to_max` with two rectangles `r1` and `r2`. `self` is a mutable reference to `r1` and `other` is a move of `r2`. After calling `self.max(other)`, the `max` method consumes ownership of both rectangles. When `max` returns, Rust deallocates both strings "r1" and "r2" in the heap. Notice the problem: at the location L2, `*self` is supposed to be readable and writable. However, `(*self).name` (actually `r1.name`) has been deallocated.
+এই প্রোগ্রামে আমরা দুটি rectangle `r1` আর `r2` দিয়ে `set_to_max` call করি। `self` হলো `r1`-এর একটি mutable reference, আর `other` হলো `r2`-এর একটি move। `self.max(other)` call করার পর `max` method দুটি rectangle-এরই ownership নিয়ে নেয়। `max` return করলে Rust heap-এ থাকা "r1" আর "r2" দুটি string-ই deallocate করে। সমস্যাটি লক্ষ করুন: L2 অবস্থানে `*self`-এর পড়া ও লেখার উপযোগী থাকার কথা। কিন্তু `(*self).name` (আসলে `r1.name`) deallocate হয়ে গেছে।
 
-Therefore when we do `*self = max`, we encounter undefined behavior. When we overwrite `*self`, Rust will implicitly drop the data previously in `*self`. To make that behavior explicit, we have added `drop(*self)`. After calling `drop(*self)`, Rust attempts to free `(*self).name` a second time. That action is a double-free, which is undefined behavior.
+তাই আমরা যখন `*self = max` করি, তখন undefined behavior-এর মুখোমুখি হই। `*self`-এর ওপর নতুন করে লিখলে Rust আগে `*self`-এ থাকা ডেটা নিজে থেকেই drop করবে। এই আচরণটি স্পষ্ট করতে আমরা `drop(*self)` যোগ করেছি। `drop(*self)` call করার পর Rust দ্বিতীয়বার `(*self).name` free করার চেষ্টা করে। এই কাজটি একটি double-free, যা undefined behavior।
 
-So remember: when you see an error like "cannot move out of `*self`", that's usually because you're trying to call a `self` method on a reference like `&self` or `&mut self`. Rust is protecting you from a double-free.
+তাই মনে রাখবেন: "cannot move out of `*self`"-এর মতো error দেখলে, তা সাধারণত এ কারণে যে আপনি `&self` বা `&mut self`-এর মতো একটি reference-এর ওপর একটি `self` method call করার চেষ্টা করছেন। Rust আপনাকে একটি double-free থেকে রক্ষা করছে।
 
 
-## Summary
+## সারসংক্ষেপ {#summary}
 
-Structs let you create custom types that are meaningful for your domain. By
-using structs, you can keep associated pieces of data connected to each other
-and name each piece to make your code clear. In `impl` blocks, you can define
-functions that are associated with your type, and methods are a kind of
-associated function that let you specify the behavior that instances of your
-structs have.
+struct দিয়ে আপনি এমন নিজস্ব type তৈরি করতে পারেন, যা আপনার বিষয়ক্ষেত্রের জন্য অর্থবহ।
+struct ব্যবহার করে আপনি সম্পর্কিত ডেটার অংশগুলোকে পরস্পরের সঙ্গে যুক্ত রাখতে পারেন, আর
+প্রতিটি অংশের নাম দিয়ে আপনার কোড স্পষ্ট করতে পারেন। `impl` block-এ আপনি এমন function
+সংজ্ঞায়িত করতে পারেন, যা আপনার type-এর সঙ্গে যুক্ত, আর method হলো এক ধরনের associated
+function, যা দিয়ে আপনার struct-এর instance-গুলোর আচরণ নির্দিষ্ট করা যায়।
 
-But structs aren’t the only way you can create custom types: Let’s turn to
-Rust’s enum feature to add another tool to your toolbox.
+তবে নিজস্ব type তৈরির একমাত্র উপায় struct নয়: আপনার হাতিয়ারের বাক্সে আরেকটি হাতিয়ার
+যোগ করতে চলুন Rust-এর enum বৈশিষ্ট্যের দিকে যাই।
 
 {{#quiz ../quizzes/ch05-03-method-syntax-sec2.toml}}
 

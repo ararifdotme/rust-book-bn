@@ -1,14 +1,16 @@
-# Using Structs to Structure Related Data
+# সম্পর্কিত ডেটা গুছিয়ে রাখতে struct ব্যবহার {#using-structs-to-structure-related-data}
 
-A _struct_, or _structure_, is a custom data type that lets you package
-together and name multiple related values that make up a meaningful group. If
-you’re familiar with an object-oriented language, a struct is like an object’s
-data attributes. In this chapter, we’ll compare and contrast tuples with
-structs to build on what you already know and demonstrate when structs are a
-better way to group data.
+_struct_ বা _structure_ (নিজস্ব গঠনের ডেটা টাইপ) হলো একটি নিজস্ব data type, যা দিয়ে
+অর্থবহ একটি দল তৈরি করে এমন একাধিক সম্পর্কিত মানকে একসঙ্গে বেঁধে নাম দেওয়া যায়।
+আপনি যদি কোনো object-oriented ভাষার সঙ্গে পরিচিত হন, তাহলে struct হলো একটি object
+(বস্তু, object-oriented ভাষায় ডেটা ও আচরণের একক)-এর ডেটা-বৈশিষ্ট্যগুলোর মতো। এই
+অধ্যায়ে আপনার আগের জানা বিষয়ের ওপর ভিত্তি করে আমরা tuple (বিভিন্ন type-এর
+নির্দিষ্টসংখ্যক মানের একটি দল) আর struct-এর মিল-অমিল তুলনা করব, এবং দেখাব কখন ডেটা
+একত্র করার জন্য struct বেশি ভালো উপায়।
 
-We’ll demonstrate how to define and instantiate structs. We’ll discuss how to
-define associated functions, especially the kind of associated functions called
-_methods_, to specify behavior associated with a struct type. Structs and enums
-(discussed in Chapter 6) are the building blocks for creating new types in your
-program’s domain to take full advantage of Rust’s compile-time type checking.
+আমরা দেখাব কীভাবে struct সংজ্ঞায়িত ও instantiate (একটি instance তৈরি) করতে হয়।
+একটি struct type-এর সঙ্গে যুক্ত আচরণ নির্দিষ্ট করতে কীভাবে associated function (কোনো
+type-এর সঙ্গে যুক্ত function), বিশেষ করে _method_ নামের associated function সংজ্ঞায়িত
+করতে হয়, তা নিয়েও আলোচনা করব। struct আর enum (অধ্যায় 6-এ আলোচিত) হলো আপনার
+প্রোগ্রামের বিষয়ক্ষেত্রে নতুন type তৈরির মূল উপাদান, যা দিয়ে Rust-এর compile-time-এর
+type checking (type ঠিক আছে কি না যাচাই)-এর পুরো সুবিধা নেওয়া যায়।

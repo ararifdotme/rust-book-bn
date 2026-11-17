@@ -25,17 +25,17 @@ fn area(rectangle: Rectangle) -> u32 {
 answer.doesCompile = false
 answer.lineNumber = 14
 context = """ 
-The `area` function takes ownership of its argument `rectangle`. Calling `area(rect1)` therefore
-moves `rect1`, meaning it cannot be used on the next line.
+`area` function তার argument `rectangle`-এর ownership নেয়। তাই `area(rect1)` call করলে
+`rect1` move হয়ে যায়, অর্থাৎ পরের লাইনে এটি আর ব্যবহার করা যায় না।
 """
 
 [[questions]]
 id = "9ce4156e-4112-4101-a2c7-51758ceca639"
 type = "MultipleChoice"
-prompt.prompt = "Which statement best describes a difference between the `Display` and `Debug` traits?"
-answer.answer = "`Display` is for presenting values to an end-user, while `Debug` is for developers' internal use"
+prompt.prompt = "`Display` আর `Debug` trait-এর একটি পার্থক্য কোন বক্তব্যটি সবচেয়ে ভালোভাবে বর্ণনা করে?"
+answer.answer = "`Display` শেষ ব্যবহারকারীর কাছে মান দেখানোর জন্য, আর `Debug` ডেভেলপারদের নিজেদের ব্যবহারের জন্য"
 prompt.distractors = [
-  "`Display` is for printing values to the console, while `Debug` is for viewing values in a debugger",
-  "`Display` cannot be implemented for structs, while `Debug` can be implemented for structs",
-  "There is no difference, `Display` and `Debug` are aliases for the same trait."
+  "`Display` কনসোলে মান প্রিন্ট করার জন্য, আর `Debug` ডিবাগারে মান দেখার জন্য",
+  "struct-এর জন্য `Display` implement করা যায় না, কিন্তু `Debug` implement করা যায়",
+  "কোনো পার্থক্য নেই, `Display` আর `Debug` একই trait-এর দুটি বিকল্প নাম।"
 ]

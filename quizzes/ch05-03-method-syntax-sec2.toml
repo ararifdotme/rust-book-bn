@@ -2,8 +2,8 @@
 id = "97781ca8-ad58-449c-9769-e20b9d2e42a6"
 type = "MultipleChoice"
 prompt.prompt = """
-Say you have a variable `v` of type `&mut Vec<i32>`, and you want to call the `len` method with the
-following signature:
+ধরুন আপনার কাছে `&mut Vec<i32>` type-এর একটি variable `v` আছে, আর আপনি নিচের signature-এর
+`len` method call করতে চান:
 
 ```
 impl Vec<i32> {
@@ -13,24 +13,24 @@ impl Vec<i32> {
 }
 ```
 
-If you try to compile the expression `v.len()`, which of the following statements best describes what happens?
+`v.len()` expression compile করার চেষ্টা করলে কী ঘটে, তা নিচের কোন বক্তব্যটি সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
-answer.answer = "It compiles, because the `&mut` reference is implicitly reborrowed as an `&` reference"
+answer.answer = "এটি compile হয়, কারণ `&mut` reference-টি অন্তর্নিহিতভাবে একটি `&` reference হিসেবে reborrow হয়"
 prompt.distractors = [
-  "It does not compile, because `&mut Vec<i32>` is not the same type as `&Vec<i32>`",
-  "It does not compile, `v` is not explicitly dereferenced",
-  "It compiles, because `&self` can take any kind of reference"
+  "এটি compile হয় না, কারণ `&mut Vec<i32>` আর `&Vec<i32>` একই type নয়",
+  "এটি compile হয় না, `v` স্পষ্টভাবে dereference করা হয়নি",
+  "এটি compile হয়, কারণ `&self` যেকোনো ধরনের reference নিতে পারে"
 ]
 context = """
-The expression `v.len()` desugars to `Vec::len(&*v)`, which is a valid re-borrow of `v`, so this expression compiles.
-You cannot, however, pass `v` directly to `Vec::len`, since `&self` specifically refers to immutable references.
+`v.len()` expression desugar হয়ে দাঁড়ায় `Vec::len(&*v)`, যা `v`-এর একটি বৈধ re-borrow, তাই এই expression compile হয়।
+তবে `v`-কে সরাসরি `Vec::len`-এ পাঠানো যায় না, কারণ `&self` নির্দিষ্টভাবে immutable reference বোঝায়।
 """
 
 [[questions]]
 id = "35a75881-eb08-486c-92b3-413ab512138a"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider these two methods that increment a field of a struct. Which style would be more idiomatic for Rust?
+একটি struct-এর একটি field-এর মান এক বাড়ায় এমন এই দুটি method দেখুন। কোন ধরনটি বেশি Rust-সুলভ?
 
 ```
 struct Point(i32, i32);
@@ -43,13 +43,13 @@ impl Point {
 answer.answer = "`incr_v2`"
 prompt.distractors = [
   "`incr_v1`",
-  "Both are idiomatic",
-  "Neither are idiomatic"
+  "দুটিই Rust-সুলভ",
+  "কোনোটিই Rust-সুলভ নয়"
 ]
 prompt.answerIndex = 1
 context = """
-The `incr_v1` method is not idiomatic, because it consumes ownership of the `Point`. This means after calling `p.incr_v1()`, `p` 
-would be unusable, which is probably not intended for this method.
+`incr_v1` method Rust-সুলভ নয়, কারণ এটি `Point`-এর ownership নিয়ে নেয়। এর মানে `p.incr_v1()` call করার পর `p` 
+আর ব্যবহারের উপযোগী থাকবে না, যা সম্ভবত এই method-এর উদ্দেশ্য নয়।
 """
 
 [[questions]]
@@ -72,7 +72,7 @@ fn main() {
 answer.doesCompile = true
 answer.stdout = "1"
 context = """ 
-Remember that `.0` is valid for tuple structs like `Point`.
+মনে রাখবেন, `Point`-এর মতো tuple struct-এর জন্য `.0` বৈধ।
 """
 
 [[questions]]
@@ -100,6 +100,6 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 16
 context = """ 
-Because `get_x` mutably borrows all of `p`, a program cannot use `p` in any way until `x` is no longer used. 
-Therefore reading `x` and `p.y` in the same line is an ownership error.
+`get_x` যেহেতু পুরো `p`-কে mutable-ভাবে borrow করে, তাই `x`-এর ব্যবহার শেষ না হওয়া পর্যন্ত প্রোগ্রাম কোনোভাবেই `p` ব্যবহার করতে পারে না। 
+তাই একই লাইনে `x` আর `p.y` পড়া একটি ownership error।
 """
