@@ -1,47 +1,48 @@
-# Foreword
+# মুখবন্ধ {#foreword}
 
-The Rust programming language has come a long way in a few short years, from
-its creation and incubation by a small and nascent community of enthusiasts, to
-becoming one of the most loved and in-demand programming languages in the
-world. Looking back, it was inevitable that the power and promise of Rust would
-turn heads and gain a foothold in systems programming. What was not inevitable
-was the global growth in interest and innovation that permeated through open
-source communities and catalyzed wide-scale adoption across industries.
+মাত্র কয়েক বছরে Rust প্রোগ্রামিং ভাষা অনেক দূর এগিয়েছে। এর জন্ম আর বেড়ে
+ওঠা উৎসাহী মানুষদের একটি ছোট, নতুন কমিউনিটির হাতে; আর আজ এটি বিশ্বের
+সবচেয়ে প্রিয় এবং সবচেয়ে চাহিদাসম্পন্ন প্রোগ্রামিং ভাষাগুলোর একটি। পেছনে
+তাকালে মনে হয়, Rust-এর শক্তি আর সম্ভাবনা যে সবার নজর কাড়বে এবং systems
+programming (সিস্টেম-স্তরের প্রোগ্রামিং)-এ জায়গা করে নেবে, সেটা ছিল
+অবধারিত। কিন্তু যা অবধারিত ছিল না, তা হলো সারা বিশ্বে আগ্রহ আর উদ্ভাবনের এমন
+জোয়ার, যা ওপেন সোর্স কমিউনিটিগুলোতে ছড়িয়ে পড়েছে এবং নানা শিল্পখাতে ব্যাপকভাবে
+Rust গ্রহণের পথ খুলে দিয়েছে।
 
-At this point in time, it is easy to point to the wonderful features that Rust
-has to offer to explain this explosion in interest and adoption. Who doesn’t
-want memory safety, *and* fast performance, *and* a friendly compiler, *and*
-great tooling, among a host of other wonderful features? The Rust language you
-see today combines years of research in systems programming with the practical
-wisdom of a vibrant and passionate community. This language was designed with
-purpose and crafted with care, offering developers a tool that makes it easier
-to write safe, fast, and reliable code.
+আজ Rust-এর চমৎকার বৈশিষ্ট্যগুলোর কথা বললেই এই বিপুল আগ্রহ আর ব্যবহারের
+ব্যাখ্যা সহজে পাওয়া যায়। memory safety (মেমোরি-নিরাপত্তা), *আর* দ্রুত
+পারফরম্যান্স, *আর* বন্ধুসুলভ compiler (সংকলক), *আর* দারুণ সব টুল, সঙ্গে আরও
+অনেক চমৎকার সুবিধা, কে না চায়? আজ যে Rust ভাষা আপনি দেখছেন, তাতে মিশে আছে
+systems programming নিয়ে বহু বছরের গবেষণা আর একটি প্রাণবন্ত, নিবেদিতপ্রাণ
+কমিউনিটির ব্যবহারিক অভিজ্ঞতা। ভাষাটি নির্দিষ্ট উদ্দেশ্য নিয়ে নকশা করা এবং
+যত্ন নিয়ে গড়া; এটি ডেভেলপারদের হাতে এমন একটি টুল তুলে দেয়, যা দিয়ে নিরাপদ,
+দ্রুত ও নির্ভরযোগ্য কোড লেখা সহজ হয়।
 
-But what makes Rust truly special is its roots in empowering you, the user, to
-achieve your goals. This is a language that wants you to succeed, and the
-principle of empowerment runs through the core of the community that builds,
-maintains, and advocates for this language. Since the previous edition of this
-definitive text, Rust has further developed into a truly global and trusted
-language. The Rust Project is now robustly supported by the Rust Foundation,
-which also invests in key initiatives to ensure that Rust is secure, stable,
-and sustainable.
+তবে Rust-কে সত্যিই অনন্য করে তুলেছে এর মূল ভাবনা: আপনাকে, অর্থাৎ
+ব্যবহারকারীকে, নিজের লক্ষ্যে পৌঁছানোর শক্তি জোগানো। এই ভাষা চায় আপনি সফল হন।
+যে কমিউনিটি ভাষাটি তৈরি করে, রক্ষণাবেক্ষণ করে এবং এর পক্ষে কথা বলে, তাদের
+একেবারে কেন্দ্রেও রয়েছে মানুষকে সক্ষম করে তোলার এই নীতি। এই প্রামাণ্য বইয়ের
+আগের সংস্করণের পর থেকে Rust আরও বিকশিত হয়ে সত্যিকারের বৈশ্বিক ও আস্থাভাজন
+একটি ভাষায় পরিণত হয়েছে। Rust Project-এর পেছনে এখন দৃঢ়ভাবে দাঁড়িয়ে আছে Rust
+Foundation, যারা Rust-কে নিরাপদ, স্থিতিশীল ও টেকসই রাখতে গুরুত্বপূর্ণ নানা
+উদ্যোগেও বিনিয়োগ করে।
 
-This edition of *The Rust Programming Language* is a comprehensive update,
-reflecting the language’s evolution over the years and providing valuable new
-information. But it is not just a guide to syntax and libraries—it’s an
-invitation to join a community that values quality, performance, and thoughtful
-design. Whether you’re a seasoned developer looking to explore Rust for the
-first time or an experienced Rustacean looking to refine your skills, this
-edition offers something for everyone.
+*The Rust Programming Language*-এর এই সংস্করণে বইটি পুরোপুরি হালনাগাদ করা
+হয়েছে: এতে বছরের পর বছর ধরে ভাষাটির বিবর্তন তুলে ধরা হয়েছে, আর যোগ হয়েছে
+মূল্যবান নতুন তথ্য। তবে এটি শুধু syntax (ভাষার লিখনরীতি) আর library
+(লাইব্রেরি)-র গাইড নয়—এটি এমন এক কমিউনিটিতে যোগ দেওয়ার আমন্ত্রণ, যারা মান,
+পারফরম্যান্স আর সুচিন্তিত নকশাকে মূল্য দেয়। আপনি প্রথমবার Rust ঘেঁটে দেখতে
+চাওয়া অভিজ্ঞ ডেভেলপার হোন, কিংবা নিজের দক্ষতা আরও শাণিত করতে চাওয়া অভিজ্ঞ
+Rustacean (Rust প্রোগ্রামার), এই সংস্করণে সবার জন্যই কিছু না কিছু আছে।
 
-The Rust journey has been one of collaboration, learning, and iteration. The
-growth of the language and its ecosystem is a direct reflection of the vibrant,
-diverse community behind it. The contributions of thousands of developers, from
-core language designers to casual contributors, are what make Rust such a
-unique and powerful tool. By picking up this book, you’re not just learning a
-new programming language—you’re joining a movement to make software better,
-safer, and more enjoyable to work with.
+Rust-এর এই পথচলা সহযোগিতা, শেখা আর বারবার উন্নত করার গল্প। ভাষাটি আর এর
+ইকোসিস্টেম যেভাবে বেড়ে উঠেছে, তা সরাসরি এর পেছনের প্রাণবন্ত, বৈচিত্র্যময়
+কমিউনিটিরই প্রতিফলন। মূল ভাষা-নকশাকার থেকে শুরু করে মাঝেমধ্যে অবদান রাখা
+মানুষ পর্যন্ত হাজারো ডেভেলপারের অবদানই Rust-কে এমন অনন্য ও শক্তিশালী একটি
+টুল করে তুলেছে। এই বইটি হাতে নিয়ে আপনি শুধু একটি নতুন প্রোগ্রামিং ভাষাই
+শিখছেন না—আপনি এমন এক আন্দোলনে যোগ দিচ্ছেন, যার লক্ষ্য সফটওয়্যারকে আরও
+ভালো, আরও নিরাপদ এবং কাজ করার জন্য আরও আনন্দদায়ক করে তোলা।
 
-Welcome to the Rust community!
+Rust কমিউনিটিতে স্বাগতম!
 
-- Bec Rumbul, Executive Director of the Rust Foundation
+- Bec Rumbul, নির্বাহী পরিচালক, Rust Foundation

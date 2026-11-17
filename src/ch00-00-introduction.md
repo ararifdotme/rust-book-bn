@@ -1,201 +1,195 @@
-# Introduction
+# ভূমিকা {#introduction}
 
-> Note: This edition of the book is the same as [The Rust Programming
-> Language][nsprust] available in print and ebook format from [No Starch
-> Press][nsp].
+> Note: বইয়ের এই সংস্করণটি [No Starch
+> Press][nsp] থেকে ছাপা বই ও ই-বুক আকারে প্রকাশিত [The Rust Programming
+> Language][nsprust]-এর মতোই।
 
 [nsprust]: https://nostarch.com/rust-programming-language-3rd-edition
 [nsp]: https://nostarch.com/
 
-Welcome to _The Rust Programming Language_, an introductory book about Rust.
-The Rust programming language helps you write faster, more reliable software.
-High-level ergonomics and low-level control are often at odds in programming
-language design; Rust challenges that conflict. Through balancing powerful
-technical capacity and a great developer experience, Rust gives you the option
-to control low-level details (such as memory usage) without all the hassle
-traditionally associated with such control.
+_The Rust Programming Language_-এ আপনাকে স্বাগতম! এটি Rust-এর সঙ্গে পরিচয়
+করিয়ে দেওয়ার একটি বই। Rust প্রোগ্রামিং ভাষা আপনাকে আরও দ্রুত ও আরও
+নির্ভরযোগ্য সফটওয়্যার লিখতে সাহায্য করে। প্রোগ্রামিং ভাষার নকশায় high-level
+(উচ্চ-স্তরের) ব্যবহার-স্বাচ্ছন্দ্য আর low-level (নিম্ন-স্তরের) নিয়ন্ত্রণ প্রায়ই
+একে অপরের বিপরীতে দাঁড়ায়; Rust এই দ্বন্দ্ব মেনে নেয় না। শক্তিশালী প্রযুক্তিগত
+সক্ষমতা আর ডেভেলপারদের জন্য চমৎকার অভিজ্ঞতার মধ্যে ভারসাম্য রেখে Rust আপনাকে
+low-level খুঁটিনাটি (যেমন মেমোরির ব্যবহার) নিয়ন্ত্রণের সুযোগ দেয়, অথচ এ ধরনের
+নিয়ন্ত্রণের সঙ্গে সাধারণত যে ঝামেলা জড়িয়ে থাকে, তা পোহাতে হয় না।
 
-## Who Rust Is For
+## Rust কাদের জন্য {#who-rust-is-for}
 
-Rust is ideal for many people for a variety of reasons. Let’s look at a few of
-the most important groups.
+নানা কারণে অনেক ধরনের মানুষের জন্যই Rust আদর্শ। চলুন, এদের মধ্যে সবচেয়ে
+গুরুত্বপূর্ণ কয়েকটি দলের কথা দেখা যাক।
 
-### Teams of Developers
+### ডেভেলপারদের দল {#teams-of-developers}
 
-Rust is proving to be a productive tool for collaborating among large teams of
-developers with varying levels of systems programming knowledge. Low-level code
-is prone to various subtle bugs, which in most other languages can only be
-caught through extensive testing and careful code review by experienced
-developers. In Rust, the compiler plays a gatekeeper role by refusing to
-compile code with these elusive bugs, including concurrency bugs. By working
-alongside the compiler, the team can spend its time focusing on the program’s
-logic rather than chasing down bugs.
+systems programming-এ নানা মাত্রার জ্ঞান থাকা ডেভেলপারদের বড় বড় দলের একসঙ্গে
+কাজ করার জন্য Rust একটি কার্যকর টুল হিসেবে প্রমাণিত হচ্ছে। low-level কোডে
+নানা ধরনের সূক্ষ্ম বাগ ঢুকে পড়ার প্রবণতা থাকে; বেশিরভাগ ভাষায় এগুলো ধরা যায়
+কেবল ব্যাপক testing (পরীক্ষা) আর অভিজ্ঞ ডেভেলপারদের সতর্ক কোড রিভিউয়ের
+মাধ্যমে। Rust-এ compiler দারোয়ানের ভূমিকা পালন করে: এ ধরনের ধরা-কঠিন বাগ
+থাকলে, এমনকি concurrency (একসঙ্গে একাধিক কাজ সামলানো)-সংক্রান্ত বাগ থাকলেও,
+সে কোড compile (সংকলন) করতে রাজি হয় না। compiler-এর সঙ্গে মিলে কাজ করলে দলটি
+বাগের পেছনে ছোটার বদলে প্রোগ্রামের মূল যুক্তিতে মনোযোগ দিতে পারে।
 
-Rust also brings contemporary developer tools to the systems programming world:
+Rust systems programming-এর জগতে আধুনিক ডেভেলপার টুলও নিয়ে এসেছে:
 
-- Cargo, the included dependency manager and build tool, makes adding,
-  compiling, and managing dependencies painless and consistent across the Rust
-  ecosystem.
-- The `rustfmt` formatting tool ensures a consistent coding style across
-  developers.
-- The Rust Language Server powers integrated development environment (IDE)
-  integration for code completion and inline error messages.
+- Cargo হলো Rust-এর সঙ্গেই আসা dependency manager ও build tool (কোড বিল্ড ও
+  সংকলনের টুল)। dependency (নির্ভরতা, অর্থাৎ যে লাইব্রেরির ওপর কোড নির্ভর করে)
+  যোগ করা, compile করা ও সামলানোর কাজ এটি ঝামেলাহীন করে, আর পুরো Rust
+  ইকোসিস্টেমে কাজটি একই নিয়মে চলে।
+- `rustfmt` ফরম্যাটিং টুলটি সব ডেভেলপারের কোডের লেখার ধরন একই রকম রাখে।
+- Rust Language Server-এর সাহায্যে integrated development environment
+  (IDE)-এ code completion আর কোডের লাইনের পাশেই error message দেখানোর সুবিধা
+  পাওয়া যায়।
 
-By using these and other tools in the Rust ecosystem, developers can be
-productive while writing systems-level code.
+এসব টুল এবং Rust ইকোসিস্টেমের অন্যান্য টুল ব্যবহার করে ডেভেলপাররা সিস্টেম-স্তরের
+কোড লেখার সময়ও বেশ দক্ষতার সঙ্গে কাজ করতে পারেন।
 
-### Students
+### শিক্ষার্থী {#students}
 
-Rust is for students and those who are interested in learning about systems
-concepts. Using Rust, many people have learned about topics like operating
-systems development. The community is very welcoming and happy to answer
-students’ questions. Through efforts such as this book, the Rust teams want to
-make systems concepts more accessible to more people, especially those new to
-programming.
+Rust শিক্ষার্থীদের জন্য, এবং তাদের জন্যও যারা systems-এর ধারণাগুলো শিখতে
+আগ্রহী। Rust ব্যবহার করে অনেকেই অপারেটিং সিস্টেম তৈরির মতো বিষয় শিখেছেন।
+কমিউনিটি খুবই আন্তরিক, আর শিক্ষার্থীদের প্রশ্নের উত্তর দিতে সবাই আগ্রহী। এই
+বইয়ের মতো নানা উদ্যোগের মাধ্যমে Rust-এর দলগুলো systems-এর ধারণাগুলো আরও বেশি
+মানুষের কাছে সহজ করে তুলতে চায়, বিশেষ করে যারা প্রোগ্রামিংয়ে নতুন।
 
-### Companies
+### কোম্পানি {#companies}
 
-Hundreds of companies, large and small, use Rust in production for a variety of
-tasks, including command line tools, web services, DevOps tooling, embedded
-devices, audio and video analysis and transcoding, cryptocurrencies,
-bioinformatics, search engines, Internet of Things applications, machine
-learning, and even major parts of the Firefox web browser.
+ছোট-বড় শত শত কোম্পানি production-এ, অর্থাৎ বাস্তব পণ্য ও সেবায়, নানা কাজে
+Rust ব্যবহার করে: কমান্ড লাইন টুল, ওয়েব সার্ভিস, DevOps টুল, এমবেডেড ডিভাইস,
+অডিও ও ভিডিও বিশ্লেষণ ও রূপান্তর, ক্রিপ্টোকারেন্সি, বায়োইনফরমেটিক্স, সার্চ
+ইঞ্জিন, Internet of Things অ্যাপ্লিকেশন, মেশিন লার্নিং, এমনকি Firefox ওয়েব
+ব্রাউজারের বড় বড় অংশও।
 
-### Open Source Developers
+### ওপেন সোর্স ডেভেলপার {#open-source-developers}
 
-Rust is for people who want to build the Rust programming language, community,
-developer tools, and libraries. We’d love to have you contribute to the Rust
-language.
+Rust তাদের জন্য, যারা Rust প্রোগ্রামিং ভাষা, এর কমিউনিটি, ডেভেলপার টুল আর
+library গড়ে তুলতে চান। Rust ভাষায় আপনার অবদান পেলে আমরা খুবই খুশি হব।
 
-### People Who Value Speed and Stability
+### যারা গতি ও স্থিতিশীলতাকে মূল্য দেন {#people-who-value-speed-and-stability}
 
-Rust is for people who crave speed and stability in a language. By speed, we
-mean both how quickly Rust code can run and the speed at which Rust lets you
-write programs. The Rust compiler’s checks ensure stability through feature
-additions and refactoring. This is in contrast to the brittle legacy code in
-languages without these checks, which developers are often afraid to modify. By
-striving for zero-cost abstractions—higher-level features that compile to
-lower-level code as fast as code written manually—Rust endeavors to make safe
-code be fast code as well.
+Rust তাদের জন্য, যারা একটি ভাষায় গতি আর স্থিতিশীলতা চান। গতি বলতে আমরা দুটো
+জিনিস বোঝাই: Rust কোড কত দ্রুত চলে, আর Rust দিয়ে কত দ্রুত প্রোগ্রাম লেখা যায়।
+নতুন বৈশিষ্ট্য যোগ করা বা refactoring (আচরণ না বদলে কোড পুনর্গঠন) করার সময়ও
+Rust compiler-এর যাচাইগুলো প্রোগ্রামকে স্থিতিশীল রাখে। যেসব ভাষায় এ ধরনের
+যাচাই নেই, সেখানকার ভঙ্গুর পুরোনো কোডের সঙ্গে এখানেই পার্থক্য; সেসব কোডে হাত
+দিতে ডেভেলপাররা প্রায়ই ভয় পান। Rust লক্ষ্য রাখে zero-cost abstraction (বাড়তি খরচ ছাড়া
+উচ্চ-স্তরের সুবিধা)-এর দিকে—অর্থাৎ এমন high-level সুবিধা, যা compile হয়ে হাতে
+লেখা low-level কোডের মতোই দ্রুত কোডে পরিণত হয়। এভাবে Rust নিরাপদ কোডকে দ্রুত
+কোডও করে তুলতে চায়।
 
-The Rust language hopes to support many other users as well; those mentioned
-here are merely some of the biggest stakeholders. Overall, Rust’s greatest
-ambition is to eliminate the trade-offs that programmers have accepted for
-decades by providing safety _and_ productivity, speed _and_ ergonomics. Give
-Rust a try, and see if its choices work for you.
+Rust আরও অনেক ধরনের ব্যবহারকারীর কাজে আসতে চায়; এখানে যাদের কথা বলা হলো,
+তারা কেবল সবচেয়ে বড় অংশীজনদের কয়েকজন। সব মিলিয়ে Rust-এর সবচেয়ে বড় লক্ষ্য হলো
+নিরাপত্তা _এবং_ উৎপাদনশীলতা, গতি _এবং_ ব্যবহার-স্বাচ্ছন্দ্য একসঙ্গে দিয়ে সেই
+আপসগুলো দূর করা, যেগুলো প্রোগ্রামাররা দশকের পর দশক মেনে নিয়ে এসেছেন। Rust
+একবার ব্যবহার করে দেখুন, এর বেছে নেওয়া পথগুলো আপনার কাজে মেলে কি না।
 
-## Who This Book Is For
+## এই বই কাদের জন্য {#who-this-book-is-for}
 
-This book assumes that you’ve written code in another programming language, but
-it doesn’t make any assumptions about which one. We’ve tried to make the
-material broadly accessible to those from a wide variety of programming
-backgrounds. We don’t spend a lot of time talking about what programming _is_
-or how to think about it. If you’re entirely new to programming, you would be
-better served by reading a book that specifically provides an introduction to
-programming.
+এই বই ধরে নেয় যে আপনি আগে অন্য কোনো প্রোগ্রামিং ভাষায় কোড লিখেছেন, তবে সেটি
+কোন ভাষা, তা নিয়ে কিছু ধরে নেয় না। আমরা চেষ্টা করেছি বিষয়বস্তু এমনভাবে লিখতে,
+যাতে নানা ধরনের প্রোগ্রামিং পটভূমি থেকে আসা পাঠকেরা সহজে বুঝতে পারেন।
+প্রোগ্রামিং আসলে _কী_, বা প্রোগ্রামিং নিয়ে কীভাবে ভাবতে হয়, তা নিয়ে আমরা বেশি
+সময় ব্যয় করিনি। আপনি যদি প্রোগ্রামিংয়ে একেবারেই নতুন হন, তাহলে বিশেষভাবে
+প্রোগ্রামিং শেখানোর জন্য লেখা কোনো বই পড়লে বেশি উপকার পাবেন।
 
-## How to Use This Book
+## এই বই কীভাবে পড়বেন {#how-to-use-this-book}
 
-In general, this book assumes that you’re reading it in sequence from front to
-back. Later chapters build on concepts in earlier chapters, and earlier
-chapters might not delve into details on a particular topic but will revisit
-the topic in a later chapter.
+সাধারণভাবে এই বই ধরে নেয় যে আপনি শুরু থেকে শেষ পর্যন্ত ক্রমানুসারে পড়ছেন।
+পরের অধ্যায়গুলো আগের অধ্যায়ের ধারণার ওপর দাঁড়িয়ে আছে। কোনো বিষয় প্রথমবার
+আসার সময় হয়তো তার খুঁটিনাটিতে যাওয়া হয়নি; পরের কোনো অধ্যায়ে সেই বিষয়ে আবার
+ফিরে আসা হবে।
 
-You’ll find two kinds of chapters in this book: concept chapters and project
-chapters. In concept chapters, you’ll learn about an aspect of Rust. In project
-chapters, we’ll build small programs together, applying what you’ve learned so
-far. Chapter 2, Chapter 12, and Chapter 21 are project chapters; the rest are
-concept chapters.
+এই বইয়ে দুই ধরনের অধ্যায় পাবেন: ধারণামূলক অধ্যায় আর প্রজেক্ট অধ্যায়।
+ধারণামূলক অধ্যায়ে Rust-এর কোনো একটি দিক সম্পর্কে শিখবেন। প্রজেক্ট অধ্যায়ে আমরা
+একসঙ্গে ছোট ছোট প্রোগ্রাম বানাব, এ পর্যন্ত যা শিখেছেন তা কাজে লাগিয়ে। অধ্যায়
+2, অধ্যায় 12 আর অধ্যায় 21 প্রজেক্ট অধ্যায়; বাকিগুলো ধারণামূলক।
 
-**Chapter 1** explains how to install Rust, how to write a “Hello, world!”
-program, and how to use Cargo, Rust’s package manager and build tool. **Chapter
-2** is a hands-on introduction to writing a program in Rust, having you build
-up a number-guessing game. Here, we cover concepts at a high level, and later
-chapters will provide additional detail. If you want to get your hands dirty
-right away, Chapter 2 is the place for that. If you’re a particularly
-meticulous learner who prefers to learn every detail before moving on to the
-next, you might want to skip Chapter 2 and go straight to **Chapter 3**, which
-covers Rust features that are similar to those of other programming languages;
-then, you can return to Chapter 2 when you’d like to work on a project applying
-the details you’ve learned.
+**অধ্যায় 1**-এ দেখানো হয়েছে কীভাবে Rust ইনস্টল করবেন, কীভাবে একটি “Hello,
+world!” প্রোগ্রাম লিখবেন, আর কীভাবে Rust-এর package manager ও build tool
+Cargo ব্যবহার করবেন। **অধ্যায়
+2** হাতে-কলমে Rust প্রোগ্রাম লেখার সঙ্গে পরিচয়: এখানে আপনি একটি সংখ্যা
+আন্দাজ করার খেলা বানাবেন। এখানে আমরা ধারণাগুলো ওপর-ওপর দেখব, আর পরের
+অধ্যায়গুলোতে বিস্তারিত থাকবে। এখনই হাত লাগিয়ে কাজ শুরু করতে চাইলে অধ্যায় 2
+আপনার জন্য। আর আপনি যদি এমন শিক্ষার্থী হন, যিনি পরের ধাপে যাওয়ার আগে প্রতিটি
+খুঁটিনাটি জেনে নিতে চান, তাহলে অধ্যায় 2 বাদ দিয়ে সরাসরি **অধ্যায় 3**-এ যেতে
+পারেন; সেখানে Rust-এর এমন বৈশিষ্ট্যগুলো আছে, যেগুলো অন্যান্য প্রোগ্রামিং
+ভাষার মতোই। তারপর শেখা খুঁটিনাটি কাজে লাগিয়ে কোনো প্রজেক্ট করতে চাইলে অধ্যায়
+2-এ ফিরে আসতে পারেন।
 
-In **Chapter 4**, you’ll learn about Rust’s ownership system. **Chapter 5**
-discusses structs and methods. **Chapter 6** covers enums, `match` expressions,
-and the `if let` and `let...else` control flow constructs. You’ll use structs
-and enums to make custom types.
+**অধ্যায় 4**-এ শিখবেন Rust-এর ownership ব্যবস্থা। **অধ্যায় 5**-এ আলোচনা
+করা হয়েছে struct আর method নিয়ে। **অধ্যায় 6**-এ আছে enum, `match`
+expression, আর `if let` ও `let...else` control flow কাঠামো। struct আর enum
+ব্যবহার করে আপনি নিজের type বানাবেন।
 
-In **Chapter 7**, you’ll learn about Rust’s module system and about privacy
-rules for organizing your code and its public application programming interface
-(API). **Chapter 8** discusses some common collection data structures that the
-standard library provides: vectors, strings, and hash maps. **Chapter 9**
-explores Rust’s error-handling philosophy and techniques.
+**অধ্যায় 7**-এ শিখবেন Rust-এর module ব্যবস্থা, আর আপনার কোড এবং এর public
+application programming interface (API) গুছিয়ে রাখার জন্য privacy-র নিয়মগুলো।
+**অধ্যায় 8**-এ আলোচনা করা হয়েছে standard library-র দেওয়া কয়েকটি বহুল ব্যবহৃত
+collection data structure নিয়ে: vector, string আর hash map। **অধ্যায় 9**-এ
+দেখা হয়েছে error handling নিয়ে Rust-এর দর্শন ও কৌশল।
 
-**Chapter 10** digs into generics, traits, and lifetimes, which give you the
-power to define code that applies to multiple types. **Chapter 11** is all
-about testing, which even with Rust’s safety guarantees is necessary to ensure
-that your program’s logic is correct. In **Chapter 12**, we’ll build our own
-implementation of a subset of functionality from the `grep` command line tool
-that searches for text within files. For this, we’ll use many of the concepts
-we discussed in the previous chapters.
+**অধ্যায় 10** গভীরে গিয়ে দেখায় generics, trait আর lifetime, যেগুলো দিয়ে
+একাধিক type-এর জন্য খাটে এমন কোড লেখা যায়। **অধ্যায় 11** পুরোটাই testing
+নিয়ে; Rust-এর নিরাপত্তার নিশ্চয়তা থাকা সত্ত্বেও প্রোগ্রামের যুক্তি ঠিক আছে কি
+না, তা নিশ্চিত করতে testing দরকার। **অধ্যায় 12**-এ আমরা ফাইলের ভেতরে লেখা
+খুঁজে দেওয়া `grep` কমান্ড লাইন টুলের কিছু কাজ নিজেরা বানাব। এর জন্য আগের
+অধ্যায়গুলোতে আলোচিত অনেক ধারণা কাজে লাগাব।
 
-**Chapter 13** explores closures and iterators: features of Rust that come from
-functional programming languages. In **Chapter 14**, we’ll examine Cargo in
-more depth and talk about best practices for sharing your libraries with
-others. **Chapter 15** discusses smart pointers that the standard library
-provides and the traits that enable their functionality.
+**অধ্যায় 13**-এ আছে closure আর iterator: Rust-এর এমন বৈশিষ্ট্য, যা এসেছে
+functional programming ভাষাগুলো থেকে। **অধ্যায় 14**-এ আমরা Cargo-কে আরও
+গভীরভাবে দেখব, আর নিজের library অন্যদের সঙ্গে ভাগ করে নেওয়ার ভালো চর্চাগুলো নিয়ে
+কথা বলব। **অধ্যায় 15**-এ আলোচনা করা হয়েছে standard library-র দেওয়া smart
+pointer আর সেগুলোর কাজ সম্ভব করে তোলা trait নিয়ে।
 
-In **Chapter 16**, we’ll walk through different models of concurrent
-programming and talk about how Rust helps you program in multiple threads
-fearlessly. In **Chapter 17**, we build on that by exploring Rust’s async and
-await syntax, along with tasks, futures, and streams, and the lightweight
-concurrency model they enable.
+**অধ্যায় 16**-এ আমরা concurrent programming-এর নানা মডেল ঘুরে দেখব, আর Rust
+কীভাবে আপনাকে নির্ভয়ে একাধিক thread-এ প্রোগ্রাম লিখতে সাহায্য করে, তা নিয়ে
+কথা বলব। **অধ্যায় 17**-এ তার ওপর ভিত্তি করে দেখব Rust-এর async আর await
+syntax, সঙ্গে task, future আর stream, এবং এগুলো যে হালকা ধরনের concurrency
+মডেল সম্ভব করে, সেটি।
 
-**Chapter 18** looks at how Rust idioms compare to object-oriented programming
-principles you might be familiar with. **Chapter 19** is a reference on
-patterns and pattern matching, which are powerful ways of expressing ideas
-throughout Rust programs. **Chapter 20** contains a smorgasbord of advanced
-topics of interest, including unsafe Rust, macros, and more about lifetimes,
-traits, types, functions, and closures.
+**অধ্যায় 18**-এ দেখা হয়েছে, আপনার হয়তো পরিচিত object-oriented programming-এর
+নীতিগুলোর তুলনায় Rust-এর idiom কেমন। **অধ্যায় 19** pattern আর pattern
+matching-এর একটি রেফারেন্স; Rust প্রোগ্রামের সবখানে ভাবনা প্রকাশের জন্য এগুলো
+শক্তিশালী উপায়। **অধ্যায় 20**-এ আছে নানা উন্নত বিষয়ের পাঁচমিশালি সংগ্রহ: unsafe
+Rust, macro, আর lifetime, trait, type, function ও closure নিয়ে আরও আলোচনা।
 
-In **Chapter 21**, we’ll complete a project in which we’ll implement a
-low-level multithreaded web server!
+**অধ্যায় 21**-এ আমরা একটি প্রজেক্ট শেষ করব, যেখানে একটি low-level
+multithreaded ওয়েব সার্ভার বানাব!
 
-Finally, some appendixes contain useful information about the language in a
-more reference-like format. **Appendix A** covers Rust’s keywords, **Appendix
-B** covers Rust’s operators and symbols, **Appendix C** covers derivable traits
-provided by the standard library, **Appendix D** covers some useful development
-tools, and **Appendix E** explains Rust editions. In **Appendix F**, you can
-find translations of the book, and in **Appendix G** we’ll cover how Rust is
-made and what nightly Rust is.
+সবশেষে, কয়েকটি পরিশিষ্টে ভাষাটি সম্পর্কে দরকারি তথ্য রেফারেন্সের ধাঁচে দেওয়া
+আছে। **পরিশিষ্ট A**-তে আছে Rust-এর keyword, **পরিশিষ্ট
+B**-তে Rust-এর operator ও প্রতীক, **পরিশিষ্ট C**-তে standard library-র দেওয়া
+derivable trait, **পরিশিষ্ট D**-তে কিছু কাজের ডেভেলপমেন্ট টুল, আর **পরিশিষ্ট
+E**-তে Rust-এর edition-এর ব্যাখ্যা। **পরিশিষ্ট F**-এ পাবেন বইটির বিভিন্ন
+অনুবাদ, আর **পরিশিষ্ট G**-তে দেখব Rust কীভাবে তৈরি হয় এবং nightly Rust কী।
 
-There is no wrong way to read this book: If you want to skip ahead, go for it!
-You might have to jump back to earlier chapters if you experience any
-confusion. But do whatever works for you.
+এই বই পড়ার কোনো ভুল পদ্ধতি নেই: সামনে এগিয়ে যেতে চাইলে নির্দ্বিধায় যান!
+কোথাও গুলিয়ে গেলে হয়তো আগের অধ্যায়ে ফিরে আসতে হবে। তবে আপনার জন্য যেটা
+সুবিধাজনক, সেটাই করুন।
 
 <span id="ferris"></span>
 
-An important part of the process of learning Rust is learning how to read the
-error messages the compiler displays: These will guide you toward working code.
-As such, we’ll provide many examples that don’t compile along with the error
-message the compiler will show you in each situation. Know that if you enter
-and run a random example, it may not compile! Make sure you read the
-surrounding text to see whether the example you’re trying to run is meant to
-error. In most situations, we’ll lead you to the correct version of any code
-that doesn’t compile. Ferris will also help you distinguish code that isn’t
-meant to work:
+Rust শেখার একটি গুরুত্বপূর্ণ অংশ হলো compiler-এর দেখানো error message পড়তে
+শেখা: এগুলোই আপনাকে কাজ করে এমন কোডের দিকে নিয়ে যাবে। তাই আমরা এমন অনেক
+উদাহরণ দেব, যেগুলো compile হয় না, আর প্রতিটি ক্ষেত্রে compiler কোন error
+message দেখায়, তাও দেখাব। মনে রাখবেন, যেকোনো একটি উদাহরণ তুলে নিয়ে চালালে
+সেটি compile না-ও হতে পারে! যে উদাহরণ চালানোর চেষ্টা করছেন, সেটি ইচ্ছে করেই
+error দেওয়ার জন্য লেখা কি না, তা বুঝতে আশেপাশের লেখাটুকু পড়ে নিন। বেশিরভাগ
+ক্ষেত্রে, compile হয় না এমন কোডের সঠিক রূপটিও আমরা আপনাকে দেখিয়ে দেব। কোন
+কোড কাজ করার কথা নয়, তা চিনতে Ferris-ও আপনাকে সাহায্য করবে:
 
-| Ferris                                                                                                           | Meaning                                          |
-| ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| <img src="img/ferris/does_not_compile.svg" class="ferris-explain" alt="Ferris with a question mark"/>            | This code does not compile!                      |
-| <img src="img/ferris/panics.svg" class="ferris-explain" alt="Ferris throwing up their hands"/>                   | This code panics!                                |
-| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain" alt="Ferris with one claw up, shrugging"/> | This code does not produce the desired behavior. |
+| Ferris                                                                                                    | অর্থ                                             |
+| --------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| <img src="img/ferris/does_not_compile.svg" class="ferris-explain" alt="প্রশ্নবোধক চিহ্নসহ Ferris"/>         | এই কোড compile হয় না!                           |
+| <img src="img/ferris/panics.svg" class="ferris-explain" alt="হতাশায় দুই হাত তুলে ধরা Ferris"/>            | এই কোড panic (প্রোগ্রামের হঠাৎ থেমে যাওয়া) করে! |
+| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain" alt="এক দাঁড়া তুলে কাঁধ ঝাঁকানো Ferris"/> | এই কোড প্রত্যাশিত আচরণ করে না।                  |
 
-In most situations, we’ll lead you to the correct version of any code that
-doesn’t compile.
+বেশিরভাগ ক্ষেত্রে, compile হয় না এমন কোডের সঠিক রূপটিও আমরা আপনাকে দেখিয়ে
+দেব।
 
-## Source Code
+## সোর্স কোড {#source-code}
 
-The source files from which this book is generated can be found on
-[GitHub][book].
+যেসব সোর্স ফাইল থেকে এই বই তৈরি হয়, সেগুলো [GitHub][book]-এ পাওয়া যাবে।
 
 [book]: https://github.com/rust-lang/book/tree/main/src

@@ -1,9 +1,9 @@
 [[questions]]
 id = "d172fc53-0220-4ff4-83c9-9c0a6834dd8e"
 type = "MultipleChoice"
-prompt.prompt = "What is 1 + 1? (Try clicking a wrong answer.)"
+prompt.prompt = "1 + 1 কত? (একটি ভুল উত্তরে ক্লিক করে দেখুন।)"
 answer.answer = "2"
 prompt.distractors = [ "0", "-999", "11" ]
 context = """
-See *Principia Mathematica* for an explanation of this fact.
+এই সত্যের ব্যাখ্যা জানতে *Principia Mathematica* দেখুন।
 """

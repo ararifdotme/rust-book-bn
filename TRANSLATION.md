@@ -84,11 +84,15 @@ those, translate the heading (with a pinned ID) and the body.
 ```
 
 - `number` and `file-name`: never change.
-- `caption`: this is reader-visible prose and is the one attribute that **is**
-  translated. Code spans inside it stay as code. The tool adds the English
-  "Listing 1-1:" prefix itself.
+- `caption`: this is reader-visible prose and **is** translated. Code spans
+  inside it stay as code. The tool adds the English "Listing 1-1:" prefix
+  itself.
 - `<span class="filename">Filename: src/main.rs</span>`: keep as is (it matches
   the "Filename:" text the Listing tool generates).
+
+**Image alt text:** `alt="..."` on `<img>` is translated, because screen
+readers read it aloud. `src`, `class` and every other attribute stay as they
+are. (`caption` on `<Listing>` and `alt` are the only attributes translated.)
 
 **Code blocks:** ```` ```rust ````, ```` ```console ````, ```` ```text ````,
 ```` ```toml ````, ```` ```cmd ````, ```` ```powershell ```` etc. are never
@@ -132,6 +136,82 @@ tested with this repo's build.
 
 | English term | Form we use | Bengali gloss | First chapter it appears in |
 | --- | --- | --- | --- |
+| API | API | প্রোগ্রামিং ইন্টারফেস | 0 |
+| async / await | async / await | অ্যাসিঙ্ক্রোনাস প্রোগ্রামিংয়ের সিনট্যাক্স | 0 |
+| build tool | build tool | কোড বিল্ড ও সংকলনের টুল | 0 |
+| closure | closure | পারিপার্শ্বিক মান ধরে রাখতে পারে এমন নামহীন function | 0 |
+| collection | collection | একাধিক মান রাখার কাঠামো | 0 |
+| compile | compile করা | সংকলন করা | 0 |
+| compile time | compile time | সংকলনের সময় | 0 |
+| compiler | compiler | সংকলক | 0 |
+| concurrency | concurrency | একসঙ্গে একাধিক কাজ সামলানো | 0 |
+| control flow | control flow | কোড চলার ক্রম নিয়ন্ত্রণ | 0 |
+| data structure | data structure | ডেটা সাজানোর কাঠামো | 0 |
+| dependency | dependency | নির্ভরতা (যে লাইব্রেরির ওপর কোড নির্ভর করে) | 0 |
+| derivable trait | derivable trait | স্বয়ংক্রিয়ভাবে যুক্ত করা যায় এমন trait | 0 |
+| edition | edition | Rust-এর সংস্করণ-ধাপ | 0 |
+| enum | enum | কয়েকটি সম্ভাব্য রূপের একটি নিতে পারে এমন টাইপ | 0 |
+| error handling | error handling | ত্রুটি সামলানো | 0 |
+| expression | expression | মান তৈরি করে এমন কোড-অংশ | 0 |
+| function | function | ফাংশন | 0 |
+| functional programming | functional programming | ফাংশনভিত্তিক প্রোগ্রামিং | 0 |
+| future | future | ভবিষ্যতে পাওয়া যাবে এমন মান | 0 |
+| generics | generics | একাধিক টাইপের জন্য একই কোড | 0 |
+| hash map | hash map | key-value জোড়ার তালিকা | 0 |
+| high-level | high-level | উচ্চ-স্তরের | 0 |
+| idiom | idiom | Rust-এর প্রচলিত লেখার ধরন | 0 |
+| iterator | iterator | একটির পর একটি উপাদান দেয় এমন বস্তু | 0 |
+| keyword | keyword | ভাষার সংরক্ষিত শব্দ | 0 |
+| library | library | লাইব্রেরি | 0 |
+| lifetime | lifetime | reference কতক্ষণ বৈধ থাকে | 0 |
+| low-level | low-level | নিম্ন-স্তরের | 0 |
+| macro | macro | কোড তৈরি করে এমন কোড | 0 |
+| memory safety | memory safety | মেমোরি-নিরাপত্তা | 0 |
+| method | method | টাইপের সঙ্গে যুক্ত function | 0 |
+| module | module | কোডের অংশ ভাগ করার একক | 0 |
+| multithreaded | multithreaded | একাধিক thread-যুক্ত | 0 |
+| nightly Rust | nightly Rust | প্রতি রাতে তৈরি পরীক্ষামূলক সংস্করণ | 0 |
+| object-oriented programming | object-oriented programming | অবজেক্টভিত্তিক প্রোগ্রামিং | 0 |
+| operator | operator | অপারেটর-চিহ্ন | 0 |
+| ownership | ownership | মালিকানা | 0 |
+| package manager | package manager | প্যাকেজ ব্যবস্থাপক | 0 |
+| panic | panic | প্রোগ্রামের হঠাৎ থেমে যাওয়া | 0 |
+| pattern | pattern | মানের গঠনের নকশা | 0 |
+| pattern matching | pattern matching | নকশার সঙ্গে মেলানো | 0 |
+| privacy | privacy | গোপনীয়তা (কে কী দেখতে পারবে) | 0 |
+| refactoring | refactoring | আচরণ না বদলে কোড পুনর্গঠন | 0 |
+| runtime | runtime | প্রোগ্রাম চলার সময় | 0 |
+| Rustacean | Rustacean | Rust প্রোগ্রামার | 0 |
+| smart pointer | smart pointer | অতিরিক্ত ক্ষমতাসম্পন্ন pointer | 0 |
+| standard library | standard library | আদর্শ লাইব্রেরি | 0 |
+| stream | stream | ধারাবাহিক মানের প্রবাহ | 0 |
+| string | string | লেখা (টেক্সট) | 0 |
+| struct | struct | নিজস্ব গঠনের ডেটা টাইপ | 0 |
+| syntax | syntax | ভাষার লিখনরীতি | 0 |
+| systems programming | systems programming | সিস্টেম-স্তরের প্রোগ্রামিং | 0 |
+| task | task | কাজ | 0 |
+| testing | testing | পরীক্ষা ("test লেখা") | 0 |
+| thread | thread | প্রোগ্রামের ভেতরের আলাদা কাজের ধারা | 0 |
+| trait | trait | টাইপের সাধারণ আচরণের সংজ্ঞা | 0 |
+| type | type | ডেটার ধরন | 0 |
+| unsafe Rust | unsafe Rust | নিরাপত্তা-যাচাই শিথিল করা Rust | 0 |
+| vector | vector | পরিবর্তনশীল দৈর্ঘ্যের তালিকা | 0 |
+| zero-cost abstraction | zero-cost abstraction | বাড়তি খরচ ছাড়া উচ্চ-স্তরের সুবিধা | 0 |
+
+### Everyday computing words
+
+These are written in Bengali script because a common Bengali form exists.
+Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
+
+| English | Form we use | First chapter it appears in |
+| --- | --- | --- |
+| bug | বাগ | 0 |
+| command line | কমান্ড লাইন | 0 |
+| cookie | কুকি | 0 |
+| ecosystem | ইকোসিস্টেম | 0 |
+| highlight | হাইলাইট | 0 |
+| open source | ওপেন সোর্স | 0 |
+| quiz | কুইজ | 0 |
 
 ## Progress
 
@@ -143,7 +223,7 @@ commit `88250e0392cef0622f318e35469108d68694c1f7`
 Each line covers the chapter's `.md` files and the quizzes and listings they
 use.
 
-- [ ] Chapter 0: Front matter (experiment-intro, title-page, foreword, ch00-00-introduction)
+- [x] Chapter 0: Front matter (experiment-intro, title-page, foreword, ch00-00-introduction)
 - [ ] Chapter 1: Getting Started (ch01-*)
 - [ ] Chapter 2: Programming a Guessing Game (ch02-*)
 - [ ] Chapter 3: Common Programming Concepts (ch03-*)

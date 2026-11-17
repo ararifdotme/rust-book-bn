@@ -1,23 +1,24 @@
-# The Rust Programming Language
+# Rust প্রোগ্রামিং ভাষা {#the-rust-programming-language}
 
-*by Steve Klabnik, Carol Nichols, and Chris Krycho, with contributions from the Rust Community*
+*লেখক: Steve Klabnik, Carol Nichols ও Chris Krycho; সঙ্গে Rust কমিউনিটির অবদান*
 
-*(and with experimental modifications!)*
+*(আর সঙ্গে কিছু পরীক্ষামূলক পরিবর্তনও!)*
 
-This version of the text assumes you’re using Rust 1.90.0 (released 2025-09-18)
-or later with `edition = "2024"` in the *Cargo.toml* file of all projects to
-configure them to use Rust 2024 Edition idioms. See the [“Installation” section
-of Chapter 1][install]<!-- ignore --> for instructions on installing or
-updating Rust, and see [Appendix E][appendix-e]<!-- ignore --> for information
-on editions.
+এই বই ধরে নেয় যে আপনি Rust 1.90.0 (প্রকাশ: 2025-09-18) বা তার
+পরের কোনো সংস্করণ ব্যবহার করছেন, এবং প্রতিটি প্রজেক্টের *Cargo.toml* ফাইলে
+`edition = "2024"` লিখে প্রজেক্টগুলোকে Rust 2024 edition (Rust-এর
+সংস্করণ-ধাপ)-এর idiom (Rust-এর প্রচলিত লেখার ধরন) মেনে চলার জন্য সেট করেছেন।
+Rust ইনস্টল বা আপডেট করার নির্দেশনা পাবেন [অধ্যায় 1-এর “ইনস্টলেশন”
+অংশে][install]<!-- ignore -->, আর edition সম্পর্কে জানতে দেখুন
+[পরিশিষ্ট E][appendix-e]<!-- ignore -->।
 
-The experimental version is only available online and in English. 
-The non-experimental version is available offline with installations of Rust made with `rustup`; run `rustup doc
---book` to open.
+পরীক্ষামূলক সংস্করণটি শুধু অনলাইনে এবং ইংরেজিতে পাওয়া যায়; আপনি এখন যেটি পড়ছেন, সেটি তার একটি অনানুষ্ঠানিক বাংলা অনুবাদ। 
+পরীক্ষামূলক নয় এমন মূল সংস্করণটি `rustup` দিয়ে Rust ইনস্টল করলে অফলাইনেও পাওয়া যায়; খুলতে চালান `rustup doc
+--book`।
 
-Several community [translations] of the non-experimental version are also available.
-The non-experimental text is available in [paperback and ebook format from No Starch
-Press][nsprust].
+মূল সংস্করণের কমিউনিটির করা কয়েকটি [অনুবাদ][translations]ও পাওয়া যায়।
+মূল সংস্করণটি No Starch Press থেকে [ছাপা বই ও ই-বুক আকারেও][nsprust]
+পাওয়া যায়।
 
 [install]: ch01-01-installation.html
 [appendix-e]: appendix-05-editions.html
