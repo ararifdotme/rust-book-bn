@@ -1,10 +1,27 @@
-# The Rust Programming Language
+# Rust প্রোগ্রামিং ভাষা (বাংলা অনুবাদ)
 
-![Build Status](https://github.com/rust-lang/book/workflows/CI/badge.svg)
+এটি *The Rust Programming Language* বইয়ের ইন্টারঅ্যাকটিভ সংস্করণের একটি
+**অনানুষ্ঠানিক বাংলা অনুবাদ**। মূল বইটি Brown University-র Cognitive
+Engineering Lab-এর
+[cognitive-engineering-lab/rust-book](https://github.com/cognitive-engineering-lab/rust-book)
+(অনলাইনে: <https://rust-book.cs.brown.edu/>), যা আবার Rust প্রজেক্টের
+[rust-lang/book](https://github.com/rust-lang/book) থেকে তৈরি। এই অনুবাদ Rust
+প্রজেক্ট বা Brown University-র কোনো অফিসিয়াল প্রকাশনা নয়।
+
+মূল লাইসেন্স অপরিবর্তিত আছে: বইটি [MIT](LICENSE-MIT) এবং
+[Apache-2.0](LICENSE-APACHE) লাইসেন্সের অধীনে (বিস্তারিত [COPYRIGHT](COPYRIGHT)
+ফাইলে)। অনুবাদের নিয়ম, শব্দকোষ আর অগ্রগতি দেখুন [TRANSLATION.md](TRANSLATION.md)-এ।
+
+*This is an unofficial Bengali translation of the
+[interactive Rust book](https://github.com/cognitive-engineering-lab/rust-book).
+The original MIT / Apache-2.0 licences are retained. Please report problems with
+the translation on this repository, not upstream.*
+
+---
+
+The rest of this README is the original upstream README.
 
 This repository contains the source of "The Rust Programming Language" book, specifically an experimental branch that supports interactive features like quizzes.
-
-**If you discovered an issue in at <https://rust-book.cs.brown.edu/>, PLEASE report the issue on THIS REPOSITORY and not elsewhere.**
 
 [The book is available in dead-tree form from No Starch Press][nostarch].
 
