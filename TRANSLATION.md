@@ -549,6 +549,19 @@ tested with this repo's build.
 | concurrency primitive | concurrency primitive | concurrency-র মৌলিক গঠন (যেমন mutex, atomic) | 16 |
 | atomic | atomic | অবিভাজ্যভাবে সম্পন্ন, thread-এর মধ্যে নিরাপদ | 16 |
 | marker trait | marker trait | method ছাড়া শুধু একটি বৈশিষ্ট্য চিহ্নিত করে এমন trait (`Send`, `Sync`) | 16 |
+| asynchronous programming (async) | asynchronous programming | সম্ভাব্য থামার জায়গা আর পরে পাওয়া ফলের ভাষায় কোড লেখা | 17 |
+| await (a future) | await করা | future প্রস্তুত হওয়ার জন্য অপেক্ষা করা | 17 |
+| polling | polling | future-এর মান পাওয়া যাচ্ছে কি না যাচাই করা | 17 |
+| await point | await point | যেখানে নিয়ন্ত্রণ runtime-এর হাতে ফেরে | 17 |
+| executor | executor | runtime-এর যে অংশ async কোড চালায় | 17 |
+| state machine | state machine | অবস্থা পরিবর্তনের যন্ত্র | 17 |
+| cooperative multitasking | cooperative multitasking | প্রতিটি কাজ নিজেই ঠিক করে কখন নিয়ন্ত্রণ ছাড়বে | 17 |
+| work stealing | work stealing | ব্যস্ততা অনুযায়ী task-কে thread থেকে thread-এ সরানো | 17 |
+| pin (`Pin`) / `Unpin` | pin করা / `Unpin` | মান মেমোরিতে সরতে না দেওয়া / সরানো নিরাপদ চিহ্ন | 17 |
+| self-referential type | self-referential type | নিজেকেই reference করে এমন type | 17 |
+| CPU-bound / I/O-bound | CPU-bound / I/O-bound | হিসাবের গতি / input-output-এর গতির ওপর নির্ভরশীল | 17 |
+| serial | serial | ক্রমানুসারী, একটির পর একটি | 17 |
+| blocking / non-blocking | blocking / non-blocking | অগ্রগতি আটকে রাখে / রাখে না এমন | 17 |
 
 ### Everyday computing words
 
@@ -660,7 +673,7 @@ use.
 - [x] Chapter 14: More about Cargo and Crates.io (ch14-*)
 - [x] Chapter 15: Smart Pointers (ch15-*)
 - [x] Chapter 16: Fearless Concurrency (ch16-*)
-- [ ] Chapter 17: Fundamentals of Asynchronous Programming: Async, Await, Futures, and Streams (ch17-*)
+- [x] Chapter 17: Fundamentals of Asynchronous Programming: Async, Await, Futures, and Streams (ch17-*)
 - [ ] Chapter 18: Object Oriented Programming Features (ch18-*)
 - [ ] Chapter 19: Patterns and Matching (ch19-*)
 - [ ] Chapter 20: Advanced Features (ch20-*)

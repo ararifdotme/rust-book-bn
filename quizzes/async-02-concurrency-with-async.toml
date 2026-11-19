@@ -1,7 +1,7 @@
 [[questions]]
 type = "MultipleChoice"
 prompt.prompt = """
-Consider the following function:
+নিচের function-টি বিবেচনা করুন:
 
 ```rust
 async fn print_letters() {
@@ -14,24 +14,24 @@ async fn print_letters() {
 }
 ```
 
-Which of the following strings can possibly be printed after running `print_letters().await`?
+`print_letters().await` চালানোর পর নিচের কোন string-গুলো print হতে পারে?
 """
 prompt.distractors = ["`ABC`", "`BCA`", "`ACB`"]
 answer.answer = ["`CBA`"]
 context = """
-This program has deterministic behavior. The prints do not execute until the async blocks are awaited.
-The blocks are awaited in the order `c`/`b`/`a`, so the program will only print `CBA`.
+এই প্রোগ্রামের আচরণ নির্ধারিত। async block-গুলোর জন্য await না করা পর্যন্ত print-গুলো চলে না।
+block-গুলোর জন্য await করা হয় `c`/`b`/`a` ক্রমে, তাই প্রোগ্রাম শুধু `CBA` print করবে।
 """
 id = "8f62c158-525a-43a2-aa6a-0cc106cada10"
 
 [[questions]]
 type = "MultipleChoice"
 prompt.prompt = """
-Say you are given a helper function `wait_all(a, b)` with the following behavior:
-* `wait_all` guarantees that `a` and `b` are executed to completion.
-* `wait_all` makes no guarantees regarding fairness or initial execution order.
+ধরুন আপনাকে এমন আচরণের একটি সহায়ক function `wait_all(a, b)` দেওয়া হলো:
+* `wait_all` নিশ্চয়তা দেয় যে `a` আর `b` শেষ পর্যন্ত চলবে।
+* ন্যায্যতা বা শুরুতে চলার ক্রম নিয়ে `wait_all` কোনো নিশ্চয়তা দেয় না।
 
-Then given the following code:
+তাহলে নিচের কোডটি দেওয়া থাকলে:
 
 ```rust
 async fn print_letters() {
@@ -49,24 +49,24 @@ async fn print_letters() {
 }
 ```
 
-Which of the following strings can possibly be printed after running `print_letters().await`?
+`print_letters().await` চালানোর পর নিচের কোন string-গুলো print হতে পারে?
 """
 prompt.distractors = ["`DABC`"]
 answer.answer = [
   "`ABCD`", "`CADB`", "`ACBD`"
 ]
 context = """
-The hypothetical `wait_all` primitive is like `join` but with fewer guarantees. Given only the spec in this problem, any interleaving of the
-two futures is valid. The only invalid output is one that inverts program execution order, i.e., `DABC` which would have `D` printed before `C`.
+কাল্পনিক `wait_all` primitive `join`-এর মতো, তবে কম নিশ্চয়তাসহ। এই প্রশ্নের বিবরণ অনুযায়ী দুটি future-এর যেকোনো মিশ্রণ
+বৈধ। একমাত্র অবৈধ output হলো যা প্রোগ্রামের চলার ক্রম উল্টে দেয়, অর্থাৎ `DABC`, যেখানে `C`-এর আগে `D` print হতো।
 """
 id = "4b28f13e-9781-4d29-b886-7639fa527f36"
 
 [[questions]]
 type = "MultipleChoice"
 prompt.prompt = """
-Say you are given a message-passing channel `channel()` which is non-blocking and *bounded*, 
-meaning `send` returns a future that completes once there is capacity in the channel.
-Assume you also have a function `join(a, b)` which *fairly* waits on both its arguments to completion. Then given this async code:
+ধরুন আপনাকে একটি message-passing channel `channel()` দেওয়া হলো, যা non-blocking এবং *bounded* (সীমিত ধারণক্ষমতার), 
+অর্থাৎ `send` এমন একটি future return করে, যা channel-এ জায়গা হলেই শেষ হয়।
+ধরে নিন আপনার কাছে `join(a, b)` নামে একটি function-ও আছে, যা তার দুটি argument শেষ হওয়ার জন্য *ন্যায্যভাবে* অপেক্ষা করে। তাহলে এই async কোডটি দেওয়া থাকলে:
 
 ```rust
 let (tx, mut rx) = channel(16);
@@ -76,15 +76,15 @@ let (n, _) = join(recv_fut, send_fut).await;
 println!("{}", n.unwrap());
 ```
 
-What will happen as a result of executing this code?
+এই কোড চালানোর ফলে কী ঘটবে?
 """
 prompt.distractors = [
-  "The program prints `0` and loops forever",
-  "The program prints nothing and loops forever",
-  "The program panics"
+  "প্রোগ্রাম `0` print করে এবং চিরকাল loop করতে থাকে",
+  "প্রোগ্রাম কিছুই print করে না এবং চিরকাল loop করতে থাকে",
+  "প্রোগ্রাম panic করে"
 ]
-answer.answer = "The program prints `0` and exits"
+answer.answer = "প্রোগ্রাম `0` print করে বন্ধ হয়"
 context = """
-Because the channel is non-blocking, we can create a receive future before sending without looping forever.
+channel যেহেতু non-blocking, তাই চিরকাল loop না করেই পাঠানোর আগে একটি গ্রহণের future তৈরি করা যায়।
 """
 id = "e23b7c48-3780-44e7-8ea4-df35032548a1"

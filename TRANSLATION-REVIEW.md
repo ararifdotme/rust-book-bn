@@ -299,11 +299,27 @@ lock, concurrency primitive, atomic, marker trait.
 | it will happily run on multiple threads | এটি … আনন্দের সঙ্গে একাধিক thread-এ চলবে |
 | Go forth and make your programs concurrent, fearlessly! | এগিয়ে যান এবং নির্ভয়ে আপনার প্রোগ্রামগুলোকে concurrent করুন! |
 
-## Chapter 17: Async and Await (IN PROGRESS)
+## Chapter 17: Async and Await
 
-**Status:** the prose of all seven `src/ch17-*.md` files is translated and
-builds; the heading IDs are unchanged. **Not done yet:** the quiz files
-`quizzes/async-0[1-5]-*.toml`, the glossary rows, and the Progress tick.
-Planned terms: future, polling, await point, runtime, executor, state machine,
-task, cooperative multitasking, work stealing, stream, pin / `Pin`, `Unpin`,
-self-referential type, CPU-bound / I/O-bound, serial.
+**Auto-chosen terms:** asynchronous programming, await, polling, await point,
+executor, state machine, cooperative multitasking, work stealing, pin / `Unpin`,
+self-referential type, CPU-bound / I/O-bound, serial, blocking / non-blocking.
+
+**Decisions:**
+- The long `alt` texts and `<figcaption>` texts of Figures 17-1 to 17-9 are
+  translated; "Figure 17-N" stays in English.
+- The HTML comment blocks in ch17-05 (notes to editors) stay in English.
+- Listing comments translated: 17-01/17-02 (`TODO`), 17-14, 17-19 and
+  `no-listing-stream-ext`. `// for mdbook test` comments stay (hidden lines).
+- The link label for chapter 16's `spawn` section uses the Bengali heading,
+  which adds a code span; this is expected.
+- Quiz options that are pure output strings ("ABDEFC", `` `CBA` ``) stay as is.
+
+**Unsure sentences:**
+
+| English | Bengali |
+| --- | --- |
+| one future _starving_ other futures | একটি future অন্য future-গুলোকে _অভুক্ত রাখছে_ (starving) |
+| Threads are somewhat “fire and forget” | thread কিছুটা “চালু করো আর ভুলে যাও” ধরনের |
+| Phew—we finally have some working async code! | যাক—অবশেষে আমাদের কাছে কাজ করে এমন async কোড আছে! |
+| putting the future back to sleep when it is not yet ready | future এখনো প্রস্তুত না হলে একে আবার ঘুম পাড়িয়ে দেয় |

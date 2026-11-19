@@ -1,22 +1,22 @@
 [[questions]]
 type = "MultipleChoice"
-prompt.prompt = "If you want to wait on a future in non-async code, you should do which of the following?"
+prompt.prompt = "async নয় এমন কোডে একটি future-এর জন্য অপেক্ষা করতে চাইলে নিচের কোনটি করা উচিত?"
 prompt.distractors = [
-  "Put an `.await` directly after the future",
-  "Give the future to Rust's built-in async runtime",
-  "Wrap the future in an `async` block and `.await` the block",  
+  "future-এর ঠিক পরে একটি `.await` বসানো",
+  "future-টি Rust-এর built-in async runtime-কে দেওয়া",
+  "future-টি একটি `async` block-এ মুড়ে block-টির জন্য `.await` করা",  
 ]
-answer.answer = "Give the future to a third-party async runtime" 
+answer.answer = "future-টি একটি third-party async runtime-কে দেওয়া" 
 context = """
-Rust does not let you use `.await` outside of `async` blocks or functions. Rust also does not have a built-in async runtime.
-You should use a third-party async runtime like `tokio` or `trpl`. 
+Rust `async` block বা function-এর বাইরে `.await` ব্যবহার করতে দেয় না। Rust-এর কোনো built-in async runtime-ও নেই।
+`tokio` বা `trpl`-এর মতো একটি third-party async runtime ব্যবহার করা উচিত। 
 """
 id = "de2a5023-dd5c-412e-8425-c8ed638f18f0"
 
 [[questions]]
 type = "MultipleChoice"
 prompt.prompt = """
-The async function below desugars into which type signature?
+নিচের async function-টির সহজ রূপ (desugar করা রূপ) কোন type signature?
 
 ```rust
 async fn calculate(nums: &[i32]) -> i32 {
@@ -47,9 +47,9 @@ fn calculate<'a>(nums: &'a [i32]) -> impl Future<Output = i32> + 'a;
 ```
 """
 context = """
-An async function returns an anonymous type that implements the `Future` trait whose output is the function's return type. 
-So here, that is represented as `impl Future<Output = i32>`. The future captures any lifetimes in the function's arguments.
-Therefore the returned type has the bound `+ 'a` and the input slice has the type `&'a [i32]`. This indicates that the slice 
-must live at least as long as the future which captures it.
+একটি async function এমন একটি নামহীন type return করে, যা `Future` trait implement করে এবং যার output হলো function-এর return type। 
+তাই এখানে তা প্রকাশ করা হয় `impl Future<Output = i32>` হিসেবে। future-টি function-এর argument-গুলোর সব lifetime capture করে।
+তাই return করা type-এ `+ 'a` bound থাকে, আর input slice-এর type হয় `&'a [i32]`। এটি বোঝায় যে slice-টিকে 
+অন্তত সেই future-এর সমান সময় বাঁচতে হবে, যা একে capture করে।
 """
 id = "9c000322-464b-4d34-9e30-55591f9283d2"

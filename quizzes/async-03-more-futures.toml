@@ -1,7 +1,7 @@
 [[questions]]
 type = "MultipleChoice"
 prompt.prompt = """
-Given a function `sleep(d)` that sleeps for the given duration, consider this function:
+প্রদত্ত সময় ধরে sleep করে এমন একটি function `sleep(d)` দেওয়া থাকলে, এই function-টি বিবেচনা করুন:
 
 ```rust
 let futs: Vec<_> = [1, 2, 3].iter().map(|n| async move {
@@ -15,25 +15,25 @@ for fut in futs {
 }
 ```
 
-When executed, about how many seconds should this take to execute?
+চালালে এটি শেষ হতে মোটামুটি কত সেকেন্ড লাগার কথা?
 """
 prompt.distractors = ["5", "0"]
 answer.answer = "15"
 context = """
-Without using a function like `join_all`, the futures will not run concurrently. Therefore this code would take 15 seconds (5 seconds per list element).
+`join_all`-এর মতো কোনো function ব্যবহার না করলে future-গুলো concurrent-ভাবে চলবে না। তাই এই কোডে 15 সেকেন্ড লাগবে (তালিকার প্রতিটি উপাদানের জন্য 5 সেকেন্ড)।
 """
 id = "68680e2e-7a9f-4cee-8080-70e57fe5a2b3"
 
 [[questions]]
 type = "MultipleChoice"
 prompt.prompt = """
-Say you are designing a utility function with the following specification:
+ধরুন আপনি নিচের বিবরণ অনুযায়ী একটি সহায়ক function নকশা করছেন:
 
-> `map_stringify` takes two arguments: a vector of inputs, and an async function that converts the input to an output,
-> where the outputs can be converted to strings.
-> `map_stringify` returns a vector of stringified outputs.
+> `map_stringify` দুটি argument নেয়: input-এর একটি vector, আর একটি async function যা input-কে output-এ রূপান্তর করে,
+> যেখানে output-গুলোকে string-এ রূপান্তর করা যায়।
+> `map_stringify` string-এ রূপান্তরিত output-গুলোর একটি vector return করে।
 
-Which function type signature best encodes this specification?
+কোন function type signature এই বিবরণ সবচেয়ে ভালোভাবে প্রকাশ করে?
 """
 prompt.distractors = [
 """
@@ -72,7 +72,7 @@ where
 ```
 """
 context = """
-Here's one implementation of the specified function:
+বর্ণিত function-টির একটি implementation এই:
 
 ```rust
 async fn map_stringify<I, O, F>(
@@ -95,8 +95,8 @@ id = "b42a9c5b-bfe7-4d6f-967a-f8ff2a6faa0d"
 [[questions]]
 type = "MultipleChoice"
 prompt.prompt = """
-Say you are writing a program that needs to run some async code, but every 500ms check to see if the computation should be halted.
-Which helper function would be most appropriate for accomplishing this task?
+ধরুন আপনি এমন একটি প্রোগ্রাম লিখছেন, যাকে কিছু async কোড চালাতে হবে, কিন্তু প্রতি 500ms পরপর যাচাই করতে হবে হিসাবটি থামানো উচিত কি না।
+এই কাজের জন্য কোন সহায়ক function সবচেয়ে উপযুক্ত হবে?
 """
 prompt.distractors = [
   "`join`",
@@ -105,6 +105,6 @@ prompt.distractors = [
 ]
 answer.answer = "`race` / `select`"
 context = """
-For instance, you could run a `select` in a loop between a long-running future and a sleep future that completes in 500ms.
+যেমন, দীর্ঘ সময় ধরে চলা একটি future আর 500ms-এ শেষ হওয়া একটি sleep future-এর মধ্যে একটি loop-এ `select` চালাতে পারেন।
 """
 id = "7da21e95-8e03-412b-8c4d-90ccfc8c6802"

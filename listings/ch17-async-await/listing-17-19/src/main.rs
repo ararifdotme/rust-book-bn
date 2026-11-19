@@ -23,6 +23,6 @@ async fn timeout<F: Future>(
     future_to_try: F,
     max_time: Duration,
 ) -> Result<F::Output, Duration> {
-    // Here is where our implementation will go!
+    // আমাদের implementation এখানে বসবে!
 }
 // ANCHOR_END: declaration

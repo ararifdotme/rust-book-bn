@@ -1,24 +1,24 @@
 [[questions]]
 type = "MultipleChoice"
-prompt.prompt = "Given a future `f`, which of the following best describes how `f.await` works?"
+prompt.prompt = "একটি future `f` দেওয়া থাকলে, `f.await` কীভাবে কাজ করে তা নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?"
 prompt.distractors = [
-  "It calls `f.poll()` once, which blocks in-place until `f` is ready",
-  "It calls `f.poll()` in a loop, exiting if `f` is ready, or immediately polling again if `f` is not ready",
-  "It calls `f.push(...)` once, which executes a callback containing the remaining code after `f.await` once `f` is ready"
+  "এটি একবার `f.poll()` call করে, যা `f` প্রস্তুত না হওয়া পর্যন্ত জায়গাতেই block করে",
+  "এটি একটি loop-এ `f.poll()` call করে, `f` প্রস্তুত হলে বেরিয়ে যায়, আর `f` প্রস্তুত না হলে সঙ্গে সঙ্গে আবার poll করে",
+  "এটি একবার `f.push(...)` call করে, যা `f` প্রস্তুত হলে `f.await`-এর পরের বাকি কোডযুক্ত একটি callback চালায়"
 ]
-answer.answer = "It calls `f.poll()` in a loop, exiting if `f` is ready, or returning control to the async runtime if `f` is not ready"
+answer.answer = "এটি একটি loop-এ `f.poll()` call করে, `f` প্রস্তুত হলে বেরিয়ে যায়, আর `f` প্রস্তুত না হলে async runtime-এর হাতে নিয়ন্ত্রণ ফিরিয়ে দেয়"
 context = """
-Rust uses a poll-based model for future execution. An await point desugars into a loop which repeatedly calls `.poll()`, 
-and cedes control to the async runtime after each unsuccessful poll to allow other async code to run. The runtime can later
-"wake up" the `f.await` code to poll `f` again.
+future চালাতে Rust poll-ভিত্তিক একটি model ব্যবহার করে। একটি await point এমন একটি loop-এ পরিণত হয়, যা বারবার `.poll()` call করে, 
+এবং প্রতিটি ব্যর্থ poll-এর পর অন্য async কোড চলতে দিতে async runtime-এর হাতে নিয়ন্ত্রণ ছেড়ে দেয়। runtime পরে
+`f` আবার poll করতে `f.await` কোডকে "জাগিয়ে তুলতে" পারে।
 """
 id = "c4d90f3c-7286-4272-921c-241b266e9f91"
 
 [[questions]]
 type = "MultipleChoice"
 prompt.prompt = """
-Imagine Rust did not require that futures were pinned in order to be polled. 
-Which of the following async functions could potentially cause undefined behavior if not pinned?
+কল্পনা করুন, poll করার জন্য Rust future-কে pin করা বাধ্যতামূলক করত না। 
+নিচের কোন async function pin না করলে undefined behavior ঘটাতে পারে?
 """
 prompt.distractors = [
 """
@@ -57,8 +57,8 @@ async fn example(x: i32) -> i32 {
 ```
 """
 context = """
-The core problem addressed by pinning is self-reference, or a future which contains a pointer to itself. 
-This happens when an async block contains a local variable that refers to another local variable in the future.
-Here, that would be `y = &x`.
+pinning যে মূল সমস্যার সমাধান করে তা হলো নিজেকেই reference করা, অর্থাৎ এমন একটি future যাতে নিজেরই দিকে একটি pointer থাকে। 
+এটি ঘটে যখন একটি async block-এ এমন একটি local variable থাকে, যা future-এর আরেকটি local variable-কে নির্দেশ করে।
+এখানে সেটি হলো `y = &x`।
 """
 id = "bc8b4acb-d111-4fec-b89a-e5d1bc77c8f2"

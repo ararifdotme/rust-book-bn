@@ -4,7 +4,7 @@ use std::{thread, time::Duration};
 
 fn main() {
     trpl::block_on(async {
-        // We will call `slow` here later
+        // পরে এখানে `slow` call করব
     });
 }
 
