@@ -1,10 +1,10 @@
 [multipart]
 q = """
-**Context:** You are designing a serialization library that converts Rust data types into formats like JSON.
+**প্রেক্ষাপট:** আপনি একটি serialization library নকশা করছেন, যা Rust data type-কে JSON-এর মতো format-এ রূপান্তর করে।
 
-**Functionality:** A `Serialize` trait that can be implemented by serializable types, and a `to_json` function that converts serializable types into JSON.
+**কার্যক্ষমতা:** একটি `Serialize` trait, যা serialize করা যায় এমন type implement করতে পারে, আর একটি `to_json` function, যা serialize করা যায় এমন type-কে JSON-এ রূপান্তর করে।
 
-**Designs:** Below are several proposed designs to implement the functionality.
+**নকশা:** কার্যক্ষমতাটি implement করার জন্য নিচে কয়েকটি প্রস্তাবিত নকশা দেওয়া হলো।
 
 ```
 // Option 1: types serialize to a `Value` enum
@@ -54,19 +54,19 @@ pub fn to_json(data: impl Serialize) -> String {
 type = "MultipleChoice"
 multipart = "q"
 prompt.prompt = """
-Select each design option that satisfies the following requirement:
+নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:
 
-**Requirement:** It should be possible to add a new data format without needing to modify code in existing implementations of the `Serialize` trait.
+**চাহিদা:** `Serialize` trait-এর বিদ্যমান implementation-এর কোড না বদলেই একটি নতুন data format যোগ করা সম্ভব হওয়া উচিত।
 """
 prompt.distractors = []
 prompt.sortAnswers = true
 answer.answer = ["1", "2"]
 context = """
-Both designs are sufficiently decoupled such that each new data format is independent of any `Serialize` implementations. For Option 1,
-each data format converts a `Value` into the format's representation. `Value` acts as a module boundary.
+দুটি নকশাই যথেষ্ট বিচ্ছিন্ন, ফলে প্রতিটি নতুন data format যেকোনো `Serialize` implementation থেকে স্বাধীন। Option 1-এ
+প্রতিটি data format একটি `Value`-কে সেই format-এর রূপে রূপান্তর করে। `Value` একটি module-এর সীমানা হিসেবে কাজ করে।
 
-For Option 2, there is no explicit intermediate representation of a serialized value, but rather each `Serialize` implementation is explicitly generic
-over any choice of `S` that implements `Serializer`.
+Option 2-এ serialize করা মানের কোনো স্পষ্ট মধ্যবর্তী রূপ নেই, বরং প্রতিটি `Serialize` implementation `Serializer` implement করা যেকোনো
+`S`-এর ওপর স্পষ্টভাবে generic।
 """
 id = "66e036c9-91a0-4611-8110-967b5ed1a514"
 
@@ -74,16 +74,16 @@ id = "66e036c9-91a0-4611-8110-967b5ed1a514"
 type = "MultipleChoice"
 multipart = "q"
 prompt.prompt = """
-Select each design option that satisfies the following requirement:
+নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:
 
-**Requirement:** The process of serialization should consume as little memory as possible.
+**চাহিদা:** serialization প্রক্রিয়ায় যত কম সম্ভব মেমোরি খরচ হওয়া উচিত।
 """
 prompt.distractors = ["1"]
 prompt.sortAnswers = true
 answer.answer = ["2"]
 context = """
-Option 1 serializes data by first converting a data structure into an intermediate representation, `Value`, and then converting `Value` into the final format.
-This intermediate data structure consumes memory which is not needed by Option 2, where data is converted directly into the final format.
+Option 1 প্রথমে একটি data structure-কে একটি মধ্যবর্তী রূপ, `Value`-এ রূপান্তর করে, তারপর `Value`-কে চূড়ান্ত format-এ রূপান্তর করে ডেটা serialize করে।
+এই মধ্যবর্তী data structure মেমোরি খরচ করে, যা Option 2-এ লাগে না, যেখানে ডেটা সরাসরি চূড়ান্ত format-এ রূপান্তরিত হয়।
 """
 id = "eaa95520-1b72-4f7d-a600-5444b6368785"
 
@@ -92,16 +92,16 @@ id = "eaa95520-1b72-4f7d-a600-5444b6368785"
 multipart = "q"
 type = "MultipleChoice"
 prompt.prompt = """
-Select each design option that satisfies the following requirement:
+নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:
 
-**Requirement:** When the same data type is serialized into multiple formats, that should increase the size of the compiled binary as little as possible.
+**চাহিদা:** একই data type একাধিক format-এ serialize করা হলে তাতে compile করা binary-র আকার যত কম সম্ভব বাড়া উচিত।
 """
 prompt.distractors = ["2"]
 prompt.sortAnswers = true
 answer.answer = ["1"]
 context = """
-With Option 1, there is only a single instantiation of `Serialize` that converts a type `T` into a `Value`. Because Option 2 is generic over serializers `S`,
-then every time `T::serialize` is called with a new `S`, the Rust compiler will monomorphize a new instance of `T::serialize` which would increase the size of
-the binary by comparison to Option 1.
+Option 1-এ `Serialize`-এর মাত্র একটি instantiation থাকে, যা একটি type `T`-কে একটি `Value`-এ রূপান্তর করে। Option 2 যেহেতু serializer `S`-এর ওপর generic,
+তাই প্রতিবার নতুন একটি `S` দিয়ে `T::serialize` call করলে Rust compiler `T::serialize`-এর একটি নতুন instance monomorphize করবে, যা Option 1-এর তুলনায়
+binary-র আকার বাড়াবে।
 """
 id = "2751731e-7d18-46a1-aaea-b5734bf51c80"

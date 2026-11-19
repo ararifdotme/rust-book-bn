@@ -2,9 +2,9 @@
 id = "d19f9e83-d4c2-41d5-9fc7-81db5135eb1e"
 type = "MultipleChoice"
 prompt.prompt = """
-In the running example from this section, a blog post could have one of three states: `Draft`, `PendingReview`, and `Published`. In the example, each state was represented as a struct, and state transitions was represented as trait methods returning trait objects.
+এই অংশের চলমান উদাহরণে একটি blog post তিনটি অবস্থার একটিতে থাকতে পারত: `Draft`, `PendingReview` আর `Published`। উদাহরণে প্রতিটি অবস্থা একটি struct হিসেবে, আর অবস্থার বদল trait object return করা trait method হিসেবে প্রকাশ করা হয়েছিল।
 
-An alternative implementation could represent the states as an enum, like this:
+একটি বিকল্প implementation অবস্থাগুলোকে একটি enum হিসেবে প্রকাশ করতে পারত, এভাবে:
 
 ```
 enum BlogState {
@@ -25,29 +25,29 @@ impl Post {
 }
 ```
 
-Which of the following are good reasons to prefer the struct/trait representation over the enum representation?
+enum রূপের চেয়ে struct/trait রূপ পছন্দ করার ভালো কারণ নিচের কোনগুলো?
 """
 answer.answer = [
-    "An API client could add a new state to the system",
-    "Adding a new state does not require modifying methods on every other state"
+    "API-র একজন ব্যবহারকারী system-এ একটি নতুন অবস্থা যোগ করতে পারত",
+    "নতুন অবস্থা যোগ করতে অন্য প্রতিটি অবস্থার method পরিবর্তন করতে হয় না"
 ]
 prompt.distractors = [
-    "The use of `match` is slower at runtime than dynamic dispatch",
-    "An API client could add a new method for all states in the system"
+    "runtime-এ `match`-এর ব্যবহার dynamic dispatch-এর চেয়ে ধীর",
+    "API-র একজন ব্যবহারকারী system-এর সব অবস্থার জন্য একটি নতুন method যোগ করতে পারত"
 ]
 context = """
-The struct/trait approach is extensible in the sense that an API client could potentially
-create a new state (such as `Retracted`) without changing the core API functionality. When
-adding this state, the methods for other states do not need to be changed. Whereas with enums,
-a client cannot add a new branch to the enum. Moreover, all `match` expressions must be updated
-when a state is added.
+struct/trait পদ্ধতি এই অর্থে বাড়ানো যায় যে API-র একজন ব্যবহারকারী মূল API-র কার্যক্ষমতা না বদলেই
+একটি নতুন অবস্থা (যেমন `Retracted`) তৈরি করতে পারে। এই অবস্থা যোগ করার সময়
+অন্য অবস্থার method বদলাতে হয় না। অন্যদিকে enum-এর ক্ষেত্রে
+একজন ব্যবহারকারী enum-এ নতুন শাখা যোগ করতে পারে না। তা ছাড়া একটি অবস্থা যোগ করলে
+সব `match` expression হালনাগাদ করতে হয়।
 
-A `match` is not likely to be slower than dynamic dispatch. A match is a simple branch based on
-an enum's tag, while dynamic dispatch requires a layer of indirection through a trait
-object's virtual table with non-inlined function calls.
+একটি `match` dynamic dispatch-এর চেয়ে ধীর হওয়ার সম্ভাবনা কম। match হলো একটি enum-এর tag-এর ভিত্তিতে
+একটি সরল শাখা, অন্যদিকে dynamic dispatch-এর জন্য একটি trait object-এর virtual table দিয়ে
+inline না করা function call-সহ এক স্তরের indirection দরকার।
 
-An API client cannot add a new *method* for existing states in the struct/trait approach, they 
-can only add new states. The methods are fixed by the API author's trait definition. Note that you could add a new method which only builds on existing methods via extension traits, such as:
+struct/trait পদ্ধতিতে API-র একজন ব্যবহারকারী বিদ্যমান অবস্থাগুলোর জন্য নতুন *method* যোগ করতে পারে না, 
+শুধু নতুন অবস্থা যোগ করতে পারে। method-গুলো API-র লেখকের trait-এর সংজ্ঞায় নির্দিষ্ট। খেয়াল করুন, extension trait দিয়ে এমন একটি নতুন method যোগ করা যায়, যা শুধু বিদ্যমান method-এর ওপর ভিত্তি করে তৈরি, যেমন:
 
 ```
 trait StateExt {
@@ -61,5 +61,5 @@ impl<S: State> StateExt for S {
 }
 ```
 
-But these extensions cannot read the private data of the states.
+তবে এই extension-গুলো অবস্থাগুলোর private ডেটা পড়তে পারে না।
 """

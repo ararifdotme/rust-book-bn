@@ -323,3 +323,32 @@ self-referential type, CPU-bound / I/O-bound, serial, blocking / non-blocking.
 | Threads are somewhat “fire and forget” | thread কিছুটা “চালু করো আর ভুলে যাও” ধরনের |
 | Phew—we finally have some working async code! | যাক—অবশেষে আমাদের কাছে কাজ করে এমন async কোড আছে! |
 | putting the future back to sleep when it is not yet ready | future এখনো প্রস্তুত না হলে একে আবার ঘুম পাড়িয়ে দেয় |
+
+## Chapter 18: Object-Oriented Programming Features
+
+**Auto-chosen terms:** object, encapsulation, polymorphism, subclass /
+superclass, design pattern, state pattern / state object, duck typing, static /
+dynamic dispatch, dyn compatibility, inline, delegate. Everyday: paradigm
+(ধারা), নকশার সুবিধা-অসুবিধা (design trade-offs).
+
+**Decisions:**
+- Quiz files for this chapter are named `quizzes/ch17-*` upstream (the book
+  was renumbered); I translated them under those names and left the paths as
+  they are, including `ch18-04-inventory.md` → `ch17-04-inventory.toml`.
+- In the inventory quiz, the commented-out (`#`) question block stays English.
+- Design-challenge quizzes: "Option 1/2/3" and the code comments inside the
+  design code blocks stay in English; **DO** / **NOT** are rendered as bold
+  **করে** / **করে না**.
+- The "Why Not An Enum?" and "Polymorphism" blockquote headings are pinned to
+  their original IDs.
+- Listing comments translated: 18-07 (`Button`), 18-08 (`SelectBox`); the copies
+  in later listings' `lib.rs` files are hidden and left as is.
+
+**Unsure sentences:**
+
+| English | Bengali |
+| --- | --- |
+| If it walks like a duck and quacks like a duck, then it must be a duck! | যদি এটি হাঁসের মতো হাঁটে আর হাঁসের মতো প্যাঁকপ্যাঁক করে, তাহলে এটি নিশ্চয়ই হাঁস! |
+| is blurring the lines between the responsibility of `State` and … `Post` | `State`-এর দায়িত্ব আর `Post`-এর দায়িত্বের মধ্যের সীমারেখা ঝাপসা করে দিচ্ছে |
+| a "closed world" system | একটি "বদ্ধ জগৎ" system |
+| bounded parametric polymorphism | (left in English, italic) |

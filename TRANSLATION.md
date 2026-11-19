@@ -562,6 +562,17 @@ tested with this repo's build.
 | CPU-bound / I/O-bound | CPU-bound / I/O-bound | হিসাবের গতি / input-output-এর গতির ওপর নির্ভরশীল | 17 |
 | serial | serial | ক্রমানুসারী, একটির পর একটি | 17 |
 | blocking / non-blocking | blocking / non-blocking | অগ্রগতি আটকে রাখে / রাখে না এমন | 17 |
+| object | object | ডেটা আর সেই ডেটার ওপর কাজ করা method একসঙ্গে | 18 |
+| encapsulation | encapsulation | implementation-এর খুঁটিনাটি লুকিয়ে রাখা (আবদ্ধকরণ) | 18 |
+| polymorphism | polymorphism | বহুরূপতা: একাধিক type-এর ডেটা নিয়ে কাজ করা কোড | 18 |
+| subclass / superclass | subclass / superclass | উত্তরাধিকারী class / parent class | 18 |
+| design pattern | design pattern | প্রচলিত সমস্যার পুনর্ব্যবহারযোগ্য নকশা-সমাধান | 18 |
+| state pattern / state object | state pattern / state object | অবস্থা অনুযায়ী আচরণ বদলানোর pattern / একেকটি অবস্থা বোঝানো object | 18 |
+| duck typing | duck typing | type নয়, কী কী method আছে তা দিয়ে মান বিচার করা | 18 |
+| static / dynamic dispatch | static / dynamic dispatch | compile time-এ / runtime-এ কোন method call হবে তা ঠিক হওয়া | 18 |
+| dyn compatibility | dyn compatibility | কোন trait trait object হিসেবে ব্যবহার করা যায় তার নিয়ম | 18 |
+| inline (a function) | inline করা | call-এর জায়গায় function-এর কোড সরাসরি বসানো | 18 |
+| delegate | delegate করা | কাজ অন্য method-এর হাতে তুলে দেওয়া | 18 |
 
 ### Everyday computing words
 
@@ -645,6 +656,8 @@ Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
 | dual license | দুটি license একসঙ্গে (dual license) | 14 |
 | first-come, first-served | আগে এলে আগে পাবেন ভিত্তিতে | 14 |
 | resource | resource (সম্পদ, যেমন ফাইল বা network connection) | 15 |
+| paradigm | paradigm (ধারা) | 18 |
+| design trade-offs | নকশার সুবিধা-অসুবিধা | 18 |
 
 ## Progress
 
@@ -674,7 +687,7 @@ use.
 - [x] Chapter 15: Smart Pointers (ch15-*)
 - [x] Chapter 16: Fearless Concurrency (ch16-*)
 - [x] Chapter 17: Fundamentals of Asynchronous Programming: Async, Await, Futures, and Streams (ch17-*)
-- [ ] Chapter 18: Object Oriented Programming Features (ch18-*)
+- [x] Chapter 18: Object Oriented Programming Features (ch18-*)
 - [ ] Chapter 19: Patterns and Matching (ch19-*)
 - [ ] Chapter 20: Advanced Features (ch20-*)
 - [ ] Chapter 21: Final Project: Building a Multithreaded Web Server (ch21-*)

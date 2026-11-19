@@ -2,15 +2,15 @@
 id = "a4680619-9533-4cbb-a785-7b73570168af"
 type = "MultipleChoice"
 prompt.prompt = """
-Which of the following aspects of object-oriented programming does Rust implement?
+object-oriented programming-এর নিচের কোন দিকগুলো Rust implement করে?
 """
 answer.answer = [
-    "Objects with methods",
-    "Encapsulation of private data",
+    "method-যুক্ত object",
+    "private ডেটার encapsulation",
 ]
 prompt.distractors = [
-    "Inheritance of superclass methods"
+    "superclass-এর method-এর inheritance"
 ]
 context = """
-Rust contains objects (i.e. structs) and encapsulation (via the `pub` keyword), but not inheritance.
+Rust-এ object (অর্থাৎ struct) আর encapsulation (`pub` keyword-এর মাধ্যমে) আছে, কিন্তু inheritance নেই।
 """

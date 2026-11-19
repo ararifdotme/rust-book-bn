@@ -172,7 +172,7 @@
 id = "2c6d6e2e-ad6e-4e98-bf88-8cada144ebee"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 1:**
+**প্রোগ্রাম 1:**
 
 ```ide
 /// Adds a Display-able object into a vector of 
@@ -186,7 +186,7 @@ fn add_displayable<T: Display>(
 }
 ```
 
-If you tried to compile this program, which of the following best describes the compiler error you would get?
+এই প্রোগ্রাম compile করার চেষ্টা করলে আপনি যে compiler error পেতেন, নিচের কোনটি তা সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
 answer.answer = "the type `T` does not live long enough when cast to a trait object"
 prompt.distractors = [
@@ -195,8 +195,8 @@ prompt.distractors = [
   "the type `T` does not outlive the lifetime of the reference `&mut Vec<..>`"
 ]
 context = """
-When casting `Box<T>` to `Box<dyn Display>` (implicitly in `v.push(..)`), Rust requires that the trait object `dyn Display`
-must outlive the vector. However, the lifetime of `T` is unspecified, so `T` may not live long enough.
+`Box<T>`-কে `Box<dyn Display>`-এ cast করার সময় (`v.push(..)`-এ অপ্রকাশ্যভাবে) Rust চায় trait object `dyn Display`
+vector-এর চেয়ে বেশি সময় বাঁচুক। কিন্তু `T`-এর lifetime উল্লেখ করা নেই, তাই `T` হয়তো যথেষ্ট সময় বাঁচবে না।
 """
 
 
@@ -204,7 +204,7 @@ must outlive the vector. However, the lifetime of `T` is unspecified, so `T` may
 id = "36da4652-baeb-47a6-9ee1-1448b02cbe8e"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 1:**
+**প্রোগ্রাম 1:**
 
 ```ide
 /// Adds a Display-able object into a vector of 
@@ -218,7 +218,7 @@ fn add_displayable<T: Display>(
 }
 ```
 
-Normally if you try to compile this function, the compiler returns the following error:
+সাধারণত এই function compile করার চেষ্টা করলে compiler নিচের error দেয়:
 
 ```text
 error[E0310]: the parameter type `T` may not live long enough
@@ -228,9 +228,9 @@ error[E0310]: the parameter type `T` may not live long enough
   |            ^^^^^^^^^^^
 ```
 
-Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
-(1) pass the compiler, and (2) possibly cause undefined behavior if executed?
-Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying."""
+ধরে নিন, compiler এই function বাতিল **করেনি**। নিচের প্রোগ্রামগুলোর মধ্যে কোনগুলো (যদি থাকে)
+(1) compiler পেরিয়ে যাবে, এবং (2) চালালে undefined behavior ঘটাতে পারে?
+দুটি শর্তই পূরণ করে এমন প্রতিটি প্রোগ্রাম বেছে নিন, অথবা কোনোটিই পূরণ না করলে "এগুলোর কোনোটিই নয়" বেছে নিন।"""
 answer.answer = [
 """
 ```
@@ -244,7 +244,7 @@ println!("{}", v[0]);
 """,
 ]
 prompt.distractors = [
-  "None of these programs",
+  "এগুলোর কোনোটিই নয়",
 """
 ```
 let mut v: Vec<Box<dyn Display>> = Vec::new();
@@ -263,9 +263,9 @@ add_displayable(&mut v, 5);
 """
 ]
 context = """
-This program is memory-unsafe. To create a memory safety violation, the program must create a type `T` that contains
-references which do not outlive the vector. For example, adding `&n` where `n` goes out of scope before `v` means that
-the later use of `v[0]` is a read of deallocated memory.
+এই প্রোগ্রাম memory-unsafe। memory safety ভঙ্গ ঘটাতে প্রোগ্রামকে এমন একটি type `T` তৈরি করতে হবে, যাতে এমন
+reference আছে যা vector-এর চেয়ে বেশি সময় বাঁচে না। যেমন, `&n` যোগ করলে, যেখানে `v`-এর আগে `n` scope-এর বাইরে চলে যায়, পরে
+`v[0]` ব্যবহার করা মানে deallocate হওয়া মেমোরি পড়া।
 """
 
 
@@ -273,7 +273,7 @@ the later use of `v[0]` is a read of deallocated memory.
 id = "2da21d0e-5722-4908-b528-dc87bbce1faf"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 1:**
+**প্রোগ্রাম 1:**
 
 ```ide
 /// Adds a Display-able object into a vector of 
@@ -287,10 +287,10 @@ fn add_displayable<T: Display>(
 }
 ```
 
-Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
-1. The fixed function passes the Rust compiler,
-2. The fixed function preserves the intention of the original code, and
-3. The fixed function does not introduce unnecessary inefficiencies
+নিচের সমাধানগুলোর (হলুদ রঙে হাইলাইট করা) মধ্যে কোনটি এই তিনটি শর্ত সবচেয়ে ভালোভাবে পূরণ করে:
+1. ঠিক করা function-টি Rust compiler পেরিয়ে যায়,
+2. ঠিক করা function-টি মূল কোডের উদ্দেশ্য বজায় রাখে, এবং
+3. ঠিক করা function-টি অপ্রয়োজনীয় অদক্ষতা যোগ করে না
 """
 answer.answer = """
 ```ide
@@ -335,11 +335,11 @@ fn add_displayable<`['a]`, T: Display `[+ 'a]`>(
 """,
 ]
 context = """
-The most idiomatic fix is to specify how the lifetime of `T` should relate to the lifetime of the trait object `dyn Display`.
-Here, that means adding a lifetime parameter `'a`, saying that `T` outlives `'a`, and that the trait objects also live for
-at least `'a`. 
+সবচেয়ে idiomatic সমাধান হলো বলে দেওয়া `T`-এর lifetime trait object `dyn Display`-এর lifetime-এর সঙ্গে কীভাবে সম্পর্কিত হবে।
+এখানে তার মানে একটি lifetime parameter `'a` যোগ করা, বলা যে `T` `'a`-এর চেয়ে বেশি সময় বাঁচে, আর trait object-গুলোও অন্তত
+`'a` পর্যন্ত বাঁচে। 
 
-Using a `'static` bound is the same thing but worse: it is simply less expressive, disallowing the vector's trait objects
-from ever holding references. Putting the lifetime `'a` on the `&'a mut Vec<..>` reference is not correct and does not
-fix the compiler error.
+`'static` bound ব্যবহার করা একই জিনিস, তবে আরও খারাপ: এটি কম প্রকাশক্ষম, vector-এর trait object-গুলোকে কখনো
+reference রাখতে দেয় না। `&'a mut Vec<..>` reference-এ lifetime `'a` বসানো সঠিক নয় এবং
+compiler error ঠিক করে না।
 """

@@ -1,10 +1,10 @@
 [multipart]
 q = """
-**Context:** You are designing a simple user interface framework that consists of a tree of widgets, such as text and buttons.
+**প্রেক্ষাপট:** আপনি একটি সরল user interface framework নকশা করছেন, যা লেখা আর button-এর মতো widget-এর একটি tree দিয়ে গঠিত।
 
-**Functionality:** The API provides a `Widget` trait that defines how a widget works. The API client implements the `Widget` trait, and calls it to render a UI.
+**কার্যক্ষমতা:** API একটি `Widget` trait দেয়, যা সংজ্ঞায়িত করে একটি widget কীভাবে কাজ করে। API-র ব্যবহারকারী `Widget` trait implement করে, এবং একটি UI আঁকতে (render করতে) এটি call করে।
 
-**Designs:** Below are several proposed designs to implement the functionality.
+**নকশা:** কার্যক্ষমতাটি implement করার জন্য নিচে কয়েকটি প্রস্তাবিত নকশা দেওয়া হলো।
 
 ```
 // Option 1: children must be Self
@@ -39,15 +39,15 @@ pub trait Widget {
 type = "MultipleChoice"
 multipart = "q"
 prompt.prompt = """
-Select each design option that satisfies the following requirement:
+নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:
 
-**Requirement:** The API client is expected to provide a single `WidgetImpl` enum representing all possible widgets, and implement the `Widget` trait for `WidgetImpl`.
+**চাহিদা:** API-র ব্যবহারকারী সব সম্ভাব্য widget বোঝানো একটিমাত্র `WidgetImpl` enum দেবে এবং `WidgetImpl`-এর জন্য `Widget` trait implement করবে বলে আশা করা হয়।
 """
 prompt.distractors = ["2", "3", "4", "5"]
 prompt.sortAnswers = true
 answer.answer = ["1"]
 context = """
-If we represent all possible widgets as a single enum, like this:
+সব সম্ভাব্য widget-কে যদি একটিমাত্র enum হিসেবে প্রকাশ করি, এভাবে:
 
 ```
 enum WidgetImpl {
@@ -59,8 +59,8 @@ enum WidgetImpl {
 impl Widget for WidgetImpl { /* .. */ }
 ```
 
-Then we have a "closed world" system where there is a non-extensible set of possible widgets. There is only one implementation of `Widget`, and no need for dynamic dispatch. 
-Therefore only Option 1 makes sense, because `render` would only ever return other `WidgetImpl` types. All other designs contain unnecessary complexity under this requirement.
+তাহলে আমাদের একটি "বদ্ধ জগৎ" system, যেখানে সম্ভাব্য widget-এর সেট বাড়ানো যায় না। `Widget`-এর মাত্র একটি implementation আছে, আর dynamic dispatch-এর দরকার নেই। 
+তাই শুধু Option 1 অর্থবহ, কারণ `render` সবসময় শুধু অন্য `WidgetImpl` type-ই return করবে। এই চাহিদায় বাকি সব নকশায় অপ্রয়োজনীয় জটিলতা আছে।
 """
 id = "e529cabf-a14c-4f1b-865f-1f376b704df8"
 
@@ -68,16 +68,16 @@ id = "e529cabf-a14c-4f1b-865f-1f376b704df8"
 type = "MultipleChoice"
 multipart = "q"
 prompt.prompt = """
-Select each design option that satisfies the following requirement:
+নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:
 
-**Requirement:** The API client is expected to provide a unique struct for each possible widget, and implement the `Widget` trait for each struct. 
-Each widget can return a vector containing widgets of any possible type.
+**চাহিদা:** API-র ব্যবহারকারী প্রতিটি সম্ভাব্য widget-এর জন্য একটি অনন্য struct দেবে এবং প্রতিটি struct-এর জন্য `Widget` trait implement করবে বলে আশা করা হয়। 
+প্রতিটি widget যেকোনো সম্ভাব্য type-এর widget-যুক্ত একটি vector return করতে পারে।
 """
 prompt.distractors = ["1", "2", "3"]
 prompt.sortAnswers = true
 answer.answer = ["4", "5"]
 context = """
-Unlike the previous question, now we expect to have a distinct type for each widget, like:
+আগের প্রশ্নের মতো নয়, এখন আমরা প্রতিটি widget-এর জন্য একটি আলাদা type আশা করি, যেমন:
 
 ```
 struct Button { /* .. */ }
@@ -87,9 +87,9 @@ struct Text { /* .. */ }
 impl Widget for Text { /* .. */ }
 ```
 
-Therefore a vector of widgets needs to be heterogeneous, i.e., it could contain widgets of distinct types.
-Options 1, 2, and 3 all constrain each `Widget::render` implementation to return a vector of a single widget type.
-Options 4 and 5 use dynamic dispatch via trait objects to permit heterogeneous widget vectors.
+তাই widget-এর একটি vector-কে বিভিন্ন জাতের হতে হবে, অর্থাৎ এতে ভিন্ন ভিন্ন type-এর widget থাকতে পারে।
+Option 1, 2 আর 3 সবগুলোই প্রতিটি `Widget::render` implementation-কে একটিমাত্র widget type-এর vector return করতে বাধ্য করে।
+Option 4 আর 5 বিভিন্ন জাতের widget-এর vector সম্ভব করতে trait object-এর মাধ্যমে dynamic dispatch ব্যবহার করে।
 """
 id = "0fdd5ca0-835f-4999-8d24-37841cb0a1a7"
 
@@ -98,15 +98,15 @@ id = "0fdd5ca0-835f-4999-8d24-37841cb0a1a7"
 multipart = "q"
 type = "MultipleChoice"
 prompt.prompt = """
-Select each design option that satisfies the following requirement:
+নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:
 
-**Requirement:** Only types that implement the `Widget` trait should be returned from `render`.
+**চাহিদা:** `render` থেকে শুধু `Widget` trait implement করা type-ই return হওয়া উচিত।
 """
 prompt.distractors = ["2"]
 prompt.sortAnswers = true
 answer.answer = ["1", "3", "4", "5"]
 context = """
-The `Widget` trait in Option 2 does not constrain that `Children: Widget`. 
-All other options do ensure return a `Vec<W>` for some `W` where `W: Widget`.
+Option 2-এর `Widget` trait `Children: Widget` হওয়ার বাধ্যবাধকতা দেয় না। 
+বাকি সব বিকল্প নিশ্চিত করে যে কোনো এক `W`-এর জন্য একটি `Vec<W>` return হবে, যেখানে `W: Widget`।
 """
 id = "fbed1c75-737c-49f5-8f11-66d25391079b"

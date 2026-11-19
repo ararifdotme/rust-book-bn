@@ -1,14 +1,14 @@
-# Design Trade-offs
+# নকশার সুবিধা-অসুবিধা {#design-trade-offs}
 
-This section is about **design trade-offs** in Rust. To be an effective Rust engineer, it's not enough just to know how Rust works. You have to decide which of Rust's many tools are appropriate for a given job. In this section, we will give you a sequence of quizzes about your understanding of design trade-offs in Rust.  After each quiz, we will explain in-depth our rationale for each question.
+এই অংশটি Rust-এ **নকশার সুবিধা-অসুবিধা (design trade-offs)** নিয়ে। একজন দক্ষ Rust প্রকৌশলী হতে শুধু Rust কীভাবে কাজ করে তা জানাই যথেষ্ট নয়। একটি নির্দিষ্ট কাজের জন্য Rust-এর অনেক হাতিয়ারের মধ্যে কোনগুলো উপযুক্ত তা আপনাকে ঠিক করতে হবে। এই অংশে Rust-এ নকশার সুবিধা-অসুবিধা সম্পর্কে আপনার বোঝাপড়া নিয়ে আমরা একের পর এক কুইজ দেব।  প্রতিটি কুইজের পরে প্রতিটি প্রশ্নের পেছনে আমাদের যুক্তি বিস্তারিত ব্যাখ্যা করব।
 
-Here's an example of what a question will look like. It will start out by describing a software case study with a space of designs:
+একটি প্রশ্ন দেখতে কেমন হবে তার একটি উদাহরণ এখানে দেওয়া হলো। এটি শুরু হবে একাধিক সম্ভাব্য নকশাসহ একটি software case study-র বর্ণনা দিয়ে:
 
-> **Context:** You are designing an application with a global configuration, e.g. containing command-line flags.
+> **প্রেক্ষাপট:** আপনি একটি global configuration-যুক্ত application নকশা করছেন, যেমন যাতে command-line flag থাকে।
 >
-> **Functionality:** The application needs to pass immutable references to this configuration throughout the application.
+> **কার্যক্ষমতা:** application-টিকে পুরো application জুড়ে এই configuration-এর immutable reference পাঠাতে হবে।
 >
-> **Designs:** Below are several proposed designs to implement the functionality.
+> **নকশা:** কার্যক্ষমতাটি implement করার জন্য নিচে কয়েকটি প্রস্তাবিত নকশা দেওয়া হলো।
 >
 > ```rust,ignore
 > use std::rc::Rc;
@@ -29,29 +29,29 @@ Here's an example of what a question will look like. It will start out by descri
 > struct ConfigRef(Arc<Config>);
 > ```
 
-Given just the context and key functionality, all three designs are potential candidates. 
-We need more information about the system goals to decide which ones make the most sense.
-Hence, we give a new requirement:
+শুধু প্রেক্ষাপট আর মূল কার্যক্ষমতা দেওয়া থাকলে তিনটি নকশাই সম্ভাব্য প্রার্থী। 
+কোনগুলো সবচেয়ে অর্থবহ তা ঠিক করতে system-এর লক্ষ্য সম্পর্কে আরও তথ্য দরকার।
+তাই আমরা একটি নতুন চাহিদা দিই:
 
-> Select each design option that satisfies the following requirement:
+> নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:
 >
-> **Requirement:** The configuration reference must be shareable between multiple threads.
+> **চাহিদা:** configuration-এর reference একাধিক thread-এর মধ্যে ভাগ করা যেতে হবে।
 >
-> **Answer:**
+> **উত্তর:**
 >
 > <input type="checkbox" checked disabled> Option 1 <br>
 > <input type="checkbox" disabled> Option 2 <br>
 > <input type="checkbox" checked disabled> Option 3 <br>
 
-In formal terms, this means that `ConfigRef` implements [`Send`] and [`Sync`]. 
-Assuming `Config: Send + Sync`, then both `&Config` and `Arc<Config>` satisfy this requirement,
-but [`Rc`] does not (because non-atomic reference-counted pointers are not thread-safe). So Option 2 does not satisfy the requirement, while Option 3 does.
+আনুষ্ঠানিক ভাষায় এর মানে `ConfigRef` [`Send`] আর [`Sync`] implement করে। 
+`Config: Send + Sync` ধরে নিলে `&Config` আর `Arc<Config>` দুটিই এই চাহিদা পূরণ করে,
+কিন্তু [`Rc`] করে না (কারণ non-atomic reference-counted pointer thread-safe নয়)। তাই Option 2 চাহিদা পূরণ করে না, আর Option 3 করে।
 
-We might also be tempted to conclude that Option 1 does not satisfy the requirement because functions like [`thread::spawn`] require that all data moved into a thread can only contain references with a `'static` lifetime. However, that does not rule out Option 1 for two reasons:
-1.  The `Config` could be stored as a global static variable (e.g., using [`OnceLock`]), so one could construct `&'static Config` references.
-2. Not all concurrency mechanisms require `'static` lifetimes, such as [`thread::scope`]. 
+আমরা হয়তো এই সিদ্ধান্তেও পৌঁছাতে চাইব যে Option 1 চাহিদা পূরণ করে না, কারণ [`thread::spawn`]-এর মতো function চায় একটি thread-এ সরানো সব ডেটায় শুধু `'static` lifetime-এর reference থাকুক। তবে দুটি কারণে এটি Option 1-কে বাদ দেয় না:
+1.  `Config` একটি global static variable হিসেবে রাখা যেতে পারে (যেমন [`OnceLock`] ব্যবহার করে), ফলে `&'static Config` reference তৈরি করা যায়।
+2. সব concurrency ব্যবস্থায় `'static` lifetime লাগে না, যেমন [`thread::scope`]। 
 
-Therefore the requirement as-stated only rules out non-[`Send`] types, and we consider Options 1 and 3 to be the correct answers.
+তাই বর্ণিত চাহিদা শুধু non-[`Send`] type-গুলোকে বাদ দেয়, আর আমরা Option 1 ও 3-কে সঠিক উত্তর হিসেবে গণ্য করি।
 
 [`thread::spawn`]: https://doc.rust-lang.org/std/thread/fn.spawn.html
 [`Send`]: https://doc.rust-lang.org/std/marker/trait.Send.html
@@ -62,14 +62,14 @@ Therefore the requirement as-stated only rules out non-[`Send`] types, and we co
 
 <hr>
 
-Now you try with the questions below! Each section contains a quiz focused on a single scenario. Complete the quiz, and make sure to read the answer context after each quiz.
+এবার নিচের প্রশ্নগুলো দিয়ে আপনি চেষ্টা করুন! প্রতিটি অংশে একটিমাত্র পরিস্থিতির ওপর কেন্দ্রীভূত একটি কুইজ আছে। কুইজটি শেষ করুন, এবং প্রতিটি কুইজের পরে উত্তরের ব্যাখ্যা অবশ্যই পড়ুন।
  <!-- These questions are both experimental and opinionated &mdash; please leave us feedback via the bug button 🐞 if you disagree with our answers. -->
 
-Along with each quiz, we have also provided links to popular Rust crates that served as inspiration for the quiz.
+প্রতিটি কুইজের সঙ্গে আমরা সেই জনপ্রিয় Rust crate-গুলোর link-ও দিয়েছি, যেগুলো কুইজটির অনুপ্রেরণা ছিল।
 
-## References
+## reference {#references}
 
-*Inspiration:* [Bevy assets], [Petgraph node indices], [Cargo units]
+*অনুপ্রেরণা:* [Bevy assets], [Petgraph node indices], [Cargo units]
 
 {{#quiz ../quizzes/ch17-05-design-challenge-references.toml}}
 
@@ -78,18 +78,18 @@ Along with each quiz, we have also provided links to popular Rust crates that se
 [Petgraph node indices]: https://docs.rs/petgraph/0.6.4/petgraph/graph/struct.NodeIndex.html
 [Cargo units]: https://docs.rs/cargo/0.73.1/cargo/core/compiler/struct.Unit.html
 
-## Trait Trees
+## trait tree {#trait-trees}
 
-*Inspiration:* [Yew components], [Druid widgets]
+*অনুপ্রেরণা:* [Yew components], [Druid widgets]
 
 {{#quiz ../quizzes/ch17-05-design-challenge-trait-trees.toml}}
 
 [Yew components]: https://docs.rs/yew/0.20.0/yew/html/trait.Component.html
 [Druid widgets]: https://docs.rs/druid/0.8.3/druid/trait.Widget.html
 
-## Dispatch
+## dispatch {#dispatch}
 
-*Inspiration:* [Bevy systems], [Diesel queries], [Axum handlers]
+*অনুপ্রেরণা:* [Bevy systems], [Diesel queries], [Axum handlers]
 
 {{#quiz ../quizzes/ch17-05-design-challenge-dispatch.toml}}
 
@@ -97,9 +97,9 @@ Along with each quiz, we have also provided links to popular Rust crates that se
 [Diesel queries]: https://docs.diesel.rs/2.1.x/diesel/query_dsl/trait.BelongingToDsl.html
 [Axum handlers]: https://docs.rs/axum/0.6.20/axum/handler/trait.Handler.html
 
-## Intermediates
+## মধ্যবর্তী রূপ {#intermediates}
 
-*Inspiration:* [Serde] and [miniserde]
+*অনুপ্রেরণা:* [Serde] আর [miniserde]
 
 {{#quiz ../quizzes/ch17-05-design-challenge-intermediates.toml}}
 
