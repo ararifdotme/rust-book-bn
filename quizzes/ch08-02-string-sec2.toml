@@ -1,31 +1,31 @@
 [[questions]]
 id = "da6daf92-5b2c-4f8d-97de-6905dbc77936"
 type = "MultipleChoice"
-prompt.prompt = "Which statement is the best explanation for why Rust does not allow string indexing?"
-answer.answer = "Indexing strings is ambiguous because strings represent several granularities of sequenced data"
+prompt.prompt = "Rust কেন string-এ index করতে দেয় না, তার সবচেয়ে ভালো ব্যাখ্যা কোন বক্তব্যটি?"
+answer.answer = "string-এ index করা দ্ব্যর্থক, কারণ string ক্রমিক ডেটার কয়েকটি আলাদা স্তর প্রকাশ করে"
 prompt.distractors = [
-  "Indexing strings is unsafe because it can cause a segfault or buffer overflow",
-  "Indexing strings is inefficient because string are null-terminated so their length cannot be efficiently computed",
-  "Indexing strings would make Rust too easy to use, and Rust developers need job security"
+  "string-এ index করা অনিরাপদ, কারণ এতে segfault বা buffer overflow ঘটতে পারে",
+  "string-এ index করা অদক্ষ, কারণ string null-terminated, তাই এদের দৈর্ঘ্য দক্ষভাবে হিসাব করা যায় না",
+  "string-এ index করতে দিলে Rust ব্যবহার করা খুব সহজ হয়ে যেত, আর Rust ডেভেলপারদের চাকরির নিরাপত্তা দরকার"
 ]
 context = """
-A UTF-8 string can be interpreted as a sequence of bytes, characters, or grapheme clusters. None of these is necessarily the "default" way
-of interpreting a string, so a default indexing operation does not make sense.
+একটি UTF-8 string-কে byte, অক্ষর বা grapheme cluster-এর ক্রম হিসেবে ব্যাখ্যা করা যায়। এর কোনোটিই অবধারিতভাবে string ব্যাখ্যার "ডিফল্ট" উপায়
+নয়, তাই একটি ডিফল্ট index operation অর্থবহ নয়।
 """
 
 [[questions]]
 id = "9366278e-a3f5-4759-ac72-e3c7d248da44"
 type = "MultipleChoice"
 prompt.prompt = """
-Which statement best describes the difference between the types of a string slice `&str` and a byte slice `&[u8]`?
+একটি string slice `&str` আর একটি byte slice `&[u8]`-এর type-এর পার্থক্য কোন বক্তব্যটি সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
-answer.answer = "`&str` points to bytes that can always be interpreted as UTF-8, whereas `&[u8]` can be any byte sequence"
+answer.answer = "`&str` এমন byte-কে নির্দেশ করে, যা সবসময় UTF-8 হিসেবে ব্যাখ্যা করা যায়, অথচ `&[u8]` যেকোনো byte-ক্রম হতে পারে"
 prompt.distractors = [
-  "`&str` always points to data stored in the program binary, whereas `&[u8]` can be stored anywhere in memory",
-  "`&str` cannot be further sliced, while `&[u8]` can be sliced again",
-  "`&str` can be constructed from a `String`, while `&[u8]` can only come from a `Vec`"
+  "`&str` সবসময় প্রোগ্রামের binary-তে রাখা ডেটাকে নির্দেশ করে, অথচ `&[u8]` মেমোরির যেকোনো জায়গায় থাকতে পারে",
+  "`&str`-এর আর slice নেওয়া যায় না, অথচ `&[u8]`-এর আবার slice নেওয়া যায়",
+  "`&str` একটি `String` থেকে তৈরি করা যায়, অথচ `&[u8]` শুধু একটি `Vec` থেকে আসতে পারে"
 ]
 context = """
-`&str` is a promise that the byte sequence it points to will always be valid UTF-8. Therefore a programmer who wants to e.g. print out
-an `&str` never needs to check if it is valid, or worry about accidentally interpreting an invalid string.
+`&str` একটি প্রতিশ্রুতি যে এটি যে byte-ক্রমকে নির্দেশ করে, তা সবসময় বৈধ UTF-8 হবে। তাই যে প্রোগ্রামার, যেমন, একটি `&str` প্রিন্ট করতে
+চান, তাকে কখনো যাচাই করতে হয় না এটি বৈধ কি না, বা ভুল করে একটি অবৈধ string ব্যাখ্যা করে ফেলার চিন্তাও করতে হয় না।
 """

@@ -2,7 +2,7 @@
 id = "867e5d29-c1eb-44b3-99e3-bb2325b74e44"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 1:**
+**প্রোগ্রাম 1:**
 
 ```ide
 /// Removes all the zeros in-place from a vector of integers.
@@ -16,7 +16,7 @@ fn remove_zeros(v: &mut Vec<i32>) {
 }
 ```
 
-If you tried to compile this function, which of the following best describes the compiler error you would get?
+এই function compile করার চেষ্টা করলে আপনি যে compiler error পেতেন, নিচের কোনটি তা সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
 answer.answer = "`v.remove(i)` cannot borrow `v` as mutable"
 prompt.distractors = [
@@ -25,8 +25,8 @@ prompt.distractors = [
   "`v.iter()` cannot be called on a mutable reference"
 ]
 context = """
-The function `v.iter()` immutably borrows a vector `v` for the duration of the for-loop. However, `v.remove(i)` requires a mutable
-reference to `v`. Therefore `v.remove(i)` cannot borrow `v` as mutable, since that would conflict with the iterator.
+`v.iter()` function পুরো for-loop জুড়ে একটি vector `v`-কে immutable-ভাবে borrow করে। কিন্তু `v.remove(i)`-এর জন্য `v`-এর একটি mutable
+reference দরকার। তাই `v.remove(i)` `v`-কে mutable হিসেবে borrow করতে পারে না, কারণ তা iterator-এর সঙ্গে সংঘাত ঘটাত।
 """
 
 
@@ -34,7 +34,7 @@ reference to `v`. Therefore `v.remove(i)` cannot borrow `v` as mutable, since th
 id = "dd1bd092-ef8d-4293-a4d6-6a59b5887e98"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 1:**
+**প্রোগ্রাম 1:**
 
 ```ide
 /// Removes all the zeros in-place from a vector of integers.
@@ -48,7 +48,7 @@ fn remove_zeros(v: &mut Vec<i32>) {
 }
 ```
 
-Normally if you try to compile this function, the compiler returns the following error:
+সাধারণত এই function compile করার চেষ্টা করলে compiler নিচের error দেয়:
 
 ```text
 error[E0502]: cannot borrow `*v` as mutable because it is also borrowed as immutable
@@ -64,9 +64,9 @@ error[E0502]: cannot borrow `*v` as mutable because it is also borrowed as immut
   |             ^^^^^^^^^^^ mutable borrow occurs here
 ```
 
-Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
-(1) pass the compiler, and (2) possibly cause undefined behavior if executed?
-Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
+ধরে নিন, compiler এই function বাতিল **করেনি**। নিচের প্রোগ্রামগুলোর মধ্যে কোনগুলো (যদি থাকে)
+(1) compiler পেরিয়ে যাবে, এবং (2) চালালে undefined behavior ঘটাতে পারে?
+দুটি শর্তই পূরণ করে এমন প্রতিটি প্রোগ্রাম বেছে নিন, অথবা কোনোটিই পূরণ না করলে "এগুলোর কোনোটিই নয়" বেছে নিন।
 """
 answer.answer = [
 """
@@ -90,20 +90,20 @@ let mut v = vec![1; 100];
 remove_zeros(&mut v);
 ```
 """,
-"None of these programs",
+"এগুলোর কোনোটিই নয়",
 ]
 context = """
-To violate memory safety, `remove_zeros` must be called with a vector that contains a zero after the first element.
-The call to `v.shrink_to_fit()` will deallocate memory owned by the vector (due to resizing), which will invalidate the
-iterator `v.iter()` which contains a pointer to the old data. Note that reading the vector `v` after calling `remove_zeros`
-is not essential to the safety violation, since the issue is internal to `remove_zeros`.
+memory safety লঙ্ঘন করতে হলে `remove_zeros`-কে এমন একটি vector দিয়ে call করতে হবে, যাতে প্রথম উপাদানের পরে একটি শূন্য আছে।
+`v.shrink_to_fit()` call vector-এর মালিকানাধীন মেমোরি deallocate করবে (আকার বদলানোর কারণে), যা
+পুরোনো ডেটার pointer থাকা iterator `v.iter()`-কে অবৈধ করে দেবে। লক্ষ করুন, `remove_zeros` call করার পর vector `v` পড়া
+এই নিরাপত্তা-লঙ্ঘনের জন্য অপরিহার্য নয়, কারণ সমস্যাটি `remove_zeros`-এর ভেতরেই।
 """
 
 [[questions]]
 id = "c7e7e1e1-2788-4dd9-9c18-436bc95b405f"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 1:**
+**প্রোগ্রাম 1:**
 
 ```ide
 /// Removes all the zeros in-place from a vector of integers.
@@ -117,10 +117,10 @@ fn remove_zeros(v: &mut Vec<i32>) {
 }
 ```
 
-Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
-1. The fixed function passes the Rust compiler,
-2. The fixed function preserves the intention of the original code, and
-3. The fixed function does not introduce unnecessary inefficiencies
+নিচের সমাধানগুলোর (হলুদ রঙে হাইলাইট করা) মধ্যে কোনটি এই তিনটি শর্ত সবচেয়ে ভালোভাবে পূরণ করে:
+1. ঠিক করা function-টি Rust compiler পেরিয়ে যায়,
+2. ঠিক করা function-টি মূল কোডের উদ্দেশ্য বজায় রাখে, এবং
+3. ঠিক করা function-টি অপ্রয়োজনীয় অদক্ষতা যোগ করে না
 """
 answer.answer = """
 ```ide
@@ -174,20 +174,20 @@ fn remove_zeros(v: `[Vec<i32>]`) {
 """,
 ]
 context = """
-Any strategy that requires allocating a new vector, either via `Vec::clone` or `Vec::new`, requires unnecessary additional allocation.
-Therefore the simplest strategy that works is to only iterate over the indices `0 .. v.len()` which does not borrow `v`. We do this
-in reverse order to avoid removing missing indexes.
+`Vec::clone` বা `Vec::new`-এর মাধ্যমে নতুন vector বরাদ্দ করতে হয় এমন যেকোনো কৌশলে অপ্রয়োজনীয় বাড়তি বরাদ্দ লাগে।
+তাই কাজ করে এমন সবচেয়ে সহজ কৌশল হলো শুধু `0 .. v.len()` index-গুলোর ওপর iterate করা, যা `v`-কে borrow করে না। হারিয়ে যাওয়া index
+সরানো এড়াতে আমরা এটি উল্টো ক্রমে করি।
 
-Like with Problem 1, the most idiomatic strategy is actually to use a built-in function we haven't discussed,
-[`Vec::retain`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.retain). This function keeps only elements in a vector
-that pass a predicate, but does so with more memory-efficiency.
+সমস্যা 1-এর মতোই, সবচেয়ে Rust-সুলভ কৌশল আসলে এমন একটি বিল্ট-ইন function ব্যবহার করা, যা আমরা আলোচনা করিনি:
+[`Vec::retain`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.retain)। এই function একটি vector-এ শুধু সেই উপাদানগুলো রাখে,
+যেগুলো একটি predicate (true/false ফেরত দেয় এমন শর্ত-function) পেরোয়, তবে তা আরও মেমোরি-দক্ষভাবে করে।
 """
 
 [[questions]]
 id = "fb0e3080-7cc8-4338-948e-fae693d137c8"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 2:**
+**প্রোগ্রাম 2:**
 
 ```ide
 /// Reverses the elements of a vector in-place
@@ -199,7 +199,7 @@ fn reverse(v: &mut Vec<String>) {
 }
 ```
 
-If you tried to compile this program, which of the following best describes the compiler error you would get?
+এই প্রোগ্রাম compile করার চেষ্টা করলে আপনি যে compiler error পেতেন, নিচের কোনটি তা সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
 answer.answer = "cannot borrow `v` as mutable twice for `v[i]` and `v[n - i - 1]`"
 prompt.distractors = [
@@ -207,9 +207,9 @@ prompt.distractors = [
   "cannot mutably borrow an element `v[i]` of a mutable vector"
 ]
 context = """
-The compiler does not consider the specific value of the indexes used to access an array, so `&mut v[i]`
-and `&mut v[n - i - 1]` are assumed to possibly refer to the same element. Therefore we get an error
-where `v` cannot be mutably borrowed twice.
+array-তে পৌঁছাতে ব্যবহৃত index-গুলোর নির্দিষ্ট মান compiler বিবেচনা করে না, তাই `&mut v[i]`
+আর `&mut v[n - i - 1]` একই উপাদান নির্দেশ করতে পারে বলে ধরে নেওয়া হয়। তাই আমরা এমন একটি error পাই,
+যেখানে `v`-কে দুবার mutable-ভাবে borrow করা যায় না।
 """
 
 
@@ -217,7 +217,7 @@ where `v` cannot be mutably borrowed twice.
 id = "4c703871-3cc3-483f-beb5-876bdbcd223b"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 2:**
+**প্রোগ্রাম 2:**
 
 ```ide
 /// Reverses the elements of a vector in-place
@@ -229,7 +229,7 @@ fn reverse(v: &mut Vec<String>) {
 }
 ```
 
-Normally if you try to compile this function, the compiler returns the following error:
+সাধারণত এই function compile করার চেষ্টা করলে compiler নিচের error দেয়:
 
 ```text
 error[E0499]: cannot borrow `*v` as mutable more than once at a time
@@ -242,11 +242,11 @@ error[E0499]: cannot borrow `*v` as mutable more than once at a time
   |         first borrow later used by call
 ```
 
-Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
-(1) pass the compiler, and (2) possibly cause undefined behavior if executed?
-Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
+ধরে নিন, compiler এই function বাতিল **করেনি**। নিচের প্রোগ্রামগুলোর মধ্যে কোনগুলো (যদি থাকে)
+(1) compiler পেরিয়ে যাবে, এবং (2) চালালে undefined behavior ঘটাতে পারে?
+দুটি শর্তই পূরণ করে এমন প্রতিটি প্রোগ্রাম বেছে নিন, অথবা কোনোটিই পূরণ না করলে "এগুলোর কোনোটিই নয়" বেছে নিন।
 """
-answer.answer = ["None of these programs"]
+answer.answer = ["এগুলোর কোনোটিই নয়"]
 prompt.distractors = [
 """
 ```
@@ -271,16 +271,16 @@ println!("{:?}", v);
 """,
 ]
 context = """
-This function cannot cause a memory safety violation because `i != n - i - 1` for all `i`, so the two
-mutable references always refer to different elements. Note that the `let x = &v[0]` program would not
-compile, as Rust's borrow checker would not allow `reverse` to be called while `x` is live.
+এই function memory safety লঙ্ঘন ঘটাতে পারে না, কারণ সব `i`-এর জন্য `i != n - i - 1`, তাই দুটি
+mutable reference সবসময় আলাদা উপাদান নির্দেশ করে। লক্ষ করুন, `let x = &v[0]` প্রোগ্রামটি compile
+হতো না, কারণ `x` সক্রিয় থাকা অবস্থায় Rust-এর borrow checker `reverse` call করতে দিত না।
 """
 
 [[questions]]
 id = "380fc77f-190d-4386-9e0e-f9360bbbfd98"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 2:**
+**প্রোগ্রাম 2:**
 
 ```ide
 /// Reverses the elements of a vector in-place
@@ -292,10 +292,10 @@ fn reverse(v: &mut Vec<String>) {
 }
 ```
 
-Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
-1. The fixed function passes the Rust compiler,
-2. The fixed function preserves the intention of the original code, and
-3. The fixed function does not introduce unnecessary inefficiencies
+নিচের সমাধানগুলোর (হলুদ রঙে হাইলাইট করা) মধ্যে কোনটি এই তিনটি শর্ত সবচেয়ে ভালোভাবে পূরণ করে:
+1. ঠিক করা function-টি Rust compiler পেরিয়ে যায়,
+2. ঠিক করা function-টি মূল কোডের উদ্দেশ্য বজায় রাখে, এবং
+3. ঠিক করা function-টি অপ্রয়োজনীয় অদক্ষতা যোগ করে না
 """
 answer.answer = """
 ```ide
@@ -348,9 +348,9 @@ fn reverse(v: &mut Vec<String>) {
 """,
 ]
 context = """
-In a situation where the borrow checker rejects an operation that is actually safe and has no workaround, then
-unsafe code is sometimes acceptable if it's critical to avoid allocations. 
-In this specific case, you should actually use [`Vec::swap`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.swap), which is internally implemented
-with heavily-tested `unsafe` code similar to the code above. 
-But in general, if the standard library doesn't happen to support your use case, then `unsafe` can be acceptable if used correctly.
+borrow checker যখন এমন একটি operation বাতিল করে, যা আসলে নিরাপদ এবং যার কোনো বিকল্প উপায় নেই, তখন
+বরাদ্দ এড়ানো অত্যন্ত জরুরি হলে unsafe কোড কখনো কখনো গ্রহণযোগ্য। 
+এই নির্দিষ্ট ক্ষেত্রে আসলে আপনার [`Vec::swap`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.swap) ব্যবহার করা উচিত, যা ভেতরে ভেতরে implement করা
+ওপরের কোডের মতোই ভালোভাবে পরীক্ষিত `unsafe` কোড দিয়ে। 
+তবে সাধারণভাবে, standard library যদি আপনার ব্যবহারের ক্ষেত্রটি সমর্থন না করে, তাহলে সঠিকভাবে ব্যবহার করলে `unsafe` গ্রহণযোগ্য হতে পারে।
 """

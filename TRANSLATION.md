@@ -429,6 +429,20 @@ tested with this repo's build.
 | symbolic link | symbolic link | ফাইল বা ডিরেক্টরির শর্টকাট-লিংক | 7 |
 | build script | build script | build-এর আগে চলা Rust স্ক্রিপ্ট (`build.rs`) | 7 |
 | static method | static method | instance ছাড়াই call করা যায় এমন associated function | 7 |
+| map | map | key থেকে মানে যাওয়ার data structure | 8 |
+| hashing function / hash function | hashing function | key থেকে একটি সংখ্যা (hash) হিসাব করার function | 8 |
+| hasher | hasher | hash function তৈরি করে এমন type | 8 |
+| iterate | iterate করা | একে একে প্রতিটি উপাদানে যাওয়া | 8 |
+| wrapper | wrapper | অন্য একটি type-কে মুড়ে রাখা type | 8 |
+| associated type | associated type | trait-এর সঙ্গে যুক্ত type | 8 |
+| coerce | coerce করা | এক type-কে স্বয়ংক্রিয়ভাবে আরেক type-এ রূপান্তর করা | 8 |
+| grapheme cluster | grapheme cluster | মানুষের চোখে একটি অক্ষর, যা একাধিক Unicode মান মিলে গঠিত | 8 |
+| constant time | constant time | ইনপুটের আকার যা-ই হোক, একই সময় | 8 |
+| profile (performance) | profile করা | কোডের কোন অংশে কত সময় লাগে তা মাপা | 8 |
+| byte slice | byte slice | byte-এর slice (`&[u8]`) | 8 |
+| buffer overflow | buffer overflow | বাফারের সীমার বাইরে লেখা | 8 |
+| null-terminated | null-terminated | শেষে একটি null byte দিয়ে শেষ হওয়া | 8 |
+| predicate | predicate | true/false ফেরত দেয় এমন শর্ত-function | 8 |
 
 ### Everyday computing words
 
@@ -496,6 +510,10 @@ Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
 | shortcut | শর্টকাট | 7 |
 | codebase | কোডবেস | 7 |
 | front of house / back of house (restaurant) | front of house (সামনের অংশ) / back of house (পেছনের অংশ) | 7 |
+| concatenate | জোড়া লাগানো | 8 |
+| angle brackets | কৌণিক বন্ধনী | 8 |
+| Cyrillic / Devanagari | সিরিলিক / দেবনাগরী | 8 |
+| median / mode | median / mode (with an explanation in the sentence) | 8 |
 
 ## Progress
 
@@ -515,7 +533,7 @@ use.
 - [x] Chapter 5: Using Structs to Structure Related Data (ch05-*)
 - [x] Chapter 6: Enums and Pattern Matching (ch06-*)
 - [x] Chapter 7: Packages, Crates, and Modules (ch07-*)
-- [ ] Chapter 8: Common Collections (ch08-*)
+- [x] Chapter 8: Common Collections (ch08-*)
 - [ ] Chapter 9: Error Handling (ch09-*)
 - [ ] Chapter 10: Generic Types, Traits, and Lifetimes (ch10-*)
 - [ ] Chapter 11: Writing Automated Tests (ch11-*)

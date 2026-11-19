@@ -42,3 +42,33 @@ link, build script, static method. Everyday: ফাইল সিস্টেম,
 | not only are you the author, but you’re also a client! | আপনি শুধু লেখক নন, একজন ব্যবহারকারীও! |
 | hosts seat customers, servers take orders and payment, and bartenders make drinks | host খদ্দেরদের বসান, পরিবেশনকারীরা অর্ডার আর টাকা নেন, আর bartender পানীয় বানান |
 | `mod` is not an “include” operation | `mod` এমন কোনো “include” operation নয় |
+
+## Chapter 8: Common Collections
+
+**Auto-chosen terms:** map, hashing function, hasher, iterate, wrapper,
+associated type, coerce, grapheme cluster, constant time, profile
+(performance), byte slice, buffer overflow, null-terminated, predicate.
+Everyday: জোড়া লাগানো (concatenate), কৌণিক বন্ধনী, সিরিলিক / দেবনাগরী.
+
+**Decisions:**
+- *profile* (performance) gets a different gloss from chapter 1's *profile*
+  (build settings): "কোডের কোন অংশে কত সময় লাগে তা মাপা".
+- In Ownership Inventory #2 the options that read like compiler messages
+  ("`v.remove(i)` cannot borrow `v` as mutable", "cannot borrow `v` as mutable
+  twice …") stay in English, following the chapter 6 rule.
+- The greeting strings in Listing 8-14 and the Hindi example "नमस्ते" are
+  unchanged (code / example data).
+- Listing comments translated: 8-10, 8-12, 8-18, 8-22.
+
+**Unsure sentences:**
+
+| English | Bengali |
+| --- | --- |
+| strings being a more complicated data structure than many programmers give them credit for | অনেক প্রোগ্রামার যতটা ভাবেন তার চেয়ে string বেশি জটিল একটি data structure হওয়া |
+| The error tells the story | error-টিই পুরো গল্প বলে |
+| the closest thing to what we would call _letters_ | আমরা যাকে _বর্ণ_ বলি, তার সবচেয়ে কাছাকাছি |
+| They’re diacritics that don’t make sense on their own. | এগুলো এমন চিহ্ন (diacritic), যা একা অর্থবহ নয়। |
+| many more goodies are hiding in the functions | function-গুলোতে আরও অনেক দারুণ জিনিস লুকিয়ে আছে |
+| plays more nicely with the borrow checker | borrow checker-এর সঙ্গেও বেশি ভালোভাবে মানিয়ে চলে |
+| Rust developers need job security (quiz joke) | Rust ডেভেলপারদের চাকরির নিরাপত্তা দরকার |
+| several granularities of sequenced data (quiz) | ক্রমিক ডেটার কয়েকটি আলাদা স্তর |

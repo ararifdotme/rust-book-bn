@@ -1,17 +1,16 @@
-## Storing Lists of Values with Vectors
+## vector দিয়ে মানের তালিকা রাখা {#storing-lists-of-values-with-vectors}
 
-The first collection type we’ll look at is `Vec<T>`, also known as a vector.
-Vectors allow you to store more than one value in a single data structure that
-puts all the values next to each other in memory. Vectors can only store values
-of the same type. They are useful when you have a list of items, such as the
-lines of text in a file or the prices of items in a shopping cart.
+প্রথম যে collection type আমরা দেখব, তা হলো `Vec<T>`, যাকে vector-ও বলা হয়। vector দিয়ে একটিমাত্র data
+structure-এ একাধিক মান রাখা যায়, যা সব মান মেমোরিতে পাশাপাশি রাখে। vector শুধু একই type-এর মান রাখতে
+পারে। এগুলো কাজে আসে যখন আপনার কাছে আইটেমের একটি তালিকা থাকে, যেমন একটি ফাইলের লেখার লাইনগুলো বা একটি
+শপিং কার্টের আইটেমগুলোর দাম।
 
-### Creating a New Vector
+### একটি নতুন vector তৈরি করা {#creating-a-new-vector}
 
-To create a new, empty vector, we call the `Vec::new` function, as shown in
-Listing 8-1.
+একটি নতুন, ফাঁকা vector তৈরি করতে আমরা `Vec::new` function call করি, Listing 8-1-এ যেমন দেখানো
+হয়েছে।
 
-<Listing number="8-1" caption="Creating a new, empty vector to hold values of type `i32`">
+<Listing number="8-1" caption="`i32` type-এর মান রাখার জন্য একটি নতুন, ফাঁকা vector তৈরি করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-01/src/main.rs:here}}
@@ -19,24 +18,21 @@ Listing 8-1.
 
 </Listing>
 
-Note that we added a type annotation here. Because we aren’t inserting any
-values into this vector, Rust doesn’t know what kind of elements we intend to
-store. This is an important point. Vectors are implemented using generics;
-we’ll cover how to use generics with your own types in Chapter 10. For now,
-know that the `Vec<T>` type provided by the standard library can hold any type.
-When we create a vector to hold a specific type, we can specify the type within
-angle brackets. In Listing 8-1, we’ve told Rust that the `Vec<T>` in `v` will
-hold elements of the `i32` type.
+লক্ষ করুন, এখানে আমরা একটি type annotation (type স্পষ্ট করে লিখে দেওয়া) যোগ করেছি। যেহেতু এই vector-এ
+আমরা কোনো মান ঢোকাচ্ছি না, তাই আমরা কী ধরনের উপাদান রাখতে চাই, Rust তা জানে না। এটি একটি গুরুত্বপূর্ণ
+বিষয়। vector implement করা হয়েছে generics (একাধিক টাইপের জন্য একই কোড) ব্যবহার করে; নিজের type-এর সঙ্গে
+generics কীভাবে ব্যবহার করতে হয়, তা আমরা অধ্যায় 10-এ দেখব। আপাতত জেনে রাখুন, standard library-র দেওয়া
+`Vec<T>` type যেকোনো type রাখতে পারে। একটি নির্দিষ্ট type রাখার জন্য vector তৈরি করার সময় আমরা কৌণিক বন্ধনীর
+ভেতরে type-টি লিখে দিতে পারি। Listing 8-1-এ আমরা Rust-কে বলেছি যে `v`-এর `Vec<T>` `i32` type-এর উপাদান রাখবে।
 
-More often, you’ll create a `Vec<T>` with initial values, and Rust will infer
-the type of value you want to store, so you rarely need to do this type
-annotation. Rust conveniently provides the `vec!` macro, which will create a
-new vector that holds the values you give it. Listing 8-2 creates a new
-`Vec<i32>` that holds the values `1`, `2`, and `3`. The integer type is `i32`
-because that’s the default integer type, as we discussed in the [“Data
-Types”][data-types]<!-- ignore --> section of Chapter 3.
+বেশিরভাগ সময় আপনি শুরুর মানসহ একটি `Vec<T>` তৈরি করবেন, আর Rust আপনি কী type-এর মান রাখতে চান তা infer
+(type অনুমান করে নেওয়া) করে নেবে, তাই এই type annotation খুব কমই দরকার হয়। সুবিধার জন্য Rust `vec!` macro
+(কোড তৈরি করে এমন কোড) দেয়, যা আপনার দেওয়া মানগুলো রাখে এমন একটি নতুন vector তৈরি করে। Listing 8-2 একটি নতুন
+`Vec<i32>` তৈরি করে, যা `1`, `2` আর `3` মান রাখে। integer type হলো `i32`, কারণ এটিই ডিফল্ট integer type,
+যেমনটি আমরা অধ্যায় 3-এর [“data
+type”][data-types]<!-- ignore --> অংশে আলোচনা করেছি।
 
-<Listing number="8-2" caption="Creating a new vector containing values">
+<Listing number="8-2" caption="মানসহ একটি নতুন vector তৈরি করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-02/src/main.rs:here}}
@@ -44,16 +40,15 @@ Types”][data-types]<!-- ignore --> section of Chapter 3.
 
 </Listing>
 
-Because we’ve given initial `i32` values, Rust can infer that the type of `v`
-is `Vec<i32>`, and the type annotation isn’t necessary. Next, we’ll look at how
-to modify a vector.
+যেহেতু আমরা শুরুর `i32` মান দিয়েছি, তাই Rust infer করতে পারে যে `v`-এর type হলো `Vec<i32>`, আর type
+annotation-এর দরকার নেই। এরপর আমরা দেখব কীভাবে একটি vector বদলাতে হয়।
 
-### Updating a Vector
+### একটি vector আপডেট করা {#updating-a-vector}
 
-To create a vector and then add elements to it, we can use the `push` method,
-as shown in Listing 8-3.
+একটি vector তৈরি করে তারপর তাতে উপাদান যোগ করতে আমরা `push` method ব্যবহার করতে পারি, Listing 8-3-এ যেমন
+দেখানো হয়েছে।
 
-<Listing number="8-3" caption="Using the `push` method to add values to a vector">
+<Listing number="8-3" caption="একটি vector-এ মান যোগ করতে `push` method ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-03/src/main.rs:here}}
@@ -61,21 +56,18 @@ as shown in Listing 8-3.
 
 </Listing>
 
-As with any variable, if we want to be able to change its value, we need to
-make it mutable using the `mut` keyword, as discussed in Chapter 3. The numbers
-we place inside are all of type `i32`, and Rust infers this from the data, so
-we don’t need the `Vec<i32>` annotation.
+অন্য যেকোনো variable-এর মতোই, এর মান বদলাতে চাইলে অধ্যায় 3-এ যেমন আলোচনা করা হয়েছে, `mut` keyword ব্যবহার
+করে একে mutable করতে হবে। আমরা যে সংখ্যাগুলো ভেতরে রাখি, সেগুলো সবই `i32` type-এর, আর Rust ডেটা থেকেই তা
+infer করে, তাই `Vec<i32>` annotation-এর দরকার নেই।
 
-### Reading Elements of Vectors
+### vector-এর উপাদান পড়া {#reading-elements-of-vectors}
 
-There are two ways to reference a value stored in a vector: via indexing or by
-using the `get` method. In the following examples, we’ve annotated the types of
-the values that are returned from these functions for extra clarity.
+vector-এ রাখা একটি মানকে reference করার দুটি উপায় আছে: index দিয়ে, অথবা `get` method ব্যবহার করে। নিচের
+উদাহরণগুলোতে বাড়তি স্পষ্টতার জন্য এই function-গুলো থেকে return হওয়া মানের type আমরা annotate করেছি।
 
-Listing 8-4 shows both methods of accessing a value in a vector, with indexing
-syntax and the `get` method.
+Listing 8-4-এ vector-এর একটি মানে পৌঁছানোর দুটি পদ্ধতিই দেখানো হয়েছে: index syntax আর `get` method।
 
-<Listing number="8-4" caption="Using indexing syntax and using the `get` method to access an item in a vector">
+<Listing number="8-4" caption="vector-এর একটি আইটেমে পৌঁছাতে index syntax আর `get` method ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-04/src/main.rs:here}}
@@ -83,19 +75,16 @@ syntax and the `get` method.
 
 </Listing>
 
-Note a few details here. We use the index value of `2` to get the third element
-because vectors are indexed by number, starting at zero. Using `&` and `[]`
-gives us a reference to the element at the index value. When we use the `get`
-method with the index passed as an argument, we get an `Option<&T>` that we can
-use with `match`.
+এখানে কয়েকটি খুঁটিনাটি লক্ষ করুন। তৃতীয় উপাদানটি পেতে আমরা index মান `2` ব্যবহার করি, কারণ vector-এর index
+শূন্য থেকে শুরু হওয়া সংখ্যা দিয়ে হয়। `&` আর `[]` ব্যবহার করলে আমরা ওই index-এর উপাদানের একটি reference পাই।
+`get` method-এ index-কে argument হিসেবে দিলে আমরা একটি `Option<&T>` পাই, যা `match`-এর সঙ্গে ব্যবহার করা যায়।
 
-Rust provides these two ways to reference an element so that you can choose how
-the program behaves when you try to use an index value outside the range of
-existing elements. As an example, let’s see what happens when we have a vector
-of five elements and then we try to access an element at index 100 with each
-technique, as shown in Listing 8-5.
+Rust একটি উপাদানকে reference করার এই দুটি উপায় দেয়, যাতে বিদ্যমান উপাদানগুলোর পরিসরের বাইরের index মান
+ব্যবহারের চেষ্টা করলে প্রোগ্রাম কেমন আচরণ করবে, তা আপনি বেছে নিতে পারেন। উদাহরণ হিসেবে, দেখা যাক পাঁচটি
+উপাদানের একটি vector থাকলে প্রতিটি কৌশল দিয়ে index 100-এর উপাদানে পৌঁছানোর চেষ্টা করলে কী ঘটে, Listing 8-5-এ
+যেমন দেখানো হয়েছে।
 
-<Listing number="8-5" caption="Attempting to access the element at index 100 in a vector containing five elements">
+<Listing number="8-5" caption="পাঁচটি উপাদানযুক্ত একটি vector-এ index 100-এর উপাদানে পৌঁছানোর চেষ্টা">
 
 ```rust,should_panic,panics
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-05/src/main.rs:here}}
@@ -103,32 +92,25 @@ technique, as shown in Listing 8-5.
 
 </Listing>
 
-When we run this code, the first `[]` method will cause the program to panic
-because it references a nonexistent element. This method is best used when you
-want your program to crash if there’s an attempt to access an element past the
-end of the vector.
+এই কোড চালালে প্রথম `[]` পদ্ধতিটি প্রোগ্রামকে panic (প্রোগ্রামের হঠাৎ থেমে যাওয়া) করাবে, কারণ এটি এমন একটি
+উপাদানকে reference করে, যার অস্তিত্ব নেই। আপনি যদি চান vector-এর শেষের পরের কোনো উপাদানে পৌঁছানোর চেষ্টা হলে
+প্রোগ্রাম ক্র্যাশ করুক, তাহলে এই পদ্ধতিটিই সবচেয়ে ভালো।
 
-When the `get` method is passed an index that is outside the vector, it returns
-`None` without panicking. You would use this method if accessing an element
-beyond the range of the vector may happen occasionally under normal
-circumstances. Your code will then have logic to handle having either
-`Some(&element)` or `None`, as discussed in Chapter 6. For example, the index
-could be coming from a person entering a number. If they accidentally enter a
-number that’s too large and the program gets a `None` value, you could tell the
-user how many items are in the current vector and give them another chance to
-enter a valid value. That would be more user-friendly than crashing the program
-due to a typo!
+`get` method-এ vector-এর বাইরের একটি index দিলে এটি panic না করে `None` return করে। স্বাভাবিক পরিস্থিতিতেও
+মাঝে মাঝে vector-এর পরিসরের বাইরের উপাদানে পৌঁছানোর চেষ্টা হতে পারে এমন হলে আপনি এই পদ্ধতি ব্যবহার করবেন।
+তখন আপনার কোডে `Some(&element)` বা `None` সামলানোর যুক্তি থাকবে, যেমনটি অধ্যায় 6-এ আলোচনা করা হয়েছে। যেমন,
+index হয়তো আসছে একজন মানুষের লেখা একটি সংখ্যা থেকে। তিনি ভুল করে খুব বড় একটি সংখ্যা লিখলে আর প্রোগ্রাম
+একটি `None` মান পেলে আপনি ব্যবহারকারীকে জানাতে পারেন বর্তমান vector-এ কয়টি আইটেম আছে, আর একটি বৈধ মান লেখার
+আরেকটি সুযোগ দিতে পারেন। টাইপের ভুলের কারণে প্রোগ্রাম ক্র্যাশ করানোর চেয়ে এটি অনেক বেশি ব্যবহারকারী-বান্ধব!
 
-When the program has a valid reference, the borrow checker enforces the
-ownership and borrowing rules (covered in Chapter 4) to ensure that this
-reference and any other references to the contents of the vector remain valid.
-Recall the rule that states you can’t have mutable and immutable references in
-the same scope. That rule applies in Listing 8-6, where we hold an immutable
-reference to the first element in a vector and try to add an element to the
-end. This program won’t work if we also try to refer to that element later in
-the function.
+প্রোগ্রামের কাছে একটি বৈধ reference থাকলে borrow checker (borrow-এর নিয়ম যাচাই করা compiler-এর অংশ)
+ownership আর borrowing-এর নিয়ম (অধ্যায় 4-এ আলোচিত) বলবৎ করে, যাতে এই reference আর vector-এর বিষয়বস্তুর অন্য
+সব reference বৈধ থাকে। সেই নিয়মটি মনে করুন, যা বলে একই scope-এ mutable আর immutable reference রাখা যায় না।
+Listing 8-6-এ সেই নিয়মটি প্রযোজ্য, যেখানে আমরা একটি vector-এর প্রথম উপাদানের একটি immutable reference ধরে
+রেখে শেষে একটি উপাদান যোগ করার চেষ্টা করি। function-এর পরের অংশে আমরা যদি সেই উপাদানটি আবার উল্লেখ করারও
+চেষ্টা করি, তাহলে এই প্রোগ্রাম কাজ করবে না।
 
-<Listing number="8-6" caption="Attempting to add an element to a vector while holding a reference to an item">
+<Listing number="8-6" caption="একটি আইটেমের reference ধরে রাখা অবস্থায় vector-এ একটি উপাদান যোগ করার চেষ্টা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-06/src/main.rs:here}}
@@ -136,33 +118,29 @@ the function.
 
 </Listing>
 
-Compiling this code will result in this error:
+এই কোড compile করলে এই error আসবে:
 
 ```console
 {{#include ../listings/ch08-common-collections/listing-08-06/output.txt}}
 ```
 
-The code in Listing 8-6 might look like it should work: Why should a reference
-to the first element care about changes at the end of the vector? This error is
-due to the way vectors work: Because vectors put the values next to each other
-in memory, adding a new element onto the end of the vector might require
-allocating new memory and copying the old elements to the new space, if there
-isn’t enough room to put all the elements next to each other where the vector
-is currently stored. In that case, the reference to the first element would be
-pointing to deallocated memory. The borrowing rules prevent programs from
-ending up in that situation.
+Listing 8-6-এর কোড দেখে মনে হতে পারে এটি কাজ করা উচিত: প্রথম উপাদানের একটি reference কেন vector-এর শেষের
+পরিবর্তন নিয়ে মাথা ঘামাবে? এই error vector কীভাবে কাজ করে তার কারণে: vector যেহেতু মানগুলো মেমোরিতে পাশাপাশি
+রাখে, তাই vector-এর শেষে একটি নতুন উপাদান যোগ করতে হলে, vector বর্তমানে যেখানে আছে সেখানে সব উপাদান পাশাপাশি
+রাখার মতো যথেষ্ট জায়গা না থাকলে, নতুন মেমোরি বরাদ্দ করে পুরোনো উপাদানগুলো নতুন জায়গায় কপি করতে হতে পারে।
+সেই ক্ষেত্রে প্রথম উপাদানের reference deallocate হওয়া মেমোরিকে নির্দেশ করত। borrowing-এর নিয়মগুলো প্রোগ্রামকে
+সেই পরিস্থিতিতে পৌঁছাতে দেয় না।
 
-> Note: For more on the implementation details of the `Vec<T>` type, see [“The
-> Rustonomicon”][nomicon].
+> Note: `Vec<T>` type-এর implementation-এর খুঁটিনাটি সম্পর্কে আরও জানতে দেখুন [“The
+> Rustonomicon”][nomicon]।
 
-### Iterating Over the Values in a Vector
+### vector-এর মানগুলোর ওপর iterate করা {#iterating-over-the-values-in-a-vector}
 
-To access each element in a vector in turn, we would iterate through all of the
-elements rather than use indices to access one at a time. Listing 8-7 shows how
-to use a `for` loop to get immutable references to each element in a vector of
-`i32` values and print them.
+একটি vector-এর প্রতিটি উপাদানে একে একে পৌঁছাতে আমরা index দিয়ে একটি করে উপাদানে না গিয়ে সব উপাদানের ওপর
+iterate (একে একে প্রতিটি উপাদানে যাওয়া) করব। Listing 8-7-এ দেখানো হয়েছে, `i32` মানের একটি vector-এর প্রতিটি
+উপাদানের immutable reference পেতে এবং সেগুলো প্রিন্ট করতে কীভাবে একটি `for` loop ব্যবহার করতে হয়।
 
-<Listing number="8-7" caption="Printing each element in a vector by iterating over the elements using a `for` loop">
+<Listing number="8-7" caption="একটি `for` loop দিয়ে উপাদানগুলোর ওপর iterate করে vector-এর প্রতিটি উপাদান প্রিন্ট করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-07/src/main.rs:here}}
@@ -170,13 +148,12 @@ to use a `for` loop to get immutable references to each element in a vector of
 
 </Listing>
 
-To read the number that `i` refers to, we have to use the `*` dereference operator to get to the value in `i` before we can add 1 to it, as covered in ["Dereferencing a Pointer Accesses Its Data"][deref].
+`i` যে সংখ্যাটিকে নির্দেশ করে, তা পড়তে আমাদের `*` dereference operator ব্যবহার করে `i`-এর মানে পৌঁছাতে হয়, তারপরই এর সঙ্গে 1 যোগ করা যায়, যেমনটি ["pointer dereference করলে তার ডেটায় পৌঁছানো যায়"][deref]-এ আলোচনা করা হয়েছে।
 
-We can also iterate over mutable references to each element in a mutable vector
-in order to make changes to all the elements. The `for` loop in Listing 8-8
-will add `50` to each element.
+সব উপাদানে পরিবর্তন আনতে আমরা একটি mutable vector-এর প্রতিটি উপাদানের mutable reference-এর ওপরও iterate করতে
+পারি। Listing 8-8-এর `for` loop প্রতিটি উপাদানের সঙ্গে `50` যোগ করবে।
 
-<Listing number="8-8" caption="Iterating over mutable references to elements in a vector">
+<Listing number="8-8" caption="একটি vector-এর উপাদানগুলোর mutable reference-এর ওপর iterate করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-08/src/main.rs:here}}
@@ -184,15 +161,15 @@ will add `50` to each element.
 
 </Listing>
 
-To change the value that the mutable reference refers to, we again use the `*` dereference operator to get to the value in `i` before we can use the `+=` operator. 
+mutable reference যে মানকে নির্দেশ করে, তা বদলাতে আবারও আমরা `*` dereference operator ব্যবহার করে `i`-এর মানে পৌঁছাই, তারপরই `+=` operator ব্যবহার করা যায়। 
 
 {{#quiz ../quizzes/ch08-01-vec-sec1.toml}}
 
-### Safely Using Iterators
+### নিরাপদে iterator ব্যবহার করা {#safely-using-iterators}
 
-We will discuss more about how iterators work in Chapter 13.2 ["Processing a Series of Items with Iterators"](ch13-02-iterators.html).
-For now, one important detail is that iterators contain a pointer to data within the vector. We can see how
-iterators work by desugaring a for-loop into the corresponding method calls of [`Vec::iter`] and [`Iterator::next`]:
+iterator কীভাবে কাজ করে, তা নিয়ে আমরা অধ্যায় 13.2-এর ["Processing a Series of Items with Iterators"](ch13-02-iterators.html)-এ আরও আলোচনা করব।
+আপাতত একটি গুরুত্বপূর্ণ খুঁটিনাটি হলো, iterator-এর ভেতরে vector-এর ডেটার একটি pointer থাকে। একটি for-loop-কে
+[`Vec::iter`] আর [`Iterator::next`]-এর সংশ্লিষ্ট method call-এ desugar (syntactic sugar খুলে মূল রূপে লেখা) করে আমরা দেখতে পারি iterator কীভাবে কাজ করে:
 
 ```aquascope,interpreter,horizontal
 #fn main() {
@@ -205,11 +182,11 @@ let end: Option<&i32>       = iter.next();`[]`
 #}
 ```
 
-Observe that the iterator `iter` is a pointer that moves through each element of the vector. The `next` method advances
-the iterator and returns an optional reference to the previous element, either `Some` (which we unwrap) or `None` at the end of the vector.
+লক্ষ করুন, iterator `iter` হলো একটি pointer, যা vector-এর প্রতিটি উপাদানের ওপর দিয়ে সরে যায়। `next` method iterator-কে
+এক ধাপ এগিয়ে দেয় এবং আগের উপাদানের একটি ঐচ্ছিক reference return করে: হয় `Some` (যা আমরা unwrap করি), নয়তো vector-এর শেষে `None`।
 
-This detail is relevant to safely using vectors. For example, say we wanted to duplicate a vector in-place, such as `[1, 2]` becoming `[1, 2, 1, 2]`.
-A naive implementation might look like this, annotated with the permissions inferred by the compiler:
+এই খুঁটিনাটি নিরাপদে vector ব্যবহারের জন্য প্রাসঙ্গিক। যেমন, ধরুন আমরা একটি vector-কে নিজ জায়গাতেই দ্বিগুণ করতে চাই, যেমন `[1, 2]` হয়ে যাবে `[1, 2, 1, 2]`।
+একটি সরল implementation দেখতে হয়তো এরকম হতো, যাতে compiler-এর infer করা permission (অনুমতি)-গুলো দেখানো হয়েছে:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 fn dup_in_place(v: &mut Vec<i32>) {
@@ -219,7 +196,7 @@ fn dup_in_place(v: &mut Vec<i32>) {
 }
 ```
 
-Notice that `v.iter()` removes the @Perm{write} permission from `*v`. Therefore the `v.push(..)` operation is missing the expected @Perm{write} permission. The Rust compiler will reject this program with a corresponding error message:
+লক্ষ করুন, `v.iter()` `*v` থেকে @Perm{write} permission সরিয়ে নেয়। তাই `v.push(..)` operation-এর প্রত্যাশিত @Perm{write} permission নেই। Rust compiler সংশ্লিষ্ট error message দিয়ে এই প্রোগ্রাম বাতিল করবে:
 
 ```text
 error[E0502]: cannot borrow `*v` as mutable because it is also borrowed as immutable
@@ -234,7 +211,7 @@ error[E0502]: cannot borrow `*v` as mutable because it is also borrowed as immut
   |         ^^^^^^^^^^^^^^ mutable borrow occurs here
 ```
 
-As we discussed in Chapter 4, the safety issue beneath this error is reading deallocated memory. As soon as `v.push(1)` happens, the vector will reallocate its contents and invalidate the iterator's pointer. So to use iterators safely, Rust does not allow you to add or remove elements from the vector during iteration.
+অধ্যায় 4-এ যেমন আলোচনা করেছি, এই error-এর পেছনের নিরাপত্তা-সমস্যা হলো deallocate হওয়া মেমোরি পড়া। `v.push(1)` ঘটামাত্র vector তার বিষয়বস্তু নতুন করে বরাদ্দ করবে এবং iterator-এর pointer অবৈধ করে দেবে। তাই নিরাপদে iterator ব্যবহারের জন্য Rust iteration চলার সময় vector-এ উপাদান যোগ বা বাদ দিতে দেয় না।
 
 <!-- TODO: add loop support and make this diagram look reasonable -->
 <!-- ```aquascope,interpreter,shouldFail,horizontal
@@ -249,7 +226,7 @@ fn main() {
 }
 ``` -->
 
-One way to iterate over a vector without using a pointer is with a range, like we used for string slices in [Chapter 4.4](ch04-04-slices.html#range-syntax). For example, the range `0 .. v.len()` is an iterator over all indices of a vector `v`, as seen here:
+pointer ব্যবহার না করে একটি vector-এর ওপর iterate করার একটি উপায় হলো range, যেমনটি আমরা [অধ্যায় 4.4](ch04-04-slices.html#range-syntax)-এ string slice-এর জন্য ব্যবহার করেছিলাম। যেমন, range `0 .. v.len()` হলো একটি vector `v`-এর সব index-এর ওপর একটি iterator, এখানে যেমন দেখা যাচ্ছে:
 
 ```aquascope,interpreter,horizontal
 #fn main() {
@@ -261,22 +238,18 @@ let n1: &i32               = &v[i1];`[]`
 #}
 ```
 
-### Using an Enum to Store Multiple Types
+### একাধিক type রাখতে enum ব্যবহার করা {#using-an-enum-to-store-multiple-types}
 
-Vectors can only store values that are of the same type. This can be
-inconvenient; there are definitely use cases for needing to store a list of
-items of different types. Fortunately, the variants of an enum are defined
-under the same enum type, so when we need one type to represent elements of
-different types, we can define and use an enum!
+vector শুধু একই type-এর মান রাখতে পারে। এটি অসুবিধাজনক হতে পারে; বিভিন্ন type-এর আইটেমের তালিকা রাখার দরকার
+হয় এমন ক্ষেত্র অবশ্যই আছে। সৌভাগ্যক্রমে, একটি enum-এর variant-গুলো একই enum type-এর অধীনে সংজ্ঞায়িত, তাই
+বিভিন্ন type-এর উপাদান প্রকাশ করতে যখন একটি type দরকার, তখন আমরা একটি enum সংজ্ঞায়িত করে ব্যবহার করতে পারি!
 
-For example, say we want to get values from a row in a spreadsheet in which
-some of the columns in the row contain integers, some floating-point numbers,
-and some strings. We can define an enum whose variants will hold the different
-value types, and all the enum variants will be considered the same type: that
-of the enum. Then, we can create a vector to hold that enum and so, ultimately,
-hold different types. We’ve demonstrated this in Listing 8-9.
+যেমন, ধরুন আমরা একটি spreadsheet-এর একটি সারি থেকে মান নিতে চাই, যেখানে সারির কিছু কলামে integer, কিছুতে
+floating-point সংখ্যা, আর কিছুতে string আছে। আমরা একটি enum সংজ্ঞায়িত করতে পারি, যার variant-গুলো বিভিন্ন type-এর
+মান রাখবে, আর সব enum variant একই type হিসেবে গণ্য হবে: enum-টির type। তারপর আমরা সেই enum রাখার জন্য একটি
+vector তৈরি করতে পারি, ফলে শেষ পর্যন্ত বিভিন্ন type রাখা যায়। Listing 8-9-এ আমরা এটি দেখিয়েছি।
 
-<Listing number="8-9" caption="Defining an enum to store values of different types in one vector">
+<Listing number="8-9" caption="একটি vector-এ বিভিন্ন type-এর মান রাখতে একটি enum সংজ্ঞায়িত করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-09/src/main.rs:here}}
@@ -284,29 +257,26 @@ hold different types. We’ve demonstrated this in Listing 8-9.
 
 </Listing>
 
-Rust needs to know what types will be in the vector at compile time so that it
-knows exactly how much memory on the heap will be needed to store each element.
-We must also be explicit about what types are allowed in this vector. If Rust
-allowed a vector to hold any type, there would be a chance that one or more of
-the types would cause errors with the operations performed on the elements of
-the vector. Using an enum plus a `match` expression means that Rust will ensure
-at compile time that every possible case is handled, as discussed in Chapter 6.
+compile time-এ Rust-কে জানতে হয় vector-এ কোন কোন type থাকবে, যাতে সে ঠিক জানে প্রতিটি উপাদান রাখতে heap-এ কতটা
+মেমোরি লাগবে। এই vector-এ কোন কোন type রাখার অনুমতি আছে, তা নিয়েও আমাদের স্পষ্ট হতে হবে। Rust যদি একটি vector-কে
+যেকোনো type রাখতে দিত, তাহলে vector-এর উপাদানগুলোর ওপর চালানো operation-এর সঙ্গে এক বা একাধিক type error ঘটানোর
+সম্ভাবনা থাকত। enum আর একটি `match` expression ব্যবহার করা মানে, অধ্যায় 6-এ যেমন আলোচনা করা হয়েছে, Rust
+compile time-এ নিশ্চিত করবে যে সব সম্ভাব্য ক্ষেত্র সামলানো হয়েছে।
 
-If you don’t know the exhaustive set of types a program will get at runtime to
-store in a vector, the enum technique won’t work. Instead, you can use a trait
-object, which we’ll cover in Chapter 18.
+runtime-এ একটি প্রোগ্রাম vector-এ রাখার জন্য কোন কোন type পাবে, তার পূর্ণ সেট যদি আপনি না জানেন, তাহলে enum-এর
+কৌশল কাজ করবে না। এর বদলে আপনি একটি trait object (trait-এর মাধ্যমে বিভিন্ন type ব্যবহার করার মান) ব্যবহার করতে
+পারেন, যা নিয়ে আমরা অধ্যায় 18-এ আলোচনা করব।
 
-Now that we’ve discussed some of the most common ways to use vectors, be sure
-to review [the API documentation][vec-api]<!-- ignore --> for all of the many
-useful methods defined on `Vec<T>` by the standard library. For example, in
-addition to `push`, a `pop` method removes and returns the last element.
+vector ব্যবহারের সবচেয়ে প্রচলিত কয়েকটি উপায় নিয়ে আলোচনা হলো, এবার standard library `Vec<T>`-এর ওপর যে অনেক
+কাজের method সংজ্ঞায়িত করেছে, সেগুলো দেখতে অবশ্যই [API ডকুমেন্টেশন][vec-api]<!-- ignore --> দেখে নিন। যেমন,
+`push`-এর পাশাপাশি একটি `pop` method আছে, যা শেষ উপাদানটি সরিয়ে return করে।
 
-### Dropping a Vector Drops Its Elements
+### vector drop করলে এর উপাদানগুলোও drop হয় {#dropping-a-vector-drops-its-elements}
 
-Like any other `struct`, a vector is freed when it goes out of scope, as
-annotated in Listing 8-10.
+অন্য যেকোনো `struct`-এর মতোই, একটি vector scope-এর বাইরে গেলে free হয়ে যায়, যেমনটি Listing 8-10-এ চিহ্নিত
+করা হয়েছে।
 
-<Listing number="8-10" caption="Showing where the vector and its elements are dropped">
+<Listing number="8-10" caption="vector আর এর উপাদানগুলো কোথায় drop হয় তা দেখানো">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-10/src/main.rs:here}}
@@ -314,12 +284,10 @@ annotated in Listing 8-10.
 
 </Listing>
 
-When the vector gets dropped, all of its contents are also dropped, meaning the
-integers it holds will be cleaned up. The borrow checker ensures that any
-references to contents of a vector are only used while the vector itself is
-valid.
+vector drop হলে এর সব বিষয়বস্তুও drop হয়, অর্থাৎ এতে রাখা integer-গুলো মুছে ফেলা হবে। borrow checker নিশ্চিত
+করে যে vector-এর বিষয়বস্তুর যেকোনো reference শুধু vector-টি নিজে বৈধ থাকা অবস্থাতেই ব্যবহার হয়।
 
-Let’s move on to the next collection type: `String`!
+চলুন পরের collection type-এ যাই: `String`!
 
 {{#quiz ../quizzes/ch08-01-vec-sec2.toml}}
 

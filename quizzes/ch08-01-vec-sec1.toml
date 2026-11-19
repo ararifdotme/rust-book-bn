@@ -2,7 +2,7 @@
 id = "1665d1ef-961f-4451-a988-ec46121531f9"
 type = "MultipleChoice"
 prompt.prompt = """
-Which call to this `find_until` function will cause a runtime panic?
+এই `find_until` function-এর কোন call runtime-এ panic ঘটাবে?
 
 ```
 fn find_until(v: &Vec<i32>, n: i32, til: usize) -> Option<usize> {
@@ -22,8 +22,8 @@ prompt.distractors = [
   "`find_until(&vec![1, 2, 3], 1, 4)`"
 ]
 context = """
-If `til = 4`, then for a vector of length 3, the for-loop will attempt to index the vector with `i = 3`, which is out of bounds.
-This function does not panic if `n = 1` because it returns before reaching the out-of-bounds index.
+`til = 4` হলে 3 দৈর্ঘ্যের একটি vector-এর জন্য for-loop `i = 3` দিয়ে vector-এ index করার চেষ্টা করবে, যা সীমার বাইরে।
+`n = 1` হলে এই function panic করে না, কারণ সীমার বাইরের index-এ পৌঁছানোর আগেই এটি return করে।
 """
 
 [[questions]]
@@ -42,7 +42,7 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 6
 context = """
-`Vec::push` moves its argument, so `s` is not usable after calling `v.push(s)`. Therefore calling `println!("original: {}", s)` is not ownership-safe.
+`Vec::push` তার argument move করে, তাই `v.push(s)` call করার পর `s` আর ব্যবহারযোগ্য নয়। তাই `println!("original: {}", s)` call করা ownership-এর দিক থেকে নিরাপদ নয়।
 """
 
 [[questions]]
@@ -59,7 +59,7 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 3
 context = """
-Non-copyable types cannot be moved out of a vector by indexing. Only methods such as `Vec::remove` permit moving out of a vector. See Section 4.3 
-["Copying vs. Moving Out of a Collection"](ch04-03-fixing-ownership-errors.html#fixing-an-unsafe-program-copying-vs-moving-out-of-a-collection)
-for a deeper explanation of why.
+non-copyable type index করে vector থেকে move করে বের করা যায় না। শুধু `Vec::remove`-এর মতো method vector থেকে move করে বের করার অনুমতি দেয়। কেন, তার আরও গভীর ব্যাখ্যার জন্য অংশ 4.3 
+["collection থেকে কপি বনাম move করা"](ch04-03-fixing-ownership-errors.html#fixing-an-unsafe-program-copying-vs-moving-out-of-a-collection)
+দেখুন।
 """

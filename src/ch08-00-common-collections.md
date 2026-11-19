@@ -1,25 +1,25 @@
-# Common Collections
+# সাধারণ collection {#common-collections}
 
-Rust’s standard library includes a number of very useful data structures called
-_collections_. Most other data types represent one specific value, but
-collections can contain multiple values. Unlike the built-in array and tuple
-types, the data that these collections point to is stored on the heap, which
-means the amount of data does not need to be known at compile time and can grow
-or shrink as the program runs. Each kind of collection has different
-capabilities and costs, and choosing an appropriate one for your current
-situation is a skill you’ll develop over time. In this chapter, we’ll discuss
-three collections that are used very often in Rust programs:
+Rust-এর standard library (আদর্শ লাইব্রেরি)-তে _collection_ (একাধিক মান রাখার কাঠামো) নামের বেশ কিছু
+খুব কাজের data structure আছে। অন্যান্য বেশিরভাগ data type একটি নির্দিষ্ট মান প্রকাশ করে, কিন্তু
+collection-এ একাধিক মান থাকতে পারে। বিল্ট-ইন array আর tuple type-এর বিপরীতে, এই collection-গুলো যে
+ডেটাকে নির্দেশ করে, তা রাখা হয় heap (প্রয়োজনমতো জায়গা বরাদ্দের মেমোরি-অংশ)-এ, অর্থাৎ ডেটার পরিমাণ
+compile time-এ জানার দরকার নেই, আর প্রোগ্রাম চলার সময় তা বাড়তে বা কমতে পারে। প্রতিটি ধরনের collection-এর
+সক্ষমতা আর খরচ আলাদা, আর বর্তমান পরিস্থিতির জন্য উপযুক্তটি বেছে নেওয়া এমন একটি দক্ষতা, যা সময়ের সঙ্গে
+আপনার মধ্যে গড়ে উঠবে। এই অধ্যায়ে আমরা তিনটি collection নিয়ে আলোচনা করব, যেগুলো Rust প্রোগ্রামে খুব
+বেশি ব্যবহার হয়:
 
-- A _vector_ allows you to store a variable number of values next to each other.
-- A _string_ is a collection of characters. We’ve mentioned the `String` type
-  previously, but in this chapter, we’ll talk about it in depth.
-- A _hash map_ allows you to associate a value with a specific key. It’s a
-  particular implementation of the more general data structure called a _map_.
+- একটি _vector_ (পরিবর্তনশীল দৈর্ঘ্যের তালিকা) দিয়ে পরিবর্তনশীল সংখ্যক মান পাশাপাশি রাখা যায়।
+- একটি _string_ হলো অক্ষরের একটি collection। আমরা আগে `String` type-এর কথা বলেছি, তবে এই অধ্যায়ে
+  এটি নিয়ে বিস্তারিত আলোচনা করব।
+- একটি _hash map_ (key-value জোড়ার তালিকা) দিয়ে একটি মানকে একটি নির্দিষ্ট key-এর সঙ্গে যুক্ত করা
+  যায়। এটি আরও সাধারণ একটি data structure-এর নির্দিষ্ট implementation, যার নাম _map_ (key থেকে মানে
+  যাওয়ার data structure)।
 
-To learn about the other kinds of collections provided by the standard library,
-see [the documentation][collections].
+standard library-র দেওয়া অন্যান্য ধরনের collection সম্পর্কে জানতে [ডকুমেন্টেশন][collections]
+দেখুন।
 
-We’ll discuss how to create and update vectors, strings, and hash maps, as well
-as what makes each special.
+vector, string আর hash map কীভাবে তৈরি ও আপডেট করতে হয়, আর প্রতিটির বিশেষত্ব কী, তা নিয়ে আমরা আলোচনা
+করব।
 
 [collections]: https://doc.rust-lang.org/std/collections/index.html

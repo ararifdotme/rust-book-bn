@@ -1,22 +1,22 @@
 [[questions]]
 id = "79942534-f414-41e6-944f-96d57905632c"
 type = "MultipleChoice"
-prompt.prompt = "What is the difference between using `a + b` and `a.push_str(b)` to concatenate two strings?"
-answer.answer = "`+` consumes ownership of `a`, while `push_str` does not"
+prompt.prompt = "দুটি string জোড়া লাগাতে `a + b` আর `a.push_str(b)` ব্যবহারের পার্থক্য কী?"
+answer.answer = "`+` `a`-এর ownership নিয়ে নেয়, কিন্তু `push_str` নেয় না"
 prompt.distractors = [
-  "`push_str` is more efficient at runtime than `+`",
-  "`push_str` consumes ownership of `b`, while `+` does not",
-  "There is no difference, they are aliases for the same function"
+  "runtime-এ `push_str` `+`-এর চেয়ে বেশি দক্ষ",
+  "`push_str` `b`-এর ownership নিয়ে নেয়, কিন্তু `+` নেয় না",
+  "কোনো পার্থক্য নেই, এরা একই function-এর বিকল্প নাম"
 ]
 context = """
-`push_str` takes `&mut self` while `+` takes `self`, so `+` consumes ownership and `push_str` does not.
+`push_str` নেয় `&mut self`, আর `+` নেয় `self`, তাই `+` ownership নিয়ে নেয় আর `push_str` নেয় না।
 """
 
 [[questions]]
 id = "f1ab2171-96f0-4380-b16d-9055a9a00415"
 type = "ShortAnswer"
 prompt.prompt = """
-What is the maximum number of times a heap allocation could occur in this program? Write your answer in digits, e.g. 0 or 1.
+এই প্রোগ্রামে সর্বোচ্চ কতবার heap-এ বরাদ্দ ঘটতে পারে? উত্তর অঙ্কে লিখুন, যেমন 0 বা 1।
 
 ```
 let s1 = String::from("tic");
@@ -28,5 +28,5 @@ let s = s1 + "-" + &s2 + "-" + &s3;
 """
 answer.answer = "7"
 context = """
-One allocation for each call to `String::from`, and one allocation for every time `+` is called.
+`String::from`-এর প্রতিটি call-এর জন্য একটি বরাদ্দ, আর প্রতিবার `+` call হলে একটি করে বরাদ্দ।
 """
