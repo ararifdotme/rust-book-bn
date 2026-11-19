@@ -499,6 +499,16 @@ tested with this repo's build.
 | separation of concerns | দায়িত্ব আলাদা করা (separation of concerns) | প্রতিটি অংশকে একটি কাজের দায়িত্ব দেওয়া | 12 |
 | modular / modularity | modular / modularity | আলাদা আলাদা অংশে ভাগ করা | 12 |
 | redirect (output) | অন্যত্র পাঠানো (redirect) | output স্ক্রিনের বদলে ফাইলে পাঠানো | 12 |
+| capture (a value) | capture করা | closure-এর বাইরের মান ধরে রাখা | 13 |
+| environment (of a closure) | environment | closure যেখানে সংজ্ঞায়িত, সেখানকার পারিপার্শ্বিক মানগুলো | 13 |
+| `Fn` / `FnMut` / `FnOnce` traits | `Fn` traits | closure কীভাবে call করা যায় তা বোঝানো তিনটি trait | 13 |
+| `move` closure | `move` closure | capture করা মানের ownership নিয়ে নেয় এমন closure | 13 |
+| lazy (iterator) | lazy | consume না করা পর্যন্ত কোনো কাজ করে না | 13 |
+| consume (an iterator) | consume করা | iterator খরচ করে ফেলা | 13 |
+| consuming adapter | consuming adapter | iterator খরচ করে এমন method (যেমন `sum`) | 13 |
+| iterator adapter | iterator adapter | এক iterator থেকে আরেক iterator তৈরি করে এমন method (যেমন `map`) | 13 |
+| loop unrolling | loop unrolling | loop খুলে পুনরাবৃত্তিগুলো সরাসরি লিখে দেওয়ার optimization | 13 |
+| top-level function | top-level function | কোনো কিছুর ভেতরে নয়, সরাসরি module-এ সংজ্ঞায়িত function | 13 |
 
 ### Everyday computing words
 
@@ -578,6 +588,7 @@ Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
 | template | template (কাঠামো) | 11 |
 | ignored | উপেক্ষিত (ignored) | 11 |
 | lowercase / uppercase | ছোট হাতের / বড় হাতের অক্ষর | 12 |
+| spoiler alert | আগেভাগে বলে দিই | 13 |
 
 ## Progress
 
@@ -602,7 +613,7 @@ use.
 - [x] Chapter 10: Generic Types, Traits, and Lifetimes (ch10-*)
 - [x] Chapter 11: Writing Automated Tests (ch11-*)
 - [x] Chapter 12: An I/O Project: Building a Command Line Program (ch12-*)
-- [ ] Chapter 13: Functional Language Features: Iterators and Closures (ch13-*)
+- [x] Chapter 13: Functional Language Features: Iterators and Closures (ch13-*)
 - [ ] Chapter 14: More about Cargo and Crates.io (ch14-*)
 - [ ] Chapter 15: Smart Pointers (ch15-*)
 - [ ] Chapter 16: Fearless Concurrency (ch16-*)

@@ -190,3 +190,30 @@ case-insensitive / case-sensitive, exit status, separation of concerns
 | than to try to hyperoptimize code on your first pass | প্রথম চেষ্টাতেই কোডকে অতিমাত্রায় optimize করার চেষ্টার চেয়ে |
 | Whew! … we’ve set ourselves up for success in the future. | উফ! … আমরা ভবিষ্যতের সাফল্যের জন্য ভিত তৈরি করে ফেলেছি। |
 | Our program is not currently well behaved | আমাদের প্রোগ্রাম এখন ঠিকমতো আচরণ করছে না |
+
+## Chapter 13: Functional Language Features: Iterators and Closures
+
+**Auto-chosen terms:** capture, environment (of a closure), `Fn` / `FnMut` /
+`FnOnce` traits, `move` closure, lazy, consume, consuming adapter, iterator
+adapter, loop unrolling, top-level function. Everyday: আগেভাগে বলে দিই
+(spoiler alert).
+
+**Decisions:**
+- The aligned `add_one_v1 … v4` block and the benchmark output block are kept
+  byte for byte.
+- The Stroustrup quote is translated into Bengali; the talk title “Foundations
+  of C++” and the book title _The Adventures of Sherlock Holmes_ stay in
+  English.
+- Quiz: the True/false question's options became "সত্য" / "মিথ্যা" (the
+  MultipleChoice answer is prose).
+- No listing comments needed translating in this chapter.
+
+**Unsure sentences:**
+
+| English | Bengali |
+| --- | --- |
+| in an additive fashion | যোগ হওয়ার ধাঁচে |
+| This is a contrived, convoluted way (that doesn’t work) | এটি একটি কৃত্রিম, জটিল (এবং কাজ করে না এমন) চেষ্টা |
+| Instead of fiddling with the various bits of looping | loop-এর নানা খুঁটিনাটি নিয়ে নাড়াচাড়া না করে |
+| sometimes called the "toilet closure" (quiz, inside code: left in English) | — |
+| What you don’t use, you don’t pay for. And further: What you do use, you couldn’t hand code any better. | যা আপনি ব্যবহার করেন না, তার জন্য আপনাকে মূল্য দিতে হয় না। আর আরও বলা যায়: যা আপনি ব্যবহার করেন, তা আপনি হাতে লিখে এর চেয়ে ভালো করতে পারতেন না। |

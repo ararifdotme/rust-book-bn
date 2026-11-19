@@ -2,25 +2,25 @@
 id = "e6cbd582-9692-4045-a984-8770a12e1b95"
 type = "MultipleChoice"
 prompt.prompt = """
-Which of the following best describes the rationale for why Rust will infer the types of arguments/returns for closures, but not top-level functions?
+Rust কেন closure-এর argument/return-এর type অনুমান করে, কিন্তু top-level function-এর করে না, তার যুক্তি নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
-answer.answer = "Top-level functions can be part of a library's external interface, while closures cannot be directly exposed"
+answer.answer = "top-level function একটি library-র বাইরের interface-এর অংশ হতে পারে, কিন্তু closure সরাসরি প্রকাশ করা যায় না"
 prompt.distractors = [
-  "Due to the halting problem, it is mathematically impossible for Rust to infer the types of top-level functions",
-  "For backwards compatibility with older versions of Rust",
-  "Anything assignable to a variable can be type-inferred, and top-level functions cannot be assigned to a variable"
+  "halting problem-এর কারণে top-level function-এর type অনুমান করা Rust-এর পক্ষে গাণিতিকভাবে অসম্ভব",
+  "Rust-এর পুরোনো সংস্করণের সঙ্গে সামঞ্জস্য রাখার জন্য",
+  "variable-এ বসানো যায় এমন যেকোনো কিছুর type অনুমান করা যায়, আর top-level function variable-এ বসানো যায় না"
 ]
 context = """
-Rust could, in theory, provide type inference for top-level functions. Functional languages like Haskell and OCaml have this feature.
-However, Rust designers made the conscious decision to require type annotations on top-level functions to promote clarity at the 
-interface level: a function will always have exactly the type it says it has.
+তাত্ত্বিকভাবে Rust top-level function-এর জন্যও type অনুমান দিতে পারত। Haskell আর OCaml-এর মতো functional ভাষায় এই বৈশিষ্ট্য আছে।
+কিন্তু interface-এর স্তরে স্পষ্টতা বাড়াতে Rust-এর নকশাকারেরা সচেতনভাবে top-level function-এ type annotation বাধ্যতামূলক করার সিদ্ধান্ত নিয়েছেন: 
+একটি function-এর type সবসময় ঠিক তা-ই হবে, যা সে বলে।
 """
 
 [[questions]]
 id = "f844d1c2-3f63-4cdb-b16e-6e818e996e0d"
 type = "MultipleChoice"
 prompt.prompt = """
-Rust permits pattern matching within closure arguments, including the use of the underscore. For example, you could write the following:
+Rust closure-এর argument-এর ভেতরে pattern matching অনুমোদন করে, underscore-এর ব্যবহারসহ। যেমন, আপনি এভাবে লিখতে পারেন:
 
 ```rust
 let f = |_| (); // sometimes called the "toilet closure"
@@ -28,15 +28,15 @@ let s = String::from("Hello");
 f(s);
 ```
 
-Which of the following best describes the relationship between `f` and `s` in this program?
+এই প্রোগ্রামে `f` আর `s`-এর সম্পর্ক নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
-answer.answer = "`f` causes `s` to be immediately dropped"
+answer.answer = "`f`-এর কারণে `s` সঙ্গে সঙ্গে drop হয়ে যায়"
 prompt.distractors = [
-  "`f` has no effect on `s`",
-  "`f` reads `s` and then throws away the result",
-  "`f` captures `s` in its environment"
+  "`s`-এর ওপর `f`-এর কোনো প্রভাব নেই",
+  "`f` `s` পড়ে, তারপর ফলাফল ফেলে দেয়",
+  "`f` তার environment-এ `s` capture করে"
 ]
 context = """
-The toilet closure is similar to [`std::mem::drop`](https://doc.rust-lang.org/std/mem/fn.drop.html), i.e. a function that moves
-an argument and causes it to be dropped.
+toilet closure [`std::mem::drop`](https://doc.rust-lang.org/std/mem/fn.drop.html)-এর মতো, অর্থাৎ এমন একটি function যা একটি argument
+সরিয়ে নেয় এবং সেটিকে drop করায়।
 """

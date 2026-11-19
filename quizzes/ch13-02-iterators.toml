@@ -2,43 +2,43 @@
 id = "d50dd9fb-f84c-4748-9e45-cd3dc8d5fb47"
 type = "MultipleChoice"
 prompt.prompt = """
-Which of the following best describes why iterators are described as "lazy"?
+iterator-কে কেন "lazy" বলা হয়, তা নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
-answer.answer = "An iterator has no effect until you call methods that extract elements from the iterator"
+answer.answer = "iterator থেকে উপাদান বের করে এমন method call না করা পর্যন্ত iterator-এর কোনো প্রভাব নেই"
 prompt.distractors = [
-    "An iterator creates a copy of each item it iterates over", 
-    "An iterator takes ownership of the sequence of items it is iterating over", 
-    "An iterator will only iterate over a given number of items"
+    "iterator যে item-গুলোর ওপর দিয়ে iterate করে, সেগুলোর প্রতিটির একটি কপি তৈরি করে", 
+    "iterator যে item-ধারার ওপর দিয়ে iterate করছে, তার ownership নিয়ে নেয়", 
+    "iterator শুধু নির্দিষ্ট সংখ্যক item-এর ওপর দিয়ে iterate করবে"
 ]
 context = """
-Lazy generally means "does not do work until asked", and iterators do not perform any computation until
-`Iterator::next` is called.
+lazy বলতে সাধারণত বোঝায় "না চাওয়া পর্যন্ত কাজ করে না", আর `Iterator::next` call না হওয়া পর্যন্ত iterator কোনো
+হিসাব করে না।
 """
 
 [[questions]]
 id = "19eac65e-44ad-4349-9632-47bdbb519d46"
 type = "MultipleChoice"
 prompt.prompt = """
-True/false: these two code snippets are semantically equivalent where `iter` is an iterator.
+সত্য/মিথ্যা: `iter` একটি iterator হলে এই দুটি কোড-অংশের অর্থ একই।
 
-Snippet 1:
+কোড-অংশ 1:
 ```
 while let Some(x) = iter.next() {
     f(x);
 }
 ```
 
-Snippet 2:
+কোড-অংশ 2:
 ```
 for x in iter {
     f(x);
 }
 ```
 """
-answer.answer = "True"
-prompt.distractors = ["False"]
+answer.answer = "সত্য"
+prompt.distractors = ["মিথ্যা"]
 context = """
-The for-loop is a syntactic sugar for the `while let`, which is itself a sugar for `loop` and `break`.
+for-loop হলো `while let`-এর syntax sugar, আর সেটি নিজেও `loop` ও `break`-এর sugar।
 """
 
 [[questions]]
@@ -55,17 +55,17 @@ fn main() {
 answer.doesCompile = true
 answer.stdout = "4 2"
 context = """
-The order of iterators matters &mdash; a filter and a map is not the same as a map and a filter!
+iterator-এর ক্রম গুরুত্বপূর্ণ &mdash; আগে filter তারপর map আর আগে map তারপর filter এক নয়!
 
-You might wonder why the first filter uses `*x` and the second filter does not. 
-`v.iter()` produces an `Iterator<Item = &i32>`. The `.filter()` call takes an `Iterator<Item = T>` as input,
-and passes `&T` to its predicate. Therefore `x: &&i32` on line 3. The Rust standard library implements the
-remainder operator `%` for `&i32` on the left-hand side ([see the docs](https://doc.rust-lang.org/std/ops/trait.Rem.html#impl-Rem%3Ci32%3E-for-%26'a+i32)),
-but not for `&&i32`. So we have to dereference `x` once to use it in the expression `*x % 2`.
+হয়তো ভাবছেন, প্রথম filter কেন `*x` ব্যবহার করে আর দ্বিতীয় filter কেন করে না। 
+`v.iter()` একটি `Iterator<Item = &i32>` তৈরি করে। `.filter()` call input হিসেবে একটি `Iterator<Item = T>` নেয়,
+এবং তার predicate (শর্ত যাচাই করা closure)-এ `&T` পাঠায়। তাই লাইন 3-এ `x: &&i32`। Rust standard library বাম পাশে `&i32`-এর জন্য
+ভাগশেষ operator `%` implement করে ([docs দেখুন](https://doc.rust-lang.org/std/ops/trait.Rem.html#impl-Rem%3Ci32%3E-for-%26'a+i32)),
+কিন্তু `&&i32`-এর জন্য নয়। তাই `*x % 2` expression-এ ব্যবহার করতে `x`-কে একবার dereference করতে হয়।
 
-By contrast on line 4, when `.map()` takes an `Iterator<Item = T>` as input, it passes `T` to its closure.
-Therefore the closure in `map` takes `&i32` as input. The multiplication operator `*` is implemented for `&i32`,
-so `x` does not need to be dereferenced in `x * 2`. The operation `x * 2` produces a value of type `i32`, so
-the result of the map is an `Iterator<Item = i32>`. The `filter` then takes `x : &i32`, which also does not need
-a dereference to do `x % 2`. Now you know!
+বিপরীতে লাইন 4-এ, `.map()` যখন input হিসেবে একটি `Iterator<Item = T>` নেয়, তখন এটি তার closure-এ `T` পাঠায়।
+তাই `map`-এর closure input হিসেবে `&i32` নেয়। গুণ operator `*` `&i32`-এর জন্য implement করা আছে,
+তাই `x * 2`-এ `x`-কে dereference করতে হয় না। `x * 2` operation `i32` type-এর একটি মান তৈরি করে, তাই
+map-এর ফল হলো একটি `Iterator<Item = i32>`। তারপর `filter` নেয় `x : &i32`, যার জন্যও `x % 2` করতে
+dereference লাগে না। এবার জানলেন!
 """

@@ -1,17 +1,13 @@
-## Processing a Series of Items with Iterators
+## iterator দিয়ে একের পর এক item প্রক্রিয়া করা {#processing-a-series-of-items-with-iterators}
 
-The iterator pattern allows you to perform some task on a sequence of items in
-turn. An iterator is responsible for the logic of iterating over each item and
-determining when the sequence has finished. When you use iterators, you don’t
-have to reimplement that logic yourself.
+iterator pattern দিয়ে item-এর একটি ধারার প্রতিটির ওপর পালাক্রমে কোনো কাজ করা যায়। প্রতিটি item-এর ওপর দিয়ে iterate করা এবং ধারাটি কখন
+শেষ হলো তা নির্ধারণ করার logic-এর দায়িত্ব iterator-এর। iterator ব্যবহার করলে সেই logic আপনাকে নিজে আবার implement করতে হয় না।
 
-In Rust, iterators are _lazy_, meaning they have no effect until you call
-methods that consume the iterator to use it up. For example, the code in
-Listing 13-10 creates an iterator over the items in the vector `v1` by calling
-the `iter` method defined on `Vec<T>`. This code by itself doesn’t do anything
-useful.
+Rust-এ iterator _lazy_ (অলস), অর্থাৎ iterator-কে খরচ করে ফেলে (consume করে) এমন method call না করা পর্যন্ত এদের কোনো প্রভাব নেই।
+যেমন, Listing 13-10-এর কোড `Vec<T>`-এর ওপর সংজ্ঞায়িত `iter` method call করে `v1` vector-এর item-গুলোর ওপর একটি iterator তৈরি করে। এই
+কোড নিজে থেকে কোনো কাজের কিছু করে না।
 
-<Listing number="13-10" file-name="src/main.rs" caption="Creating an iterator">
+<Listing number="13-10" file-name="src/main.rs" caption="একটি iterator তৈরি করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-10/src/main.rs:here}}
@@ -19,18 +15,14 @@ useful.
 
 </Listing>
 
-The iterator is stored in the `v1_iter` variable. Once we’ve created an
-iterator, we can use it in a variety of ways. In Listing 3-5, we iterated over
-an array using a `for` loop to execute some code on each of its items. Under
-the hood, this implicitly created and then consumed an iterator, but we glossed
-over how exactly that works until now.
+iterator-টি `v1_iter` variable-এ রাখা আছে। একবার iterator তৈরি করলে একে নানাভাবে ব্যবহার করা যায়। Listing 3-5-এ আমরা একটি `for` loop
+ব্যবহার করে একটি array-র ওপর দিয়ে iterate করে এর প্রতিটি item-এর ওপর কিছু কোড চালিয়েছিলাম। ভেতরে ভেতরে এটি অপ্রকাশ্যভাবে একটি iterator
+তৈরি করে খরচ করেছিল, কিন্তু এটি ঠিক কীভাবে কাজ করে তা আমরা এতক্ষণ এড়িয়ে গেছি।
 
-In the example in Listing 13-11, we separate the creation of the iterator from
-the use of the iterator in the `for` loop. When the `for` loop is called using
-the iterator in `v1_iter`, each element in the iterator is used in one
-iteration of the loop, which prints out each value.
+Listing 13-11-এর উদাহরণে আমরা iterator তৈরি করা আর `for` loop-এ iterator ব্যবহার করা আলাদা করেছি। `v1_iter`-এর iterator দিয়ে `for` loop
+চালালে iterator-এর প্রতিটি উপাদান loop-এর একেকটি পুনরাবৃত্তিতে ব্যবহৃত হয়, যা প্রতিটি মান print করে।
 
-<Listing number="13-11" file-name="src/main.rs" caption="Using an iterator in a `for` loop">
+<Listing number="13-11" file-name="src/main.rs" caption="একটি `for` loop-এ iterator ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-11/src/main.rs:here}}
@@ -38,21 +30,16 @@ iteration of the loop, which prints out each value.
 
 </Listing>
 
-In languages that don’t have iterators provided by their standard libraries,
-you would likely write this same functionality by starting a variable at index
-0, using that variable to index into the vector to get a value, and
-incrementing the variable value in a loop until it reached the total number of
-items in the vector.
+যেসব ভাষার standard library iterator দেয় না, সেখানে আপনি সম্ভবত একই কার্যক্ষমতা লিখতেন এভাবে: একটি variable index 0 থেকে শুরু করে, সেই
+variable দিয়ে vector-এ index করে একটি মান নিয়ে, আর loop-এ variable-এর মান বাড়াতে বাড়াতে যতক্ষণ না এটি vector-এর মোট item সংখ্যায়
+পৌঁছায়।
 
-Iterators handle all of that logic for you, cutting down on repetitive code you
-could potentially mess up. Iterators give you more flexibility to use the same
-logic with many different kinds of sequences, not just data structures you can
-index into, like vectors. Let’s examine how iterators do that.
+iterator এই সব logic আপনার হয়ে সামলায়, ফলে এমন পুনরাবৃত্ত কোড কমে যায় যাতে আপনি ভুল করে ফেলতে পারতেন। iterator আপনাকে একই logic অনেক
+রকম ধারার সঙ্গে ব্যবহারের নমনীয়তা দেয়, শুধু vector-এর মতো index করা যায় এমন data structure নয়। চলুন দেখি iterator কীভাবে তা করে।
 
-### The `Iterator` Trait and the `next` Method
+### `Iterator` trait ও `next` method {#the-iterator-trait-and-the-next-method}
 
-All iterators implement a trait named `Iterator` that is defined in the
-standard library. The definition of the trait looks like this:
+সব iterator standard library-তে সংজ্ঞায়িত `Iterator` নামের একটি trait implement করে। trait-টির সংজ্ঞা দেখতে এমন:
 
 ```rust
 pub trait Iterator {
@@ -64,23 +51,18 @@ pub trait Iterator {
 }
 ```
 
-Notice that this definition uses some new syntax: `type Item` and `Self::Item`,
-which are defining an associated type with this trait. We’ll talk about
-associated types in depth in Chapter 20. For now, all you need to know is that
-this code says implementing the `Iterator` trait requires that you also define
-an `Item` type, and this `Item` type is used in the return type of the `next`
-method. In other words, the `Item` type will be the type returned from the
-iterator.
+খেয়াল করুন, এই সংজ্ঞায় কিছু নতুন syntax আছে: `type Item` আর `Self::Item`, যা এই trait-এর সঙ্গে একটি associated type (trait-এর সঙ্গে যুক্ত
+type) সংজ্ঞায়িত করছে। associated type নিয়ে গভীরভাবে আলোচনা করব অধ্যায় 20-এ। আপাতত শুধু জানলেই চলবে যে এই কোড বলছে, `Iterator` trait
+implement করতে হলে একটি `Item` type-ও সংজ্ঞায়িত করতে হবে, আর এই `Item` type `next` method-এর return type-এ ব্যবহৃত হয়। অন্যভাবে বললে,
+`Item` type হবে iterator থেকে return হওয়া type।
 
-The `Iterator` trait only requires implementors to define one method: the
-`next` method, which returns one item of the iterator at a time, wrapped in
-`Some`, and, when iteration is over, returns `None`.
+`Iterator` trait implement-কারীদের কাছে শুধু একটি method সংজ্ঞায়িত করার দাবি করে: `next` method, যা একবারে iterator-এর একটি item `Some`-এ
+মুড়ে return করে, আর iteration শেষ হলে `None` return করে।
 
-We can call the `next` method on iterators directly; Listing 13-12 demonstrates
-what values are returned from repeated calls to `next` on the iterator created
-from the vector.
+আমরা iterator-এর ওপর সরাসরি `next` method call করতে পারি; Listing 13-12 দেখায় vector থেকে তৈরি iterator-এর ওপর বারবার `next` call করলে
+কোন মানগুলো return হয়।
 
-<Listing number="13-12" file-name="src/lib.rs" caption="Calling the `next` method on an iterator">
+<Listing number="13-12" file-name="src/lib.rs" caption="একটি iterator-এর ওপর `next` method call করা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-12/src/lib.rs:here}}
@@ -88,37 +70,27 @@ from the vector.
 
 </Listing>
 
-Note that we needed to make `v1_iter` mutable: Calling the `next` method on an
-iterator changes internal state that the iterator uses to keep track of where
-it is in the sequence. In other words, this code _consumes_, or uses up, the
-iterator. Each call to `next` eats up an item from the iterator. We didn’t need
-to make `v1_iter` mutable when we used a `for` loop, because the loop took
-ownership of `v1_iter` and made it mutable behind the scenes.
+খেয়াল করুন, `v1_iter`-কে mutable করতে হয়েছে: একটি iterator-এর ওপর `next` method call করলে iterator ধারার কোথায় আছে তা মনে রাখতে যে
+অভ্যন্তরীণ অবস্থা ব্যবহার করে, তা বদলে যায়। অন্যভাবে বললে, এই কোড iterator-কে _consume_ করে, বা খরচ করে ফেলে। `next`-এর প্রতিটি call
+iterator থেকে একটি item খেয়ে ফেলে। `for` loop ব্যবহারের সময় `v1_iter`-কে mutable করতে হয়নি, কারণ loop `v1_iter`-এর ownership নিয়ে
+পর্দার আড়ালে একে mutable করে নিয়েছিল।
 
-Also note that the values we get from the calls to `next` are immutable
-references to the values in the vector. The `iter` method produces an iterator
-over immutable references. If we want to create an iterator that takes
-ownership of `v1` and returns owned values, we can call `into_iter` instead of
-`iter`. Similarly, if we want to iterate over mutable references, we can call
-`iter_mut` instead of `iter`.
+আরও খেয়াল করুন, `next` call থেকে পাওয়া মানগুলো vector-এর মানগুলোর immutable reference। `iter` method immutable reference-এর ওপর একটি
+iterator তৈরি করে। যদি এমন iterator তৈরি করতে চাই যা `v1`-এর ownership নেয় এবং owned মান return করে, তাহলে `iter`-এর বদলে `into_iter`
+call করতে পারি। একইভাবে, mutable reference-এর ওপর iterate করতে চাইলে `iter`-এর বদলে `iter_mut` call করতে পারি।
 
-### Methods That Consume the Iterator
+### iterator খরচ করে এমন method {#methods-that-consume-the-iterator}
 
-The `Iterator` trait has a number of different methods with default
-implementations provided by the standard library; you can find out about these
-methods by looking in the standard library API documentation for the `Iterator`
-trait. Some of these methods call the `next` method in their definition, which
-is why you’re required to implement the `next` method when implementing the
-`Iterator` trait.
+`Iterator` trait-এ standard library-র দেওয়া default implementation-সহ অনেক রকম method আছে; standard library-র API documentation-এ
+`Iterator` trait দেখলে এই method-গুলো সম্পর্কে জানতে পারবেন। এর কিছু method তাদের সংজ্ঞায় `next` method call করে, এ কারণেই `Iterator`
+trait implement করার সময় `next` method implement করা বাধ্যতামূলক।
 
-Methods that call `next` are called _consuming adapters_ because calling them
-uses up the iterator. One example is the `sum` method, which takes ownership of
-the iterator and iterates through the items by repeatedly calling `next`, thus
-consuming the iterator. As it iterates through, it adds each item to a running
-total and returns the total when iteration is complete. Listing 13-13 has a
-test illustrating a use of the `sum` method.
+যে method-গুলো `next` call করে সেগুলোকে বলা হয় _consuming adapters_ (iterator খরচ করে এমন adapter), কারণ এগুলো call করলে iterator খরচ
+হয়ে যায়। একটি উদাহরণ হলো `sum` method, যা iterator-এর ownership নিয়ে বারবার `next` call করে item-গুলোর ওপর দিয়ে iterate করে, ফলে
+iterator খরচ হয়ে যায়। iterate করার সময় এটি প্রতিটি item একটি চলমান যোগফলে যোগ করে এবং iteration শেষ হলে যোগফলটি return করে। Listing
+13-13-এ `sum` method-এর ব্যবহার দেখানো একটি test আছে।
 
-<Listing number="13-13" file-name="src/lib.rs" caption="Calling the `sum` method to get the total of all items in the iterator">
+<Listing number="13-13" file-name="src/lib.rs" caption="iterator-এর সব item-এর যোগফল পেতে `sum` method call করা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-13/src/lib.rs:here}}
@@ -126,22 +98,18 @@ test illustrating a use of the `sum` method.
 
 </Listing>
 
-We aren’t allowed to use `v1_iter` after the call to `sum`, because `sum` takes
-ownership of the iterator we call it on.
+`sum` call করার পর আমরা `v1_iter` ব্যবহার করতে পারি না, কারণ `sum` যে iterator-এর ওপর call করা হয় তার ownership নিয়ে নেয়।
 
-### Methods That Produce Other Iterators
+### অন্য iterator তৈরি করে এমন method {#methods-that-produce-other-iterators}
 
-_Iterator adapters_ are methods defined on the `Iterator` trait that don’t
-consume the iterator. Instead, they produce different iterators by changing
-some aspect of the original iterator.
+_Iterator adapters_ (iterator adapter) হলো `Iterator` trait-এর ওপর সংজ্ঞায়িত এমন method, যা iterator খরচ করে না। বরং মূল iterator-এর
+কোনো দিক বদলে এরা ভিন্ন iterator তৈরি করে।
 
-Listing 13-14 shows an example of calling the iterator adapter method `map`,
-which takes a closure to call on each item as the items are iterated through.
-The `map` method returns a new iterator that produces the modified items. The
-closure here creates a new iterator in which each item from the vector will be
-incremented by 1.
+Listing 13-14-এ iterator adapter method `map` call করার একটি উদাহরণ দেখানো হয়েছে, যা item-গুলোর ওপর দিয়ে iterate করার সময় প্রতিটি item-এর
+ওপর call করার জন্য একটি closure নেয়। `map` method একটি নতুন iterator return করে, যা পরিবর্তিত item-গুলো তৈরি করে। এখানকার closure এমন একটি
+নতুন iterator তৈরি করে, যাতে vector-এর প্রতিটি item 1 করে বাড়ানো হবে।
 
-<Listing number="13-14" file-name="src/main.rs" caption="Calling the iterator adapter `map` to create a new iterator">
+<Listing number="13-14" file-name="src/main.rs" caption="নতুন iterator তৈরি করতে iterator adapter `map` call করা">
 
 ```rust,not_desired_behavior
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-14/src/main.rs:here}}
@@ -149,25 +117,22 @@ incremented by 1.
 
 </Listing>
 
-However, this code produces a warning:
+কিন্তু এই কোড একটি warning দেয়:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-14/output.txt}}
 ```
 
-The code in Listing 13-14 doesn’t do anything; the closure we’ve specified
-never gets called. The warning reminds us why: Iterator adapters are lazy, and
-we need to consume the iterator here.
+Listing 13-14-এর কোড কিছুই করে না; আমাদের দেওয়া closure কখনো call হয় না। warning আমাদের মনে করিয়ে দেয় কেন: iterator adapter lazy, আর
+এখানে আমাদের iterator খরচ করতে হবে।
 
-To fix this warning and consume the iterator, we’ll use the `collect` method,
-which we used with `env::args` in Listing 12-1. This method consumes the
-iterator and collects the resultant values into a collection data type.
+এই warning ঠিক করে iterator খরচ করতে আমরা `collect` method ব্যবহার করব, যা Listing 12-1-এ `env::args`-এর সঙ্গে ব্যবহার করেছিলাম। এই method
+iterator খরচ করে এবং ফলাফলের মানগুলো একটি collection data type-এ জড়ো করে।
 
-In Listing 13-15, we collect the results of iterating over the iterator that’s
-returned from the call to `map` into a vector. This vector will end up
-containing each item from the original vector, incremented by 1.
+Listing 13-15-এ `map` call থেকে return হওয়া iterator-এর ওপর দিয়ে iterate করার ফলগুলো আমরা একটি vector-এ জড়ো করি। এই vector-এ শেষ পর্যন্ত
+মূল vector-এর প্রতিটি item 1 করে বাড়ানো অবস্থায় থাকবে।
 
-<Listing number="13-15" file-name="src/main.rs" caption="Calling the `map` method to create a new iterator, and then calling the `collect` method to consume the new iterator and create a vector">
+<Listing number="13-15" file-name="src/main.rs" caption="একটি নতুন iterator তৈরি করতে `map` method call করা, তারপর নতুন iterator খরচ করে একটি vector তৈরি করতে `collect` method call করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-15/src/main.rs:here}}
@@ -175,35 +140,28 @@ containing each item from the original vector, incremented by 1.
 
 </Listing>
 
-Because `map` takes a closure, we can specify any operation we want to perform
-on each item. This is a great example of how closures let you customize some
-behavior while reusing the iteration behavior that the `Iterator` trait
-provides.
+`map` যেহেতু একটি closure নেয়, তাই প্রতিটি item-এর ওপর আমরা যেকোনো operation চালাতে পারি। `Iterator` trait-এর দেওয়া iteration-এর আচরণ
+পুনর্ব্যবহার করে closure কীভাবে কিছু আচরণ নিজের মতো সাজাতে দেয়, এটি তার একটি চমৎকার উদাহরণ।
 
-You can chain multiple calls to iterator adapters to perform complex actions in
-a readable way. But because all iterators are lazy, you have to call one of the
-consuming adapter methods to get results from calls to iterator adapters.
+জটিল কাজ পড়তে সহজ উপায়ে করার জন্য iterator adapter-এর একাধিক call পরপর জুড়ে দিতে (chain করতে) পারেন। কিন্তু সব iterator যেহেতু lazy,
+তাই iterator adapter call-এর ফল পেতে consuming adapter method-গুলোর কোনো একটি call করতে হবে।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-closures-that-capture-their-environment"></a>
 
-### Closures That Capture Their Environment
+### environment capture করে এমন closure {#closures-that-capture-their-environment}
 
-Many iterator adapters take closures as arguments, and commonly the closures
-we’ll specify as arguments to iterator adapters will be closures that capture
-their environment.
+অনেক iterator adapter argument হিসেবে closure নেয়, আর সাধারণত iterator adapter-এর argument হিসেবে আমরা যে closure দেব তা হবে environment
+capture করে এমন closure।
 
-For this example, we’ll use the `filter` method that takes a closure. The
-closure gets an item from the iterator and returns a `bool`. If the closure
-returns `true`, the value will be included in the iteration produced by
-`filter`. If the closure returns `false`, the value won’t be included.
+এই উদাহরণে আমরা `filter` method ব্যবহার করব, যা একটি closure নেয়। closure-টি iterator থেকে একটি item পায় এবং একটি `bool` return করে।
+closure `true` return করলে মানটি `filter`-এর তৈরি iteration-এ যুক্ত হবে। closure `false` return করলে মানটি যুক্ত হবে না।
 
-In Listing 13-16, we use `filter` with a closure that captures the `shoe_size`
-variable from its environment to iterate over a collection of `Shoe` struct
-instances. It will return only shoes that are the specified size.
+Listing 13-16-এ আমরা `Shoe` struct instance-এর একটি collection-এর ওপর দিয়ে iterate করতে এমন একটি closure-সহ `filter` ব্যবহার করি, যা তার
+environment থেকে `shoe_size` variable capture করে। এটি শুধু নির্দিষ্ট মাপের জুতাগুলো return করবে।
 
-<Listing number="13-16" file-name="src/lib.rs" caption="Using the `filter` method with a closure that captures `shoe_size`">
+<Listing number="13-16" file-name="src/lib.rs" caption="`shoe_size` capture করে এমন একটি closure-সহ `filter` method ব্যবহার করা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-16/src/lib.rs}}
@@ -211,21 +169,15 @@ instances. It will return only shoes that are the specified size.
 
 </Listing>
 
-The `shoes_in_size` function takes ownership of a vector of shoes and a shoe
-size as parameters. It returns a vector containing only shoes of the specified
-size.
+`shoes_in_size` function parameter হিসেবে জুতার একটি vector-এর ownership আর একটি জুতার মাপ নেয়। এটি এমন একটি vector return করে যাতে শুধু
+নির্দিষ্ট মাপের জুতা থাকে।
 
-In the body of `shoes_in_size`, we call `into_iter` to create an iterator that
-takes ownership of the vector. Then, we call `filter` to adapt that iterator
-into a new iterator that only contains elements for which the closure returns
-`true`.
+`shoes_in_size`-এর body-তে আমরা `into_iter` call করে এমন একটি iterator তৈরি করি যা vector-এর ownership নেয়। তারপর `filter` call করে সেই
+iterator-কে এমন একটি নতুন iterator-এ রূপান্তর করি, যাতে শুধু সেই উপাদানগুলো থাকে যাদের জন্য closure `true` return করে।
 
-The closure captures the `shoe_size` parameter from the environment and
-compares the value with each shoe’s size, keeping only shoes of the size
-specified. Finally, calling `collect` gathers the values returned by the
-adapted iterator into a vector that’s returned by the function.
+closure-টি environment থেকে `shoe_size` parameter capture করে এবং মানটিকে প্রতিটি জুতার মাপের সঙ্গে তুলনা করে, শুধু নির্দিষ্ট মাপের জুতাগুলো
+রেখে দেয়। শেষে `collect` call করে রূপান্তরিত iterator-এর return করা মানগুলো একটি vector-এ জড়ো করা হয়, যা function return করে।
 
-The test shows that when we call `shoes_in_size`, we get back only shoes that
-have the same size as the value we specified.
+test দেখায় যে `shoes_in_size` call করলে আমরা শুধু সেই জুতাগুলো ফেরত পাই, যাদের মাপ আমাদের দেওয়া মানের সমান।
 
 {{#quiz ../quizzes/ch13-02-iterators.toml}}

@@ -3,14 +3,12 @@
 <a id="closures-anonymous-functions-that-can-capture-their-environment"></a>
 <a id="closures-anonymous-functions-that-capture-their-environment"></a>
 
-## Closures
+## closure {#closures}
 
-Rust’s closures are anonymous functions you can save in a variable or pass as
-arguments to other functions. You can create the closure in one place and then
-call the closure elsewhere to evaluate it in a different context. Unlike
-functions, closures can capture values from the scope in which they’re defined.
-We’ll demonstrate how these closure features allow for code reuse and behavior
-customization.
+Rust-এর closure (পারিপার্শ্বিক মান ধরে রাখতে পারে এমন নামহীন function) হলো নামহীন function, যা variable-এ রাখা যায় বা অন্য
+function-এ argument হিসেবে পাঠানো যায়। এক জায়গায় closure তৈরি করে অন্য জায়গায় call করে ভিন্ন প্রেক্ষাপটে একে মূল্যায়ন করা যায়।
+function-এর মতো নয়, closure যে scope-এ সংজ্ঞায়িত হয় সেখান থেকে মান capture করতে (ধরে রাখতে) পারে। closure-এর এই বৈশিষ্ট্যগুলো
+কীভাবে কোডের পুনর্ব্যবহার আর আচরণ নিজের মতো সাজানো সম্ভব করে, তা আমরা দেখাব।
 
 <!-- Old headings. Do not remove or links may break. -->
 
@@ -19,27 +17,21 @@ customization.
 <a id="refactoring-with-closures-to-store-code"></a>
 <a id="capturing-the-environment-with-closures"></a>
 
-### Capturing the Environment
+### environment capture করা {#capturing-the-environment}
 
-We’ll first examine how we can use closures to capture values from the
-environment they’re defined in for later use. Here’s the scenario: Every so
-often, our T-shirt company gives away an exclusive, limited-edition shirt to
-someone on our mailing list as a promotion. People on the mailing list can
-optionally add their favorite color to their profile. If the person chosen for
-a free shirt has their favorite color set, they get that color shirt. If the
-person hasn’t specified a favorite color, they get whatever color the company
-currently has the most of.
+প্রথমে দেখব কীভাবে closure ব্যবহার করে যে environment (পারিপার্শ্বিক পরিবেশ)-এ এটি সংজ্ঞায়িত হয়েছে সেখান থেকে পরে ব্যবহারের জন্য মান
+capture করা যায়। পরিস্থিতিটা এমন: প্রচারণার অংশ হিসেবে আমাদের T-shirt কোম্পানি মাঝে মাঝে mailing list-এর কাউকে একটি বিশেষ, সীমিত
+সংস্করণের shirt উপহার দেয়। mailing list-এর মানুষেরা চাইলে তাদের profile-এ প্রিয় রং যোগ করতে পারে। বিনামূল্যের shirt-এর জন্য বাছাই
+করা ব্যক্তির প্রিয় রং সেট করা থাকলে সে সেই রঙের shirt পায়। আর প্রিয় রং উল্লেখ না করলে কোম্পানির কাছে এই মুহূর্তে যে রঙের shirt সবচেয়ে
+বেশি আছে, সেটি পায়।
 
-There are many ways to implement this. For this example, we’re going to use an
-enum called `ShirtColor` that has the variants `Red` and `Blue` (limiting the
-number of colors available for simplicity). We represent the company’s
-inventory with an `Inventory` struct that has a field named `shirts` that
-contains a `Vec<ShirtColor>` representing the shirt colors currently in stock.
-The method `giveaway` defined on `Inventory` gets the optional shirt color
-preference of the free-shirt winner, and it returns the shirt color the
-person will get. This setup is shown in Listing 13-1.
+এটি implement করার অনেক উপায় আছে। এই উদাহরণে আমরা `ShirtColor` নামের একটি enum ব্যবহার করব, যার variant হলো `Red` আর `Blue` (সরলতার
+জন্য রঙের সংখ্যা সীমিত রাখা হয়েছে)। কোম্পানির মজুত বোঝাতে আমরা একটি `Inventory` struct ব্যবহার করি, যার `shirts` নামের একটি field-এ
+একটি `Vec<ShirtColor>` থাকে, যা এই মুহূর্তে মজুত থাকা shirt-এর রংগুলো বোঝায়। `Inventory`-এর ওপর সংজ্ঞায়িত `giveaway` method
+বিনামূল্যের shirt বিজয়ীর ঐচ্ছিক রঙের পছন্দ নেয়, এবং ব্যক্তিটি যে রঙের shirt পাবে তা return করে। এই ব্যবস্থাটি Listing 13-1-এ দেখানো
+হয়েছে।
 
-<Listing number="13-1" file-name="src/main.rs" caption="Shirt company giveaway situation">
+<Listing number="13-1" file-name="src/main.rs" caption="shirt কোম্পানির উপহার দেওয়ার পরিস্থিতি">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-01/src/main.rs}}
@@ -47,73 +39,53 @@ person will get. This setup is shown in Listing 13-1.
 
 </Listing>
 
-The `store` defined in `main` has two blue shirts and one red shirt remaining
-to distribute for this limited-edition promotion. We call the `giveaway` method
-for a user with a preference for a red shirt and a user without any preference.
+`main`-এ সংজ্ঞায়িত `store`-এ এই সীমিত সংস্করণের প্রচারণায় বিতরণের জন্য দুটি নীল আর একটি লাল shirt বাকি আছে। আমরা লাল shirt পছন্দ করা
+একজন ব্যবহারকারী আর কোনো পছন্দ নেই এমন একজন ব্যবহারকারীর জন্য `giveaway` method call করি।
 
-Again, this code could be implemented in many ways, and here, to focus on
-closures, we’ve stuck to concepts you’ve already learned, except for the body of
-the `giveaway` method that uses a closure. In the `giveaway` method, we get the
-user preference as a parameter of type `Option<ShirtColor>` and call the
-`unwrap_or_else` method on `user_preference`. The [`unwrap_or_else` method on
-`Option<T>`][unwrap-or-else]<!-- ignore --> is defined by the standard library.
-It takes one argument: a closure without any arguments that returns a value `T`
-(the same type stored in the `Some` variant of the `Option<T>`, in this case
-`ShirtColor`). If the `Option<T>` is the `Some` variant, `unwrap_or_else`
-returns the value from within the `Some`. If the `Option<T>` is the `None`
-variant, `unwrap_or_else` calls the closure and returns the value returned by
-the closure.
+আবারও বলি, এই কোড অনেকভাবে implement করা যেত, আর এখানে closure-এর দিকে মনোযোগ রাখতে আমরা আপনার আগে শেখা ধারণাগুলোতেই সীমাবদ্ধ থেকেছি,
+শুধু `giveaway` method-এর body ছাড়া, যেখানে একটি closure ব্যবহার করা হয়েছে। `giveaway` method-এ আমরা ব্যবহারকারীর পছন্দ
+`Option<ShirtColor>` type-এর parameter হিসেবে পাই এবং `user_preference`-এর ওপর `unwrap_or_else` method call করি। [`Option<T>`-এর ওপর
+`unwrap_or_else` method][unwrap-or-else]<!-- ignore --> standard library-তে সংজ্ঞায়িত। এটি একটি argument নেয়: কোনো argument ছাড়া একটি
+closure, যা একটি `T` মান return করে (`Option<T>`-এর `Some` variant-এ যে type রাখা থাকে সেই একই type, এই ক্ষেত্রে `ShirtColor`)।
+`Option<T>` যদি `Some` variant হয়, তাহলে `unwrap_or_else` `Some`-এর ভেতরের মানটি return করে। `Option<T>` যদি `None` variant হয়, তাহলে
+`unwrap_or_else` closure-টি call করে এবং closure-এর return করা মানটি return করে।
 
-We specify the closure expression `|| self.most_stocked()` as the argument to
-`unwrap_or_else`. This is a closure that takes no parameters itself (if the
-closure had parameters, they would appear between the two vertical pipes). The
-body of the closure calls `self.most_stocked()`. We’re defining the closure
-here, and the implementation of `unwrap_or_else` will evaluate the closure
-later if the result is needed.
+`unwrap_or_else`-এর argument হিসেবে আমরা closure expression `|| self.most_stocked()` দিই। এটি এমন একটি closure যা নিজে কোনো parameter
+নেয় না (closure-এর parameter থাকলে সেগুলো দুটি খাড়া দাগের মাঝে থাকত)। closure-এর body `self.most_stocked()` call করে। closure-টি আমরা
+এখানে সংজ্ঞায়িত করছি, আর ফলাফল দরকার হলে `unwrap_or_else`-এর implementation পরে closure-টি মূল্যায়ন করবে।
 
-Running this code prints the following:
+এই কোড চালালে এই output আসে:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-01/output.txt}}
 ```
 
-One interesting aspect here is that we’ve passed a closure that calls
-`self.most_stocked()` on the current `Inventory` instance. The standard library
-didn’t need to know anything about the `Inventory` or `ShirtColor` types we
-defined, or the logic we want to use in this scenario. The closure captures an
-immutable reference to the `self` `Inventory` instance and passes it with the
-code we specify to the `unwrap_or_else` method. Functions, on the other hand,
-are not able to capture their environment in this way.
+এখানে একটি মজার দিক হলো, আমরা এমন একটি closure পাঠিয়েছি যা বর্তমান `Inventory` instance-এর ওপর `self.most_stocked()` call করে।
+আমাদের সংজ্ঞায়িত `Inventory` বা `ShirtColor` type, বা এই পরিস্থিতিতে আমরা যে logic ব্যবহার করতে চাই, সে সম্পর্কে standard library-র কিছু
+জানার দরকার হয়নি। closure-টি `self` `Inventory` instance-এর একটি immutable reference capture করে এবং আমাদের দেওয়া কোডের সঙ্গে সেটি
+`unwrap_or_else` method-এ পাঠায়। অন্যদিকে function এভাবে তার environment capture করতে পারে না।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="closure-type-inference-and-annotation"></a>
 
-### Inferring and Annotating Closure Types
+### closure-এর type অনুমান ও annotate করা {#inferring-and-annotating-closure-types}
 
-There are more differences between functions and closures. Closures don’t
-usually require you to annotate the types of the parameters or the return value
-like `fn` functions do. Type annotations are required on functions because the
-types are part of an explicit interface exposed to your users. Defining this
-interface rigidly is important for ensuring that everyone agrees on what types
-of values a function uses and returns. Closures, on the other hand, aren’t used
-in an exposed interface like this: They’re stored in variables, and they’re
-used without naming them and exposing them to users of our library.
+function আর closure-এর মধ্যে আরও পার্থক্য আছে। `fn` function-এর মতো closure-এ সাধারণত parameter বা return মানের type annotate করতে হয়
+না। function-এ type annotation বাধ্যতামূলক, কারণ type-গুলো আপনার ব্যবহারকারীদের কাছে প্রকাশিত একটি স্পষ্ট interface-এর অংশ। একটি
+function কোন type-এর মান ব্যবহার ও return করে সে বিষয়ে সবাই যাতে একমত থাকে, তা নিশ্চিত করতে এই interface কঠোরভাবে সংজ্ঞায়িত করা
+গুরুত্বপূর্ণ। অন্যদিকে closure এভাবে কোনো প্রকাশিত interface-এ ব্যবহৃত হয় না: এগুলো variable-এ রাখা হয়, এবং নাম না দিয়ে ও আমাদের
+library-র ব্যবহারকারীদের কাছে প্রকাশ না করেই ব্যবহার করা হয়।
 
-Closures are typically short and relevant only within a narrow context rather
-than in any arbitrary scenario. Within these limited contexts, the compiler can
-infer the types of the parameters and the return type, similar to how it’s able
-to infer the types of most variables (there are rare cases where the compiler
-needs closure type annotations too).
+closure সাধারণত ছোট হয় এবং যেকোনো পরিস্থিতিতে নয়, বরং একটি সংকীর্ণ প্রেক্ষাপটেই প্রাসঙ্গিক থাকে। এই সীমিত প্রেক্ষাপটে compiler
+parameter আর return মানের type অনুমান করতে পারে, ঠিক যেভাবে বেশিরভাগ variable-এর type অনুমান করতে পারে (তবে বিরল কিছু ক্ষেত্রে
+compiler-এরও closure-এর type annotation দরকার হয়)।
 
-As with variables, we can add type annotations if we want to increase
-explicitness and clarity at the cost of being more verbose than is strictly
-necessary. Annotating the types for a closure would look like the definition
-shown in Listing 13-2. In this example, we’re defining a closure and storing it
-in a variable rather than defining the closure in the spot we pass it as an
-argument, as we did in Listing 13-1.
+variable-এর মতোই, প্রয়োজনের চেয়ে বেশি শব্দবহুল হওয়ার বিনিময়ে স্পষ্টতা বাড়াতে চাইলে আমরা type annotation যোগ করতে পারি। একটি
+closure-এর type annotate করলে দেখতে Listing 13-2-এর সংজ্ঞার মতো হবে। এই উদাহরণে Listing 13-1-এর মতো যেখানে argument হিসেবে পাঠাচ্ছি
+সেখানেই closure সংজ্ঞায়িত না করে আমরা একটি closure সংজ্ঞায়িত করে variable-এ রাখছি।
 
-<Listing number="13-2" file-name="src/main.rs" caption="Adding optional type annotations of the parameter and return value types in the closure">
+<Listing number="13-2" file-name="src/main.rs" caption="closure-এ parameter ও return মানের type-এর ঐচ্ছিক annotation যোগ করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-02/src/main.rs:here}}
@@ -121,12 +93,9 @@ argument, as we did in Listing 13-1.
 
 </Listing>
 
-With type annotations added, the syntax of closures looks more similar to the
-syntax of functions. Here, we define a function that adds 1 to its parameter and
-a closure that has the same behavior, for comparison. We’ve added some spaces
-to line up the relevant parts. This illustrates how closure syntax is similar
-to function syntax except for the use of pipes and the amount of syntax that is
-optional:
+type annotation যোগ করলে closure-এর syntax function-এর syntax-এর আরও কাছাকাছি দেখায়। তুলনার জন্য এখানে আমরা একটি function সংজ্ঞায়িত
+করেছি যা তার parameter-এর সঙ্গে 1 যোগ করে, আর একই আচরণের একটি closure। প্রাসঙ্গিক অংশগুলো এক সারিতে আনতে কিছু space যোগ করেছি। এতে
+বোঝা যায় যে closure-এর syntax function-এর syntax-এর মতোই, শুধু খাড়া দাগের ব্যবহার আর কতটা syntax ঐচ্ছিক, এই দুটি ছাড়া:
 
 ```rust,ignore
 fn  add_one_v1   (x: u32) -> u32 { x + 1 }
@@ -135,26 +104,18 @@ let add_one_v3 = |x|             { x + 1 };
 let add_one_v4 = |x|               x + 1  ;
 ```
 
-The first line shows a function definition and the second line shows a fully
-annotated closure definition. In the third line, we remove the type annotations
-from the closure definition. In the fourth line, we remove the brackets, which
-are optional because the closure body has only one expression. These are all
-valid definitions that will produce the same behavior when they’re called. The
-`add_one_v3` and `add_one_v4` lines require the closures to be evaluated to be
-able to compile because the types will be inferred from their usage. This is
-similar to `let v = Vec::new();` needing either type annotations or values of
-some type to be inserted into the `Vec` for Rust to be able to infer the type.
+প্রথম লাইনে একটি function-এর সংজ্ঞা, আর দ্বিতীয় লাইনে পুরোপুরি annotate করা একটি closure-এর সংজ্ঞা। তৃতীয় লাইনে closure-এর সংজ্ঞা
+থেকে type annotation সরিয়ে দিয়েছি। চতুর্থ লাইনে bracket সরিয়ে দিয়েছি, যা ঐচ্ছিক, কারণ closure-এর body-তে মাত্র একটি expression।
+এগুলো সবই বৈধ সংজ্ঞা, যা call করলে একই আচরণ করবে। `add_one_v3` আর `add_one_v4` লাইন compile হতে হলে closure-গুলোকে মূল্যায়ন করতে হবে,
+কারণ type অনুমান হবে তাদের ব্যবহার থেকে। এটা `let v = Vec::new();`-এর মতো, যেখানে Rust-কে type অনুমান করতে হলে হয় type annotation
+লাগে, নয়তো `Vec`-এ কোনো type-এর মান ঢোকাতে হয়।
 
-For closure definitions, the compiler will infer one concrete type for each of
-their parameters and for their return value. For instance, Listing 13-3 shows
-the definition of a short closure that just returns the value it receives as a
-parameter. This closure isn’t very useful except for the purposes of this
-example. Note that we haven’t added any type annotations to the definition.
-Because there are no type annotations, we can call the closure with any type,
-which we’ve done here with `String` the first time. If we then try to call
-`example_closure` with an integer, we’ll get an error.
+closure-এর সংজ্ঞার ক্ষেত্রে compiler এর প্রতিটি parameter আর return মানের জন্য একটি করে concrete type অনুমান করবে। যেমন, Listing 13-3-এ
+একটি ছোট closure-এর সংজ্ঞা দেখানো হয়েছে, যা parameter হিসেবে পাওয়া মানটিই return করে। এই উদাহরণের উদ্দেশ্য ছাড়া closure-টি খুব একটা
+কাজের নয়। খেয়াল করুন, সংজ্ঞায় আমরা কোনো type annotation যোগ করিনি। type annotation না থাকায় যেকোনো type দিয়ে closure-টি call করা যায়,
+এখানে প্রথমবার আমরা `String` দিয়ে তা করেছি। তারপর integer দিয়ে `example_closure` call করার চেষ্টা করলে error পাব।
 
-<Listing number="13-3" file-name="src/main.rs" caption="Attempting to call a closure whose types are inferred with two different types">
+<Listing number="13-3" file-name="src/main.rs" caption="যে closure-এর type অনুমান করা হয়েছে তাকে দুটি ভিন্ন type দিয়ে call করার চেষ্টা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-03/src/main.rs:here}}
@@ -162,32 +123,27 @@ which we’ve done here with `String` the first time. If we then try to call
 
 </Listing>
 
-The compiler gives us this error:
+compiler আমাদের এই error দেয়:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-03/output.txt}}
 ```
 
-The first time we call `example_closure` with the `String` value, the compiler
-infers the type of `x` and the return type of the closure to be `String`. Those
-types are then locked into the closure in `example_closure`, and we get a type
-error when we next try to use a different type with the same closure.
+প্রথমবার `String` মান দিয়ে `example_closure` call করলে compiler `x`-এর type আর closure-এর return type `String` বলে অনুমান করে। তারপর
+সেই type-গুলো `example_closure`-এর closure-এ আটকে যায়, আর পরের বার একই closure-এ ভিন্ন type ব্যবহার করার চেষ্টা করলে type error পাই।
 
 {{#quiz ../quizzes/ch13-01-closures-sec1.toml}}
 
-### Capturing References or Moving Ownership
+### reference capture করা বা ownership সরিয়ে নেওয়া {#capturing-references-or-moving-ownership}
 
-Closures can capture values from their environment in three ways, which
-directly map to the three ways a function can take a parameter: borrowing
-immutably, borrowing mutably, and taking ownership. The closure will decide
-which of these to use based on what the body of the function does with the
-captured values.
+closure তার environment থেকে তিনভাবে মান capture করতে পারে, যা সরাসরি function-এর parameter নেওয়ার তিনটি উপায়ের সঙ্গে মেলে: immutable-ভাবে
+borrow করা, mutable-ভাবে borrow করা, আর ownership নেওয়া। capture করা মানগুলো নিয়ে function-এর body কী করে, তার ওপর ভিত্তি করে closure
+ঠিক করবে এগুলোর কোনটি ব্যবহার করবে।
 
-In Listing 13-4, we define a closure that captures an immutable reference to
-the vector named `list` because it only needs an immutable reference to print
-the value.
+Listing 13-4-এ আমরা এমন একটি closure সংজ্ঞায়িত করি যা `list` নামের vector-এর একটি immutable reference capture করে, কারণ মান print করতে এর
+শুধু একটি immutable reference দরকার।
 
-<Listing number="13-4" file-name="src/main.rs" caption="Defining and calling a closure that captures an immutable reference">
+<Listing number="13-4" file-name="src/main.rs" caption="immutable reference capture করে এমন একটি closure সংজ্ঞায়িত ও call করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-04/src/main.rs}}
@@ -195,23 +151,20 @@ the value.
 
 </Listing>
 
-This example also illustrates that a variable can bind to a closure definition,
-and we can later call the closure by using the variable name and parentheses as
-if the variable name were a function name.
+এই উদাহরণ এটাও দেখায় যে একটি variable একটি closure-এর সংজ্ঞার সঙ্গে bind হতে পারে, আর পরে variable-এর নাম আর বন্ধনী ব্যবহার করে
+closure-টি call করা যায়, যেন variable-এর নামটিই একটি function-এর নাম।
 
-Because we can have multiple immutable references to `list` at the same time,
-`list` is still accessible from the code before the closure definition, after
-the closure definition but before the closure is called, and after the closure
-is called. This code compiles, runs, and prints:
+একই সময়ে `list`-এর একাধিক immutable reference থাকতে পারে বলে closure-এর সংজ্ঞার আগের কোড থেকে, closure-এর সংজ্ঞার পরে কিন্তু
+closure call করার আগে, আর closure call করার পরে, সব জায়গা থেকেই `list` ব্যবহার করা যায়। এই কোড compile হয়, চলে, এবং print করে:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-04/output.txt}}
 ```
 
-Next, in Listing 13-5, we change the closure body so that it adds an element to
-the `list` vector. The closure now captures a mutable reference.
+এরপর Listing 13-5-এ আমরা closure-এর body বদলে দিই, যাতে এটি `list` vector-এ একটি উপাদান যোগ করে। closure-টি এখন একটি mutable reference
+capture করে।
 
-<Listing number="13-5" file-name="src/main.rs" caption="Defining and calling a closure that captures a mutable reference">
+<Listing number="13-5" file-name="src/main.rs" caption="mutable reference capture করে এমন একটি closure সংজ্ঞায়িত ও call করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-05/src/main.rs}}
@@ -219,32 +172,26 @@ the `list` vector. The closure now captures a mutable reference.
 
 </Listing>
 
-This code compiles, runs, and prints:
+এই কোড compile হয়, চলে, এবং print করে:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-05/output.txt}}
 ```
 
-Note that there’s no longer a `println!` between the definition and the call of
-the `borrows_mutably` closure: When `borrows_mutably` is defined, it captures a
-mutable reference to `list`. We don’t use the closure again after the closure
-is called, so the mutable borrow ends. Between the closure definition and the
-closure call, an immutable borrow to print isn’t allowed, because no other
-borrows are allowed when there’s a mutable borrow. Try adding a `println!`
-there to see what error message you get!
+খেয়াল করুন, `borrows_mutably` closure-এর সংজ্ঞা আর call-এর মাঝে এখন আর কোনো `println!` নেই: `borrows_mutably` সংজ্ঞায়িত হওয়ার সময় এটি
+`list`-এর একটি mutable reference capture করে। closure call করার পর আমরা আর closure-টি ব্যবহার করি না, তাই mutable borrow শেষ হয়ে
+যায়। closure-এর সংজ্ঞা আর closure call-এর মাঝে print করার জন্য immutable borrow অনুমোদিত নয়, কারণ mutable borrow থাকলে অন্য কোনো
+borrow অনুমোদিত নয়। সেখানে একটি `println!` যোগ করে দেখুন কোন error message পান!
 
-If you want to force the closure to take ownership of the values it uses in the
-environment even though the body of the closure doesn’t strictly need
-ownership, you can use the `move` keyword before the parameter list.
+closure-এর body-র আসলে ownership দরকার না হলেও আপনি যদি closure-কে environment-এ ব্যবহৃত মানগুলোর ownership নিতে বাধ্য করতে চান, তাহলে
+parameter তালিকার আগে `move` keyword ব্যবহার করতে পারেন।
 
-This technique is mostly useful when passing a closure to a new thread to move
-the data so that it’s owned by the new thread. We’ll discuss threads and why
-you would want to use them in detail in Chapter 16 when we talk about
-concurrency, but for now, let’s briefly explore spawning a new thread using a
-closure that needs the `move` keyword. Listing 13-6 shows Listing 13-4 modified
-to print the vector in a new thread rather than in the main thread.
+এই কৌশল মূলত কাজে লাগে যখন একটি নতুন thread-এ closure পাঠিয়ে ডেটা সরিয়ে নিতে হয়, যাতে ডেটার owner হয় নতুন thread। thread কী এবং কেন
+ব্যবহার করবেন, তা বিস্তারিত আলোচনা করব অধ্যায় 16-এ concurrency (একসঙ্গে একাধিক কাজ সামলানো) নিয়ে কথা বলার সময়, তবে আপাতত চলুন সংক্ষেপে
+দেখি কীভাবে `move` keyword লাগে এমন একটি closure দিয়ে নতুন thread চালু করা যায়। Listing 13-6-এ Listing 13-4-কে বদলে main thread-এর বদলে
+একটি নতুন thread-এ vector print করানো হয়েছে।
 
-<Listing number="13-6" file-name="src/main.rs" caption="Using `move` to force the closure for the thread to take ownership of `list`">
+<Listing number="13-6" file-name="src/main.rs" caption="thread-এর closure-কে `list`-এর ownership নিতে বাধ্য করতে `move` ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-06/src/main.rs}}
@@ -252,21 +199,14 @@ to print the vector in a new thread rather than in the main thread.
 
 </Listing>
 
-We spawn a new thread, giving the thread a closure to run as an argument. The
-closure body prints out the list. In Listing 13-4, the closure only captured
-`list` using an immutable reference because that's the least amount of access
-to `list` needed to print it. In this example, even though the closure body
-still only needs an immutable reference, we need to specify that `list` should
-be moved into the closure by putting the `move` keyword at the beginning of the
-closure definition. If the main thread performed more operations before calling
-`join` on the new thread, the new thread might finish before the rest of the
-main thread finishes, or the main thread might finish first. If the main thread
-maintained ownership of `list` but ended before the new thread and drops
-`list`, the immutable reference in the thread would be invalid. Therefore, the
-compiler requires that `list` be moved into the closure given to the new thread
-so that the reference will be valid. Try removing the `move` keyword or using
-`list` in the main thread after the closure is defined to see what compiler
-errors you get!
+আমরা একটি নতুন thread চালু করি, আর argument হিসেবে thread-কে চালানোর জন্য একটি closure দিই। closure-এর body তালিকাটি print করে। Listing
+13-4-এ closure শুধু একটি immutable reference দিয়ে `list` capture করেছিল, কারণ print করতে `list`-এর ওপর ওইটুকু প্রবেশাধিকারই যথেষ্ট। এই
+উদাহরণে closure-এর body-র এখনো শুধু একটি immutable reference দরকার হলেও closure-এর সংজ্ঞার শুরুতে `move` keyword বসিয়ে আমাদের বলে দিতে
+হবে যে `list`-কে closure-এর ভেতরে সরিয়ে নিতে হবে। নতুন thread-এ `join` call করার আগে main thread যদি আরও কাজ করত, তাহলে নতুন thread
+main thread-এর বাকি অংশ শেষ হওয়ার আগেই শেষ হয়ে যেতে পারত, অথবা main thread আগে শেষ হতে পারত। main thread যদি `list`-এর ownership রেখে
+দিত কিন্তু নতুন thread-এর আগে শেষ হয়ে `list` drop করত, তাহলে thread-এর immutable reference অবৈধ হয়ে যেত। তাই compiler চায় `list`-কে
+নতুন thread-এ দেওয়া closure-এর ভেতরে সরিয়ে নেওয়া হোক, যাতে reference বৈধ থাকে। `move` keyword সরিয়ে দিয়ে, বা closure সংজ্ঞায়িত করার
+পরে main thread-এ `list` ব্যবহার করে দেখুন কোন compiler error পান!
 
 <!-- Old headings. Do not remove or links may break. -->
 
@@ -275,38 +215,28 @@ errors you get!
 <a id="moving-captured-values-out-of-the-closure-and-the-fn-traits"></a>
 <a id="moving-captured-values-out-of-closures-and-the-fn-traits"></a>
 
-### Moving Captured Values Out of Closures
+### capture করা মান closure থেকে বের করে নেওয়া {#moving-captured-values-out-of-closures}
 
-Once a closure has captured a reference or captured ownership of a value from
-the environment where the closure is defined (thus affecting what, if anything,
-is moved _into_ the closure), the code in the body of the closure defines what
-happens to the references or values when the closure is evaluated later (thus
-affecting what, if anything, is moved _out of_ the closure).
+closure যে environment-এ সংজ্ঞায়িত হয়েছে সেখান থেকে একবার কোনো মানের reference বা ownership capture করে ফেললে (যা ঠিক করে কী, যদি
+কিছু থাকে, closure-এর _ভেতরে_ সরানো হবে), closure-এর body-র কোড ঠিক করে পরে closure মূল্যায়নের সময় reference বা মানগুলোর কী হবে (যা ঠিক
+করে কী, যদি কিছু থাকে, closure-এর _বাইরে_ সরানো হবে)।
 
-A closure body can do any of the following: Move a captured value out of the
-closure, mutate the captured value, neither move nor mutate the value, or
-capture nothing from the environment to begin with.
+একটি closure-এর body এর যেকোনোটি করতে পারে: capture করা মান closure থেকে বাইরে সরিয়ে নেওয়া, capture করা মান পরিবর্তন করা, মানটি
+সরানো বা পরিবর্তন কোনোটিই না করা, অথবা শুরু থেকেই environment থেকে কিছুই capture না করা।
 
-The way a closure captures and handles values from the environment affects
-which traits the closure implements, and traits are how functions and structs
-can specify what kinds of closures they can use. Closures will automatically
-implement one, two, or all three of these `Fn` traits, in an additive fashion,
-depending on how the closure’s body handles the values:
+closure কীভাবে environment থেকে মান capture করে ও সামলায়, তা ঠিক করে closure কোন trait implement করবে, আর trait-এর মাধ্যমেই function
+ও struct বলে দিতে পারে তারা কোন ধরনের closure ব্যবহার করতে পারে। closure-এর body মানগুলো কীভাবে সামলায় তার ওপর নির্ভর করে closure
+স্বয়ংক্রিয়ভাবে এই `Fn` trait-গুলোর একটি, দুটি বা তিনটিই, যোগ হওয়ার ধাঁচে, implement করবে:
 
-* `FnOnce` applies to closures that can be called once. All closures implement
-  at least this trait because all closures can be called. A closure that moves
-  captured values out of its body will only implement `FnOnce` and none of the
-  other `Fn` traits because it can only be called once.
-* `FnMut` applies to closures that don’t move captured values out of their body
-  but might mutate the captured values. These closures can be called more than
-  once.
-* `Fn` applies to closures that don’t move captured values out of their body
-  and don’t mutate captured values, as well as closures that capture nothing
-  from their environment. These closures can be called more than once without
-  mutating their environment, which is important in cases such as calling a closure multiple times concurrently.
+* `FnOnce` প্রযোজ্য সেই closure-এর ক্ষেত্রে যা একবার call করা যায়। সব closure অন্তত এই trait implement করে, কারণ সব closure call করা
+  যায়। যে closure capture করা মান তার body থেকে বাইরে সরিয়ে নেয়, সেটি শুধু `FnOnce` implement করবে, অন্য কোনো `Fn` trait নয়, কারণ
+  এটি মাত্র একবার call করা যায়।
+* `FnMut` প্রযোজ্য সেই closure-এর ক্ষেত্রে যা capture করা মান তার body থেকে বাইরে সরায় না, কিন্তু capture করা মান পরিবর্তন করতে পারে।
+  এই closure-গুলো একাধিকবার call করা যায়।
+* `Fn` প্রযোজ্য সেই closure-এর ক্ষেত্রে যা capture করা মান তার body থেকে বাইরে সরায় না এবং capture করা মান পরিবর্তনও করে না, আর সেই
+  closure-এর ক্ষেত্রেও যা environment থেকে কিছুই capture করে না। এই closure-গুলো environment পরিবর্তন না করেই একাধিকবার call করা যায়, যা গুরুত্বপূর্ণ, যেমন একই closure একসঙ্গে একাধিকবার call করার ক্ষেত্রে।
 
-Let’s look at the definition of the `unwrap_or_else` method on `Option<T>` that
-we used in Listing 13-1:
+Listing 13-1-এ ব্যবহার করা `Option<T>`-এর `unwrap_or_else` method-এর সংজ্ঞাটি দেখা যাক:
 
 ```rust,ignore
 impl<T> Option<T> {
@@ -322,42 +252,29 @@ impl<T> Option<T> {
 }
 ```
 
-Recall that `T` is the generic type representing the type of the value in the
-`Some` variant of an `Option`. That type `T` is also the return type of the
-`unwrap_or_else` function: Code that calls `unwrap_or_else` on an
-`Option<String>`, for example, will get a `String`.
+মনে করুন, `T` হলো generic type, যা একটি `Option`-এর `Some` variant-এ থাকা মানের type বোঝায়। সেই `T` type-ই `unwrap_or_else` function-এর
+return type: যেমন, একটি `Option<String>`-এর ওপর `unwrap_or_else` call করা কোড একটি `String` পাবে।
 
-Next, notice that the `unwrap_or_else` function has the additional generic type
-parameter `F`. The `F` type is the type of the parameter named `f`, which is
-the closure we provide when calling `unwrap_or_else`.
+এরপর খেয়াল করুন, `unwrap_or_else` function-এর একটি বাড়তি generic type parameter `F` আছে। `F` type হলো `f` নামের parameter-এর type, যা
+`unwrap_or_else` call করার সময় আমাদের দেওয়া closure।
 
-The trait bound specified on the generic type `F` is `FnOnce() -> T`, which
-means `F` must be able to be called once, take no arguments, and return a `T`.
-Using `FnOnce` in the trait bound expresses the constraint that
-`unwrap_or_else` will not call `f` more than once. In the body of
-`unwrap_or_else`, we can see that if the `Option` is `Some`, `f` won’t be
-called. If the `Option` is `None`, `f` will be called once. Because all
-closures implement `FnOnce`, `unwrap_or_else` accepts all three kinds of
-closures and is as flexible as it can be.
+generic type `F`-এর ওপর দেওয়া trait bound হলো `FnOnce() -> T`, অর্থাৎ `F`-কে একবার call করা যেতে হবে, কোনো argument নেবে না, এবং একটি `T`
+return করবে। trait bound-এ `FnOnce` ব্যবহার করা এই শর্ত প্রকাশ করে যে `unwrap_or_else` `f`-কে একবারের বেশি call করবে না।
+`unwrap_or_else`-এর body-তে দেখতে পাই, `Option` যদি `Some` হয়, তাহলে `f` call হবে না। `Option` যদি `None` হয়, তাহলে `f` একবার call হবে।
+সব closure যেহেতু `FnOnce` implement করে, তাই `unwrap_or_else` তিন ধরনের closure-ই গ্রহণ করে এবং যতটা সম্ভব নমনীয়।
 
-> Note: If what we want to do doesn’t require capturing a value from the
-> environment, we can use the name of a function rather than a closure where we
-> need something that implements one of the `Fn` traits. For example, on an
-> `Option<Vec<T>>` value, we could call `unwrap_or_else(Vec::new)` to get a
-> new, empty vector if the value is `None`. The compiler automatically
-> implements whichever of the `Fn` traits is applicable for a function
-> definition.
+> Note: আমরা যা করতে চাই তাতে যদি environment থেকে কোনো মান capture করার দরকার না হয়, তাহলে যেখানে `Fn` trait-গুলোর কোনো একটি implement
+> করে এমন কিছু লাগে, সেখানে closure-এর বদলে একটি function-এর নাম ব্যবহার করতে পারি। যেমন, একটি `Option<Vec<T>>` মানের ওপর
+> `unwrap_or_else(Vec::new)` call করে মানটি `None` হলে একটি নতুন, খালি vector পেতে পারি। compiler একটি function-এর সংজ্ঞার জন্য `Fn`
+> trait-গুলোর মধ্যে যেটি প্রযোজ্য, সেটি স্বয়ংক্রিয়ভাবে implement করে।
 
-Now let’s look at the standard library method `sort_by_key`, defined on slices,
-to see how that differs from `unwrap_or_else` and why `sort_by_key` uses
-`FnMut` instead of `FnOnce` for the trait bound. The closure gets one argument
-in the form of a reference to the current item in the slice being considered,
-and it returns a value of type `K` that can be ordered. This function is useful
-when you want to sort a slice by a particular attribute of each item. In
-Listing 13-7, we have a list of `Rectangle` instances, and we use `sort_by_key`
-to order them by their `width` attribute from low to high.
+এবার slice-এর ওপর সংজ্ঞায়িত standard library-র method `sort_by_key` দেখা যাক, যাতে বোঝা যায় এটি `unwrap_or_else` থেকে কীভাবে আলাদা এবং
+কেন `sort_by_key` trait bound-এ `FnOnce`-এর বদলে `FnMut` ব্যবহার করে। closure-টি একটি argument পায়, যা slice-এর বিবেচনাধীন বর্তমান
+item-এর একটি reference, এবং এটি `K` type-এর এমন একটি মান return করে যা ক্রমানুসারে সাজানো যায়। প্রতিটি item-এর নির্দিষ্ট কোনো বৈশিষ্ট্য
+অনুযায়ী একটি slice সাজাতে চাইলে এই function কাজে লাগে। Listing 13-7-এ আমাদের কাছে `Rectangle` instance-এর একটি তালিকা আছে, আর আমরা
+`sort_by_key` ব্যবহার করে সেগুলোকে তাদের `width` বৈশিষ্ট্য অনুযায়ী কম থেকে বেশি ক্রমে সাজাই।
 
-<Listing number="13-7" file-name="src/main.rs" caption="Using `sort_by_key` to order rectangles by width">
+<Listing number="13-7" file-name="src/main.rs" caption="প্রস্থ অনুযায়ী আয়তক্ষেত্র সাজাতে `sort_by_key` ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-07/src/main.rs}}
@@ -365,22 +282,20 @@ to order them by their `width` attribute from low to high.
 
 </Listing>
 
-This code prints:
+এই কোড print করে:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-07/output.txt}}
 ```
 
-The reason `sort_by_key` is defined to take an `FnMut` closure is that it calls
-the closure multiple times: once for each item in the slice. The closure `|r|
-r.width` doesn’t capture, mutate, or move anything out from its environment, so
-it meets the trait bound requirements.
+`sort_by_key`-কে একটি `FnMut` closure নেওয়ার মতো করে সংজ্ঞায়িত করার কারণ হলো এটি closure-টি একাধিকবার call করে: slice-এর প্রতিটি item-এর
+জন্য একবার করে। `|r|
+r.width` closure তার environment থেকে কিছু capture, পরিবর্তন বা বাইরে সরায় না, তাই এটি trait bound-এর শর্ত পূরণ করে।
 
-In contrast, Listing 13-8 shows an example of a closure that implements just
-the `FnOnce` trait, because it moves a value out of the environment. The
-compiler won’t let us use this closure with `sort_by_key`.
+বিপরীতে, Listing 13-8-এ এমন একটি closure-এর উদাহরণ দেখানো হয়েছে যা শুধু `FnOnce` trait implement করে, কারণ এটি environment থেকে একটি মান
+বাইরে সরিয়ে নেয়। compiler আমাদের এই closure `sort_by_key`-এর সঙ্গে ব্যবহার করতে দেবে না।
 
-<Listing number="13-8" file-name="src/main.rs" caption="Attempting to use an `FnOnce` closure with `sort_by_key`">
+<Listing number="13-8" file-name="src/main.rs" caption="`sort_by_key`-এর সঙ্গে একটি `FnOnce` closure ব্যবহারের চেষ্টা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-08/src/main.rs}}
@@ -388,31 +303,23 @@ compiler won’t let us use this closure with `sort_by_key`.
 
 </Listing>
 
-This is a contrived, convoluted way (that doesn’t work) to try to count the
-number of times `sort_by_key` calls the closure when sorting `list`. This code
-attempts to do this counting by pushing `value`—a `String` from the closure’s
-environment—into the `sort_operations` vector. The closure captures `value` and
-then moves `value` out of the closure by transferring ownership of `value` to
-the `sort_operations` vector. This closure can be called once; trying to call
-it a second time wouldn’t work, because `value` would no longer be in the
-environment to be pushed into `sort_operations` again! Therefore, this closure
-only implements `FnOnce`. When we try to compile this code, we get this error
-that `value` can’t be moved out of the closure because the closure must
-implement `FnMut`:
+`list` সাজানোর সময় `sort_by_key` কতবার closure call করে তা গোনার এটি একটি কৃত্রিম, জটিল (এবং কাজ করে না এমন) চেষ্টা। এই কোড গোনার কাজটি
+করতে চায় `value`—closure-এর environment-এর একটি `String`—কে `sort_operations` vector-এ push করে। closure-টি `value` capture করে, তারপর
+`value`-এর ownership `sort_operations` vector-এ হস্তান্তর করে `value`-কে closure থেকে বাইরে সরিয়ে নেয়। এই closure একবার call করা যায়;
+দ্বিতীয়বার call করার চেষ্টা কাজ করবে না, কারণ তখন `sort_operations`-এ আবার push করার জন্য environment-এ আর `value` থাকবে না! তাই এই
+closure শুধু `FnOnce` implement করে। এই কোড compile করার চেষ্টা করলে আমরা এই error পাই যে `value`-কে closure থেকে বাইরে সরানো যাবে না,
+কারণ closure-কে `FnMut` implement করতে হবে:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-08/output.txt}}
 ```
 
-The error points to the line in the closure body that moves `value` out of the
-environment. To fix this, we need to change the closure body so that it doesn’t
-move values out of the environment. Keeping a counter in the environment and
-incrementing its value in the closure body is a more straightforward way to
-count the number of times the closure is called. The closure in Listing 13-9
-works with `sort_by_key` because it is only capturing a mutable reference to the
-`num_sort_operations` counter and can therefore be called more than once.
+error-টি closure-এর body-র সেই লাইন দেখিয়ে দেয় যা `value`-কে environment থেকে বাইরে সরায়। এটি ঠিক করতে closure-এর body এমনভাবে বদলাতে
+হবে যাতে এটি environment থেকে কোনো মান বাইরে না সরায়। environment-এ একটি counter রেখে closure-এর body-তে তার মান বাড়ানো closure কতবার call
+হয়েছে তা গোনার আরও সোজাসাপ্টা উপায়। Listing 13-9-এর closure `sort_by_key`-এর সঙ্গে কাজ করে, কারণ এটি শুধু `num_sort_operations` counter-এর
+একটি mutable reference capture করছে, তাই একাধিকবার call করা যায়।
 
-<Listing number="13-9" file-name="src/main.rs" caption="Using an `FnMut` closure with `sort_by_key` is allowed.">
+<Listing number="13-9" file-name="src/main.rs" caption="`sort_by_key`-এর সঙ্গে একটি `FnMut` closure ব্যবহার করা অনুমোদিত।">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-09/src/main.rs}}
@@ -422,10 +329,8 @@ works with `sort_by_key` because it is only capturing a mutable reference to the
 
 <!-- TODO: consider adding a section on the use<> operator -->
 
-In sum, the `Fn` traits are important when defining or using functions or types that
-make use of closures. In the next section, we’ll discuss iterators. Many
-iterator methods take closure arguments, so keep these closure details in mind
-as we continue!
+সংক্ষেপে, closure ব্যবহার করে এমন function বা type সংজ্ঞায়িত বা ব্যবহারের সময় `Fn` trait-গুলো গুরুত্বপূর্ণ। পরের অংশে আমরা iterator নিয়ে
+আলোচনা করব। iterator-এর অনেক method closure argument নেয়, তাই এগোনোর সময় closure-এর এই খুঁটিনাটিগুলো মনে রাখবেন!
 
 {{#quiz ../quizzes/ch13-01-closures-sec2.toml}}
 
