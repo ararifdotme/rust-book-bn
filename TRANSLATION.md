@@ -740,5 +740,5 @@ use.
 - [x] Chapter 19: Patterns and Matching (ch19-*)
 - [x] Chapter 20: Advanced Features (ch20-*)
 - [x] Chapter 21: Final Project: Building a Multithreaded Web Server (ch21-*)
-- [ ] End of Experiment (end-of-experiment)
+- [x] End of Experiment (end-of-experiment)
 - [ ] Appendix (appendix-00 to appendix-07)

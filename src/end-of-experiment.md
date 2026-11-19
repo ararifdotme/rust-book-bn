@@ -1,5 +1,5 @@
-# End of Experiment
+# পরীক্ষার সমাপ্তি {#end-of-experiment}
 
-Thank you for participating in our experiment! We hope you got something useful from our additions. Your participation will help make Rust better for everyone.
+আমাদের পরীক্ষায় অংশ নেওয়ার জন্য আপনাকে ধন্যবাদ! আশা করি আমাদের সংযোজনগুলো থেকে আপনি কিছু কাজের জিনিস পেয়েছেন। আপনার অংশগ্রহণ সবার জন্য Rust-কে আরও ভালো করতে সাহায্য করবে।
 
-You can follow [@tonofcrates](https://mastodon.social/@tonofcrates) on Mastodon if you want to hear about future updates to this experiment.
+এই পরীক্ষার ভবিষ্যৎ হালনাগাদ সম্পর্কে জানতে চাইলে Mastodon-এ [@tonofcrates](https://mastodon.social/@tonofcrates)-কে follow করতে পারেন।
