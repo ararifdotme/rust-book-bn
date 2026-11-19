@@ -1,5 +1,5 @@
-## Ownership Inventory #3
+## Ownership Inventory #3 {#ownership-inventory-3}
 
-The Ownership Inventory is a series of quizzes that test your understanding of ownership in real-world scenarios. These scenarios are inspired by common StackOverflow questions about Rust.
+Ownership Inventory হলো একগুচ্ছ কুইজ, যা বাস্তব পরিস্থিতিতে ownership (মালিকানা) সম্পর্কে আপনার বোঝাপড়া যাচাই করে। এই পরিস্থিতিগুলো Rust নিয়ে StackOverflow-এ প্রচলিত প্রশ্ন থেকে অনুপ্রাণিত।
 
 {{#quiz ../quizzes/ch10-04-inventory.toml}}

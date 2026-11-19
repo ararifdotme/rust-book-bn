@@ -2,37 +2,32 @@
 
 <a id="traits-defining-shared-behavior"></a>
 
-## Defining Shared Behavior with Traits
+## trait দিয়ে সাধারণ আচরণ সংজ্ঞায়িত করা {#defining-shared-behavior-with-traits}
 
-A _trait_ defines the functionality a particular type has and can share with
-other types. We can use traits to define shared behavior in an abstract way. We
-can use _trait bounds_ to specify that a generic type can be any type that has
-certain behavior.
+একটি _trait_ (টাইপের সাধারণ আচরণের সংজ্ঞা) সংজ্ঞায়িত করে কোনো নির্দিষ্ট type-এর কী কী কার্যক্ষমতা আছে, যা সে অন্য
+type-এর সঙ্গে ভাগ করে নিতে পারে। trait দিয়ে আমরা বিমূর্তভাবে সাধারণ আচরণ সংজ্ঞায়িত করতে পারি। আর _trait bound_
+(generic type-এর ওপর trait-এর শর্ত) দিয়ে বলে দিতে পারি যে একটি generic type এমন যেকোনো type হতে পারে যার নির্দিষ্ট
+কিছু আচরণ আছে।
 
-> Note: Traits are similar to a feature often called _interfaces_ in other
-> languages, although with some differences.
+> Note: অন্যান্য ভাষায় প্রায়ই _interfaces_ (ইন্টারফেস) নামে পরিচিত একটি বৈশিষ্ট্যের সঙ্গে trait-এর মিল আছে, যদিও কিছু
+> পার্থক্যও আছে।
 
-### Defining a Trait
+### একটি trait সংজ্ঞায়িত করা {#defining-a-trait}
 
-A type’s behavior consists of the methods we can call on that type. Different
-types share the same behavior if we can call the same methods on all of those
-types. Trait definitions are a way to group method signatures together to
-define a set of behaviors necessary to accomplish some purpose.
+একটি type-এর আচরণ বলতে বোঝায় সেই type-এর ওপর আমরা কোন কোন method call করতে পারি। যদি একাধিক type-এর ওপর একই
+method call করা যায়, তাহলে সেই type-গুলো একই আচরণ ভাগ করে নেয়। trait-এর সংজ্ঞা হলো method signature-গুলোকে একসঙ্গে
+জড়ো করে কোনো উদ্দেশ্য পূরণের জন্য প্রয়োজনীয় আচরণের একটি সেট সংজ্ঞায়িত করার উপায়।
 
-For example, let’s say we have multiple structs that hold various kinds and
-amounts of text: a `NewsArticle` struct that holds a news story filed in a
-particular location and a `SocialPost` that can have, at most, 280 characters
-along with metadata that indicates whether it was a new post, a repost, or a
-reply to another post.
+যেমন ধরুন, আমাদের কয়েকটি struct আছে যারা বিভিন্ন ধরনের ও পরিমাণের লেখা রাখে: একটি `NewsArticle` struct, যা কোনো
+নির্দিষ্ট জায়গা থেকে পাঠানো একটি সংবাদ রাখে, আর একটি `SocialPost`, যাতে সর্বোচ্চ 280টি অক্ষর থাকতে পারে, সঙ্গে থাকে
+মেটাডেটা, যা বলে এটি নতুন post, repost, নাকি অন্য কোনো post-এর উত্তর।
 
-We want to make a media aggregator library crate named `aggregator` that can
-display summaries of data that might be stored in a `NewsArticle` or
-`SocialPost` instance. To do this, we need a summary from each type, and we’ll
-request that summary by calling a `summarize` method on an instance. Listing
-10-12 shows the definition of a public `Summary` trait that expresses this
-behavior.
+আমরা `aggregator` নামে একটি media aggregator (বিভিন্ন উৎসের লেখা এক জায়গায় জড়ো করে এমন) library crate বানাতে চাই, যা
+`NewsArticle` বা `SocialPost` instance-এ রাখা ডেটার সারসংক্ষেপ দেখাতে পারে। এজন্য প্রতিটি type থেকে একটি সারসংক্ষেপ
+দরকার, আর সেটি আমরা চাইব একটি instance-এর ওপর `summarize` method call করে। Listing 10-12-এ একটি public `Summary` trait-এর
+সংজ্ঞা দেখানো হয়েছে, যা এই আচরণ প্রকাশ করে।
 
-<Listing number="10-12" file-name="src/lib.rs" caption="A `Summary` trait that consists of the behavior provided by a `summarize` method">
+<Listing number="10-12" file-name="src/lib.rs" caption="একটি `Summary` trait, যা একটি `summarize` method-এর দেওয়া আচরণ নিয়ে গঠিত">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-12/src/lib.rs}}
@@ -40,33 +35,27 @@ behavior.
 
 </Listing>
 
-Here, we declare a trait using the `trait` keyword and then the trait’s name,
-which is `Summary` in this case. We also declare the trait as `pub` so that
-crates depending on this crate can make use of this trait too, as we’ll see in
-a few examples. Inside the curly brackets, we declare the method signatures
-that describe the behaviors of the types that implement this trait, which in
-this case is `fn summarize(&self) -> String`.
+এখানে আমরা `trait` keyword আর তারপর trait-এর নাম, এই ক্ষেত্রে `Summary`, লিখে একটি trait ঘোষণা করি। trait-টিকে `pub`
+হিসেবেও ঘোষণা করি, যাতে এই crate-এর ওপর নির্ভরশীল অন্য crate-ও এই trait ব্যবহার করতে পারে, যা কয়েকটি উদাহরণে দেখব।
+curly bracket-এর ভেতরে আমরা সেই method signature-গুলো ঘোষণা করি যা এই trait implement করা type-গুলোর আচরণ বর্ণনা করে,
+এই ক্ষেত্রে `fn summarize(&self) -> String`।
 
-After the method signature, instead of providing an implementation within curly
-brackets, we use a semicolon. Each type implementing this trait must provide
-its own custom behavior for the body of the method. The compiler will enforce
-that any type that has the `Summary` trait will have the method `summarize`
-defined with this signature exactly.
+method signature-এর পরে curly bracket-এর ভেতরে implementation না দিয়ে আমরা একটি semicolon দিই। এই trait implement করা
+প্রতিটি type-কে method-এর body-র জন্য নিজস্ব আচরণ দিতে হবে। compiler নিশ্চিত করবে যে `Summary` trait আছে এমন যেকোনো
+type-এ ঠিক এই signature-সহ `summarize` method সংজ্ঞায়িত থাকবে।
 
-A trait can have multiple methods in its body: The method signatures are listed
-one per line, and each line ends in a semicolon.
+একটি trait-এর body-তে একাধিক method থাকতে পারে: method signature-গুলো প্রতি লাইনে একটি করে লেখা হয়, আর প্রতিটি লাইন
+শেষ হয় semicolon দিয়ে।
 
-### Implementing a Trait on a Type
+### একটি type-এর ওপর trait implement করা {#implementing-a-trait-on-a-type}
 
-Now that we’ve defined the desired signatures of the `Summary` trait’s methods,
-we can implement it on the types in our media aggregator. Listing 10-13 shows
-an implementation of the `Summary` trait on the `NewsArticle` struct that uses
-the headline, the author, and the location to create the return value of
-`summarize`. For the `SocialPost` struct, we define `summarize` as the username
-followed by the entire text of the post, assuming that the post content is
-already limited to 280 characters.
+`Summary` trait-এর method-গুলোর কাঙ্ক্ষিত signature সংজ্ঞায়িত করার পর এখন আমরা আমাদের media aggregator-এর type-গুলোর ওপর
+এটি implement করতে পারি। Listing 10-13-এ `NewsArticle` struct-এর ওপর `Summary` trait-এর একটি implementation দেখানো
+হয়েছে, যা শিরোনাম, লেখক আর জায়গা ব্যবহার করে `summarize`-এর return মান তৈরি করে। `SocialPost` struct-এর জন্য আমরা
+`summarize`-কে সংজ্ঞায়িত করি username আর তার পরে post-এর পুরো লেখা হিসেবে, ধরে নিয়ে যে post-এর বিষয়বস্তু আগে থেকেই
+280 অক্ষরে সীমিত।
 
-<Listing number="10-13" file-name="src/lib.rs" caption="Implementing the `Summary` trait on the `NewsArticle` and `SocialPost` types">
+<Listing number="10-13" file-name="src/lib.rs" caption="`NewsArticle` ও `SocialPost` type-এর ওপর `Summary` trait implement করা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-13/src/lib.rs:here}}
@@ -74,64 +63,52 @@ already limited to 280 characters.
 
 </Listing>
 
-Implementing a trait on a type is similar to implementing regular methods. The
-difference is that after `impl`, we put the trait name we want to implement,
-then use the `for` keyword, and then specify the name of the type we want to
-implement the trait for. Within the `impl` block, we put the method signatures
-that the trait definition has defined. Instead of adding a semicolon after each
-signature, we use curly brackets and fill in the method body with the specific
-behavior that we want the methods of the trait to have for the particular type.
+একটি type-এর ওপর trait implement করা সাধারণ method implement করার মতোই। পার্থক্য হলো `impl`-এর পরে আমরা যে trait
+implement করতে চাই তার নাম লিখি, তারপর `for` keyword, তারপর যে type-এর জন্য trait-টি implement করতে চাই তার নাম।
+`impl` block-এর ভেতরে trait-এর সংজ্ঞায় থাকা method signature-গুলো লিখি। প্রতিটি signature-এর পরে semicolon না দিয়ে
+curly bracket দিই, আর method-এর body-তে সেই নির্দিষ্ট আচরণ লিখি যা আমরা চাই trait-এর method-গুলো ওই নির্দিষ্ট type-এর
+জন্য করুক।
 
-Now that the library has implemented the `Summary` trait on `NewsArticle` and
-`SocialPost`, users of the crate can call the trait methods on instances of
-`NewsArticle` and `SocialPost` in the same way we call regular methods. The only
-difference is that the user must bring the trait into scope as well as the
-types. Here’s an example of how a binary crate could use our `aggregator`
-library crate:
+library-টি `NewsArticle` ও `SocialPost`-এর ওপর `Summary` trait implement করার পর crate-এর ব্যবহারকারীরা `NewsArticle` ও
+`SocialPost`-এর instance-এর ওপর trait-এর method call করতে পারে, ঠিক যেভাবে আমরা সাধারণ method call করি। একমাত্র
+পার্থক্য হলো ব্যবহারকারীকে type-গুলোর পাশাপাশি trait-টিকেও scope-এ আনতে হবে। একটি binary crate কীভাবে আমাদের
+`aggregator` library crate ব্যবহার করতে পারে, তার একটি উদাহরণ:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-01-calling-trait-method/src/main.rs}}
 ```
 
-This code prints `1 new post: horse_ebooks: of course, as you probably already
-know, people`.
+এই কোড print করে `1 new post: horse_ebooks: of course, as you probably already
+know, people`।
 
-Other crates that depend on the `aggregator` crate can also bring the `Summary`
-trait into scope to implement `Summary` on their own types. One restriction to
-note is that we can implement a trait on a type only if either the trait or the
-type, or both, are local to our crate. For example, we can implement standard
-library traits like `Display` on a custom type like `SocialPost` as part of our
-`aggregator` crate functionality because the type `SocialPost` is local to our
-`aggregator` crate. We can also implement `Summary` on `Vec<T>` in our
-`aggregator` crate because the trait `Summary` is local to our `aggregator`
-crate.
+`aggregator` crate-এর ওপর নির্ভরশীল অন্য crate-গুলোও নিজেদের type-এর ওপর `Summary` implement করার জন্য `Summary`
+trait-কে scope-এ আনতে পারে। একটি সীমাবদ্ধতা মনে রাখার মতো: একটি type-এর ওপর trait implement করা যায় কেবল তখনই, যখন
+trait অথবা type, কিংবা দুটোই, আমাদের crate-এর নিজস্ব (local)। যেমন, `aggregator` crate-এর কার্যক্ষমতার অংশ হিসেবে
+`SocialPost`-এর মতো নিজস্ব type-এর ওপর `Display`-এর মতো standard library-র trait implement করতে পারি, কারণ `SocialPost`
+type-টি আমাদের `aggregator` crate-এর নিজস্ব। আবার আমাদের `aggregator` crate-এ `Vec<T>`-এর ওপর `Summary`-ও implement করতে
+পারি, কারণ `Summary` trait-টি আমাদের `aggregator` crate-এর নিজস্ব।
 
-But we can’t implement external traits on external types. For example, we can’t
-implement the `Display` trait on `Vec<T>` within our `aggregator` crate,
-because `Display` and `Vec<T>` are both defined in the standard library and
-aren’t local to our `aggregator` crate. This restriction is part of a property
-called _coherence_, and more specifically the _orphan rule_, so named because
-the parent type is not present. This rule ensures that other people’s code
-can’t break your code and vice versa. Without the rule, two crates could
-implement the same trait for the same type, and Rust wouldn’t know which
-implementation to use.
+কিন্তু বাইরের type-এর ওপর বাইরের trait implement করা যায় না। যেমন, আমাদের `aggregator` crate-এর ভেতরে `Vec<T>`-এর ওপর
+`Display` trait implement করা যায় না, কারণ `Display` আর `Vec<T>` দুটিই standard library-তে সংজ্ঞায়িত, আমাদের
+`aggregator` crate-এর নিজস্ব নয়। এই সীমাবদ্ধতা _coherence_ (সামঞ্জস্য) নামের একটি বৈশিষ্ট্যের অংশ, আরও নির্দিষ্ট করে
+বললে _orphan rule_ (অনাথ নিয়ম)-এর অংশ; নামটি এসেছে কারণ এখানে parent type উপস্থিত থাকে না। এই নিয়ম নিশ্চিত করে যে
+অন্যের কোড আপনার কোড ভাঙতে পারবে না, আর আপনার কোডও অন্যেরটা ভাঙতে পারবে না। এই নিয়ম না থাকলে দুটি crate একই type-এর
+জন্য একই trait implement করতে পারত, আর Rust জানত না কোন implementation ব্যবহার করবে।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="default-implementations"></a>
 
-### Using Default Implementations
+### default implementation ব্যবহার করা {#using-default-implementations}
 
-Sometimes it’s useful to have default behavior for some or all of the methods
-in a trait instead of requiring implementations for all methods on every type.
-Then, as we implement the trait on a particular type, we can keep or override
-each method’s default behavior.
+কখনো কখনো প্রতিটি type-এ সব method-এর implementation বাধ্যতামূলক না করে trait-এর কিছু বা সব method-এর জন্য একটি default
+(পূর্বনির্ধারিত) আচরণ রাখা কাজে লাগে। তখন কোনো নির্দিষ্ট type-এর ওপর trait implement করার সময় প্রতিটি method-এর default
+আচরণ রেখে দিতে বা override (নিজের সংস্করণ দিয়ে প্রতিস্থাপন) করতে পারি।
 
-In Listing 10-14, we specify a default string for the `summarize` method of the
-`Summary` trait instead of only defining the method signature, as we did in
-Listing 10-12.
+Listing 10-14-এ আমরা Listing 10-12-এর মতো শুধু method signature সংজ্ঞায়িত না করে `Summary` trait-এর `summarize` method-এর
+জন্য একটি default string দিয়েছি।
 
-<Listing number="10-14" file-name="src/lib.rs" caption="Defining a `Summary` trait with a default implementation of the `summarize` method">
+<Listing number="10-14" file-name="src/lib.rs" caption="`summarize` method-এর একটি default implementation-সহ `Summary` trait সংজ্ঞায়িত করা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-14/src/lib.rs:here}}
@@ -139,60 +116,50 @@ Listing 10-12.
 
 </Listing>
 
-To use a default implementation to summarize instances of `NewsArticle`, we
-specify an empty `impl` block with `impl Summary for NewsArticle {}`.
+`NewsArticle`-এর instance-এর সারসংক্ষেপ করতে default implementation ব্যবহার করতে চাইলে আমরা `impl Summary for NewsArticle {}`
+দিয়ে একটি খালি `impl` block দিই।
 
-Even though we’re no longer defining the `summarize` method on `NewsArticle`
-directly, we’ve provided a default implementation and specified that
-`NewsArticle` implements the `Summary` trait. As a result, we can still call
-the `summarize` method on an instance of `NewsArticle`, like this:
+যদিও এখন আর `NewsArticle`-এর ওপর সরাসরি `summarize` method সংজ্ঞায়িত করছি না, তবু আমরা একটি default implementation
+দিয়েছি এবং বলে দিয়েছি যে `NewsArticle` `Summary` trait implement করে। ফলে `NewsArticle`-এর একটি instance-এর ওপর এখনো
+`summarize` method call করতে পারি, এভাবে:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-02-calling-default-impl/src/main.rs:here}}
 ```
 
-This code prints `New article available! (Read more...)`.
+এই কোড print করে `New article available! (Read more...)`।
 
-Creating a default implementation doesn’t require us to change anything about
-the implementation of `Summary` on `SocialPost` in Listing 10-13. The reason is
-that the syntax for overriding a default implementation is the same as the
-syntax for implementing a trait method that doesn’t have a default
-implementation.
+default implementation তৈরি করার জন্য Listing 10-13-এ `SocialPost`-এর ওপর `Summary`-এর implementation-এ কিছুই বদলাতে হয়
+না। কারণ default implementation override করার syntax আর default implementation নেই এমন trait method implement করার syntax
+একই।
 
-Default implementations can call other methods in the same trait, even if those
-other methods don’t have a default implementation. In this way, a trait can
-provide a lot of useful functionality and only require implementors to specify
-a small part of it. For example, we could define the `Summary` trait to have a
-`summarize_author` method whose implementation is required, and then define a
-`summarize` method that has a default implementation that calls the
-`summarize_author` method:
+default implementation একই trait-এর অন্য method call করতে পারে, এমনকি সেই method-গুলোর default implementation না থাকলেও।
+এভাবে একটি trait অনেক দরকারি কার্যক্ষমতা দিতে পারে, আর implement-কারীদের শুধু এর ছোট একটি অংশ নির্দিষ্ট করে দিতে হয়।
+যেমন, আমরা `Summary` trait-এ একটি `summarize_author` method রাখতে পারি যার implementation বাধ্যতামূলক, তারপর একটি
+`summarize` method সংজ্ঞায়িত করতে পারি যার default implementation `summarize_author` method-টি call করে:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/lib.rs:here}}
 ```
 
-To use this version of `Summary`, we only need to define `summarize_author`
-when we implement the trait on a type:
+`Summary`-এর এই সংস্করণ ব্যবহার করতে কোনো type-এর ওপর trait implement করার সময় আমাদের শুধু `summarize_author` সংজ্ঞায়িত
+করতে হবে:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/lib.rs:impl}}
 ```
 
-After we define `summarize_author`, we can call `summarize` on instances of the
-`SocialPost` struct, and the default implementation of `summarize` will call the
-definition of `summarize_author` that we’ve provided. Because we’ve implemented
-`summarize_author`, the `Summary` trait has given us the behavior of the
-`summarize` method without requiring us to write any more code. Here’s what
-that looks like:
+`summarize_author` সংজ্ঞায়িত করার পর `SocialPost` struct-এর instance-এর ওপর `summarize` call করা যায়, আর `summarize`-এর
+default implementation আমাদের দেওয়া `summarize_author`-এর সংজ্ঞাটি call করবে। আমরা `summarize_author` implement করেছি বলে
+`Summary` trait আর কোনো কোড না লিখিয়েই আমাদের `summarize` method-এর আচরণ দিয়ে দিয়েছে। দেখতে এমন:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/main.rs:here}}
 ```
 
-This code prints `1 new post: (Read more from @horse_ebooks...)`.
+এই কোড print করে `1 new post: (Read more from @horse_ebooks...)`।
 
-Note that it isn’t possible to call the default implementation from an
-overriding implementation of that same method.
+খেয়াল করুন, একই method-এর override করা implementation থেকে default implementation call করা সম্ভব নয়।
 
 {{#quiz ../quizzes/ch10-02-traits-sec1.toml}}
 
@@ -200,35 +167,30 @@ overriding implementation of that same method.
 
 <a id="traits-as-parameters"></a>
 
-### Using Traits as Parameters
+### trait-কে parameter হিসেবে ব্যবহার করা {#using-traits-as-parameters}
 
-Now that you know how to define and implement traits, we can explore how to use
-traits to define functions that accept many different types. We’ll use the
-`Summary` trait we implemented on the `NewsArticle` and `SocialPost` types in
-Listing 10-13 to define a `notify` function that calls the `summarize` method
-on its `item` parameter, which is of some type that implements the `Summary`
-trait. To do this, we use the `impl Trait` syntax, like this:
+trait কীভাবে সংজ্ঞায়িত ও implement করতে হয় তা যেহেতু জানেন, এবার দেখা যাক trait ব্যবহার করে কীভাবে এমন function
+সংজ্ঞায়িত করা যায় যা অনেক রকম type গ্রহণ করে। Listing 10-13-এ `NewsArticle` ও `SocialPost` type-এর ওপর implement করা
+`Summary` trait ব্যবহার করে আমরা একটি `notify` function সংজ্ঞায়িত করব, যা তার `item` parameter-এর ওপর `summarize` method
+call করে; এই parameter-টি এমন কোনো type-এর, যা `Summary` trait implement করে। এজন্য আমরা `impl Trait` syntax ব্যবহার করি, এভাবে:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-04-traits-as-parameters/src/lib.rs:here}}
 ```
 
-Instead of a concrete type for the `item` parameter, we specify the `impl`
-keyword and the trait name. This parameter accepts any type that implements the
-specified trait. In the body of `notify`, we can call any methods on `item`
-that come from the `Summary` trait, such as `summarize`. We can call `notify`
-and pass in any instance of `NewsArticle` or `SocialPost`. Code that calls the
-function with any other type, such as a `String` or an `i32`, won’t compile,
-because those types don’t implement `Summary`.
+`item` parameter-এর জন্য কোনো concrete type-এর বদলে আমরা `impl` keyword আর trait-এর নাম লিখি। এই parameter উল্লিখিত trait
+implement করে এমন যেকোনো type গ্রহণ করে। `notify`-এর body-তে `item`-এর ওপর `Summary` trait থেকে আসা যেকোনো method, যেমন
+`summarize`, call করতে পারি। `notify` call করে `NewsArticle` বা `SocialPost`-এর যেকোনো instance পাঠাতে পারি। অন্য কোনো
+type, যেমন `String` বা `i32`, দিয়ে function-টি call করা কোড compile হবে না, কারণ ওই type-গুলো `Summary` implement করে না।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="fixing-the-largest-function-with-trait-bounds"></a>
 
-#### Trait Bound Syntax
+#### trait bound syntax {#trait-bound-syntax}
 
-The `impl Trait` syntax works for straightforward cases but is actually syntax
-sugar for a longer form known as a _trait bound_; it looks like this:
+`impl Trait` syntax সহজ ক্ষেত্রে কাজ করে, তবে এটি আসলে _trait bound_ নামে পরিচিত একটি দীর্ঘ রূপের syntax sugar (লেখা
+সহজ করার সংক্ষিপ্ত রূপ); দীর্ঘ রূপটি দেখতে এমন:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: &T) {
@@ -236,128 +198,110 @@ pub fn notify<T: Summary>(item: &T) {
 }
 ```
 
-This longer form is equivalent to the example in the previous section but is
-more verbose. We place trait bounds with the declaration of the generic type
-parameter after a colon and inside angle brackets.
+এই দীর্ঘ রূপটি আগের অংশের উদাহরণের সমতুল্য, তবে বেশি শব্দবহুল। আমরা trait bound বসাই generic type parameter-এর ঘোষণার
+সঙ্গে, একটি colon-এর পরে এবং angle bracket-এর ভেতরে।
 
-The `impl Trait` syntax is convenient and makes for more concise code in simple
-cases, while the fuller trait bound syntax can express more complexity in other
-cases. For example, we can have two parameters that implement `Summary`. Doing
-so with the `impl Trait` syntax looks like this:
+`impl Trait` syntax সুবিধাজনক এবং সহজ ক্ষেত্রে কোড আরও সংক্ষিপ্ত করে, অন্যদিকে পূর্ণ trait bound syntax অন্য ক্ষেত্রে আরও
+জটিলতা প্রকাশ করতে পারে। যেমন, আমাদের এমন দুটি parameter থাকতে পারে যারা `Summary` implement করে। `impl Trait` syntax দিয়ে
+তা লিখলে দেখতে এমন:
 
 ```rust,ignore
 pub fn notify(item1: &impl Summary, item2: &impl Summary) {
 ```
 
-Using `impl Trait` is appropriate if we want this function to allow `item1` and
-`item2` to have different types (as long as both types implement `Summary`). If
-we want to force both parameters to have the same type, however, we must use a
-trait bound, like this:
+আমরা যদি চাই এই function `item1` ও `item2`-কে ভিন্ন type-এর হতে দিক (যতক্ষণ দুটি type-ই `Summary` implement করে), তাহলে
+`impl Trait` ব্যবহার করাই উপযুক্ত। কিন্তু যদি দুটি parameter-কে একই type-এর হতে বাধ্য করতে চাই, তাহলে trait bound ব্যবহার
+করতে হবে, এভাবে:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item1: &T, item2: &T) {
 ```
 
-The generic type `T` specified as the type of the `item1` and `item2`
-parameters constrains the function such that the concrete type of the value
-passed as an argument for `item1` and `item2` must be the same.
+`item1` ও `item2` parameter-এর type হিসেবে দেওয়া generic type `T` function-টিকে এমনভাবে সীমাবদ্ধ করে যে `item1` ও
+`item2`-এর argument হিসেবে পাঠানো মানের concrete type একই হতে হবে।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="specifying-multiple-trait-bounds-with-the--syntax"></a>
 
-#### Multiple Trait Bounds with the `+` Syntax
+#### `+` syntax দিয়ে একাধিক trait bound {#multiple-trait-bounds-with-the--syntax}
 
-We can also specify more than one trait bound. Say we wanted `notify` to use
-display formatting as well as `summarize` on `item`: We specify in the `notify`
-definition that `item` must implement both `Display` and `Summary`. We can do
-so using the `+` syntax:
+একাধিক trait bound-ও উল্লেখ করা যায়। ধরুন আমরা চাই `notify` `item`-এর ওপর `summarize`-এর পাশাপাশি display formatting-ও
+ব্যবহার করুক: তাহলে `notify`-এর সংজ্ঞায় বলে দিই যে `item`-কে `Display` আর `Summary` দুটিই implement করতে হবে। এটা করা যায়
+`+` syntax দিয়ে:
 
 ```rust,ignore
 pub fn notify(item: &(impl Summary + Display)) {
 ```
 
-The `+` syntax is also valid with trait bounds on generic types:
+generic type-এর trait bound-এর সঙ্গেও `+` syntax বৈধ:
 
 ```rust,ignore
 pub fn notify<T: Summary + Display>(item: &T) {
 ```
 
-With the two trait bounds specified, the body of `notify` can call `summarize`
-and use `{}` to format `item`.
+দুটি trait bound উল্লেখ করায় `notify`-এর body `summarize` call করতে পারে এবং `item`-কে format করতে `{}` ব্যবহার করতে
+পারে।
 
-#### Clearer Trait Bounds with `where` Clauses
+#### `where` clause দিয়ে আরও পরিষ্কার trait bound {#clearer-trait-bounds-with-where-clauses}
 
-Using too many trait bounds has its downsides. Each generic has its own trait
-bounds, so functions with multiple generic type parameters can contain lots of
-trait bound information between the function’s name and its parameter list,
-making the function signature hard to read. For this reason, Rust has alternate
-syntax for specifying trait bounds inside a `where` clause after the function
-signature. So, instead of writing this:
+খুব বেশি trait bound ব্যবহারের অসুবিধাও আছে। প্রতিটি generic-এর নিজস্ব trait bound থাকে, তাই একাধিক generic type
+parameter-যুক্ত function-এর নাম আর parameter তালিকার মাঝখানে অনেক trait bound-এর তথ্য জমে যেতে পারে, ফলে function
+signature পড়া কঠিন হয়ে যায়। এ কারণে Rust-এ function signature-এর পরে একটি `where` clause-এর ভেতরে trait bound উল্লেখ
+করার বিকল্প syntax আছে। তাই এভাবে লেখার বদলে:
 
 ```rust,ignore
 fn some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
 ```
 
-we can use a `where` clause, like this:
+আমরা একটি `where` clause ব্যবহার করতে পারি, এভাবে:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-07-where-clause/src/lib.rs:here}}
 ```
 
-This function’s signature is less cluttered: The function name, parameter list,
-and return type are close together, similar to a function without lots of trait
-bounds.
+এই function-এর signature কম জট পাকানো: function-এর নাম, parameter তালিকা আর return type কাছাকাছি থাকে, অনেক trait bound
+ছাড়া একটি function-এর মতো।
 
-### Returning Types That Implement Traits
+### trait implement করে এমন type return করা {#returning-types-that-implement-traits}
 
-We can also use the `impl Trait` syntax in the return position to return a
-value of some type that implements a trait, as shown here:
+return-এর জায়গাতেও `impl Trait` syntax ব্যবহার করে এমন কোনো type-এর মান return করা যায় যা একটি trait implement করে, যেমন
+এখানে দেখানো হয়েছে:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-05-returning-impl-trait/src/lib.rs:here}}
 ```
 
-By using `impl Summary` for the return type, we specify that the
-`returns_summarizable` function returns some type that implements the `Summary`
-trait without naming the concrete type. In this case, `returns_summarizable`
-returns a `SocialPost`, but the code calling this function doesn’t need to know
-that.
+return type হিসেবে `impl Summary` ব্যবহার করে আমরা বলে দিই যে `returns_summarizable` function এমন কোনো type return করে যা
+`Summary` trait implement করে, concrete type-টির নাম না বলেই। এই ক্ষেত্রে `returns_summarizable` একটি `SocialPost` return
+করে, কিন্তু এই function call করা কোডের তা জানার দরকার নেই।
 
-The ability to specify a return type only by the trait it implements is
-especially useful in the context of closures and iterators, which we cover in
-Chapter 13. Closures and iterators create types that only the compiler knows or
-types that are very long to specify. The `impl Trait` syntax lets you concisely
-specify that a function returns some type that implements the `Iterator` trait
-without needing to write out a very long type.
+শুধু implement করা trait দিয়ে return type উল্লেখ করার সুবিধা বিশেষভাবে কাজে লাগে closure ও iterator-এর ক্ষেত্রে, যা
+আমরা অধ্যায় 13-এ আলোচনা করব। closure ও iterator এমন type তৈরি করে যা শুধু compiler জানে, অথবা যার নাম লেখা খুবই দীর্ঘ।
+`impl Trait` syntax দিয়ে খুব দীর্ঘ type লিখতে না হয়ে সংক্ষেপে বলে দেওয়া যায় যে একটি function `Iterator` trait implement
+করে এমন কোনো type return করে।
 
-However, you can only use `impl Trait` if you’re returning a single type. For
-example, this code that returns either a `NewsArticle` or a `SocialPost` with
-the return type specified as `impl Summary` wouldn’t work:
+তবে `impl Trait` ব্যবহার করা যায় কেবল তখনই, যখন আপনি একটিমাত্র type return করছেন। যেমন, return type `impl Summary` দিয়ে
+`NewsArticle` অথবা `SocialPost` return করা এই কোড কাজ করবে না:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-06-impl-trait-returns-one-type/src/lib.rs:here}}
 ```
 
-Returning either a `NewsArticle` or a `SocialPost` isn’t allowed due to
-restrictions around how the `impl Trait` syntax is implemented in the compiler.
-We’ll cover how to write a function with this behavior in the [“Using Trait
-Objects to Abstract over Shared Behavior”][trait-objects]<!-- ignore -->
-section of Chapter 18.
+compiler-এ `impl Trait` syntax যেভাবে implement করা হয়েছে তার সীমাবদ্ধতার কারণে `NewsArticle` অথবা `SocialPost` return
+করা অনুমোদিত নয়। এমন আচরণের function কীভাবে লিখতে হয়, তা আমরা অধ্যায় 18-এর [“Using Trait
+Objects to Abstract over Shared Behavior”][trait-objects]<!-- ignore --> অংশে দেখব।
 
-### Using Trait Bounds to Conditionally Implement Methods
+### শর্তসাপেক্ষে method implement করতে trait bound ব্যবহার {#using-trait-bounds-to-conditionally-implement-methods}
 
-By using a trait bound with an `impl` block that uses generic type parameters,
-we can implement methods conditionally for types that implement the specified
-traits. For example, the type `Pair<T>` in Listing 10-15 always implements the
-`new` function to return a new instance of `Pair<T>` (recall from the [“Method
-Syntax”][methods]<!-- ignore --> section of Chapter 5 that `Self` is a type
-alias for the type of the `impl` block, which in this case is `Pair<T>`). But
-in the next `impl` block, `Pair<T>` only implements the `cmp_display` method if
-its inner type `T` implements the `PartialOrd` trait that enables comparison
-_and_ the `Display` trait that enables printing.
+generic type parameter ব্যবহার করা একটি `impl` block-এ trait bound ব্যবহার করে আমরা উল্লিখিত trait implement করে এমন
+type-এর জন্য শর্তসাপেক্ষে method implement করতে পারি। যেমন, Listing 10-15-এর `Pair<T>` type সবসময় `new` function implement
+করে, যা `Pair<T>`-এর একটি নতুন instance return করে (অধ্যায় 5-এর [“method
+syntax”][methods]<!-- ignore --> অংশ থেকে মনে করুন, `Self` হলো `impl` block-এর type-এর একটি type alias (বিকল্প নাম), যা এই
+ক্ষেত্রে `Pair<T>`)। কিন্তু পরের `impl` block-এ `Pair<T>` `cmp_display` method implement করে কেবল তখনই, যখন এর ভেতরের type
+`T` তুলনা সম্ভব করে এমন `PartialOrd` trait _এবং_ print সম্ভব করে এমন `Display` trait implement করে।
 
-<Listing number="10-15" file-name="src/lib.rs" caption="Conditionally implementing methods on a generic type depending on trait bounds">
+<Listing number="10-15" file-name="src/lib.rs" caption="trait bound-এর ওপর নির্ভর করে একটি generic type-এর ওপর শর্তসাপেক্ষে method implement করা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-15/src/lib.rs}}
@@ -365,12 +309,10 @@ _and_ the `Display` trait that enables printing.
 
 </Listing>
 
-We can also conditionally implement a trait for any type that implements
-another trait. Implementations of a trait on any type that satisfies the trait
-bounds are called _blanket implementations_ and are used extensively in the
-Rust standard library. For example, the standard library implements the
-`ToString` trait on any type that implements the `Display` trait. The `impl`
-block in the standard library looks similar to this code:
+অন্য একটি trait implement করে এমন যেকোনো type-এর জন্যও শর্তসাপেক্ষে একটি trait implement করা যায়। trait bound পূরণ করে
+এমন যেকোনো type-এর ওপর একটি trait-এর implementation-কে বলা হয় _blanket implementations_ (ঢালাও implementation), আর Rust
+standard library-তে এগুলো ব্যাপকভাবে ব্যবহৃত হয়। যেমন, standard library `Display` trait implement করে এমন যেকোনো type-এর
+ওপর `ToString` trait implement করে। standard library-র `impl` block-টি দেখতে মোটামুটি এই কোডের মতো:
 
 ```rust,ignore
 impl<T: Display> ToString for T {
@@ -378,29 +320,23 @@ impl<T: Display> ToString for T {
 }
 ```
 
-Because the standard library has this blanket implementation, we can call the
-`to_string` method defined by the `ToString` trait on any type that implements
-the `Display` trait. For example, we can turn integers into their corresponding
-`String` values like this because integers implement `Display`:
+standard library-তে এই blanket implementation থাকায় `Display` trait implement করে এমন যেকোনো type-এর ওপর `ToString` trait-এর
+সংজ্ঞায়িত `to_string` method call করতে পারি। যেমন, integer `Display` implement করে বলে এভাবে integer-কে তার সংশ্লিষ্ট
+`String` মানে রূপান্তর করা যায়:
 
 ```rust
 let s = 3.to_string();
 ```
 
-Blanket implementations appear in the documentation for the trait in the
-“Implementors” section.
+blanket implementation-গুলো trait-এর documentation-এ “Implementors” অংশে দেখা যায়।
 
-Traits and trait bounds let us write code that uses generic type parameters to
-reduce duplication but also specify to the compiler that we want the generic
-type to have particular behavior. The compiler can then use the trait bound
-information to check that all the concrete types used with our code provide the
-correct behavior. In dynamically typed languages, we would get an error at
-runtime if we called a method on a type that didn’t define the method. But Rust
-moves these errors to compile time so that we’re forced to fix the problems
-before our code is even able to run. Additionally, we don’t have to write code
-that checks for behavior at runtime, because we’ve already checked at compile
-time. Doing so improves performance without having to give up the flexibility
-of generics.
+trait ও trait bound দিয়ে আমরা এমন কোড লিখতে পারি যা generic type parameter ব্যবহার করে পুনরাবৃত্তি কমায়, আবার compiler-কে
+জানিয়েও দেয় যে আমরা চাই generic type-টির নির্দিষ্ট আচরণ থাকুক। compiler তখন trait bound-এর তথ্য ব্যবহার করে যাচাই করতে
+পারে যে আমাদের কোডের সঙ্গে ব্যবহৃত সব concrete type সঠিক আচরণ দেয়। dynamically typed (চলার সময় type যাচাই হয় এমন)
+ভাষায় কোনো type-এর ওপর এমন method call করলে, যা সেই type-এ সংজ্ঞায়িত নেই, আমরা runtime-এ error পেতাম। কিন্তু Rust এই
+error-গুলোকে compile time-এ নিয়ে আসে, ফলে আমাদের কোড চলতে পারার আগেই সমস্যাগুলো ঠিক করতে বাধ্য হই। তা ছাড়া runtime-এ
+আচরণ যাচাই করার কোড লিখতে হয় না, কারণ compile time-এই যাচাই হয়ে গেছে। এতে generics-এর নমনীয়তা না ছেড়েই performance
+বাড়ে।
 
 {{#quiz ../quizzes/ch10-02-traits-sec2.toml}}
 

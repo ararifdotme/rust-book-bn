@@ -98,3 +98,36 @@ Everyday: চুক্তি (contract), প্রশ্নবোধক চি�
 | a _bad state_ is when some assumption, guarantee, contract, or invariant has been broken | _খারাপ অবস্থা_ মানে যখন কোনো ধারণা, নিশ্চয়তা, চুক্তি বা invariant ভেঙে গেছে |
 | a contract violation always indicates a caller-side bug | চুক্তি লঙ্ঘন সবসময় caller-এর দিকের একটি বাগ বোঝায় |
 | will make your code more reliable in the face of inevitable problems | অনিবার্য সমস্যার মুখে আপনার কোড আরও নির্ভরযোগ্য হবে |
+
+## Chapter 10: Generic Types, Traits, and Lifetimes
+
+**Auto-chosen terms:** concrete type, monomorphization, trait bound, default
+implementation, override, coherence, orphan rule (অনাথ নিয়ম), blanket
+implementation (ঢালাও implementation), `impl Trait`, `where` clause, syntax
+sugar, dangling reference, lifetime annotation, lifetime elision rules,
+input / output lifetime, `'static` lifetime, UpperCamelCase, inheritance,
+dynamically typed, deallocate. Everyday: বিমূর্ত রূপ (abstraction), নিজস্ব
+(local, as in "local to our crate").
+
+**Decisions:**
+- The link label to chapter 18 ("Using Trait Objects to Abstract over Shared
+  Behavior") stays in English; labels to chapters 4 and 5 use their Bengali
+  headings.
+- Comments in listings 10-17 and 10-18 are lifetime diagrams (`'a`, `'b`
+  bars), so they stay as they are. The comments in listing 10-25 are outside
+  the displayed `here` anchor, so they were left in English.
+- Inventory quiz options that read like compiler messages ("cannot borrow
+  `elems` as mutable for `sort`") stay in English, as in earlier inventories.
+- "does not live long enough" is quoted in English with a Bengali gloss,
+  because it is the literal compiler message.
+
+**Unsure sentences:**
+
+| English | Bengali |
+| --- | --- |
+| abstract stand-ins for concrete types or other properties | concrete (নির্দিষ্ট) type বা অন্য বৈশিষ্ট্যের জায়গায় বসানো বিমূর্ত বিকল্প |
+| so named because the parent type is not present | নামটি এসেছে কারণ এখানে parent type উপস্থিত থাকে না |
+| The subject of the reference doesn’t live as long as the reference. | reference যাকে নির্দেশ করছে, সেটি reference-এর মতো বেশি সময় বাঁচে না। |
+| the compiler might only be able to point to a use of our code many steps away from the cause of the problem | compiler হয়তো শুধু আমাদের কোডের এমন কোনো ব্যবহার দেখাতে পারত যা সমস্যার আসল কারণ থেকে অনেক ধাপ দূরে |
+| Let’s pretend we’re the compiler. | চলুন নিজেদের compiler ভেবে নিই। |
+| 3 really is the correct answer! If you disagree with the answer, please don't submit a bug report! | 3-ই আসলে সঠিক উত্তর! উত্তরের সঙ্গে একমত না হলে দয়া করে bug report জমা দেবেন না! |

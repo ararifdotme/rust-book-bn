@@ -1,38 +1,31 @@
-## Validating References with Lifetimes
+## lifetime দিয়ে reference যাচাই করা {#validating-references-with-lifetimes}
 
-Lifetimes are another kind of generic that we’ve already been using. Rather
-than ensuring that a type has the behavior we want, lifetimes ensure that
-references are valid as long as we need them to be.
+lifetime (reference কতক্ষণ বৈধ থাকে) হলো আরেক ধরনের generic, যা আমরা আগে থেকেই ব্যবহার করে আসছি। একটি type-এর
+কাঙ্ক্ষিত আচরণ আছে কি না তা নিশ্চিত করার বদলে lifetime নিশ্চিত করে যে reference-গুলো যতক্ষণ দরকার ততক্ষণ বৈধ থাকবে।
 
-One detail we didn’t discuss in the [“References and
-Borrowing”][references-and-borrowing]<!-- ignore --> section in Chapter 4 is
-that every reference in Rust has a lifetime, which is the scope for which
-that reference is valid. Most of the time, lifetimes are implicit and inferred,
-just like most of the time, types are inferred. We are only required to
-annotate types when multiple types are possible. In a similar way, we must
-annotate lifetimes when the lifetimes of references could be related in a few
-different ways. Rust requires us to annotate the relationships using generic
-lifetime parameters to ensure that the actual references used at runtime will
-definitely be valid.
+অধ্যায় 4-এর [“reference ও borrowing”][references-and-borrowing]<!-- ignore --> অংশে একটি বিষয় আমরা আলোচনা করিনি: Rust-এর
+প্রতিটি reference-এর একটি lifetime আছে, অর্থাৎ যে scope-এর জন্য reference-টি বৈধ। বেশিরভাগ সময় lifetime অপ্রকাশ্য
+থাকে এবং অনুমান করে নেওয়া হয়, ঠিক যেমন বেশিরভাগ সময় type অনুমান করে নেওয়া হয়। একাধিক type সম্ভব হলেই কেবল আমাদের
+type annotate করতে হয়। একইভাবে, যখন reference-গুলোর lifetime কয়েকটি ভিন্ন উপায়ে সম্পর্কিত হতে পারে, তখন lifetime
+annotate করতে হয়। runtime-এ ব্যবহৃত আসল reference-গুলো যে নিশ্চিতভাবে বৈধ থাকবে, তা নিশ্চিত করতে Rust চায় আমরা generic
+lifetime parameter (reference-এর lifetime বোঝানোর parameter) দিয়ে সম্পর্কগুলো annotate করি।
 
-Annotating lifetimes is not even a concept most other programming languages
-have, so this is going to feel unfamiliar. Although we won’t cover lifetimes in
-their entirety in this chapter, we’ll discuss common ways you might encounter
-lifetime syntax so that you can get comfortable with the concept.
+lifetime annotate করার ধারণাটি অন্য বেশিরভাগ প্রোগ্রামিং ভাষায় নেই, তাই এটি অপরিচিত লাগবে। এই অধ্যায়ে lifetime-এর
+পুরোটা আলোচনা না করলেও lifetime syntax-এর সঙ্গে সাধারণত যেভাবে দেখা হতে পারে তা নিয়ে আলোচনা করব, যাতে ধারণাটির সঙ্গে
+আপনি স্বচ্ছন্দ হতে পারেন।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="preventing-dangling-references-with-lifetimes"></a>
 
-### Dangling References
+### dangling reference {#dangling-references}
 
-The main aim of lifetimes is to prevent dangling references, which, if they
-were allowed to exist, would cause a program to reference data other than the
-data it’s intended to reference. Consider the program in Listing 10-16, which
-has an outer scope and an inner scope.
+lifetime-এর মূল লক্ষ্য হলো dangling reference (অবৈধ ডেটার দিকে নির্দেশ করা reference) ঠেকানো; এগুলো থাকতে দিলে একটি
+প্রোগ্রাম যে ডেটাকে নির্দেশ করার কথা তার বদলে অন্য ডেটাকে নির্দেশ করত। Listing 10-16-এর প্রোগ্রামটি দেখুন, যেখানে একটি
+বাইরের scope আর একটি ভেতরের scope আছে।
 
 <!-- TODO(aquascope): support for nested scopes -->
-<Listing number="10-16" caption="An attempt to use a reference whose value has gone out of scope">
+<Listing number="10-16" caption="এমন একটি reference ব্যবহারের চেষ্টা, যার মান scope-এর বাইরে চলে গেছে">
 
 ```rust,ignore,does_not_compile
 fn main() {
@@ -49,39 +42,32 @@ fn main() {
 
 </Listing>
 
-> Note: The examples in Listings 10-16, 10-17, and 10-23 declare variables
-> without giving them an initial value, so the variable name exists in the outer
-> scope. At first glance, this might appear to be in conflict with Rust having
-> no null values. However, if we try to use a variable before giving it a value,
-> we’ll get a compile-time error, which shows that indeed Rust does not allow
-> null values.
+> Note: Listing 10-16, 10-17 ও 10-23-এর উদাহরণে variable-কে কোনো প্রাথমিক মান না দিয়েই ঘোষণা করা হয়েছে, ফলে variable-এর
+> নামটি বাইরের scope-এ থাকে। প্রথম দেখায় মনে হতে পারে এটি Rust-এ null মান না থাকার সঙ্গে সাংঘর্ষিক। কিন্তু মান দেওয়ার
+> আগেই কোনো variable ব্যবহার করার চেষ্টা করলে আমরা compile-time error পাব, যা দেখায় যে Rust সত্যিই null মান অনুমোদন
+> করে না।
 
-The outer scope declares a variable named `r` with no initial value, and the
-inner scope declares a variable named `x` with the initial value of `5`. Inside
-the inner scope, we attempt to set the value of `r` as a reference to `x`.
-Then, the inner scope ends, and we attempt to print the value in `r`. This code
-won’t compile, because the value that `r` is referring to has gone out of scope
-before we try to use it. Here is the error message:
+বাইরের scope কোনো প্রাথমিক মান ছাড়া `r` নামের একটি variable ঘোষণা করে, আর ভেতরের scope `5` প্রাথমিক মানসহ `x` নামের
+একটি variable ঘোষণা করে। ভেতরের scope-এর মধ্যে আমরা `r`-এর মান হিসেবে `x`-এর একটি reference বসানোর চেষ্টা করি। তারপর
+ভেতরের scope শেষ হয়, আর আমরা `r`-এর মান print করার চেষ্টা করি। এই কোড compile হবে না, কারণ `r` যে মানকে নির্দেশ করছে
+তা আমরা ব্যবহার করার চেষ্টার আগেই scope-এর বাইরে চলে গেছে। error message-টি এই:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-16/output.txt}}
 ```
 
-The error message says that the variable `x` “does not live long enough.” The
-reason is that `x` will be out of scope when the inner scope ends on line 7.
-But `r` is still valid for the outer scope; because its scope is larger, we say
-that it “lives longer.” If Rust allowed this code to work, `r` would be
-referencing memory that was deallocated when `x` went out of scope, and
-anything we tried to do with `r` wouldn’t work correctly. So, how does Rust
-determine that this code is invalid? It uses a borrow checker.
+error message বলছে variable `x` “does not live long enough” (যথেষ্ট সময় বেঁচে থাকে না)। কারণ লাইন 7-এ ভেতরের scope শেষ
+হলে `x` scope-এর বাইরে চলে যাবে। কিন্তু `r` বাইরের scope-এর জন্য তখনো বৈধ; এর scope বড় বলে আমরা বলি এটি “বেশি সময় বেঁচে
+থাকে”। Rust এই কোডকে চলতে দিলে `r` এমন মেমোরিকে নির্দেশ করত যা `x` scope-এর বাইরে যাওয়ার সময় deallocate (মুক্ত) হয়ে
+গেছে, আর `r` দিয়ে যা-ই করার চেষ্টা করতাম তা ঠিকমতো কাজ করত না। তাহলে Rust কীভাবে নির্ধারণ করে যে এই কোড অবৈধ? এটি
+একটি borrow checker ব্যবহার করে।
 
-### The Borrow Checker Ensures Data Outlives Its References
+### borrow checker নিশ্চিত করে যে ডেটা তার reference-এর চেয়ে বেশি সময় বাঁচে {#the-borrow-checker-ensures-data-outlives-its-references}
 
-The Rust compiler has a _borrow checker_ that compares scopes to determine
-whether all borrows are valid. Listing 10-17 shows the same code as Listing
-10-16 but with annotations showing the lifetimes of the variables.
+Rust compiler-এর একটি _borrow checker_ (borrow-এর নিয়ম যাচাই করা compiler-এর অংশ) আছে, যা scope তুলনা করে নির্ধারণ করে
+সব borrow বৈধ কি না। Listing 10-17-এ Listing 10-16-এর একই কোড দেখানো হয়েছে, তবে variable-গুলোর lifetime দেখানো annotation-সহ।
 
-<Listing number="10-17" caption="Annotations of the lifetimes of `r` and `x`, named `'a` and `'b`, respectively">
+<Listing number="10-17" caption="`r` ও `x`-এর lifetime-এর annotation, যাদের নাম যথাক্রমে `'a` ও `'b`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-17/src/main.rs}}
@@ -89,17 +75,14 @@ whether all borrows are valid. Listing 10-17 shows the same code as Listing
 
 </Listing>
 
-Here, we’ve annotated the lifetime of `r` with `'a` and the lifetime of `x`
-with `'b`. As you can see, the inner `'b` block is much smaller than the outer
-`'a` lifetime block. At compile time, Rust compares the size of the two
-lifetimes and sees that `r` has a lifetime of `'a` but that it refers to memory
-with a lifetime of `'b`. The program is rejected because `'b` is shorter than
-`'a`: The subject of the reference doesn’t live as long as the reference.
+এখানে আমরা `r`-এর lifetime-কে `'a` আর `x`-এর lifetime-কে `'b` দিয়ে annotate করেছি। দেখতেই পাচ্ছেন, ভেতরের `'b` block বাইরের
+`'a` lifetime block-এর চেয়ে অনেক ছোট। compile time-এ Rust দুটি lifetime-এর আকার তুলনা করে দেখে যে `r`-এর lifetime `'a`, কিন্তু
+এটি `'b` lifetime-এর মেমোরিকে নির্দেশ করে। প্রোগ্রামটি বাতিল হয়, কারণ `'b` `'a`-এর চেয়ে ছোট: reference যাকে নির্দেশ করছে, সেটি
+reference-এর মতো বেশি সময় বাঁচে না।
 
-Listing 10-18 fixes the code so that it doesn’t have a dangling reference and
-it compiles without any errors.
+Listing 10-18-এ কোডটি এমনভাবে ঠিক করা হয়েছে যাতে কোনো dangling reference না থাকে এবং এটি কোনো error ছাড়া compile হয়।
 
-<Listing number="10-18" caption="A valid reference because the data has a longer lifetime than the reference">
+<Listing number="10-18" caption="একটি বৈধ reference, কারণ ডেটার lifetime reference-এর চেয়ে দীর্ঘ">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-18/src/main.rs}}
@@ -107,22 +90,19 @@ it compiles without any errors.
 
 </Listing>
 
-Here, `x` has the lifetime `'b`, which in this case is larger than `'a`. This
-means `r` can reference `x` because Rust knows that the reference in `r` will
-always be valid while `x` is valid.
+এখানে `x`-এর lifetime `'b`, যা এই ক্ষেত্রে `'a`-এর চেয়ে বড়। এর মানে `r` `x`-কে নির্দেশ করতে পারে, কারণ Rust জানে `x` যতক্ষণ বৈধ,
+`r`-এর reference-টিও ততক্ষণ সবসময় বৈধ থাকবে।
 
-Now that you know where the lifetimes of references are and how Rust analyzes
-lifetimes to ensure that references will always be valid, let’s explore generic
-lifetimes in function parameters and return values.
+reference-গুলোর lifetime কোথায় থাকে, আর reference সবসময় বৈধ থাকবে তা নিশ্চিত করতে Rust কীভাবে lifetime বিশ্লেষণ করে, তা
+জানলেন। এবার function-এর parameter ও return মানে generic lifetime নিয়ে দেখা যাক।
 
-### Generic Lifetimes in Functions
+### function-এ generic lifetime {#generic-lifetimes-in-functions}
 
-We’ll write a function that returns the longer of two string slices. This
-function will take two string slices and return a single string slice. After
-we’ve implemented the `longest` function, the code in Listing 10-19 should
-print `The longest string is abcd`.
+আমরা এমন একটি function লিখব যা দুটি string slice-এর মধ্যে লম্বাটি return করে। এই function দুটি string slice নেবে এবং
+একটি string slice return করবে। `longest` function implement করার পর Listing 10-19-এর কোড print করবে
+`The longest string is abcd`।
 
-<Listing number="10-19" file-name="src/main.rs" caption="A `main` function that calls the `longest` function to find the longer of two string slices">
+<Listing number="10-19" file-name="src/main.rs" caption="একটি `main` function, যা দুটি string slice-এর মধ্যে লম্বাটি খুঁজতে `longest` function call করে">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-19/src/main.rs}}
@@ -130,17 +110,13 @@ print `The longest string is abcd`.
 
 </Listing>
 
-Note that we want the function to take string slices, which are references,
-rather than strings, because we don’t want the `longest` function to take
-ownership of its parameters. Refer to [“String Slices as
-Parameters”][string-slices-as-parameters]<!-- ignore --> in Chapter 4 for more
-discussion about why the parameters we use in Listing 10-19 are the ones we
-want.
+খেয়াল করুন, আমরা চাই function-টি string-এর বদলে string slice নিক, যা reference, কারণ আমরা চাই না `longest` function তার
+parameter-গুলোর ownership নিয়ে নিক। Listing 10-19-এ আমরা কেন এই parameter-গুলোই চাই, তা নিয়ে আরও আলোচনার জন্য অধ্যায়
+4-এর [“parameter হিসেবে string slice”][string-slices-as-parameters]<!-- ignore --> অংশটি দেখুন।
 
-If we try to implement the `longest` function as shown in Listing 10-20, it
-won’t compile.
+Listing 10-20-এর মতো করে `longest` function implement করার চেষ্টা করলে এটি compile হবে না।
 
-<Listing number="10-20" file-name="src/main.rs" caption="An implementation of the `longest` function that returns the longer of two string slices but does not yet compile">
+<Listing number="10-20" file-name="src/main.rs" caption="`longest` function-এর একটি implementation, যা দুটি string slice-এর মধ্যে লম্বাটি return করে কিন্তু এখনো compile হয় না">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-20/src/main.rs:here}}
@@ -148,46 +124,36 @@ won’t compile.
 
 </Listing>
 
-Instead, we get the following error that talks about lifetimes:
+বরং lifetime নিয়ে কথা বলা এই error-টি পাই:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-20/output.txt}}
 ```
 
-The help text reveals that the return type needs a generic lifetime parameter
-on it because Rust can’t tell whether the reference being returned refers to
-`x` or `y`. Actually, we don’t know either, because the `if` block in the body
-of this function returns a reference to `x` and the `else` block returns a
-reference to `y`!
+help-এর লেখা থেকে বোঝা যায় যে return type-এ একটি generic lifetime parameter দরকার, কারণ return করা reference-টি `x`-কে নির্দেশ
+করে নাকি `y`-কে, Rust তা বলতে পারে না। আসলে আমরাও জানি না, কারণ এই function-এর body-তে `if` block `x`-এর একটি reference
+return করে আর `else` block `y`-এর একটি reference return করে!
 
-When we’re defining this function, we don’t know the concrete values that will
-be passed into this function, so we don’t know whether the `if` case or the
-`else` case will execute. We also don’t know the concrete lifetimes of the
-references that will be passed in, so we can’t look at the scopes as we did in
-Listings 10-17 and 10-18 to determine whether the reference we return will
-always be valid. The borrow checker can’t determine this either, because it
-doesn’t know how the lifetimes of `x` and `y` relate to the lifetime of the
-return value. To fix this error, we’ll add generic lifetime parameters that
-define the relationship between the references so that the borrow checker can
-perform its analysis.
+এই function সংজ্ঞায়িত করার সময় আমরা জানি না function-এ কোন concrete মান পাঠানো হবে, তাই `if` অংশ চলবে নাকি `else` অংশ,
+তা-ও জানি না। পাঠানো reference-গুলোর concrete lifetime-ও আমরা জানি না, তাই Listing 10-17 ও 10-18-এর মতো scope দেখে
+নির্ধারণ করতে পারি না যে আমাদের return করা reference সবসময় বৈধ থাকবে কি না। borrow checker-ও এটি নির্ধারণ করতে পারে না,
+কারণ এটি জানে না `x` ও `y`-এর lifetime return মানের lifetime-এর সঙ্গে কীভাবে সম্পর্কিত। এই error ঠিক করতে আমরা এমন generic
+lifetime parameter যোগ করব যা reference-গুলোর মধ্যে সম্পর্ক সংজ্ঞায়িত করে, যাতে borrow checker তার বিশ্লেষণ চালাতে পারে।
 
-### Lifetime Annotation Syntax
+### lifetime annotation syntax {#lifetime-annotation-syntax}
 
-Lifetime annotations don’t change how long any of the references live. Rather,
-they describe the relationships of the lifetimes of multiple references to each
-other without affecting the lifetimes. Just as functions can accept any type
-when the signature specifies a generic type parameter, functions can accept
-references with any lifetime by specifying a generic lifetime parameter.
+lifetime annotation কোনো reference কত সময় বাঁচবে তা বদলায় না। বরং এগুলো lifetime-কে প্রভাবিত না করেই একাধিক
+reference-এর lifetime একে অপরের সঙ্গে কীভাবে সম্পর্কিত তা বর্ণনা করে। signature-এ generic type parameter থাকলে function যেমন
+যেকোনো type গ্রহণ করতে পারে, তেমনি generic lifetime parameter উল্লেখ করলে function যেকোনো lifetime-এর reference গ্রহণ করতে
+পারে।
 
-Lifetime annotations have a slightly unusual syntax: The names of lifetime
-parameters must start with an apostrophe (`'`) and are usually all lowercase
-and very short, like generic types. Most people use the name `'a` for the first
-lifetime annotation. We place lifetime parameter annotations after the `&` of a
-reference, using a space to separate the annotation from the reference’s type.
+lifetime annotation-এর syntax একটু অস্বাভাবিক: lifetime parameter-এর নাম একটি apostrophe (`'`) দিয়ে শুরু হতে হয়, আর generic
+type-এর মতোই সাধারণত পুরোটা ছোট হাতের অক্ষরে ও খুব ছোট হয়। বেশিরভাগ মানুষ প্রথম lifetime annotation-এর জন্য `'a` নামটি
+ব্যবহার করে। আমরা lifetime parameter-এর annotation বসাই reference-এর `&`-এর পরে, annotation আর reference-এর type-এর মাঝে
+একটি space রেখে।
 
-Here are some examples—a reference to an `i32` without a lifetime parameter, a
-reference to an `i32` that has a lifetime parameter named `'a`, and a mutable
-reference to an `i32` that also has the lifetime `'a`:
+কয়েকটি উদাহরণ: lifetime parameter ছাড়া একটি `i32`-এর reference, `'a` নামের lifetime parameter-সহ একটি `i32`-এর reference,
+আর একই `'a` lifetime-সহ একটি `i32`-এর mutable reference:
 
 ```rust,ignore
 &i32        // a reference
@@ -195,28 +161,24 @@ reference to an `i32` that also has the lifetime `'a`:
 &'a mut i32 // a mutable reference with an explicit lifetime
 ```
 
-One lifetime annotation by itself doesn’t have much meaning, because the
-annotations are meant to tell Rust how generic lifetime parameters of multiple
-references relate to each other. Let’s examine how the lifetime annotations
-relate to each other in the context of the `longest` function.
+একটিমাত্র lifetime annotation নিজে থেকে খুব একটা অর্থ বহন করে না, কারণ annotation-এর কাজই হলো Rust-কে জানানো যে একাধিক
+reference-এর generic lifetime parameter একে অপরের সঙ্গে কীভাবে সম্পর্কিত। চলুন `longest` function-এর প্রেক্ষাপটে দেখি
+lifetime annotation-গুলো একে অপরের সঙ্গে কীভাবে সম্পর্কিত।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="lifetime-annotations-in-function-signatures"></a>
 
-### In Function Signatures
+### function signature-এ {#in-function-signatures}
 
-To use lifetime annotations in function signatures, we need to declare the
-generic lifetime parameters inside angle brackets between the function name and
-the parameter list, just as we did with generic type parameters.
+function signature-এ lifetime annotation ব্যবহার করতে আমাদের function-এর নাম আর parameter তালিকার মাঝে angle bracket-এর
+ভেতরে generic lifetime parameter ঘোষণা করতে হয়, ঠিক যেমন generic type parameter-এর ক্ষেত্রে করেছিলাম।
 
-We want the signature to express the following constraint: The returned
-reference will be valid as long as both of the parameters are valid. This is
-the relationship between lifetimes of the parameters and the return value.
-We’ll name the lifetime `'a` and then add it to each reference, as shown in
-Listing 10-21.
+আমরা চাই signature-টি এই শর্ত প্রকাশ করুক: যতক্ষণ দুটি parameter-ই বৈধ, ততক্ষণ return করা reference-টিও বৈধ থাকবে। এটাই
+parameter-গুলোর lifetime আর return মানের মধ্যে সম্পর্ক। আমরা lifetime-টির নাম দেব `'a`, তারপর Listing 10-21-এর মতো প্রতিটি
+reference-এ এটি যোগ করব।
 
-<Listing number="10-21" file-name="src/main.rs" caption="The `longest` function definition specifying that all the references in the signature must have the same lifetime `'a`">
+<Listing number="10-21" file-name="src/main.rs" caption="`longest` function-এর সংজ্ঞা, যা বলে দেয় signature-এর সব reference-এর lifetime একই `'a` হতে হবে">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-21/src/main.rs:here}}
@@ -224,49 +186,35 @@ Listing 10-21.
 
 </Listing>
 
-This code should compile and produce the result we want when we use it with the
-`main` function in Listing 10-19.
+Listing 10-19-এর `main` function-এর সঙ্গে ব্যবহার করলে এই কোড compile হবে এবং আমাদের কাঙ্ক্ষিত ফল দেবে।
 
-The function signature now tells Rust that for some lifetime `'a`, the function
-takes two parameters, both of which are string slices that live at least as
-long as lifetime `'a`. The function signature also tells Rust that the string
-slice returned from the function will live at least as long as lifetime `'a`.
-In practice, it means that the lifetime of the reference returned by the
-`longest` function is the same as the smaller of the lifetimes of the values
-referred to by the function arguments. These relationships are what we want
-Rust to use when analyzing this code.
+function signature এখন Rust-কে বলছে যে কোনো এক lifetime `'a`-এর জন্য function-টি দুটি parameter নেয়, যার দুটিই এমন string
+slice যা অন্তত `'a` lifetime-এর সমান সময় বাঁচে। function signature Rust-কে এটাও বলছে যে function থেকে return করা string
+slice অন্তত `'a` lifetime-এর সমান সময় বাঁচবে। বাস্তবে এর মানে হলো, `longest` function-এর return করা reference-এর lifetime
+function-এর argument-গুলো যে মানগুলোকে নির্দেশ করে তাদের lifetime-এর মধ্যে ছোটটির সমান। এই কোড বিশ্লেষণের সময় আমরা
+চাই Rust এই সম্পর্কগুলোই ব্যবহার করুক।
 
-Remember, when we specify the lifetime parameters in this function signature,
-we’re not changing the lifetimes of any values passed in or returned. Rather,
-we’re specifying that the borrow checker should reject any values that don’t
-adhere to these constraints. Note that the `longest` function doesn’t need to
-know exactly how long `x` and `y` will live, only that some scope can be
-substituted for `'a` that will satisfy this signature.
+মনে রাখবেন, এই function signature-এ lifetime parameter উল্লেখ করে আমরা পাঠানো বা return করা কোনো মানের lifetime বদলাচ্ছি
+না। বরং বলে দিচ্ছি যে এই শর্ত মানে না এমন যেকোনো মান borrow checker-কে বাতিল করতে হবে। খেয়াল করুন, `longest`
+function-এর জানার দরকার নেই `x` আর `y` ঠিক কত সময় বাঁচবে; শুধু এটুকু দরকার যে `'a`-এর জায়গায় এমন কোনো scope বসানো যায়
+যা এই signature পূরণ করে।
 
-When annotating lifetimes in functions, the annotations go in the function
-signature, not in the function body. The lifetime annotations become part of
-the contract of the function, much like the types in the signature. Having
-function signatures contain the lifetime contract means the analysis the Rust
-compiler does can be simpler. If there’s a problem with the way a function is
-annotated or the way it is called, the compiler errors can point to the part of
-our code and the constraints more precisely. If, instead, the Rust compiler
-made more inferences about what we intended the relationships of the lifetimes
-to be, the compiler might only be able to point to a use of our code many steps
-away from the cause of the problem.
+function-এ lifetime annotate করার সময় annotation-গুলো যায় function signature-এ, function-এর body-তে নয়। lifetime
+annotation-গুলো function-এর চুক্তির অংশ হয়ে যায়, অনেকটা signature-এর type-গুলোর মতো। function signature-এ lifetime-এর চুক্তি
+থাকায় Rust compiler-এর বিশ্লেষণ সহজ হতে পারে। কোনো function যেভাবে annotate করা হয়েছে বা যেভাবে call করা হয়েছে তাতে
+সমস্যা থাকলে compiler error আমাদের কোডের অংশ আর শর্তগুলোকে আরও নিখুঁতভাবে দেখিয়ে দিতে পারে। অন্যদিকে, যদি Rust compiler
+lifetime-গুলোর সম্পর্ক নিয়ে আমাদের উদ্দেশ্য সম্পর্কে আরও বেশি অনুমান করত, তাহলে compiler হয়তো শুধু আমাদের কোডের এমন
+কোনো ব্যবহার দেখাতে পারত যা সমস্যার আসল কারণ থেকে অনেক ধাপ দূরে।
 
-When we pass concrete references to `longest`, the concrete lifetime that is
-substituted for `'a` is the part of the scope of `x` that overlaps with the
-scope of `y`. In other words, the generic lifetime `'a` will get the concrete
-lifetime that is equal to the smaller of the lifetimes of `x` and `y`. Because
-we’ve annotated the returned reference with the same lifetime parameter `'a`,
-the returned reference will also be valid for the length of the smaller of the
-lifetimes of `x` and `y`.
+যখন আমরা `longest`-এ concrete reference পাঠাই, তখন `'a`-এর জায়গায় যে concrete lifetime বসে, তা হলো `x`-এর scope-এর সেই অংশ
+যা `y`-এর scope-এর সঙ্গে মিলে যায়। অন্যভাবে বললে, generic lifetime `'a` পাবে এমন concrete lifetime, যা `x` ও `y`-এর lifetime-এর
+মধ্যে ছোটটির সমান। return করা reference-কে আমরা একই lifetime parameter `'a` দিয়ে annotate করেছি বলে return করা reference-ও
+`x` ও `y`-এর lifetime-এর মধ্যে ছোটটির সমান সময় পর্যন্ত বৈধ থাকবে।
 
-Let’s look at how the lifetime annotations restrict the `longest` function by
-passing in references that have different concrete lifetimes. Listing 10-22 is
-a straightforward example.
+চলুন ভিন্ন ভিন্ন concrete lifetime-এর reference পাঠিয়ে দেখি lifetime annotation কীভাবে `longest` function-কে সীমাবদ্ধ করে।
+Listing 10-22 একটি সোজাসাপ্টা উদাহরণ।
 
-<Listing number="10-22" file-name="src/main.rs" caption="Using the `longest` function with references to `String` values that have different concrete lifetimes">
+<Listing number="10-22" file-name="src/main.rs" caption="ভিন্ন ভিন্ন concrete lifetime-এর `String` মানের reference দিয়ে `longest` function ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-22/src/main.rs:here}}
@@ -274,21 +222,17 @@ a straightforward example.
 
 </Listing>
 
-In this example, `string1` is valid until the end of the outer scope, `string2`
-is valid until the end of the inner scope, and `result` references something
-that is valid until the end of the inner scope. Run this code and you’ll see
-that the borrow checker approves; it will compile and print `The longest string
-is long string is long`.
+এই উদাহরণে `string1` বাইরের scope-এর শেষ পর্যন্ত বৈধ, `string2` ভেতরের scope-এর শেষ পর্যন্ত বৈধ, আর `result` এমন কিছুকে
+নির্দেশ করে যা ভেতরের scope-এর শেষ পর্যন্ত বৈধ। কোডটি চালালে দেখবেন borrow checker অনুমোদন দেয়; এটি compile হবে এবং
+print করবে `The longest string
+is long string is long`।
 
-Next, let’s try an example that shows that the lifetime of the reference in
-`result` must be the smaller lifetime of the two arguments. We’ll move the
-declaration of the `result` variable outside the inner scope but leave the
-assignment of the value to the `result` variable inside the scope with
-`string2`. Then, we’ll move the `println!` that uses `result` to outside the
-inner scope, after the inner scope has ended. The code in Listing 10-23 will
-not compile.
+এবার এমন একটি উদাহরণ দেখি যা দেখায় যে `result`-এর reference-এর lifetime-কে দুটি argument-এর মধ্যে ছোট lifetime-টি হতে হবে।
+আমরা `result` variable-এর ঘোষণা ভেতরের scope-এর বাইরে সরিয়ে নেব, কিন্তু `result` variable-এ মান বসানোটা `string2`-সহ
+scope-এর ভেতরেই রাখব। তারপর `result` ব্যবহার করা `println!`-কে ভেতরের scope-এর বাইরে, ভেতরের scope শেষ হওয়ার পরে সরিয়ে
+নেব। Listing 10-23-এর কোড compile হবে না।
 
-<Listing number="10-23" file-name="src/main.rs" caption="Attempting to use `result` after `string2` has gone out of scope">
+<Listing number="10-23" file-name="src/main.rs" caption="`string2` scope-এর বাইরে যাওয়ার পর `result` ব্যবহারের চেষ্টা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-23/src/main.rs:here}}
@@ -296,30 +240,25 @@ not compile.
 
 </Listing>
 
-When we try to compile this code, we get this error:
+এই কোড compile করার চেষ্টা করলে এই error পাই:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-23/output.txt}}
 ```
 
-The error shows that for `result` to be valid for the `println!` statement,
-`string2` would need to be valid until the end of the outer scope. Rust knows
-this because we annotated the lifetimes of the function parameters and return
-values using the same lifetime parameter `'a`.
+error-টি দেখায় যে `println!` statement-এর জন্য `result` বৈধ থাকতে হলে `string2`-কে বাইরের scope-এর শেষ পর্যন্ত বৈধ থাকতে
+হতো। Rust এটা জানে, কারণ আমরা function-এর parameter আর return মানের lifetime একই lifetime parameter `'a` দিয়ে annotate
+করেছি।
 
-As humans, we can look at this code and see that `string1` is longer than
-`string2`, and therefore, `result` will contain a reference to `string1`.
-Because `string1` has not gone out of scope yet, a reference to `string1` will
-still be valid for the `println!` statement. However, the compiler can’t see
-that the reference is valid in this case. We’ve told Rust that the lifetime of
-the reference returned by the `longest` function is the same as the smaller of
-the lifetimes of the references passed in. Therefore, the borrow checker
-disallows the code in Listing 10-23 as possibly having an invalid reference.
+মানুষ হিসেবে আমরা এই কোড দেখে বুঝতে পারি যে `string1` `string2`-এর চেয়ে লম্বা, তাই `result`-এ থাকবে `string1`-এর একটি
+reference। `string1` যেহেতু এখনো scope-এর বাইরে যায়নি, তাই `println!` statement-এর জন্য `string1`-এর reference তখনো বৈধ
+থাকবে। কিন্তু compiler এই ক্ষেত্রে দেখতে পায় না যে reference-টি বৈধ। আমরা Rust-কে বলেছি যে `longest` function-এর return
+করা reference-এর lifetime পাঠানো reference-গুলোর lifetime-এর মধ্যে ছোটটির সমান। তাই borrow checker Listing 10-23-এর
+কোডকে সম্ভাব্য অবৈধ reference থাকতে পারে বলে অনুমোদন দেয় না।
 
-Try designing more experiments that vary the values and lifetimes of the
-references passed in to the `longest` function and how the returned reference
-is used. Make hypotheses about whether or not your experiments will pass the
-borrow checker before you compile; then, check to see if you’re right!
+`longest` function-এ পাঠানো reference-গুলোর মান ও lifetime, আর return করা reference কীভাবে ব্যবহার হচ্ছে, তা বদলে আরও
+পরীক্ষা সাজিয়ে দেখুন। compile করার আগে অনুমান করুন আপনার পরীক্ষাগুলো borrow checker পার হবে কি না; তারপর মিলিয়ে দেখুন
+আপনার অনুমান ঠিক ছিল কি না!
 
 {{#quiz ../quizzes/ch10-03-lifetimes-sec1.toml}}
 
@@ -327,13 +266,11 @@ borrow checker before you compile; then, check to see if you’re right!
 
 <a id="thinking-in-terms-of-lifetimes"></a>
 
-### Relationships
+### সম্পর্ক {#relationships}
 
-The way in which you need to specify lifetime parameters depends on what your
-function is doing. For example, if we changed the implementation of the
-`longest` function to always return the first parameter rather than the longest
-string slice, we wouldn’t need to specify a lifetime on the `y` parameter. The
-following code will compile:
+lifetime parameter কীভাবে উল্লেখ করতে হবে, তা নির্ভর করে আপনার function কী করছে তার ওপর। যেমন, `longest` function-এর
+implementation বদলে যদি সবসময় সবচেয়ে লম্বা string slice-এর বদলে প্রথম parameter-টি return করতাম, তাহলে `y` parameter-এ
+lifetime উল্লেখ করার দরকার হতো না। নিচের কোড compile হবে:
 
 <Listing file-name="src/main.rs">
 
@@ -343,17 +280,13 @@ following code will compile:
 
 </Listing>
 
-We’ve specified a lifetime parameter `'a` for the parameter `x` and the return
-type, but not for the parameter `y`, because the lifetime of `y` does not have
-any relationship with the lifetime of `x` or the return value.
+আমরা `x` parameter আর return type-এর জন্য lifetime parameter `'a` উল্লেখ করেছি, কিন্তু `y` parameter-এর জন্য নয়, কারণ `y`-এর
+lifetime-এর সঙ্গে `x`-এর বা return মানের lifetime-এর কোনো সম্পর্ক নেই।
 
-When returning a reference from a function, the lifetime parameter for the
-return type needs to match the lifetime parameter for one of the parameters. If
-the reference returned does _not_ refer to one of the parameters, it must refer
-to a value created within this function. However, this would be a dangling
-reference because the value will go out of scope at the end of the function.
-Consider this attempted implementation of the `longest` function that won’t
-compile:
+function থেকে reference return করার সময় return type-এর lifetime parameter-কে parameter-গুলোর কোনো একটির lifetime
+parameter-এর সঙ্গে মিলতে হবে। return করা reference যদি parameter-গুলোর কোনোটিকে নির্দেশ _না_ করে, তাহলে এটিকে এই function-এর
+ভেতরে তৈরি কোনো মানকে নির্দেশ করতে হবে। কিন্তু সেটি হবে একটি dangling reference, কারণ function-এর শেষে মানটি scope-এর বাইরে
+চলে যাবে। `longest` function-এর এই implementation-এর চেষ্টাটি দেখুন, যা compile হবে না:
 
 <Listing file-name="src/main.rs">
 
@@ -363,40 +296,34 @@ compile:
 
 </Listing>
 
-Here, even though we’ve specified a lifetime parameter `'a` for the return
-type, this implementation will fail to compile because the return value
-lifetime is not related to the lifetime of the parameters at all. Here is the
-error message we get:
+এখানে return type-এর জন্য lifetime parameter `'a` উল্লেখ করা সত্ত্বেও এই implementation compile হবে না, কারণ return মানের
+lifetime parameter-গুলোর lifetime-এর সঙ্গে মোটেই সম্পর্কিত নয়। আমরা যে error message পাই:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-09-unrelated-lifetime/output.txt}}
 ```
 
-The problem is that `result` goes out of scope and gets cleaned up at the end
-of the `longest` function. We’re also trying to return a reference to `result`
-from the function. There is no way we can specify lifetime parameters that
-would change the dangling reference, and Rust won’t let us create a dangling
-reference. In this case, the best fix would be to return an owned data type
-rather than a reference so that the calling function is then responsible for
-cleaning up the value.
+সমস্যা হলো `longest` function-এর শেষে `result` scope-এর বাইরে চলে যায় এবং পরিষ্কার হয়ে যায়। অথচ আমরা function থেকে
+`result`-এর একটি reference return করার চেষ্টা করছি। এমন কোনো lifetime parameter উল্লেখ করার উপায় নেই যা dangling
+reference-টিকে বদলে দেবে, আর Rust আমাদের dangling reference তৈরি করতে দেবে না। এই ক্ষেত্রে সবচেয়ে ভালো সমাধান হবে
+reference-এর বদলে একটি owned data type (নিজের ডেটার মালিক এমন type) return করা, যাতে মানটি পরিষ্কার করার দায়িত্ব call
+করা function-এর ওপর পড়ে।
 
-Ultimately, lifetime syntax is about connecting the lifetimes of various
-parameters and return values of functions. Once they’re connected, Rust has
-enough information to allow memory-safe operations and disallow operations that
-would create dangling pointers or otherwise violate memory safety.
+শেষ পর্যন্ত lifetime syntax-এর কাজ হলো function-এর বিভিন্ন parameter আর return মানের lifetime-গুলোকে যুক্ত করা। একবার এগুলো
+যুক্ত হলে Rust-এর কাছে যথেষ্ট তথ্য থাকে, যাতে মেমোরি-নিরাপদ operation অনুমোদন করতে পারে এবং dangling pointer তৈরি করবে
+বা অন্য কোনোভাবে memory safety ভঙ্গ করবে এমন operation বাতিল করতে পারে।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="lifetime-annotations-in-struct-definitions"></a>
 
-### In Struct Definitions
+### struct-এর সংজ্ঞায় {#in-struct-definitions}
 
-So far, the structs we’ve defined all hold owned types. We can define structs
-to hold references, but in that case, we would need to add a lifetime
-annotation on every reference in the struct’s definition. Listing 10-24 has a
-struct named `ImportantExcerpt` that holds a string slice.
+এ পর্যন্ত আমরা যত struct সংজ্ঞায়িত করেছি, সবগুলোই owned type রাখে। reference রাখার জন্যও struct সংজ্ঞায়িত করা যায়, তবে
+সেক্ষেত্রে struct-এর সংজ্ঞার প্রতিটি reference-এ একটি lifetime annotation যোগ করতে হবে। Listing 10-24-এ `ImportantExcerpt`
+নামের একটি struct আছে, যা একটি string slice রাখে।
 
-<Listing number="10-24" file-name="src/main.rs" caption="A struct that holds a reference, requiring a lifetime annotation">
+<Listing number="10-24" file-name="src/main.rs" caption="একটি reference রাখে এমন struct, যার জন্য lifetime annotation দরকার">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-24/src/main.rs}}
@@ -404,28 +331,23 @@ struct named `ImportantExcerpt` that holds a string slice.
 
 </Listing>
 
-This struct has the single field `part` that holds a string slice, which is a
-reference. As with generic data types, we declare the name of the generic
-lifetime parameter inside angle brackets after the name of the struct so that
-we can use the lifetime parameter in the body of the struct definition. This
-annotation means an instance of `ImportantExcerpt` can’t outlive the reference
-it holds in its `part` field.
+এই struct-এর একটিমাত্র field `part`, যা একটি string slice রাখে, আর string slice হলো reference। generic data type-এর মতোই
+আমরা struct-এর নামের পরে angle bracket-এর ভেতরে generic lifetime parameter-এর নাম ঘোষণা করি, যাতে struct-এর সংজ্ঞার
+body-তে lifetime parameter-টি ব্যবহার করতে পারি। এই annotation-এর মানে হলো, `ImportantExcerpt`-এর একটি instance তার `part`
+field-এ রাখা reference-এর চেয়ে বেশি সময় বাঁচতে পারবে না।
 
-The `main` function here creates an instance of the `ImportantExcerpt` struct
-that holds a reference to the first sentence of the `String` owned by the
-variable `novel`. The data in `novel` exists before the `ImportantExcerpt`
-instance is created. In addition, `novel` doesn’t go out of scope until after
-the `ImportantExcerpt` goes out of scope, so the reference in the
-`ImportantExcerpt` instance is valid.
+এখানে `main` function `ImportantExcerpt` struct-এর একটি instance তৈরি করে, যা `novel` variable-এর মালিকানাধীন `String`-এর
+প্রথম বাক্যের একটি reference রাখে। `ImportantExcerpt` instance তৈরি হওয়ার আগেই `novel`-এর ডেটা থাকে। তা ছাড়া
+`ImportantExcerpt` scope-এর বাইরে যাওয়ার পরেই কেবল `novel` scope-এর বাইরে যায়, তাই `ImportantExcerpt` instance-এর
+reference-টি বৈধ।
 
-### Lifetime Elision
+### lifetime elision {#lifetime-elision}
 
-You’ve learned that every reference has a lifetime and that you need to specify
-lifetime parameters for functions or structs that use references. However, we
-had a function in Listing 4-9, shown again in Listing 10-25, that compiled
-without lifetime annotations.
+আপনি শিখেছেন যে প্রতিটি reference-এর একটি lifetime আছে, আর reference ব্যবহার করা function বা struct-এর জন্য lifetime
+parameter উল্লেখ করতে হয়। কিন্তু Listing 4-9-এ আমাদের একটি function ছিল, যা Listing 10-25-এ আবার দেখানো হয়েছে, যেটি
+lifetime annotation ছাড়াই compile হয়েছিল।
 
-<Listing number="10-25" file-name="src/lib.rs" caption="A function we defined in Listing 4-9 that compiled without lifetime annotations, even though the parameter and return type are references">
+<Listing number="10-25" file-name="src/lib.rs" caption="Listing 4-9-এ সংজ্ঞায়িত একটি function, যা parameter আর return type reference হওয়া সত্ত্বেও lifetime annotation ছাড়াই compile হয়েছিল">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-25/src/main.rs:here}}
@@ -433,223 +355,182 @@ without lifetime annotations.
 
 </Listing>
 
-The reason this function compiles without lifetime annotations is historical:
-In early versions (pre-1.0) of Rust, this code wouldn’t have compiled, because
-every reference needed an explicit lifetime. At that time, the function
-signature would have been written like this:
+এই function lifetime annotation ছাড়া compile হওয়ার কারণ ঐতিহাসিক: Rust-এর প্রথম দিকের সংস্করণে (1.0-এর আগে) এই কোড
+compile হতো না, কারণ প্রতিটি reference-এর একটি স্পষ্ট lifetime দরকার হতো। সেই সময় function signature-টি এভাবে লেখা হতো:
 
 ```rust,ignore
 fn first_word<'a>(s: &'a str) -> &'a str {
 ```
 
-After writing a lot of Rust code, the Rust team found that Rust programmers
-were entering the same lifetime annotations over and over in particular
-situations. These situations were predictable and followed a few deterministic
-patterns. The developers programmed these patterns into the compiler’s code so
-that the borrow checker could infer the lifetimes in these situations and
-wouldn’t need explicit annotations.
+অনেক Rust কোড লেখার পর Rust দল দেখল যে নির্দিষ্ট কিছু পরিস্থিতিতে Rust প্রোগ্রামাররা বারবার একই lifetime annotation
+লিখছেন। এই পরিস্থিতিগুলো অনুমানযোগ্য ছিল এবং কয়েকটি সুনির্দিষ্ট pattern মেনে চলত। ডেভেলপাররা এই pattern-গুলো compiler-এর
+কোডে যুক্ত করে দিলেন, যাতে borrow checker এই পরিস্থিতিগুলোতে lifetime অনুমান করে নিতে পারে এবং স্পষ্ট annotation-এর
+দরকার না হয়।
 
-This piece of Rust history is relevant because it’s possible that more
-deterministic patterns will emerge and be added to the compiler. In the future,
-even fewer lifetime annotations might be required.
+Rust-এর ইতিহাসের এই অংশটি প্রাসঙ্গিক, কারণ এমন হতে পারে যে আরও সুনির্দিষ্ট pattern সামনে আসবে এবং compiler-এ যুক্ত হবে।
+ভবিষ্যতে হয়তো আরও কম lifetime annotation লাগবে।
 
-The patterns programmed into Rust’s analysis of references are called the
-_lifetime elision rules_. These aren’t rules for programmers to follow; they’re
-a set of particular cases that the compiler will consider, and if your code
-fits these cases, you don’t need to write the lifetimes explicitly.
+reference সম্পর্কে Rust-এর বিশ্লেষণে যুক্ত করা pattern-গুলোকে বলা হয় _lifetime elision rules_ (lifetime বাদ দিয়ে লেখার
+নিয়ম)। এগুলো প্রোগ্রামারদের মেনে চলার নিয়ম নয়; এগুলো কিছু নির্দিষ্ট ক্ষেত্রের একটি সেট, যা compiler বিবেচনা করবে, আর
+আপনার কোড এই ক্ষেত্রগুলোর সঙ্গে মিলে গেলে lifetime স্পষ্ট করে লেখার দরকার নেই।
 
-The elision rules don’t provide full inference. If there is still ambiguity
-about what lifetimes the references have after Rust applies the rules, the
-compiler won’t guess what the lifetime of the remaining references should be.
-Instead of guessing, the compiler will give you an error that you can resolve
-by adding the lifetime annotations.
+elision rule-গুলো পূর্ণ অনুমান দেয় না। Rust নিয়মগুলো প্রয়োগ করার পরও যদি reference-গুলোর lifetime নিয়ে অস্পষ্টতা থেকে
+যায়, তাহলে compiler বাকি reference-গুলোর lifetime কী হওয়া উচিত তা আন্দাজ করবে না। আন্দাজ না করে compiler আপনাকে একটি
+error দেবে, যা আপনি lifetime annotation যোগ করে সমাধান করতে পারেন।
 
-Lifetimes on function or method parameters are called _input lifetimes_, and
-lifetimes on return values are called _output lifetimes_.
+function বা method-এর parameter-এর lifetime-কে বলা হয় _input lifetimes_, আর return মানের lifetime-কে বলা হয় _output
+lifetimes_।
 
-The compiler uses three rules to figure out the lifetimes of the references
-when there aren’t explicit annotations. The first rule applies to input
-lifetimes, and the second and third rules apply to output lifetimes. If the
-compiler gets to the end of the three rules and there are still references for
-which it can’t figure out lifetimes, the compiler will stop with an error.
-These rules apply to `fn` definitions as well as `impl` blocks.
+স্পষ্ট annotation না থাকলে reference-গুলোর lifetime বের করতে compiler তিনটি নিয়ম ব্যবহার করে। প্রথম নিয়মটি input
+lifetime-এর ক্ষেত্রে প্রযোজ্য, আর দ্বিতীয় ও তৃতীয় নিয়ম output lifetime-এর ক্ষেত্রে। তিনটি নিয়মের শেষে পৌঁছেও যদি এমন
+reference থাকে যার lifetime compiler বের করতে পারেনি, তাহলে compiler একটি error দিয়ে থেমে যাবে। এই নিয়মগুলো `fn`-এর সংজ্ঞা
+এবং `impl` block, দুই ক্ষেত্রেই প্রযোজ্য।
 
 <!-- BEGIN INTERVENTION: d03748df-8dcf-4ec8-bd30-341927544665 -->
-The first rule is that the compiler assigns a different lifetime parameter to each lifetime in each input type. References like `&'_ i32` need a lifetime parameter, and structures like `ImportantExcerpt<'_>` need a lifetime parameter. For example:
-* The function `fn foo(x: &i32)` would get one lifetime parameter and become `fn foo<'a>(x: &'a i32)`. 
-* The function `fn foo(x: &i32, y: &i32)` would get two lifetime parameters and become `fn foo<'a, 'b>(x: &'a i32, y: &'b i32)`.
-* The function `fn foo(x: &ImportantExcerpt)` would get two lifetime parameters and become `fn foo<'a, 'b>(x: &'a ImportantExcerpt<'b>)`.
+প্রথম নিয়মটি হলো, compiler প্রতিটি input type-এর প্রতিটি lifetime-কে আলাদা একটি lifetime parameter দেয়। `&'_ i32`-এর মতো reference-এর একটি lifetime parameter দরকার, আর `ImportantExcerpt<'_>`-এর মতো structure-এরও একটি lifetime parameter দরকার। যেমন:
+* `fn foo(x: &i32)` function একটি lifetime parameter পাবে এবং হয়ে যাবে `fn foo<'a>(x: &'a i32)`। 
+* `fn foo(x: &i32, y: &i32)` function দুটি lifetime parameter পাবে এবং হয়ে যাবে `fn foo<'a, 'b>(x: &'a i32, y: &'b i32)`।
+* `fn foo(x: &ImportantExcerpt)` function দুটি lifetime parameter পাবে এবং হয়ে যাবে `fn foo<'a, 'b>(x: &'a ImportantExcerpt<'b>)`।
 <!-- END INTERVENTION -->
 
-The second rule is that, if there is exactly one input lifetime parameter, that
-lifetime is assigned to all output lifetime parameters: `fn foo<'a>(x: &'a i32)
--> &'a i32`.
+দ্বিতীয় নিয়মটি হলো, যদি ঠিক একটি input lifetime parameter থাকে, তাহলে সেই lifetime সব output lifetime parameter-কে দেওয়া হয়:
+`fn foo<'a>(x: &'a i32)
+-> &'a i32`।
 
-The third rule is that, if there are multiple input lifetime parameters, but
-one of them is `&self` or `&mut self` because this is a method, the lifetime of
-`self` is assigned to all output lifetime parameters. This third rule makes
-methods much nicer to read and write because fewer symbols are necessary.
+তৃতীয় নিয়মটি হলো, যদি একাধিক input lifetime parameter থাকে, কিন্তু method হওয়ার কারণে তাদের একটি `&self` বা `&mut self`
+হয়, তাহলে `self`-এর lifetime সব output lifetime parameter-কে দেওয়া হয়। এই তৃতীয় নিয়মের কারণে method পড়া ও লেখা অনেক
+সহজ হয়, কারণ কম চিহ্ন লাগে।
 
-Let’s pretend we’re the compiler. We’ll apply these rules to figure out the
-lifetimes of the references in the signature of the `first_word` function in
-Listing 10-25. The signature starts without any lifetimes associated with the
-references:
+চলুন নিজেদের compiler ভেবে নিই। Listing 10-25-এর `first_word` function-এর signature-এ reference-গুলোর lifetime বের করতে
+আমরা এই নিয়মগুলো প্রয়োগ করব। signature-টি শুরুতে reference-গুলোর সঙ্গে কোনো lifetime ছাড়া থাকে:
 
 ```rust,ignore
 fn first_word(s: &str) -> &str {
 ```
 
-Then, the compiler applies the first rule, which specifies that each parameter
-gets its own lifetime. We’ll call it `'a` as usual, so now the signature is
-this:
+তারপর compiler প্রথম নিয়মটি প্রয়োগ করে, যা বলে প্রতিটি parameter নিজস্ব lifetime পায়। বরাবরের মতো আমরা একে `'a` বলব,
+তাই signature-টি এখন এই:
 
 ```rust,ignore
 fn first_word<'a>(s: &'a str) -> &str {
 ```
 
-The second rule applies because there is exactly one input lifetime. The second
-rule specifies that the lifetime of the one input parameter gets assigned to
-the output lifetime, so the signature is now this:
+দ্বিতীয় নিয়মটি প্রযোজ্য, কারণ ঠিক একটি input lifetime আছে। দ্বিতীয় নিয়ম বলে, একমাত্র input parameter-এর lifetime
+output lifetime-কে দেওয়া হয়, তাই signature-টি এখন এই:
 
 ```rust,ignore
 fn first_word<'a>(s: &'a str) -> &'a str {
 ```
 
-Now all the references in this function signature have lifetimes, and the
-compiler can continue its analysis without needing the programmer to annotate
-the lifetimes in this function signature.
+এখন এই function signature-এর সব reference-এর lifetime আছে, আর প্রোগ্রামারকে এই function signature-এ lifetime annotate
+করতে না হয়েই compiler তার বিশ্লেষণ চালিয়ে যেতে পারে।
 
-Let’s look at another example, this time using the `longest` function that had
-no lifetime parameters when we started working with it in Listing 10-20:
+আরেকটি উদাহরণ দেখা যাক, এবার `longest` function দিয়ে, যা Listing 10-20-এ কাজ শুরু করার সময় কোনো lifetime parameter ছাড়া
+ছিল:
 
 ```rust,ignore
 fn longest(x: &str, y: &str) -> &str {
 ```
 
-Let’s apply the first rule: Each parameter gets its own lifetime. This time we
-have two parameters instead of one, so we have two lifetimes:
+প্রথম নিয়মটি প্রয়োগ করি: প্রতিটি parameter নিজস্ব lifetime পায়। এবার একটির বদলে দুটি parameter আছে, তাই দুটি lifetime:
 
 ```rust,ignore
 fn longest<'a, 'b>(x: &'a str, y: &'b str) -> &str {
 ```
 
-You can see that the second rule doesn’t apply, because there is more than one
-input lifetime. The third rule doesn’t apply either, because `longest` is a
-function rather than a method, so none of the parameters are `self`. After
-working through all three rules, we still haven’t figured out what the return
-type’s lifetime is. This is why we got an error trying to compile the code in
-Listing 10-20: The compiler worked through the lifetime elision rules but still
-couldn’t figure out all the lifetimes of the references in the signature.
+দেখতে পাচ্ছেন দ্বিতীয় নিয়মটি প্রযোজ্য নয়, কারণ একাধিক input lifetime আছে। তৃতীয় নিয়মটিও প্রযোজ্য নয়, কারণ `longest`
+method নয়, একটি function, তাই কোনো parameter-ই `self` নয়। তিনটি নিয়ম পার হয়েও আমরা return type-এর lifetime কী তা বের
+করতে পারিনি। এ কারণেই Listing 10-20-এর কোড compile করতে গিয়ে আমরা error পেয়েছিলাম: compiler lifetime elision rule-গুলো পার
+হয়েও signature-এর সব reference-এর lifetime বের করতে পারেনি।
 
-Because the third rule really only applies in method signatures, we’ll look at
-lifetimes in that context next to see why the third rule means we don’t have to
-annotate lifetimes in method signatures very often.
+তৃতীয় নিয়মটি যেহেতু আসলে শুধু method signature-এ প্রযোজ্য, তাই এবার সেই প্রেক্ষাপটে lifetime দেখব, যাতে বোঝা যায় কেন
+তৃতীয় নিয়মের কারণে method signature-এ খুব বেশি lifetime annotate করতে হয় না।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="lifetime-annotations-in-method-definitions"></a>
 
-### In Method Definitions
+### method-এর সংজ্ঞায় {#in-method-definitions}
 
-When we implement methods on a struct with lifetimes, we use the same syntax as
-that of generic type parameters, as shown in Listing 10-11. Where we declare
-and use the lifetime parameters depends on whether they’re related to the
-struct fields or the method parameters and return values.
+lifetime-যুক্ত struct-এর ওপর method implement করার সময় আমরা generic type parameter-এর মতোই syntax ব্যবহার করি, যেমন
+Listing 10-11-এ দেখানো হয়েছে। lifetime parameter কোথায় ঘোষণা ও ব্যবহার করব, তা নির্ভর করে সেগুলো struct-এর field-এর সঙ্গে
+সম্পর্কিত নাকি method-এর parameter ও return মানের সঙ্গে।
 
-Lifetime names for struct fields always need to be declared after the `impl`
-keyword and then used after the struct’s name because those lifetimes are part
-of the struct’s type.
+struct-এর field-এর lifetime-এর নাম সবসময় `impl` keyword-এর পরে ঘোষণা করতে হয় এবং তারপর struct-এর নামের পরে ব্যবহার করতে
+হয়, কারণ ওই lifetime-গুলো struct-এর type-এর অংশ।
 
-In method signatures inside the `impl` block, references might be tied to the
-lifetime of references in the struct’s fields, or they might be independent. In
-addition, the lifetime elision rules often make it so that lifetime annotations
-aren’t necessary in method signatures. Let’s look at some examples using the
-struct named `ImportantExcerpt` that we defined in Listing 10-24.
+`impl` block-এর ভেতরে method signature-এ reference-গুলো struct-এর field-এ থাকা reference-এর lifetime-এর সঙ্গে বাঁধা থাকতে
+পারে, আবার স্বাধীনও হতে পারে। তা ছাড়া lifetime elision rule-এর কারণে প্রায়ই method signature-এ lifetime annotation লাগে না।
+Listing 10-24-এ সংজ্ঞায়িত `ImportantExcerpt` নামের struct ব্যবহার করে কয়েকটি উদাহরণ দেখা যাক।
 
-First, we’ll use a method named `level` whose only parameter is a reference to
-`self` and whose return value is an `i32`, which is not a reference to anything:
+প্রথমে আমরা `level` নামের একটি method ব্যবহার করব, যার একমাত্র parameter হলো `self`-এর একটি reference এবং যার return মান একটি
+`i32`, যা কোনো কিছুর reference নয়:
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-10-lifetimes-on-methods/src/main.rs:1st}}
 ```
 
-The lifetime parameter declaration after `impl` and its use after the type name
-are required, but because of the first elision rule, we’re not required to
-annotate the lifetime of the reference to `self`.
+`impl`-এর পরে lifetime parameter-এর ঘোষণা এবং type-এর নামের পরে এর ব্যবহার বাধ্যতামূলক, কিন্তু প্রথম elision rule-এর কারণে
+`self`-এর reference-এর lifetime annotate করার দরকার নেই।
 
-Here is an example where the third lifetime elision rule applies:
+এখানে একটি উদাহরণ, যেখানে তৃতীয় lifetime elision rule প্রযোজ্য:
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-10-lifetimes-on-methods/src/main.rs:3rd}}
 ```
 
-There are two input lifetimes, so Rust applies the first lifetime elision rule
-and gives both `&self` and `announcement` their own lifetimes. Then, because
-one of the parameters is `&self`, the return type gets the lifetime of `&self`,
-and all lifetimes have been accounted for.
+দুটি input lifetime আছে, তাই Rust প্রথম lifetime elision rule প্রয়োগ করে `&self` আর `announcement` দুটিকেই নিজস্ব lifetime
+দেয়। তারপর parameter-গুলোর একটি `&self` হওয়ায় return type পায় `&self`-এর lifetime, আর সব lifetime-এর হিসাব মিলে যায়।
 
-### The Static Lifetime
+### static lifetime {#the-static-lifetime}
 
-One special lifetime we need to discuss is `'static`, which denotes that the
-affected reference _can_ live for the entire duration of the program. All
-string literals have the `'static` lifetime, which we can annotate as follows:
+একটি বিশেষ lifetime নিয়ে আলোচনা করা দরকার, তা হলো `'static`, যা বোঝায় সংশ্লিষ্ট reference প্রোগ্রামের পুরো সময় জুড়ে বেঁচে
+থাকতে _পারে_। সব string literal-এর lifetime `'static`, যা আমরা এভাবে annotate করতে পারি:
 
 ```rust
 let s: &'static str = "I have a static lifetime.";
 ```
 
-The text of this string is stored directly in the program’s binary, which is
-always available. Therefore, the lifetime of all string literals is `'static`.
+এই string-এর লেখাটি সরাসরি প্রোগ্রামের binary-তে রাখা থাকে, যা সবসময় পাওয়া যায়। তাই সব string literal-এর lifetime হলো
+`'static`।
 
-You might see suggestions in error messages to use the `'static` lifetime. But
-before specifying `'static` as the lifetime for a reference, think about
-whether or not the reference you have actually lives the entire lifetime of
-your program, and whether you want it to. Most of the time, an error message
-suggesting the `'static` lifetime results from attempting to create a dangling
-reference or a mismatch of the available lifetimes. In such cases, the solution
-is to fix those problems, not to specify the `'static` lifetime.
+error message-এ হয়তো `'static` lifetime ব্যবহারের পরামর্শ দেখতে পাবেন। কিন্তু কোনো reference-এর lifetime হিসেবে `'static`
+উল্লেখ করার আগে ভেবে দেখুন, আপনার reference-টি আসলেই প্রোগ্রামের পুরো lifetime জুড়ে বাঁচে কি না, আর আপনি তা চান কি না।
+বেশিরভাগ সময় `'static` lifetime-এর পরামর্শ দেওয়া error message আসে একটি dangling reference তৈরির চেষ্টা থেকে, অথবা
+পাওয়া lifetime-গুলোর মধ্যে অমিল থেকে। এমন ক্ষেত্রে সমাধান হলো সেই সমস্যাগুলো ঠিক করা, `'static` lifetime উল্লেখ করা নয়।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="generic-type-parameters-trait-bounds-and-lifetimes-together"></a>
 
-## Generic Type Parameters, Trait Bounds, and Lifetimes
+## generic type parameter, trait bound ও lifetime {#generic-type-parameters-trait-bounds-and-lifetimes}
 
-Let’s briefly look at the syntax of specifying generic type parameters, trait
-bounds, and lifetimes all in one function!
+চলুন সংক্ষেপে দেখি একটি function-এ একসঙ্গে generic type parameter, trait bound আর lifetime উল্লেখ করার syntax কেমন!
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-11-generics-traits-and-lifetimes/src/main.rs:here}}
 ```
 
-This is the `longest` function from Listing 10-21 that returns the longer of
-two string slices. But now it has an extra parameter named `ann` of the generic
-type `T`, which can be filled in by any type that implements the `Display`
-trait as specified by the `where` clause. This extra parameter will be printed
-using `{}`, which is why the `Display` trait bound is necessary. Because
-lifetimes are a type of generic, the declarations of the lifetime parameter
-`'a` and the generic type parameter `T` go in the same list inside the angle
-brackets after the function name.
+এটি Listing 10-21-এর `longest` function, যা দুটি string slice-এর মধ্যে লম্বাটি return করে। কিন্তু এখন এতে generic type `T`-এর
+`ann` নামে একটি বাড়তি parameter আছে, যার জায়গায় `where` clause-এ উল্লেখ করা অনুযায়ী `Display` trait implement করে এমন
+যেকোনো type বসানো যায়। এই বাড়তি parameter-টি `{}` দিয়ে print করা হবে, তাই `Display` trait bound দরকার। lifetime যেহেতু এক
+ধরনের generic, তাই lifetime parameter `'a` আর generic type parameter `T`-এর ঘোষণা function-এর নামের পরে angle bracket-এর
+ভেতরে একই তালিকায় যায়।
 
 {{#quiz ../quizzes/ch10-03-lifetimes-sec2.toml}}
 
-### Summary
+### সারসংক্ষেপ {#summary}
 
-We covered a lot in this chapter! Now that you know about generic type
-parameters, traits and trait bounds, and generic lifetime parameters, you’re
-ready to write code without repetition that works in many different situations.
-Generic type parameters let you apply the code to different types. Traits and
-trait bounds ensure that even though the types are generic, they’ll have the
-behavior the code needs. You learned how to use lifetime annotations to ensure
-that this flexible code won’t have any dangling references. And all of this
-analysis happens at compile time, which doesn’t affect runtime performance!
+এই অধ্যায়ে আমরা অনেক কিছু শিখলাম! generic type parameter, trait ও trait bound, আর generic lifetime parameter সম্পর্কে
+জানার পর আপনি এমন কোড লিখতে প্রস্তুত, যাতে পুনরাবৃত্তি নেই এবং যা অনেক ভিন্ন পরিস্থিতিতে কাজ করে। generic type parameter
+দিয়ে কোডকে ভিন্ন ভিন্ন type-এ প্রয়োগ করা যায়। trait ও trait bound নিশ্চিত করে যে type-গুলো generic হলেও কোডের প্রয়োজনীয়
+আচরণ তাদের থাকবে। আপনি শিখেছেন কীভাবে lifetime annotation ব্যবহার করে নিশ্চিত করতে হয় যে এই নমনীয় কোডে কোনো dangling
+reference থাকবে না। আর এই সব বিশ্লেষণ হয় compile time-এ, যা runtime-এর performance-এ কোনো প্রভাব ফেলে না!
 
-Believe it or not, there is much more to learn on the topics we discussed in
-this chapter: Chapter 18 discusses trait objects, which are another way to use
-traits. There are also more complex scenarios involving lifetime annotations
-that you will only need in very advanced scenarios; for those, you should read
-the [Rust Reference][reference]. But next, you’ll learn how to write tests in
-Rust so that you can make sure your code is working the way it should.
+বিশ্বাস করুন বা না করুন, এই অধ্যায়ে আলোচিত বিষয়গুলোতে শেখার আরও অনেক কিছু আছে: অধ্যায় 18-এ trait object (trait-এর মাধ্যমে
+বিভিন্ন type ব্যবহার করার মান) নিয়ে আলোচনা করা হয়েছে, যা trait ব্যবহারের আরেকটি উপায়। lifetime annotation নিয়ে আরও জটিল
+কিছু পরিস্থিতিও আছে, যা শুধু খুব উন্নত পর্যায়ের ক্ষেত্রে দরকার হবে; সেগুলোর জন্য [Rust Reference][reference] পড়া উচিত। তবে
+এরপর আপনি শিখবেন কীভাবে Rust-এ test লিখতে হয়, যাতে নিশ্চিত হতে পারেন যে আপনার কোড ঠিকঠাক কাজ করছে।
 
 [references-and-borrowing]: ch04-02-references-and-borrowing.html#references-and-borrowing
 [lifetime-permissions]: ch04-02-references-and-borrowing.html#permissions-are-returned-at-the-end-of-a-references-lifetime

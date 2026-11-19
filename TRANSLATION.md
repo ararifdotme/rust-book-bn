@@ -457,6 +457,26 @@ tested with this repo's build.
 | parser | parser | লেখা বিশ্লেষণ করে গঠন বের করে এমন প্রোগ্রাম | 9 |
 | rate limit | rate limit | নির্দিষ্ট সময়ে অনুরোধের সর্বোচ্চ সীমা | 9 |
 | system call | system call | অপারেটিং সিস্টেমের কাছে সরাসরি অনুরোধ | 9 |
+| concrete type | concrete type | নির্দিষ্ট type (generic নয়) | 10 |
+| monomorphization | monomorphization | generic কোডকে নির্দিষ্ট type-এর কোডে রূপান্তর | 10 |
+| trait bound | trait bound | generic type-এর ওপর trait-এর শর্ত | 10 |
+| default implementation | default implementation | trait-এ আগে থেকে দেওয়া method-এর body | 10 |
+| override | override করা | নিজের সংস্করণ দিয়ে প্রতিস্থাপন করা | 10 |
+| coherence | coherence | সামঞ্জস্য (একই type-এ একই trait-এর একাধিক implementation না থাকা) | 10 |
+| orphan rule | orphan rule | অনাথ নিয়ম: বাইরের type-এ বাইরের trait implement করা যায় না | 10 |
+| blanket implementation | blanket implementation | trait bound পূরণ করা সব type-এর জন্য ঢালাও implementation | 10 |
+| `impl Trait` | `impl Trait` | "এই trait implement করে এমন কোনো type" বোঝানোর syntax | 10 |
+| `where` clause | `where` clause | signature-এর পরে trait bound লেখার জায়গা | 10 |
+| syntax sugar | syntax sugar | লেখা সহজ করার সংক্ষিপ্ত রূপ | 10 |
+| dangling reference | dangling reference | অবৈধ ডেটার দিকে নির্দেশ করা reference | 10 |
+| lifetime annotation | lifetime annotation | reference-এ lifetime স্পষ্ট করে লেখা (`'a`) | 10 |
+| lifetime elision rules | lifetime elision rules | lifetime বাদ দিয়ে লেখার নিয়ম | 10 |
+| input / output lifetime | input / output lifetime | parameter / return মানের lifetime | 10 |
+| `'static` lifetime | `'static` lifetime | পুরো প্রোগ্রাম জুড়ে বেঁচে থাকতে পারে এমন lifetime | 10 |
+| UpperCamelCase | UpperCamelCase | প্রতিটি শব্দের প্রথম অক্ষর বড় হাতের, মাঝে ফাঁক নেই | 10 |
+| inheritance | inheritance | উত্তরাধিকার | 10 |
+| dynamically typed | dynamically typed | চলার সময় type যাচাই হয় এমন | 10 |
+| deallocate | deallocate করা | মেমোরি মুক্ত করা | 10 |
 
 ### Everyday computing words
 
@@ -531,6 +551,8 @@ Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
 | prototype | prototype (Latin; "প্রোটোটাইপ" also fine) | 9 |
 | contract (of a function) | চুক্তি (contract) | 9 |
 | question mark operator | প্রশ্নবোধক চিহ্নের operator | 9 |
+| abstraction | বিমূর্ত রূপ (abstraction) | 10 |
+| local (to a crate) | নিজস্ব (local) | 10 |
 
 ## Progress
 
@@ -552,7 +574,7 @@ use.
 - [x] Chapter 7: Packages, Crates, and Modules (ch07-*)
 - [x] Chapter 8: Common Collections (ch08-*)
 - [x] Chapter 9: Error Handling (ch09-*)
-- [ ] Chapter 10: Generic Types, Traits, and Lifetimes (ch10-*)
+- [x] Chapter 10: Generic Types, Traits, and Lifetimes (ch10-*)
 - [ ] Chapter 11: Writing Automated Tests (ch11-*)
 - [ ] Chapter 12: An I/O Project: Building a Command Line Program (ch12-*)
 - [ ] Chapter 13: Functional Language Features: Iterators and Closures (ch13-*)

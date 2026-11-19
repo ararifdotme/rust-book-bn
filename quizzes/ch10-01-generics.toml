@@ -2,7 +2,7 @@
 id = "0aad53ff-89d7-4d14-8e3d-c17809220252"
 type = "ShortAnswer"
 prompt.prompt = """
-Imagine using a third-party function whose implementation you don't know, but whose type signature is this:
+ধরুন আপনি third-party (অন্যের লেখা) একটি function ব্যবহার করছেন, যার implementation আপনি জানেন না, কিন্তু যার type signature এই:
 
 ```
 fn mystery<T>(x: T) -> T {
@@ -10,17 +10,17 @@ fn mystery<T>(x: T) -> T {
 }
 ```
 
-Then you call `mystery` like this:
+তারপর আপনি `mystery` এভাবে call করলেন:
 
 ```
 let y = mystery(3);
 ```
 
-Assuming `mystery` uses no unsafe code, then the value of `y` must be :
+ধরে নিন `mystery` কোনো unsafe কোড ব্যবহার করে না, তাহলে `y`-এর মান অবশ্যই হবে :
 """
 answer.answer = "3"
 context = """
-The only possible function (without unsafe code) that has the signature `T -> T` is the identity function:
+(unsafe কোড ছাড়া) `T -> T` signature-যুক্ত একমাত্র সম্ভাব্য function হলো identity function (input-কেই হুবহু ফেরত দেয় এমন function):
 
 ```
 fn mystery<T>(x: T) -> T {
@@ -28,11 +28,11 @@ fn mystery<T>(x: T) -> T {
 }
 ```
 
-The function could of course panic or print, but the return value can only be the input. `mystery` does not know
-what type `T` is, so there is no way for `mystery` to generate or mutate a value of `T`.
-See [Theorems for free!](https://dl.acm.org/doi/pdf/10.1145/99370.99404) for more examples of this idea.
+function-টি অবশ্যই panic করতে বা কিছু print করতে পারে, কিন্তু return মান শুধু input-টিই হতে পারে। `mystery` জানে না
+`T` কোন type, তাই `mystery`-এর পক্ষে `T`-এর কোনো মান তৈরি বা পরিবর্তন করার কোনো উপায় নেই।
+এই ধারণার আরও উদাহরণের জন্য [Theorems for free!](https://dl.acm.org/doi/pdf/10.1145/99370.99404) দেখুন।
 
-**3 really is the correct answer! If you disagree with the answer, please don't submit a bug report!**
+**3-ই আসলে সঠিক উত্তর! উত্তরের সঙ্গে একমত না হলে দয়া করে bug report জমা দেবেন না!**
 """
 
 [[questions]]
@@ -52,8 +52,8 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 3
 context = """
-If a type is generic (like `T`), we cannot assume anything about it, including the ability to turn it into a string. Therefore `println!("{x}")` is invalid
-because `x: &T`.
+একটি type generic হলে (যেমন `T`), তার সম্পর্কে আমরা কিছুই ধরে নিতে পারি না, string-এ রূপান্তর করার ক্ষমতাও নয়। তাই `println!("{x}")` অবৈধ,
+কারণ `x: &T`।
 """
 
 
@@ -79,5 +79,5 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 8
 context = """
-These definitions of `f` conflict, and there is no way for Rust to determine which `f` should be used when `p.f()` is called. Therefore this is a compiler error.
+`f`-এর এই সংজ্ঞাগুলো পরস্পরবিরোধী, আর `p.f()` call করলে কোন `f` ব্যবহার করা উচিত, Rust-এর পক্ষে তা নির্ধারণ করার কোনো উপায় নেই। তাই এটি একটি compiler error।
 """

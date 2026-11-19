@@ -2,7 +2,7 @@
 id = "9ff33b87-38e2-471b-8ca4-9c31a6431376"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 1:**
+**প্রোগ্রাম 1:**
 
 ```ide
 /// Returns the n-th largest element in a slice
@@ -13,7 +13,7 @@ fn find_nth<T: Ord + Clone>(elems: &[T], n: usize) -> T {
 }
 ```
 
-If you tried to compile this program, which of the following best describes the compiler error you would get?
+এই প্রোগ্রাম compile করার চেষ্টা করলে আপনি যে compiler error পেতেন, নিচের কোনটি তা সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
 answer.answer = "cannot borrow `elems` as mutable for `sort`"
 prompt.distractors = [
@@ -22,8 +22,8 @@ prompt.distractors = [
   "the lifetime of `T` must outlive `&[T]`",
 ]
 context = """
-The method `slice::sort` expects a mutable reference to a slice, but
-instead gets an immutable reference.
+`slice::sort` method একটি slice-এর mutable reference আশা করে, কিন্তু
+তার বদলে একটি immutable reference পায়।
 """
 
 
@@ -31,7 +31,7 @@ instead gets an immutable reference.
 id = "3ee8d846-d282-4de1-8e83-5ca0bc44fc13"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 1:**
+**প্রোগ্রাম 1:**
 
 ```ide
 /// Returns the n-th largest element in a slice
@@ -42,7 +42,7 @@ fn find_nth<T: Ord + Clone>(elems: &[T], n: usize) -> T {
 }
 ```
 
-Normally if you try to compile this function, the compiler returns the following error:
+সাধারণত এই function compile করার চেষ্টা করলে compiler নিচের error দেয়:
 
 ```text
 error[E0596]: cannot borrow `*elems` as mutable, as it is behind a `&` reference
@@ -52,11 +52,11 @@ error[E0596]: cannot borrow `*elems` as mutable, as it is behind a `&` reference
   |     ^^^^^^^^^^^^ `elems` is a `&` reference, so the data it refers to cannot be borrowed as mutable
 ```
 
-Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
-(1) pass the compiler, and (2) possibly cause undefined behavior if executed?
-Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
+ধরে নিন, compiler এই function বাতিল **করেনি**। নিচের প্রোগ্রামগুলোর মধ্যে কোনগুলো (যদি থাকে)
+(1) compiler পেরিয়ে যাবে, এবং (2) চালালে undefined behavior ঘটাতে পারে?
+দুটি শর্তই পূরণ করে এমন প্রতিটি প্রোগ্রাম বেছে নিন, অথবা কোনোটিই পূরণ না করলে "এগুলোর কোনোটিই নয়" বেছে নিন।
 """
-answer.answer = ["None of these programs"]
+answer.answer = ["এগুলোর কোনোটিই নয়"]
 prompt.distractors = [
 """
 ```
@@ -81,12 +81,12 @@ println!("{}", n);
 """,
 ]
 context = """
-This program is technically memory-safe because `slice::sort` is only capable of moving
-elements around, not freeing them. For instance, `&v[0]` is guaranteed to point to 
-*some* number after calling `find_nth`, even if it is not the *original* number.
+এই প্রোগ্রাম কারিগরি দিক থেকে memory-safe, কারণ `slice::sort` শুধু উপাদানগুলোর জায়গা বদলাতে পারে,
+এগুলোকে মুক্ত করতে পারে না। যেমন, `find_nth` call করার পর `&v[0]` নিশ্চিতভাবে 
+*কোনো একটি* সংখ্যাকে নির্দেশ করবে, যদিও সেটি *মূল* সংখ্যাটি না-ও হতে পারে।
 
-Note that `find_nth(&v, 10)` does not cause undefined behavior because Rust performs checks
-on array accesses, so evaluating `&v[10]` will panic.
+খেয়াল করুন, `find_nth(&v, 10)` undefined behavior ঘটায় না, কারণ Rust array-তে প্রবেশের সময় যাচাই
+করে, তাই `&v[10]` মূল্যায়ন করলে panic হবে।
 """
 
 
@@ -94,7 +94,7 @@ on array accesses, so evaluating `&v[10]` will panic.
 id = "d070eb9e-4527-453a-8c9b-698739a3dd6a"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 1:**
+**প্রোগ্রাম 1:**
 
 ```ide
 /// Returns the n-th largest element in a slice
@@ -105,10 +105,10 @@ fn find_nth<T: Ord + Clone>(elems: &[T], n: usize) -> T {
 }
 ```
 
-Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
-1. The fixed function passes the Rust compiler,
-2. The fixed function preserves the intention of the original code, and
-3. The fixed function does not introduce unnecessary inefficiencies
+নিচের সমাধানগুলোর (হলুদ রঙে হাইলাইট করা) মধ্যে কোনটি এই তিনটি শর্ত সবচেয়ে ভালোভাবে পূরণ করে:
+1. ঠিক করা function-টি Rust compiler পেরিয়ে যায়,
+2. ঠিক করা function-টি মূল কোডের উদ্দেশ্য বজায় রাখে, এবং
+3. ঠিক করা function-টি অপ্রয়োজনীয় অদক্ষতা যোগ করে না
 """
 answer.answer = """
 ```ide
@@ -151,20 +151,20 @@ fn find_nth<`[T: Ord]`>(`[mut elems: Vec<T>]`, n: usize) -> T {
 """,
 ]
 context = """
-A function like `find_nth` is clearly intended to be a read-only function, i.e. to
-extract some property of the input sequence. Any solution which mutates or drops the input therefore does not preserve the original function's intention, even if
-it is more efficient than creating an auxiliary vector. 
+`find_nth`-এর মতো একটি function স্পষ্টতই শুধু-পড়ার (read-only) function হিসেবে তৈরি, অর্থাৎ
+input sequence-এর কোনো বৈশিষ্ট্য বের করার জন্য। তাই যে সমাধান input পরিবর্তন বা drop করে, তা মূল function-এর উদ্দেশ্য বজায় রাখে না, যদিও
+সেটি একটি সহায়ক vector তৈরির চেয়ে বেশি দক্ষ হতে পারে। 
 
-Creating a `Vec<&T>` is preferable to creating a `Vec<T>`, since if `T` is large, then
-`elems.to_vec()` could be expensive. However, if we knew that `T: Copy`, then `to_vec`
-would be preferable to reduce the number of pointer dereferences within `elems.sort()`.
+`Vec<T>` তৈরির চেয়ে `Vec<&T>` তৈরি করা ভালো, কারণ `T` বড় হলে
+`elems.to_vec()` ব্যয়বহুল হতে পারে। তবে যদি জানতাম যে `T: Copy`, তাহলে `elems.sort()`-এর ভেতরে pointer dereference-এর
+সংখ্যা কমাতে `to_vec`-ই ভালো হতো।
 """
 
 [[questions]]
 id = "95979d75-5823-4059-a1cf-7e0eba69b41a"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 2:**
+**প্রোগ্রাম 2:**
 
 ```ide
 struct TestResult {
@@ -191,7 +191,7 @@ impl TestResult {
 }
 ```
 
-If you tried to compile this program, which of the following best describes the compiler error you would get?
+এই প্রোগ্রাম compile করার চেষ্টা করলে আপনি যে compiler error পেতেন, নিচের কোনটি তা সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
 answer.answer = "in `apply_curve`, cannot borrow `self.scores` as mutable for `iter_mut`"
 prompt.distractors = [
@@ -200,10 +200,10 @@ prompt.distractors = [
   "in `apply_curve`, `*score` cannot be mutated"
 ]
 context = """
-Due to lifetime elision, the function `get_curve` has the type signature `get_curve<'a>(&'a self) -> &'a Option<usize>`. 
-This means that a call to `self.get_curve()` extends the entire borrow on `self`, not just on `self.curve`.
-Therefore `self` is immutably borrowed inside the scope of `let Some(curve) = ...`, and `self.scores.iter_mut()`
-cannot be called.
+lifetime elision-এর কারণে `get_curve` function-এর type signature হলো `get_curve<'a>(&'a self) -> &'a Option<usize>`। 
+এর মানে `self.get_curve()` call করলে borrow শুধু `self.curve`-এর ওপর নয়, পুরো `self`-এর ওপর বিস্তৃত হয়।
+তাই `let Some(curve) = ...`-এর scope-এর ভেতরে `self` immutable-ভাবে borrow করা থাকে, আর `self.scores.iter_mut()`
+call করা যায় না।
 """
 
 
@@ -211,7 +211,7 @@ cannot be called.
 id = "dcb42a15-d9b7-437d-95ec-f000b64ce277"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 2:**
+**প্রোগ্রাম 2:**
 
 ```ide
 struct TestResult {
@@ -238,7 +238,7 @@ impl TestResult {
 }
 ```
 
-Normally if you try to compile this function, the compiler returns the following error:
+সাধারণত এই function compile করার চেষ্টা করলে compiler নিচের error দেয়:
 
 ```text
 error[E0502]: cannot borrow `self.scores` as mutable because it is also borrowed as immutable
@@ -252,11 +252,11 @@ error[E0502]: cannot borrow `self.scores` as mutable because it is also borrowed
    |                           ------ immutable borrow later used here
 ```
 
-Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
-(1) pass the compiler, and (2) possibly cause undefined behavior if executed?
-Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
+ধরে নিন, compiler এই function বাতিল **করেনি**। নিচের প্রোগ্রামগুলোর মধ্যে কোনগুলো (যদি থাকে)
+(1) compiler পেরিয়ে যাবে, এবং (2) চালালে undefined behavior ঘটাতে পারে?
+দুটি শর্তই পূরণ করে এমন প্রতিটি প্রোগ্রাম বেছে নিন, অথবা কোনোটিই পূরণ না করলে "এগুলোর কোনোটিই নয়" বেছে নিন।
 """
-answer.answer = ["None of these programs"]
+answer.answer = ["এগুলোর কোনোটিই নয়"]
 prompt.distractors = [
 """
 ```
@@ -290,16 +290,16 @@ println!("{:?}", result.scores);
 """,
 ]
 context = """
-This program is actually safe as written. It is a limitation of the borrow checker to not understand that `get_curve`
-only borrows `curve`, and doesn't affect `scores`. However, in theory if `get_curve` were changed to return a reference
-to something with `self.scores`, then memory safety could potentially be violated.
+যেভাবে লেখা হয়েছে, তাতে এই প্রোগ্রাম আসলে নিরাপদ। `get_curve` যে শুধু `curve` borrow করে এবং `scores`-কে প্রভাবিত করে না,
+তা বুঝতে না পারা borrow checker-এর একটি সীমাবদ্ধতা। তবে তাত্ত্বিকভাবে, যদি `get_curve` বদলে `self.scores`-এর কোনো কিছুর
+reference return করানো হতো, তাহলে memory safety ভঙ্গ হতে পারত।
 """
 
 [[questions]]
 id = "aa93c497-9864-4799-b69b-7de42c158f2a"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 2:**
+**প্রোগ্রাম 2:**
 
 ```ide
 struct TestResult {
@@ -326,10 +326,10 @@ impl TestResult {
 }
 ```
 
-Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
-1. The fixed function passes the Rust compiler,
-2. The fixed function preserves the intention of the original code, and
-3. The fixed function does not introduce unnecessary inefficiencies
+নিচের সমাধানগুলোর (হলুদ রঙে হাইলাইট করা) মধ্যে কোনটি এই তিনটি শর্ত সবচেয়ে ভালোভাবে পূরণ করে:
+1. ঠিক করা function-টি Rust compiler পেরিয়ে যায়,
+2. ঠিক করা function-টি মূল কোডের উদ্দেশ্য বজায় রাখে, এবং
+3. ঠিক করা function-টি অপ্রয়োজনীয় অদক্ষতা যোগ করে না
 """
 answer.answer = """
 ```ide
@@ -378,9 +378,9 @@ pub fn apply_curve(&mut self) {
 """,
 ]
 context = """
-By inlining the definition of `get_curve` into `apply_curve`, the borrow checker understands that `self.curve` is not `self.scores`,
-so it allows the function to compile. This is a common workaround for this type of borrow checker limitation.
+`get_curve`-এর সংজ্ঞা সরাসরি `apply_curve`-এর ভেতরে বসিয়ে দিলে borrow checker বুঝতে পারে যে `self.curve` আর `self.scores` এক নয়,
+তাই function-টিকে compile হতে দেয়। borrow checker-এর এই ধরনের সীমাবদ্ধতা এড়ানোর এটি একটি প্রচলিত উপায়।
 
-Another option is to leverage the fact that `self.curve` is cheap to copy and use [`Option::copied`](https://doc.rust-lang.org/std/option/enum.Option.html#method.copied), 
-which would release the borrow on `self` as soon as `.copied()` is called.
+আরেকটি উপায় হলো এই সুবিধা কাজে লাগানো যে `self.curve` copy করা সস্তা, এবং [`Option::copied`](https://doc.rust-lang.org/std/option/enum.Option.html#method.copied) ব্যবহার করা, 
+যা `.copied()` call করা মাত্রই `self`-এর ওপর borrow ছেড়ে দেবে।
 """

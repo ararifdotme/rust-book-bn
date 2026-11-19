@@ -29,21 +29,21 @@ fn main() {
 answer.doesCompile = true
 answer.stdout = "bark\n(silence)"
 context = """
-The implementation of `MakeNoise` provides a specific implementation for `Dog` and uses the default implementation for `Cat`.
-Therefore calling `make_noise` on each prints `bark` and `(silence)`, respectively. 
+`MakeNoise`-এর implementation `Dog`-এর জন্য একটি নির্দিষ্ট implementation দেয় এবং `Cat`-এর জন্য default implementation ব্যবহার করে।
+তাই প্রতিটির ওপর `make_noise` call করলে যথাক্রমে `bark` ও `(silence)` print হয়। 
 """
 
 [[questions]]
 id = "783f2485-e5b9-483b-8368-064366c77285"
 type = "MultipleChoice"
-prompt.prompt = "The following are statements about what kinds of trait implementations are permitted by Rust. Select each statement which is true."
-prompt.distractors = ["You can implement an external trait for an external type"]
+prompt.prompt = "নিচের বাক্যগুলো Rust কোন ধরনের trait implementation অনুমোদন করে তা নিয়ে। যে বাক্যগুলো সত্য, সেগুলোর প্রতিটি বেছে নিন।"
+prompt.distractors = ["একটি বাইরের type-এর জন্য একটি বাইরের trait implement করা যায়"]
 answer.answer = [
-  "You can implement an external trait for a local type",
-  "You can implement a local trait for an external type",
-  "You can implement a local trait for a local type"
+  "একটি নিজস্ব (local) type-এর জন্য একটি বাইরের trait implement করা যায়",
+  "একটি বাইরের type-এর জন্য একটি নিজস্ব (local) trait implement করা যায়",
+  "একটি নিজস্ব (local) type-এর জন্য একটি নিজস্ব (local) trait implement করা যায়"
 ]
 context = """
-The "orphan rule" requires that you cannot implement an external trait for an external type, 
-to ensure code doesn't break if two crates provide conflicting implementations.
+"orphan rule" (অনাথ নিয়ম) অনুযায়ী একটি বাইরের type-এর জন্য একটি বাইরের trait implement করা যায় না, 
+যাতে দুটি crate পরস্পরবিরোধী implementation দিলেও কোড ভেঙে না যায়।
 """

@@ -1,15 +1,15 @@
 [[questions]]
 id = "8b7f93c3-efb0-44e2-a0ca-b45e35620b30"
 type = "MultipleChoice"
-prompt.prompt = "Which kind of programming error is a lifetime supposed to prevent?"
-answer.answer = "Using a reference to an object after its memory has been freed"
+prompt.prompt = "lifetime কোন ধরনের প্রোগ্রামিং ভুল ঠেকানোর জন্য?"
+answer.answer = "কোনো object-এর মেমোরি মুক্ত হয়ে যাওয়ার পরও তার reference ব্যবহার করা"
 prompt.distractors = [
-  "Using the result of a fallible computation before checking for the possibility of error",
-  "Indexing past the bounds of an array (buffer overflow)",
-  "Not allocating enough memory for an object"
+  "ব্যর্থ হতে পারে এমন কোনো হিসাবের ফল error-এর সম্ভাবনা যাচাই করার আগেই ব্যবহার করা",
+  "array-র সীমার বাইরে index করা (buffer overflow)",
+  "কোনো object-এর জন্য যথেষ্ট মেমোরি allocate না করা"
 ]
 context = """
-Lifetimes help identify how long an object is "live", and whether references to that object outlive the object itself. 
+lifetime বুঝতে সাহায্য করে একটি object কতক্ষণ "জীবিত" থাকে, আর সেই object-এর reference-গুলো object-টির চেয়ে বেশি সময় বাঁচে কি না। 
 """
 
 [[questions]]
@@ -31,6 +31,6 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 5
 context = """
-If the type signature says that the function must return a reference with lifetime `'a`, then it would be invalid to return
-a reference with a different lifetime '`b`, i.e. `y` here.
+type signature যদি বলে function-টিকে `'a` lifetime-এর একটি reference return করতে হবে, তাহলে ভিন্ন lifetime '`b`-এর একটি
+reference, অর্থাৎ এখানে `y`, return করা অবৈধ।
 """

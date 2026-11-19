@@ -15,9 +15,9 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 7
 context = """
-Because `displayable` returns `impl Display`, then we only know that `s2` is *some* type that implements `Display`, 
-not that it is a `String` which has a `push_str` method. Therefore we cannot call `s2.push_str(..)`. If the return
-type of `displayable` was `-> T`, then this program would compile.
+`displayable` যেহেতু `impl Display` return করে, তাই আমরা শুধু জানি যে `s2` এমন *কোনো* type যা `Display` implement করে, 
+এটা জানি না যে এটি `push_str` method-যুক্ত একটি `String`। তাই `s2.push_str(..)` call করা যায় না। যদি `displayable`-এর return
+type `-> T` হতো, তাহলে এই প্রোগ্রাম compile হতো।
 """
 
 
@@ -25,7 +25,7 @@ type of `displayable` was `-> T`, then this program would compile.
 id = "8b35f91c-ced2-4b8f-bf1c-90550f2b744b"
 type = "MultipleChoice"
 prompt.prompt = """
-What is the smallest set of trait bounds on `T` needed to make this function type-check?
+এই function-কে type-check পার করাতে `T`-এর ওপর trait bound-এর সবচেয়ে ছোট কোন সেট লাগবে?
 ```
 fn f<T: /* ??? */>(t: &T) {
   let t2 = t.clone();
@@ -34,7 +34,7 @@ fn f<T: /* ??? */>(t: &T) {
 ```
 """
 answer.answer = "`Clone + Display`"
-prompt.distractors = [ "(no bounds)", "`Clone`", "`Clone + Display + Debug`" ]
+prompt.distractors = [ "(কোনো bound নেই)", "`Clone`", "`Clone + Display + Debug`" ]
 context = """
-Because `clone` is called and the `{}` display brackets are used in a formatter, then `T` must be `Clone` and `Display`.
+যেহেতু `clone` call করা হয়েছে এবং formatter-এ `{}` display bracket ব্যবহার করা হয়েছে, তাই `T`-কে অবশ্যই `Clone` ও `Display` হতে হবে।
 """
