@@ -352,3 +352,24 @@ dynamic dispatch, dyn compatibility, inline, delegate. Everyday: paradigm
 | is blurring the lines between the responsibility of `State` and … `Post` | `State`-এর দায়িত্ব আর `Post`-এর দায়িত্বের মধ্যের সীমারেখা ঝাপসা করে দিচ্ছে |
 | a "closed world" system | একটি "বদ্ধ জগৎ" system |
 | bounded parametric polymorphism | (left in English, italic) |
+
+## Chapter 19: Patterns and Matching
+
+**Auto-chosen terms:** refutable / irrefutable pattern, match guard, `@`
+binding, nested, precedence (অগ্রাধিকার). (pattern, literal, wildcard,
+destructure, exhaustive, binding, catch-all, hardcoded and range were already
+in the glossary.)
+
+**Decisions:**
+- The hand-formatted `<pre><code>` syntax blocks (`match VALUE { PATTERN => …`)
+  stay as they are; `PATTERN` in the following prose stays in capitals.
+- Quiz files are `quizzes/ch18-*` upstream; names unchanged.
+- Listing 19-6's `// code goes here` is translated (not in any output).
+
+**Unsure sentences:**
+
+| English | Bengali |
+| --- | --- |
+| Patterns pop up in a number of places in Rust | Rust-এ অনেক জায়গায় pattern দেখা যায় |
+| We’ve given the code an out! | আমরা কোডকে বেরোনোর একটি পথ দিয়েছি! |
+| the penultimate chapter of the book | বইয়ের শেষের আগের অধ্যায় |

@@ -1,29 +1,19 @@
-# Patterns and Matching
+# pattern ও matching {#patterns-and-matching}
 
-Patterns are a special syntax in Rust for matching against the structure of
-types, both complex and simple. Using patterns in conjunction with `match`
-expressions and other constructs gives you more control over a program’s
-control flow. A pattern consists of some combination of the following:
+pattern হলো Rust-এর একটি বিশেষ syntax, যা জটিল ও সরল দুই ধরনের type-এর গঠনের সঙ্গে মেলানোর জন্য। `match` expression আর অন্যান্য গঠনের সঙ্গে pattern ব্যবহার করলে প্রোগ্রামের control
+flow-এর ওপর আরও বেশি নিয়ন্ত্রণ পাওয়া যায়। একটি pattern নিচের কিছু জিনিসের সমন্বয়ে গঠিত:
 
-- Literals
-- Destructured arrays, enums, structs, or tuples
-- Variables
-- Wildcards
-- Placeholders
+- literal (সরাসরি লেখা মান)
+- destructure করা (ভেঙে নেওয়া) array, enum, struct বা tuple
+- variable
+- wildcard (যেকোনো কিছুর সঙ্গে মেলে এমন চিহ্ন)
+- placeholder
 
-Some example patterns include `x`, `(a, 3)`, and `Some(Color::Red)`. In the
-contexts in which patterns are valid, these components describe the shape of
-data. Our program then matches values against the patterns to determine whether
-it has the correct shape of data to continue running a particular piece of code.
+pattern-এর কয়েকটি উদাহরণ হলো `x`, `(a, 3)` আর `Some(Color::Red)`। যে প্রেক্ষাপটে pattern বৈধ, সেখানে এই উপাদানগুলো ডেটার আকৃতি বর্ণনা করে। তারপর আমাদের প্রোগ্রাম মানগুলোকে pattern-এর সঙ্গে
+মিলিয়ে দেখে কোনো নির্দিষ্ট কোড-অংশ চালিয়ে যাওয়ার জন্য ডেটার আকৃতি সঠিক কি না।
 
-To use a pattern, we compare it to some value. If the pattern matches the
-value, we use the value parts in our code. Recall the `match` expressions in
-Chapter 6 that used patterns, such as the coin-sorting machine example. If the
-value fits the shape of the pattern, we can use the named pieces. If it
-doesn’t, the code associated with the pattern won’t run.
+একটি pattern ব্যবহার করতে আমরা একে কোনো মানের সঙ্গে তুলনা করি। pattern মানের সঙ্গে মিললে আমরা কোডে মানের অংশগুলো ব্যবহার করি। অধ্যায় 6-এর pattern ব্যবহার করা `match` expression-গুলো মনে করুন,
+যেমন কয়েন বাছাইয়ের যন্ত্রের উদাহরণ। মানটি pattern-এর আকৃতির সঙ্গে খাপ খেলে আমরা নাম দেওয়া অংশগুলো ব্যবহার করতে পারি। না খেলে pattern-এর সঙ্গে যুক্ত কোড চলবে না।
 
-This chapter is a reference on all things related to patterns. We’ll cover the
-valid places to use patterns, the difference between refutable and irrefutable
-patterns, and the different kinds of pattern syntax that you might see. By the
-end of the chapter, you’ll know how to use patterns to express many concepts in
-a clear way.
+এই অধ্যায়টি pattern সংক্রান্ত সবকিছুর একটি রেফারেন্স। আমরা দেখব কোথায় কোথায় pattern ব্যবহার করা বৈধ, refutable আর irrefutable pattern-এর পার্থক্য, আর আপনি যে বিভিন্ন ধরনের pattern syntax
+দেখতে পারেন। অধ্যায়ের শেষে আপনি জানবেন কীভাবে pattern ব্যবহার করে অনেক ধারণা পরিষ্কারভাবে প্রকাশ করা যায়।

@@ -14,22 +14,22 @@ fn main() {
 answer.doesCompile = true
 answer.stdout = "B"
 context = """
-The first branch matches `y = 1`, which means `y != 0`, so the pattern fails.
-The second branch requires that `x == 0`, which is true, so the pattern succeeds.
+প্রথম শাখা `y = 1`-এর সঙ্গে মেলায়, অর্থাৎ `y != 0`, তাই pattern ব্যর্থ হয়।
+দ্বিতীয় শাখার শর্ত `x == 0`, যা সত্য, তাই pattern সফল হয়।
 """
 
 [[questions]]
 id = "ac0045c7-981a-46cb-baeb-adaa533804ad"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider the following program:
+নিচের প্রোগ্রামটি বিবেচনা করুন:
 
 ```
 let a = [(0, 1)];
 let ?? = a;
 ```
 
-Which of the following are valid patterns that could replace the `??` placeholder?
+`??` placeholder-এর জায়গায় বসানো যায় এমন বৈধ pattern নিচের কোনগুলো?
 """
 answer.answer = [
     "`_`",
@@ -40,7 +40,7 @@ prompt.distractors = [
     "`(_, n)`"
 ]
 context = """ 
-The pattern `(_, n)` is not valid because `a` is an array of tuples, not a tuple itself.
+`(_, n)` pattern বৈধ নয়, কারণ `a` হলো tuple-এর একটি array, নিজে কোনো tuple নয়।
 """
 
 [[questions]]
@@ -59,15 +59,15 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 4
 context = """
-It is not valid to use `..` on both sides of a value, since it is ambiguous which
-array element is being referred to.
+একটি মানের দুই পাশেই `..` ব্যবহার বৈধ নয়, কারণ কোন
+array উপাদানের কথা বলা হচ্ছে তা অস্পষ্ট।
 """
 
 [[questions]]
 id = "a7d38ffa-66b2-472a-90a5-b026b28ad3df"
 type = "MultipleChoice"
 prompt.prompt = """
-Say we have a `Point` type with the following definition:
+ধরুন আমাদের এই সংজ্ঞার একটি `Point` type আছে:
 
 ```
 struct Point {
@@ -76,13 +76,13 @@ struct Point {
 }
 ```
 
-Given the following pattern:
+নিচের pattern-টি দেওয়া থাকলে:
 
 ```
 Point { x: x @ 0 ..= 5, y } if x + y != 0
 ```
 
-Which of the following values will match this pattern?
+নিচের কোন মানগুলো এই pattern-এর সঙ্গে মিলবে?
 """
 answer.answer = [
     "`Point { x: 5, y: -4 }`",
@@ -93,6 +93,6 @@ prompt.distractors = [
     "`Point { x: 3, y: -3 }`"
 ]
 context = """
-This pattern specifies that `x` must be between 0 and 5 (inclusive), and that `x + y != 0`.
-Therefore `(5, -4)` and `(0, 1)` are valid, while `(-1, 2)` and `(3, -3)` are not.
+এই pattern বলে দেয় যে `x`-কে 0 থেকে 5-এর মধ্যে (দুই প্রান্তসহ) হতে হবে, এবং `x + y != 0`।
+তাই `(5, -4)` আর `(0, 1)` বৈধ, কিন্তু `(-1, 2)` আর `(3, -3)` নয়।
 """

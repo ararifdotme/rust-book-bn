@@ -573,6 +573,11 @@ tested with this repo's build.
 | dyn compatibility | dyn compatibility | কোন trait trait object হিসেবে ব্যবহার করা যায় তার নিয়ম | 18 |
 | inline (a function) | inline করা | call-এর জায়গায় function-এর কোড সরাসরি বসানো | 18 |
 | delegate | delegate করা | কাজ অন্য method-এর হাতে তুলে দেওয়া | 18 |
+| refutable / irrefutable pattern | refutable / irrefutable | মেলাতে ব্যর্থ হতে পারে / পারে না এমন pattern | 19 |
+| match guard | match guard | match arm-এর pattern-এর পরে বাড়তি `if` শর্ত | 19 |
+| `@` binding | `@` binding | pattern যাচাইয়ের পাশাপাশি মানটি variable-এ রেখে দেওয়া | 19 |
+| nested | nested | একটির ভেতরে আরেকটি | 19 |
+| precedence | অগ্রাধিকার (precedence) | কোন অংশ আগে প্রযোজ্য হবে | 19 |
 
 ### Everyday computing words
 
@@ -688,7 +693,7 @@ use.
 - [x] Chapter 16: Fearless Concurrency (ch16-*)
 - [x] Chapter 17: Fundamentals of Asynchronous Programming: Async, Await, Futures, and Streams (ch17-*)
 - [x] Chapter 18: Object Oriented Programming Features (ch18-*)
-- [ ] Chapter 19: Patterns and Matching (ch19-*)
+- [x] Chapter 19: Patterns and Matching (ch19-*)
 - [ ] Chapter 20: Advanced Features (ch20-*)
 - [ ] Chapter 21: Final Project: Building a Multithreaded Web Server (ch21-*)
 - [ ] End of Experiment (end-of-experiment)

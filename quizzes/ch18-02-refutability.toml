@@ -2,30 +2,30 @@
 id = "35e59c95-3d83-4277-8d88-a1986f4086d7"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider pattern-matching on an expression of some type `T`.
-Which of these statements best describes the difference between a refutable and an irrefutable pattern?
+কোনো এক type `T`-এর একটি expression-এর ওপর pattern-matching বিবেচনা করুন।
+refutable আর irrefutable pattern-এর পার্থক্য এই বাক্যগুলোর কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
-answer.answer = "Refutable patterns do not match some value of type `T`, while irrefutable patterns match all values of type `T`"
+answer.answer = "refutable pattern `T` type-এর কোনো কোনো মানের সঙ্গে মেলে না, আর irrefutable pattern `T` type-এর সব মানের সঙ্গে মেলে"
 prompt.distractors = [
-    "Refutable patterns match some values of a different type `S`, while irrefutable patterns only match values of type `T`",
-    "Refutable patterns do not match any values of type `T`, while irrefutable patterns match some values of type `T`",
-    "Refutable patterns are patterns where `T` is an enum, while irrefutable patterns are patterns where `T` is not an enum"
+    "refutable pattern ভিন্ন একটি type `S`-এর কিছু মানের সঙ্গে মেলে, আর irrefutable pattern শুধু `T` type-এর মানের সঙ্গে মেলে",
+    "refutable pattern `T` type-এর কোনো মানের সঙ্গেই মেলে না, আর irrefutable pattern `T` type-এর কিছু মানের সঙ্গে মেলে",
+    "refutable pattern হলো যেখানে `T` একটি enum, আর irrefutable pattern হলো যেখানে `T` enum নয়"
 ]
 context = """
-A pattern is refutable if there exists some value of the expected type that isn't matched by the pattern.
+প্রত্যাশিত type-এর এমন কোনো মান থাকলে, যা pattern-টির সঙ্গে মেলে না, pattern-টি refutable।
 """
 
 [[questions]]
 id = "3c29eb2d-cbe9-4a2c-99b8-aa5c6467c8b4"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider the following program:
+নিচের প্রোগ্রামটি বিবেচনা করুন:
 
 ```
 let x: &[(i32, i32)] = &[(0, 1)];
 ```
 
-Which of the following are **refutable** patterns for `x`?
+`x`-এর জন্য নিচের কোনগুলো **refutable** pattern?
 """
 answer.answer = [
     "`&[(x, y)]`",
@@ -36,6 +36,6 @@ prompt.distractors = [
     "`_`"
 ]
 context = """ 
-A slice does not have a fixed length, so any pattern which asserts that
-`x` must have at least one element is refutable.
+slice-এর দৈর্ঘ্য নির্দিষ্ট নয়, তাই যে pattern দাবি করে যে
+`x`-এ অন্তত একটি উপাদান থাকতে হবে, তা refutable।
 """

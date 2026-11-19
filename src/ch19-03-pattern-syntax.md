@@ -1,35 +1,25 @@
-## Pattern Syntax
+## pattern syntax {#pattern-syntax}
 
-In this section, we gather all the syntax that is valid in patterns and discuss
-why and when you might want to use each one.
+এই অংশে pattern-এ বৈধ সব syntax আমরা এক জায়গায় জড়ো করেছি, আর আলোচনা করেছি কেন ও কখন এগুলোর প্রতিটি ব্যবহার করতে চাইতে পারেন।
 
-### Matching Literals
+### literal-এর সঙ্গে মেলানো {#matching-literals}
 
-As you saw in Chapter 6, you can match patterns against literals directly. The
-following code gives some examples:
+অধ্যায় 6-এ যেমন দেখেছেন, pattern-কে সরাসরি literal-এর সঙ্গে মেলানো যায়। নিচের কোডে কয়েকটি উদাহরণ আছে:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-01-literals/src/main.rs:here}}
 ```
 
-This code prints `one` because the value in `x` is `1`. This syntax is useful
-when you want your code to take an action if it gets a particular concrete
-value.
+এই কোড print করে `one`, কারণ `x`-এর মান `1`। কোনো নির্দিষ্ট concrete মান পেলে আপনার কোড দিয়ে কোনো কাজ করাতে চাইলে এই syntax কাজে লাগে।
 
-### Matching Named Variables
+### নাম দেওয়া variable-এর সঙ্গে মেলানো {#matching-named-variables}
 
-Named variables are irrefutable patterns that match any value, and we’ve used
-them many times in this book. However, there is a complication when you use
-named variables in `match`, `if let`, or `while let` expressions. Because each
-of these kinds of expressions starts a new scope, variables declared as part of
-a pattern inside these expressions will shadow those with the same name outside
-the constructs, as is the case with all variables. In Listing 19-11, we declare
-a variable named `x` with the value `Some(5)` and a variable `y` with the value
-`10`. We then create a `match` expression on the value `x`. Look at the
-patterns in the match arms and `println!` at the end, and try to figure out
-what the code will print before running this code or reading further.
+নাম দেওয়া variable হলো এমন irrefutable pattern, যা যেকোনো মানের সঙ্গে মেলে, আর এই বইয়ে আমরা এগুলো বহুবার ব্যবহার করেছি। তবে `match`, `if let` বা `while let` expression-এ নাম দেওয়া variable
+ব্যবহার করলে একটি জটিলতা আছে। এই ধরনের প্রতিটি expression একটি নতুন scope শুরু করে বলে এই expression-গুলোর ভেতরে pattern-এর অংশ হিসেবে ঘোষিত variable গঠনের বাইরের একই নামের variable-কে shadow করবে,
+সব variable-এর ক্ষেত্রে যেমন হয়। Listing 19-11-এ আমরা `Some(5)` মানসহ `x` নামের একটি variable আর `10` মানসহ `y` নামের একটি variable ঘোষণা করি। তারপর `x` মানের ওপর একটি `match` expression তৈরি
+করি। match arm-গুলোর pattern আর শেষের `println!` দেখুন, এবং কোডটি চালানোর বা আরও পড়ার আগে বের করার চেষ্টা করুন কোডটি কী print করবে।
 
-<Listing number="19-11" file-name="src/main.rs" caption="A `match` expression with an arm that introduces a new variable which shadows an existing variable `y`">
+<Listing number="19-11" file-name="src/main.rs" caption="এমন একটি arm-যুক্ত `match` expression, যা একটি নতুন variable আনে যা বিদ্যমান variable `y`-কে shadow করে">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-11/src/main.rs:here}}
@@ -37,96 +27,72 @@ what the code will print before running this code or reading further.
 
 </Listing>
 
-Let’s walk through what happens when the `match` expression runs. The pattern
-in the first match arm doesn’t match the defined value of `x`, so the code
-continues.
+`match` expression চলার সময় কী ঘটে তা একে একে দেখা যাক। প্রথম match arm-এর pattern `x`-এর সংজ্ঞায়িত মানের সঙ্গে মেলে না, তাই কোড এগিয়ে যায়।
 
-The pattern in the second match arm introduces a new variable named `y` that
-will match any value inside a `Some` value. Because we’re in a new scope inside
-the `match` expression, this is a new `y` variable, not the `y` we declared at
-the beginning with the value `10`. This new `y` binding will match any value
-inside a `Some`, which is what we have in `x`. Therefore, this new `y` binds to
-the inner value of the `Some` in `x`. That value is `5`, so the expression for
-that arm executes and prints `Matched, y = 5`.
+দ্বিতীয় match arm-এর pattern `y` নামের একটি নতুন variable আনে, যা একটি `Some` মানের ভেতরের যেকোনো মানের সঙ্গে মিলবে। আমরা `match` expression-এর ভেতরে একটি নতুন scope-এ আছি বলে এটি একটি নতুন
+`y` variable, শুরুতে `10` মানসহ ঘোষণা করা `y` নয়। এই নতুন `y` binding একটি `Some`-এর ভেতরের যেকোনো মানের সঙ্গে মিলবে, আর `x`-এ আমাদের ঠিক তা-ই আছে। তাই এই নতুন `y` `x`-এর `Some`-এর ভেতরের
+মানের সঙ্গে bind হয়। সেই মান `5`, তাই সেই arm-এর expression চলে এবং print করে `Matched, y = 5`।
 
-If `x` had been a `None` value instead of `Some(5)`, the patterns in the first
-two arms wouldn’t have matched, so the value would have matched to the
-underscore. We didn’t introduce the `x` variable in the pattern of the
-underscore arm, so the `x` in the expression is still the outer `x` that hasn’t
-been shadowed. In this hypothetical case, the `match` would print `Default case,
-x = None`.
+`x` যদি `Some(5)`-এর বদলে একটি `None` মান হতো, তাহলে প্রথম দুটি arm-এর pattern মিলত না, তাই মানটি underscore-এর সঙ্গে মিলত। underscore arm-এর pattern-এ আমরা `x` variable আনিনি, তাই expression-এর `x`
+এখনো বাইরের সেই `x`, যা shadow হয়নি। এই কাল্পনিক ক্ষেত্রে `match` print করত `Default case,
+x = None`।
 
-When the `match` expression is done, its scope ends, and so does the scope of
-the inner `y`. The last `println!` produces `at the end: x = Some(5), y = 10`.
+`match` expression শেষ হলে এর scope শেষ হয়, সঙ্গে ভেতরের `y`-এর scope-ও। শেষ `println!` তৈরি করে `at the end: x = Some(5), y = 10`।
 
-To create a `match` expression that compares the values of the outer `x` and
-`y`, rather than introducing a new variable that shadows the existing `y`
-variable, we would need to use a match guard conditional instead. We’ll talk
-about match guards later in the [“Adding Conditionals with Match
-Guards”](#adding-conditionals-with-match-guards)<!-- ignore --> section.
+বিদ্যমান `y` variable-কে shadow করে এমন নতুন variable না এনে বাইরের `x` আর `y`-এর মান তুলনা করে এমন একটি `match` expression তৈরি করতে আমাদের বরং একটি match guard শর্ত ব্যবহার করতে হতো। match guard
+নিয়ে পরে [“match guard দিয়ে শর্ত যোগ
+করা”](#adding-conditionals-with-match-guards)<!-- ignore --> অংশে কথা বলব।
 
 <!-- Old headings. Do not remove or links may break. -->
 <a id="multiple-patterns"></a>
 
-### Matching Multiple Patterns
+### একাধিক pattern-এর সঙ্গে মেলানো {#matching-multiple-patterns}
 
-In `match` expressions, you can match multiple patterns using the `|` syntax,
-which is the pattern _or_ operator. For example, in the following code, we match
-the value of `x` against the match arms, the first of which has an _or_ option,
-meaning if the value of `x` matches either of the values in that arm, that
-arm’s code will run:
+`match` expression-এ `|` syntax ব্যবহার করে একাধিক pattern-এর সঙ্গে মেলানো যায়, যা pattern-এর _or_ (অথবা) operator। যেমন, নিচের কোডে আমরা `x`-এর মান match arm-গুলোর সঙ্গে মেলাই, যার প্রথমটিতে একটি
+_or_ বিকল্প আছে, অর্থাৎ `x`-এর মান সেই arm-এর যেকোনো একটি মানের সঙ্গে মিললে সেই arm-এর কোড চলবে:
 
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-02-multiple-patterns/src/main.rs:here}}
 ```
 
-This code prints `one or two`.
+এই কোড print করে `one or two`।
 
-### Matching Ranges of Values with `..=`
+### `..=` দিয়ে মানের range-এর সঙ্গে মেলানো {#matching-ranges-of-values-with-}
 
-The `..=` syntax allows us to match to an inclusive range of values. In the
-following code, when a pattern matches any of the values within the given
-range, that arm will execute:
+`..=` syntax দিয়ে মানের একটি অন্তর্ভুক্তিমূলক (দুই প্রান্তসহ) range-এর সঙ্গে মেলানো যায়। নিচের কোডে একটি pattern প্রদত্ত range-এর যেকোনো মানের সঙ্গে মিললে সেই arm চলবে:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-03-ranges/src/main.rs:here}}
 ```
 
-If `x` is `1`, `2`, `3`, `4`, or `5`, the first arm will match. This syntax is
-more convenient for multiple match values than using the `|` operator to
-express the same idea; if we were to use `|`, we would have to specify `1 | 2 |
-3 | 4 | 5`. Specifying a range is much shorter, especially if we want to match,
-say, any number between 1 and 1,000!
+`x` যদি `1`, `2`, `3`, `4` বা `5` হয়, তাহলে প্রথম arm মিলবে। একই ধারণা প্রকাশে `|` operator ব্যবহারের চেয়ে একাধিক মানের জন্য এই syntax বেশি সুবিধাজনক; `|` ব্যবহার করলে আমাদের লিখতে হতো `1 | 2 |
+3 | 4 | 5`। একটি range উল্লেখ করা অনেক সংক্ষিপ্ত, বিশেষ করে যদি, ধরুন, 1 থেকে 1,000-এর মধ্যের যেকোনো সংখ্যার সঙ্গে মেলাতে চাই!
 
-The compiler checks that the range isn’t empty at compile time, and because the
-only types for which Rust can tell if a range is empty or not are `char` and
-numeric values, ranges are only allowed with numeric or `char` values.
+compiler compile time-এ যাচাই করে যে range খালি নয়, আর একটি range খালি কি না তা Rust শুধু `char` আর সংখ্যার মানের ক্ষেত্রেই বলতে পারে বলে range শুধু সংখ্যা বা `char` মানের সঙ্গেই অনুমোদিত।
 
-Here is an example using ranges of `char` values:
+এখানে `char` মানের range ব্যবহারের একটি উদাহরণ:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-04-ranges-of-char/src/main.rs:here}}
 ```
 
-Rust can tell that `'c'` is within the first pattern’s range and prints `early
-ASCII letter`.
+Rust বলতে পারে যে `'c'` প্রথম pattern-এর range-এর ভেতরে, এবং print করে `early
+ASCII letter`।
 
-### Destructuring to Break Apart Values
+### মান ভেঙে নিতে destructuring {#destructuring-to-break-apart-values}
 
-We can also use patterns to destructure structs, enums, and tuples to use
-different parts of these values. Let’s walk through each value.
+struct, enum আর tuple-এর বিভিন্ন অংশ ব্যবহার করতে pattern দিয়ে এগুলো destructure করাও যায়। চলুন প্রতিটি একে একে দেখি।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="destructuring-structs"></a>
 
-#### Structs
+#### struct {#structs}
 
-Listing 19-12 shows a `Point` struct with two fields, `x` and `y`, that we can
-break apart using a pattern with a `let` statement.
+Listing 19-12-এ `x` আর `y` দুটি field-যুক্ত একটি `Point` struct দেখানো হয়েছে, যা একটি `let` statement-এর সঙ্গে pattern ব্যবহার করে ভেঙে নেওয়া যায়।
 
-<Listing number="19-12" file-name="src/main.rs" caption="Destructuring a struct’s fields into separate variables">
+<Listing number="19-12" file-name="src/main.rs" caption="একটি struct-এর field-গুলোকে আলাদা variable-এ destructure করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-12/src/main.rs}}
@@ -134,19 +100,12 @@ break apart using a pattern with a `let` statement.
 
 </Listing>
 
-This code creates the variables `a` and `b` that match the values of the `x`
-and `y` fields of the `p` struct. This example shows that the names of the
-variables in the pattern don’t have to match the field names of the struct.
-However, it’s common to match the variable names to the field names to make it
-easier to remember which variables came from which fields. Because of this
-common usage, and because writing `let Point { x: x, y: y } = p;` contains a
-lot of duplication, Rust has a shorthand for patterns that match struct fields:
-You only need to list the name of the struct field, and the variables created
-from the pattern will have the same names. Listing 19-13 behaves in the same
-way as the code in Listing 19-12, but the variables created in the `let`
-pattern are `x` and `y` instead of `a` and `b`.
+এই কোড `a` আর `b` variable তৈরি করে, যা `p` struct-এর `x` আর `y` field-এর মানের সঙ্গে মেলে। এই উদাহরণ দেখায় যে pattern-এর variable-গুলোর নাম struct-এর field-এর নামের সঙ্গে মিলতে হবে এমন
+নয়। তবে কোন variable কোন field থেকে এসেছে তা মনে রাখা সহজ করতে variable-এর নাম field-এর নামের সঙ্গে মেলানোই প্রচলিত। এই প্রচলিত ব্যবহারের কারণে, আর `let Point { x: x, y: y } = p;` লেখায় অনেক
+পুনরাবৃত্তি থাকে বলে, struct-এর field-এর সঙ্গে মেলা pattern-এর জন্য Rust-এ একটি সংক্ষিপ্ত রূপ আছে: শুধু struct field-এর নাম লিখলেই চলে, আর pattern থেকে তৈরি variable-গুলোর নামও একই হবে। Listing
+19-13 Listing 19-12-এর কোডের মতোই আচরণ করে, তবে `let` pattern-এ তৈরি variable-গুলো `a` আর `b`-এর বদলে `x` আর `y`।
 
-<Listing number="19-13" file-name="src/main.rs" caption="Destructuring struct fields using struct field shorthand">
+<Listing number="19-13" file-name="src/main.rs" caption="struct field-এর সংক্ষিপ্ত রূপ ব্যবহার করে struct-এর field destructure করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-13/src/main.rs}}
@@ -154,20 +113,15 @@ pattern are `x` and `y` instead of `a` and `b`.
 
 </Listing>
 
-This code creates the variables `x` and `y` that match the `x` and `y` fields
-of the `p` variable. The outcome is that the variables `x` and `y` contain the
-values from the `p` struct.
+এই কোড `x` আর `y` variable তৈরি করে, যা `p` variable-এর `x` আর `y` field-এর সঙ্গে মেলে। ফলে `x` আর `y` variable-এ `p` struct-এর মানগুলো থাকে।
 
-We can also destructure with literal values as part of the struct pattern
-rather than creating variables for all the fields. Doing so allows us to test
-some of the fields for particular values while creating variables to
-destructure the other fields.
+সব field-এর জন্য variable তৈরি না করে struct pattern-এর অংশ হিসেবে literal মান দিয়েও destructure করা যায়। এতে কিছু field নির্দিষ্ট মানের জন্য যাচাই করার পাশাপাশি অন্য field-গুলো destructure
+করতে variable তৈরি করা যায়।
 
-In Listing 19-14, we have a `match` expression that separates `Point` values
-into three cases: points that lie directly on the `x` axis (which is true when
-`y = 0`), on the `y` axis (`x = 0`), or on neither axis.
+Listing 19-14-এ আমাদের একটি `match` expression আছে, যা `Point` মানগুলোকে তিনটি ক্ষেত্রে ভাগ করে: যে বিন্দু সরাসরি `x` অক্ষের ওপর আছে (`y = 0` হলে যা সত্য), `y` অক্ষের ওপর (`x = 0`), বা কোনো অক্ষের
+ওপরই নয়।
 
-<Listing number="19-14" file-name="src/main.rs" caption="Destructuring and matching literal values in one pattern">
+<Listing number="19-14" file-name="src/main.rs" caption="একটি pattern-এ destructure করা এবং literal মানের সঙ্গে মেলানো">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-14/src/main.rs:here}}
@@ -175,35 +129,26 @@ into three cases: points that lie directly on the `x` axis (which is true when
 
 </Listing>
 
-The first arm will match any point that lies on the `x` axis by specifying that
-the `y` field matches if its value matches the literal `0`. The pattern still
-creates an `x` variable that we can use in the code for this arm.
+প্রথম arm `x` অক্ষের ওপর থাকা যেকোনো বিন্দুর সঙ্গে মিলবে, কারণ এটি বলে দেয় যে `y` field মিলবে যদি এর মান literal `0`-এর সঙ্গে মেলে। pattern-টি তবুও একটি `x` variable তৈরি করে, যা এই arm-এর কোডে
+ব্যবহার করা যায়।
 
-Similarly, the second arm matches any point on the `y` axis by specifying that
-the `x` field matches if its value is `0` and creates a variable `y` for the
-value of the `y` field. The third arm doesn’t specify any literals, so it
-matches any other `Point` and creates variables for both the `x` and `y` fields.
+একইভাবে দ্বিতীয় arm `y` অক্ষের ওপর থাকা যেকোনো বিন্দুর সঙ্গে মেলে, কারণ এটি বলে দেয় যে `x` field মিলবে যদি এর মান `0` হয়, এবং `y` field-এর মানের জন্য একটি `y` variable তৈরি করে। তৃতীয় arm কোনো
+literal উল্লেখ করে না, তাই এটি অন্য যেকোনো `Point`-এর সঙ্গে মেলে এবং `x` আর `y` দুটি field-এর জন্যই variable তৈরি করে।
 
-In this example, the value `p` matches the second arm by virtue of `x`
-containing a `0`, so this code will print `On the y axis at 7`.
+এই উদাহরণে `x`-এ একটি `0` থাকায় `p` মান দ্বিতীয় arm-এর সঙ্গে মেলে, তাই এই কোড print করবে `On the y axis at 7`।
 
-Remember that a `match` expression stops checking arms once it has found the
-first matching pattern, so even though `Point { x: 0, y: 0 }` is on the `x` axis
-and the `y` axis, this code would only print `On the x axis at 0`.
+মনে রাখবেন, প্রথম মিলে যাওয়া pattern পেলেই একটি `match` expression arm যাচাই করা বন্ধ করে, তাই `Point { x: 0, y: 0 }` `x` অক্ষ আর `y` অক্ষ দুটির ওপর থাকলেও এই কোড শুধু print করত `On the x axis at 0`।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="destructuring-enums"></a>
 
-#### Enums
+#### enum {#enums}
 
-We’ve destructured enums in this book (for example, Listing 6-5 in Chapter 6),
-but we haven’t yet explicitly discussed that the pattern to destructure an enum
-corresponds to the way the data stored within the enum is defined. As an
-example, in Listing 19-15, we use the `Message` enum from Listing 6-2 and write
-a `match` with patterns that will destructure each inner value.
+এই বইয়ে আমরা enum destructure করেছি (যেমন অধ্যায় 6-এর Listing 6-5), কিন্তু এখনো স্পষ্টভাবে আলোচনা করিনি যে একটি enum destructure করার pattern enum-এর ভেতরে রাখা ডেটা যেভাবে সংজ্ঞায়িত, তার সঙ্গে মেলে।
+উদাহরণ হিসেবে Listing 19-15-এ আমরা Listing 6-2-এর `Message` enum ব্যবহার করি এবং এমন pattern-সহ একটি `match` লিখি, যা প্রতিটি ভেতরের মান destructure করবে।
 
-<Listing number="19-15" file-name="src/main.rs" caption="Destructuring enum variants that hold different kinds of values">
+<Listing number="19-15" file-name="src/main.rs" caption="ভিন্ন ভিন্ন ধরনের মান রাখা enum variant destructure করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-15/src/main.rs}}
@@ -211,37 +156,26 @@ a `match` with patterns that will destructure each inner value.
 
 </Listing>
 
-This code will print `Change color to red 0, green 160, and blue 255`. Try
-changing the value of `msg` to see the code from the other arms run.
+এই কোড print করবে `Change color to red 0, green 160, and blue 255`। অন্য arm-গুলোর কোড চলতে দেখতে `msg`-এর মান বদলে দেখুন।
 
-For enum variants without any data, like `Message::Quit`, we can’t destructure
-the value any further. We can only match on the literal `Message::Quit` value,
-and no variables are in that pattern.
+`Message::Quit`-এর মতো কোনো ডেটা ছাড়া enum variant-এর ক্ষেত্রে মানটি আর destructure করা যায় না। শুধু literal `Message::Quit` মানের সঙ্গে match করা যায়, আর সেই pattern-এ কোনো variable নেই।
 
-For struct-like enum variants, such as `Message::Move`, we can use a pattern
-similar to the pattern we specify to match structs. After the variant name, we
-place curly brackets and then list the fields with variables so that we break
-apart the pieces to use in the code for this arm. Here we use the shorthand
-form as we did in Listing 19-13.
+`Message::Move`-এর মতো struct-সদৃশ enum variant-এর ক্ষেত্রে struct মেলাতে যে pattern দিই তার মতো pattern ব্যবহার করা যায়। variant-এর নামের পরে curly bracket দিয়ে variable-সহ field-গুলো লিখি, যাতে
+এই arm-এর কোডে ব্যবহারের জন্য অংশগুলো ভেঙে নেওয়া যায়। এখানে আমরা Listing 19-13-এর মতো সংক্ষিপ্ত রূপ ব্যবহার করি।
 
-For tuple-like enum variants, like `Message::Write` that holds a tuple with one
-element and `Message::ChangeColor` that holds a tuple with three elements, the
-pattern is similar to the pattern we specify to match tuples. The number of
-variables in the pattern must match the number of elements in the variant we’re
-matching.
+tuple-সদৃশ enum variant-এর ক্ষেত্রে, যেমন এক উপাদানের tuple রাখা `Message::Write` আর তিন উপাদানের tuple রাখা `Message::ChangeColor`, pattern-টি tuple মেলাতে যে pattern দিই তার মতো। pattern-এর variable-এর
+সংখ্যা যে variant-এর সঙ্গে মেলাচ্ছি তার উপাদানের সংখ্যার সমান হতে হবে।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="destructuring-nested-structs-and-enums"></a>
 
-#### Nested Structs and Enums
+#### nested struct ও enum {#nested-structs-and-enums}
 
-So far, our examples have all been matching structs or enums one level deep,
-but matching can work on nested items too! For example, we can refactor the
-code in Listing 19-15 to support RGB and HSV colors in the `ChangeColor`
-message, as shown in Listing 19-16.
+এ পর্যন্ত আমাদের সব উদাহরণ এক স্তর গভীরের struct বা enum মেলাচ্ছিল, তবে nested (একটির ভেতরে আরেকটি) item-এও matching কাজ করে! যেমন, Listing 19-15-এর কোড refactor করে `ChangeColor` message-এ
+RGB আর HSV রং সমর্থন করানো যায়, যেমনটি Listing 19-16-এ দেখানো হয়েছে।
 
-<Listing number="19-16" caption="Matching on nested enums">
+<Listing number="19-16" caption="nested enum-এর ওপর match করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-16/src/main.rs}}
@@ -249,55 +183,43 @@ message, as shown in Listing 19-16.
 
 </Listing>
 
-The pattern of the first arm in the `match` expression matches a
-`Message::ChangeColor` enum variant that contains a `Color::Rgb` variant; then,
-the pattern binds to the three inner `i32` values. The pattern of the second
-arm also matches a `Message::ChangeColor` enum variant, but the inner enum
-matches `Color::Hsv` instead. We can specify these complex conditions in one
-`match` expression, even though two enums are involved.
+`match` expression-এর প্রথম arm-এর pattern এমন একটি `Message::ChangeColor` enum variant-এর সঙ্গে মেলে, যাতে একটি `Color::Rgb` variant আছে; তারপর pattern-টি ভেতরের তিনটি `i32` মানের সঙ্গে bind হয়।
+দ্বিতীয় arm-এর pattern-ও একটি `Message::ChangeColor` enum variant-এর সঙ্গে মেলে, তবে ভেতরের enum বরং `Color::Hsv`-এর সঙ্গে মেলে। দুটি enum জড়িত থাকলেও এই জটিল শর্তগুলো একটি `match` expression-এ উল্লেখ
+করা যায়।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="destructuring-structs-and-tuples"></a>
 
-#### Structs and Tuples
+#### struct ও tuple {#structs-and-tuples}
 
-We can mix, match, and nest destructuring patterns in even more complex ways.
-The following example shows a complicated destructure where we nest structs and
-tuples inside a tuple and destructure all the primitive values out:
+destructuring pattern-গুলো আরও জটিলভাবে মেশানো, মেলানো আর একটির ভেতরে আরেকটি রাখা যায়। নিচের উদাহরণে একটি জটিল destructure দেখানো হয়েছে, যেখানে একটি tuple-এর ভেতরে struct আর tuple রেখে সব
+primitive মান বের করে আনা হয়েছে:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-05-destructuring-structs-and-tuples/src/main.rs:here}}
 ```
 
-This code lets us break complex types into their component parts so that we can
-use the values we’re interested in separately.
+এই কোড জটিল type-কে তাদের উপাদান অংশে ভেঙে নিতে দেয়, যাতে আমাদের আগ্রহের মানগুলো আলাদাভাবে ব্যবহার করা যায়।
 
-Destructuring with patterns is a convenient way to use pieces of values, such
-as the value from each field in a struct, separately from each other.
+pattern দিয়ে destructure করা মানের অংশগুলো, যেমন একটি struct-এর প্রতিটি field-এর মান, একে অপর থেকে আলাদাভাবে ব্যবহারের একটি সুবিধাজনক উপায়।
 
-### Ignoring Values in a Pattern
+### pattern-এ মান উপেক্ষা করা {#ignoring-values-in-a-pattern}
 
-You’ve seen that it’s sometimes useful to ignore values in a pattern, such as
-in the last arm of a `match`, to get a catch-all that doesn’t actually do
-anything but does account for all remaining possible values. There are a few
-ways to ignore entire values or parts of values in a pattern: using the `_`
-pattern (which you’ve seen), using the `_` pattern within another pattern,
-using a name that starts with an underscore, or using `..` to ignore remaining
-parts of a value. Let’s explore how and why to use each of these patterns.
+আপনি দেখেছেন যে কখনো কখনো pattern-এ মান উপেক্ষা করা কাজে লাগে, যেমন একটি `match`-এর শেষ arm-এ, এমন একটি সব-ধরা arm পেতে যা আসলে কিছু করে না, কিন্তু বাকি সব সম্ভাব্য মান বিবেচনায় আনে। pattern-এ
+পুরো মান বা মানের অংশ উপেক্ষা করার কয়েকটি উপায় আছে: `_` pattern ব্যবহার (যা আপনি দেখেছেন), আরেকটি pattern-এর ভেতরে `_` pattern ব্যবহার, underscore দিয়ে শুরু হওয়া একটি নাম ব্যবহার, অথবা মানের
+বাকি অংশ উপেক্ষা করতে `..` ব্যবহার। চলুন দেখি এই pattern-গুলোর প্রতিটি কীভাবে ও কেন ব্যবহার করতে হয়।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="ignoring-an-entire-value-with-_"></a>
 
-#### An Entire Value with `_`
+#### `_` দিয়ে পুরো মান {#an-entire-value-with-_}
 
-We’ve used the underscore as a wildcard pattern that will match any value but
-not bind to the value. This is especially useful as the last arm in a `match`
-expression, but we can also use it in any pattern, including function
-parameters, as shown in Listing 19-17.
+underscore-কে আমরা একটি wildcard pattern হিসেবে ব্যবহার করেছি, যা যেকোনো মানের সঙ্গে মেলে কিন্তু মানের সঙ্গে bind হয় না। এটি বিশেষ করে একটি `match` expression-এর শেষ arm হিসেবে কাজে লাগে, তবে
+function parameter-সহ যেকোনো pattern-এও ব্যবহার করা যায়, যেমনটি Listing 19-17-এ দেখানো হয়েছে।
 
-<Listing number="19-17" file-name="src/main.rs" caption="Using `_` in a function signature">
+<Listing number="19-17" file-name="src/main.rs" caption="একটি function signature-এ `_` ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-17/src/main.rs}}
@@ -305,31 +227,23 @@ parameters, as shown in Listing 19-17.
 
 </Listing>
 
-This code will completely ignore the value `3` passed as the first argument,
-and will print `This code only uses the y parameter: 4`.
+এই কোড প্রথম argument হিসেবে পাঠানো `3` মানটি পুরোপুরি উপেক্ষা করবে, এবং print করবে `This code only uses the y parameter: 4`।
 
-In most cases when you no longer need a particular function parameter, you
-would change the signature so that it doesn’t include the unused parameter.
-Ignoring a function parameter can be especially useful in cases when, for
-example, you’re implementing a trait when you need a certain type signature but
-the function body in your implementation doesn’t need one of the parameters.
-You then avoid getting a compiler warning about unused function parameters, as
-you would if you used a name instead.
+বেশিরভাগ ক্ষেত্রে কোনো নির্দিষ্ট function parameter আর দরকার না হলে আপনি signature বদলে অব্যবহৃত parameter-টি সরিয়ে দেবেন। function parameter উপেক্ষা করা বিশেষ করে কাজে লাগে যখন, যেমন,
+আপনি একটি trait implement করছেন, যেখানে একটি নির্দিষ্ট type signature দরকার, কিন্তু আপনার implementation-এর function body-র একটি parameter দরকার নেই। তখন অব্যবহৃত function parameter নিয়ে compiler
+warning পাওয়া এড়াতে পারেন, যা নাম ব্যবহার করলে পেতেন।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="ignoring-parts-of-a-value-with-a-nested-_"></a>
 
-#### Parts of a Value with a Nested `_`
+#### nested `_` দিয়ে মানের অংশ {#parts-of-a-value-with-a-nested-_}
 
-We can also use `_` inside another pattern to ignore just part of a value, for
-example, when we want to test for only part of a value but have no use for the
-other parts in the corresponding code we want to run. Listing 19-18 shows code
-responsible for managing a setting’s value. The business requirements are that
-the user should not be allowed to overwrite an existing customization of a
-setting but can unset the setting and give it a value if it is currently unset.
+মানের শুধু একটি অংশ উপেক্ষা করতে আরেকটি pattern-এর ভেতরেও `_` ব্যবহার করা যায়, যেমন যখন মানের শুধু একটি অংশ যাচাই করতে চাই, কিন্তু চালাতে চাওয়া সংশ্লিষ্ট কোডে অন্য অংশগুলোর কোনো দরকার নেই।
+Listing 19-18-এ একটি setting-এর মান সামলানোর দায়িত্বে থাকা কোড দেখানো হয়েছে। ব্যবসায়িক চাহিদা হলো, ব্যবহারকারীকে একটি setting-এর বিদ্যমান নিজস্ব মান overwrite করতে দেওয়া উচিত নয়, তবে
+setting-টি এখন সেট করা না থাকলে তা সেট করতে ও মান দিতে পারবে।
 
-<Listing number="19-18" caption="Using an underscore within patterns that match `Some` variants when we don’t need to use the value inside the `Some`">
+<Listing number="19-18" caption="`Some`-এর ভেতরের মান ব্যবহারের দরকার না থাকলে `Some` variant-এর সঙ্গে মেলা pattern-এর ভেতরে একটি underscore ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-18/src/main.rs:here}}
@@ -337,22 +251,17 @@ setting but can unset the setting and give it a value if it is currently unset.
 
 </Listing>
 
-This code will print `Can't overwrite an existing customized value` and then
-`setting is Some(5)`. In the first match arm, we don’t need to match on or use
-the values inside either `Some` variant, but we do need to test for the case
-when `setting_value` and `new_setting_value` are the `Some` variant. In that
-case, we print the reason for not changing `setting_value`, and it doesn’t get
-changed.
+এই কোড print করবে `Can't overwrite an existing customized value` আর তারপর
+`setting is Some(5)`। প্রথম match arm-এ কোনো `Some` variant-এর ভেতরের মানের সঙ্গে match করার বা সেগুলো ব্যবহারের দরকার নেই, তবে `setting_value` আর `new_setting_value` যখন `Some` variant, সেই
+ক্ষেত্রটি যাচাই করতে হবে। সেই ক্ষেত্রে আমরা `setting_value` না বদলানোর কারণ print করি, আর এটি বদলায় না।
 
-In all other cases (if either `setting_value` or `new_setting_value` is `None`)
-expressed by the `_` pattern in the second arm, we want to allow
-`setting_value` to be set to `new_setting_value`.
+দ্বিতীয় arm-এর `_` pattern দিয়ে প্রকাশ করা বাকি সব ক্ষেত্রে (যদি `setting_value` বা `new_setting_value`, যেকোনোটি `None` হয়) আমরা
+`setting_value`-কে `new_setting_value`-তে সেট হতে দিতে চাই।
 
-We can also use underscores in multiple places within one pattern to ignore
-particular values. Listing 19-19 shows an example of ignoring the second and
-fourth values in a tuple of five items.
+নির্দিষ্ট কিছু মান উপেক্ষা করতে একটি pattern-এর ভেতরে একাধিক জায়গায় underscore ব্যবহার করা যায়। Listing 19-19-এ পাঁচটি item-এর একটি tuple-এর দ্বিতীয় আর চতুর্থ মান উপেক্ষা করার একটি উদাহরণ
+দেখানো হয়েছে।
 
-<Listing number="19-19" caption="Ignoring multiple parts of a tuple">
+<Listing number="19-19" caption="একটি tuple-এর একাধিক অংশ উপেক্ষা করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-19/src/main.rs:here}}
@@ -360,24 +269,19 @@ fourth values in a tuple of five items.
 
 </Listing>
 
-This code will print `Some numbers: 2, 8, 32`, and the values `4` and `16` will
-be ignored.
+এই কোড print করবে `Some numbers: 2, 8, 32`, আর `4` ও `16` মান উপেক্ষিত হবে।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="ignoring-an-unused-variable-by-starting-its-name-with-_"></a>
 
-#### An Unused Variable by Starting Its Name with `_`
+#### নাম `_` দিয়ে শুরু করে একটি অব্যবহৃত variable {#an-unused-variable-by-starting-its-name-with-_}
 
-If you create a variable but don’t use it anywhere, Rust will usually issue a
-warning because an unused variable could be a bug. However, sometimes it’s
-useful to be able to create a variable you won’t use yet, such as when you’re
-prototyping or just starting a project. In this situation, you can tell Rust
-not to warn you about the unused variable by starting the name of the variable
-with an underscore. In Listing 19-20, we create two unused variables, but when
-we compile this code, we should only get a warning about one of them.
+একটি variable তৈরি করে কোথাও ব্যবহার না করলে Rust সাধারণত একটি warning দেয়, কারণ অব্যবহৃত variable একটি বাগ হতে পারে। তবে কখনো কখনো এমন একটি variable তৈরি করতে পারা কাজে লাগে যা এখনো ব্যবহার
+করবেন না, যেমন যখন prototype বানাচ্ছেন বা সবে একটি project শুরু করছেন। এই পরিস্থিতিতে variable-এর নাম একটি underscore দিয়ে শুরু করে Rust-কে বলতে পারেন অব্যবহৃত variable নিয়ে warning না দিতে।
+Listing 19-20-এ আমরা দুটি অব্যবহৃত variable তৈরি করি, কিন্তু এই কোড compile করলে শুধু একটি নিয়ে warning পাওয়ার কথা।
 
-<Listing number="19-20" file-name="src/main.rs" caption="Starting a variable name with an underscore to avoid getting unused variable warnings">
+<Listing number="19-20" file-name="src/main.rs" caption="অব্যবহৃত variable-এর warning এড়াতে variable-এর নাম একটি underscore দিয়ে শুরু করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-20/src/main.rs}}
@@ -385,15 +289,12 @@ we compile this code, we should only get a warning about one of them.
 
 </Listing>
 
-Here, we get a warning about not using the variable `y`, but we don’t get a
-warning about not using `_x`.
+এখানে `y` variable ব্যবহার না করা নিয়ে একটি warning পাই, কিন্তু `_x` ব্যবহার না করা নিয়ে কোনো warning পাই না।
 
-Note that there is a subtle difference between using only `_` and using a name
-that starts with an underscore. The syntax `_x` still binds the value to the
-variable, whereas `_` doesn’t bind at all. To show a case where this
-distinction matters, Listing 19-21 will provide us with an error.
+খেয়াল করুন, শুধু `_` ব্যবহার আর underscore দিয়ে শুরু হওয়া একটি নাম ব্যবহারের মধ্যে একটি সূক্ষ্ম পার্থক্য আছে। `_x` syntax তবুও মানটিকে variable-এর সঙ্গে bind করে, যেখানে `_` মোটেই bind করে না। এই
+পার্থক্য যেখানে গুরুত্বপূর্ণ তা দেখাতে Listing 19-21 আমাদের একটি error দেবে।
 
-<Listing number="19-21" caption="An unused variable starting with an underscore still binds the value, which might take ownership of the value.">
+<Listing number="19-21" caption="underscore দিয়ে শুরু হওয়া একটি অব্যবহৃত variable তবুও মানটি bind করে, যা মানটির ownership নিয়ে নিতে পারে।">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-21/src/main.rs:here}}
@@ -401,12 +302,10 @@ distinction matters, Listing 19-21 will provide us with an error.
 
 </Listing>
 
-We’ll receive an error because the `s` value will still be moved into `_s`,
-which prevents us from using `s` again. However, using the underscore by itself
-doesn’t ever bind to the value. Listing 19-22 will compile without any errors
-because `s` doesn’t get moved into `_`.
+আমরা একটি error পাব, কারণ `s` মান তবুও `_s`-এ সরে যাবে, যা আমাদের আবার `s` ব্যবহার করতে দেয় না। তবে শুধু underscore ব্যবহার করলে তা কখনো মানের সঙ্গে bind হয় না। Listing 19-22 কোনো error ছাড়াই
+compile হবে, কারণ `s` `_`-এ সরে যায় না।
 
-<Listing number="19-22" caption="Using an underscore does not bind the value.">
+<Listing number="19-22" caption="underscore ব্যবহার করলে মান bind হয় না।">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-22/src/main.rs:here}}
@@ -414,21 +313,17 @@ because `s` doesn’t get moved into `_`.
 
 </Listing>
 
-This code works just fine because we never bind `s` to anything; it isn’t moved.
+এই কোড ঠিকঠাক কাজ করে, কারণ আমরা কখনো `s`-কে কোনো কিছুর সঙ্গে bind করি না; এটি সরে যায় না।
 
 <a id="ignoring-remaining-parts-of-a-value-with-"></a>
 
-#### Remaining Parts of a Value with `..`
+#### `..` দিয়ে মানের বাকি অংশ {#remaining-parts-of-a-value-with-}
 
-With values that have many parts, we can use the `..` syntax to use specific
-parts and ignore the rest, avoiding the need to list underscores for each
-ignored value. The `..` pattern ignores any parts of a value that we haven’t
-explicitly matched in the rest of the pattern. In Listing 19-23, we have a
-`Point` struct that holds a coordinate in three-dimensional space. In the
-`match` expression, we want to operate only on the `x` coordinate and ignore
-the values in the `y` and `z` fields.
+অনেক অংশযুক্ত মানের ক্ষেত্রে `..` syntax ব্যবহার করে নির্দিষ্ট অংশগুলো ব্যবহার করে বাকিগুলো উপেক্ষা করা যায়, ফলে প্রতিটি উপেক্ষিত মানের জন্য underscore লিখতে হয় না। `..` pattern মানের সেই সব অংশ
+উপেক্ষা করে, যা pattern-এর বাকি অংশে আমরা স্পষ্টভাবে মেলাইনি। Listing 19-23-এ আমাদের একটি `Point` struct আছে, যা ত্রিমাত্রিক স্থানে একটি স্থানাঙ্ক রাখে। `match` expression-এ আমরা শুধু `x` স্থানাঙ্কের
+ওপর কাজ করতে চাই এবং `y` আর `z` field-এর মান উপেক্ষা করতে চাই।
 
-<Listing number="19-23" caption="Ignoring all fields of a `Point` except for `x` by using `..`">
+<Listing number="19-23" caption="`..` ব্যবহার করে `x` ছাড়া একটি `Point`-এর সব field উপেক্ষা করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-23/src/main.rs:here}}
@@ -436,15 +331,12 @@ the values in the `y` and `z` fields.
 
 </Listing>
 
-We list the `x` value and then just include the `..` pattern. This is quicker
-than having to list `y: _` and `z: _`, particularly when we’re working with
-structs that have lots of fields in situations where only one or two fields are
-relevant.
+আমরা `x` মান লিখি, তারপর শুধু `..` pattern যোগ করি। এটি `y: _` আর `z: _` লেখার চেয়ে দ্রুত, বিশেষ করে যখন অনেক field-যুক্ত struct নিয়ে এমন পরিস্থিতিতে কাজ করছি যেখানে মাত্র এক-দুটি field
+প্রাসঙ্গিক।
 
-The syntax `..` will expand to as many values as it needs to be. Listing 19-24
-shows how to use `..` with a tuple.
+`..` syntax যতগুলো মান দরকার ততগুলোতে বিস্তৃত হবে। Listing 19-24 দেখায় একটি tuple-এর সঙ্গে কীভাবে `..` ব্যবহার করতে হয়।
 
-<Listing number="19-24" file-name="src/main.rs" caption="Matching only the first and last values in a tuple and ignoring all other values">
+<Listing number="19-24" file-name="src/main.rs" caption="একটি tuple-এর শুধু প্রথম আর শেষ মানের সঙ্গে মেলানো এবং বাকি সব মান উপেক্ষা করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-24/src/main.rs}}
@@ -452,15 +344,12 @@ shows how to use `..` with a tuple.
 
 </Listing>
 
-In this code, the first and last values are matched with `first` and `last`.
-The `..` will match and ignore everything in the middle.
+এই কোডে প্রথম আর শেষ মান `first` আর `last`-এর সঙ্গে মেলানো হয়। `..` মাঝখানের সবকিছুর সঙ্গে মিলবে এবং উপেক্ষা করবে।
 
-However, using `..` must be unambiguous. If it is unclear which values are
-intended for matching and which should be ignored, Rust will give us an error.
-Listing 19-25 shows an example of using `..` ambiguously, so it will not
-compile.
+তবে `..`-এর ব্যবহার দ্ব্যর্থহীন হতে হবে। কোন মানগুলো মেলানোর জন্য আর কোনগুলো উপেক্ষা করার জন্য তা অস্পষ্ট হলে Rust আমাদের একটি error দেবে। Listing 19-25-এ দ্ব্যর্থকভাবে `..` ব্যবহারের একটি উদাহরণ
+দেখানো হয়েছে, তাই এটি compile হবে না।
 
-<Listing number="19-25" file-name="src/main.rs" caption="An attempt to use `..` in an ambiguous way">
+<Listing number="19-25" file-name="src/main.rs" caption="দ্ব্যর্থকভাবে `..` ব্যবহারের একটি চেষ্টা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-25/src/main.rs}}
@@ -468,37 +357,30 @@ compile.
 
 </Listing>
 
-When we compile this example, we get this error:
+এই উদাহরণ compile করলে এই error পাই:
 
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-25/output.txt}}
 ```
 
-It’s impossible for Rust to determine how many values in the tuple to ignore
-before matching a value with `second` and then how many further values to
-ignore thereafter. This code could mean that we want to ignore `2`, bind
-`second` to `4`, and then ignore `8`, `16`, and `32`; or that we want to ignore
-`2` and `4`, bind `second` to `8`, and then ignore `16` and `32`; and so forth.
-The variable name `second` doesn’t mean anything special to Rust, so we get a
-compiler error because using `..` in two places like this is ambiguous.
+`second`-এর সঙ্গে একটি মান মেলানোর আগে tuple-এর কতগুলো মান উপেক্ষা করতে হবে, আর তারপর আরও কতগুলো মান উপেক্ষা করতে হবে, তা নির্ধারণ করা Rust-এর পক্ষে অসম্ভব। এই কোডের মানে হতে পারে আমরা `2`
+উপেক্ষা করে `second`-কে `4`-এর সঙ্গে bind করতে, তারপর `8`, `16` আর `32` উপেক্ষা করতে চাই; অথবা `2` আর `4` উপেক্ষা করে `second`-কে `8`-এর সঙ্গে bind করতে, তারপর `16` আর `32` উপেক্ষা করতে চাই;
+ইত্যাদি। `second` variable নামটি Rust-এর কাছে বিশেষ কিছু বোঝায় না, তাই আমরা compiler error পাই, কারণ এভাবে দুই জায়গায় `..` ব্যবহার দ্ব্যর্থক।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="extra-conditionals-with-match-guards"></a>
 
-### Adding Conditionals with Match Guards
+### match guard দিয়ে শর্ত যোগ করা {#adding-conditionals-with-match-guards}
 
-A _match guard_ is an additional `if` condition, specified after the pattern in
-a `match` arm, that must also match for that arm to be chosen. Match guards are
-useful for expressing more complex ideas than a pattern alone allows. Note,
-however, that they are only available in `match` expressions, not `if let` or
-`while let` expressions.
+একটি _match guard_ হলো একটি `match` arm-এর pattern-এর পরে উল্লেখ করা একটি বাড়তি `if` শর্ত, যা সেই arm বাছাই হতে হলে মিলতেই হবে। শুধু একটি pattern যতটা প্রকাশ করতে দেয় তার চেয়ে জটিল ধারণা প্রকাশে match guard
+কাজে লাগে। তবে খেয়াল করুন, এগুলো শুধু `match` expression-এ পাওয়া যায়, `if let` বা
+`while let` expression-এ নয়।
 
-The condition can use variables created in the pattern. Listing 19-26 shows a
-`match` where the first arm has the pattern `Some(x)` and also has a match
-guard of `if x % 2 == 0` (which will be `true` if the number is even).
+শর্তটি pattern-এ তৈরি variable ব্যবহার করতে পারে। Listing 19-26-এ একটি `match` দেখানো হয়েছে, যার প্রথম arm-এর pattern `Some(x)` এবং এতে `if x % 2 == 0`-এর একটি match guard-ও আছে (সংখ্যাটি জোড়
+হলে যা `true` হবে)।
 
-<Listing number="19-26" caption="Adding a match guard to a pattern">
+<Listing number="19-26" caption="একটি pattern-এ match guard যোগ করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-26/src/main.rs:here}}
@@ -506,29 +388,20 @@ guard of `if x % 2 == 0` (which will be `true` if the number is even).
 
 </Listing>
 
-This example will print `The number 4 is even`. When `num` is compared to the
-pattern in the first arm, it matches because `Some(4)` matches `Some(x)`. Then,
-the match guard checks whether the remainder of dividing `x` by 2 is equal to
-0, and because it is, the first arm is selected.
+এই উদাহরণ print করবে `The number 4 is even`। `num`-কে প্রথম arm-এর pattern-এর সঙ্গে তুলনা করলে এটি মেলে, কারণ `Some(4)` `Some(x)`-এর সঙ্গে মেলে। তারপর match guard যাচাই করে `x`-কে 2 দিয়ে ভাগ
+করলে ভাগশেষ 0-এর সমান কি না, আর যেহেতু তা-ই, তাই প্রথম arm বাছাই হয়।
 
-If `num` had been `Some(5)` instead, the match guard in the first arm would
-have been `false` because the remainder of 5 divided by 2 is 1, which is not
-equal to 0. Rust would then go to the second arm, which would match because the
-second arm doesn’t have a match guard and therefore matches any `Some` variant.
+`num` যদি বরং `Some(5)` হতো, তাহলে প্রথম arm-এর match guard `false` হতো, কারণ 5-কে 2 দিয়ে ভাগ করলে ভাগশেষ 1, যা 0-এর সমান নয়। তখন Rust দ্বিতীয় arm-এ যেত, যা মিলত, কারণ দ্বিতীয় arm-এর কোনো match guard নেই
+এবং তাই এটি যেকোনো `Some` variant-এর সঙ্গে মেলে।
 
-There is no way to express the `if x % 2 == 0` condition within a pattern, so
-the match guard gives us the ability to express this logic. The downside of
-this additional expressiveness is that the compiler doesn’t try to check for
-exhaustiveness when match guard expressions are involved.
+`if x % 2 == 0` শর্তটি একটি pattern-এর ভেতরে প্রকাশ করার কোনো উপায় নেই, তাই match guard আমাদের এই logic প্রকাশের ক্ষমতা দেয়। এই বাড়তি প্রকাশক্ষমতার অসুবিধা হলো, match guard expression জড়িত থাকলে compiler
+exhaustiveness যাচাই করার চেষ্টা করে না।
 
-When discussing Listing 19-11, we mentioned that we could use match guards to
-solve our pattern-shadowing problem. Recall that we created a new variable
-inside the pattern in the `match` expression instead of using the variable
-outside the `match`. That new variable meant we couldn’t test against the value
-of the outer variable. Listing 19-27 shows how we can use a match guard to fix
-this problem.
+Listing 19-11 নিয়ে আলোচনার সময় আমরা বলেছিলাম যে pattern-এর shadowing সমস্যা সমাধানে match guard ব্যবহার করা যায়। মনে করুন, `match`-এর বাইরের variable ব্যবহার না করে আমরা `match` expression-এর
+pattern-এর ভেতরে একটি নতুন variable তৈরি করেছিলাম। সেই নতুন variable-এর কারণে বাইরের variable-এর মানের সঙ্গে যাচাই করতে পারছিলাম না। Listing 19-27 দেখায় এই সমস্যা ঠিক করতে কীভাবে একটি match guard
+ব্যবহার করা যায়।
 
-<Listing number="19-27" file-name="src/main.rs" caption="Using a match guard to test for equality with an outer variable">
+<Listing number="19-27" file-name="src/main.rs" caption="বাইরের একটি variable-এর সঙ্গে সমতা যাচাই করতে একটি match guard ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-27/src/main.rs}}
@@ -536,26 +409,18 @@ this problem.
 
 </Listing>
 
-This code will now print `Default case, x = Some(5)`. The pattern in the second
-match arm doesn’t introduce a new variable `y` that would shadow the outer `y`,
-meaning we can use the outer `y` in the match guard. Instead of specifying the
-pattern as `Some(y)`, which would have shadowed the outer `y`, we specify
-`Some(n)`. This creates a new variable `n` that doesn’t shadow anything because
-there is no `n` variable outside the `match`.
+এই কোড এখন print করবে `Default case, x = Some(5)`। দ্বিতীয় match arm-এর pattern এমন কোনো নতুন variable `y` আনে না যা বাইরের `y`-কে shadow করত, অর্থাৎ match guard-এ বাইরের `y` ব্যবহার করা যায়।
+pattern হিসেবে `Some(y)` উল্লেখ না করে, যা বাইরের `y`-কে shadow করত, আমরা উল্লেখ করি `Some(n)`। এটি একটি নতুন variable `n` তৈরি করে, যা কিছুই shadow করে না, কারণ `match`-এর বাইরে কোনো `n` variable
+নেই।
 
-The match guard `if n == y` is not a pattern and therefore doesn’t introduce new
-variables. This `y` _is_ the outer `y` rather than a new `y` shadowing it, and
-we can look for a value that has the same value as the outer `y` by comparing
-`n` to `y`.
+match guard `if n == y` কোনো pattern নয় এবং তাই নতুন variable আনে না। এই `y` _সত্যিই_ বাইরের `y`, একে shadow করা নতুন কোনো `y` নয়, আর `n`-কে `y`-এর সঙ্গে তুলনা করে আমরা বাইরের `y`-এর সমান মান খুঁজতে
+পারি।
 
-You can also use the _or_ operator `|` in a match guard to specify multiple
-patterns; the match guard condition will apply to all the patterns. Listing
-19-28 shows the precedence when combining a pattern that uses `|` with a match
-guard. The important part of this example is that the `if y` match guard
-applies to `4`, `5`, _and_ `6`, even though it might look like `if y` only
-applies to `6`.
+একাধিক pattern উল্লেখ করতে একটি match guard-এ _or_ operator `|`-ও ব্যবহার করা যায়; match guard-এর শর্তটি সব pattern-এ প্রযোজ্য হবে। Listing
+19-28 দেখায় `|` ব্যবহার করা একটি pattern-কে একটি match guard-এর সঙ্গে মেলালে অগ্রাধিকার কেমন হয়। এই উদাহরণের গুরুত্বপূর্ণ অংশ হলো, `if y` match guard `4`, `5` _এবং_ `6`-এ প্রযোজ্য, যদিও দেখে মনে
+হতে পারে `if y` শুধু `6`-এ প্রযোজ্য।
 
-<Listing number="19-28" caption="Combining multiple patterns with a match guard">
+<Listing number="19-28" caption="একটি match guard-এর সঙ্গে একাধিক pattern মেলানো">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-28/src/main.rs:here}}
@@ -563,43 +428,33 @@ applies to `6`.
 
 </Listing>
 
-The match condition states that the arm only matches if the value of `x` is
-equal to `4`, `5`, or `6` _and_ if `y` is `true`. When this code runs, the
-pattern of the first arm matches because `x` is `4`, but the match guard `if y`
-is `false`, so the first arm is not chosen. The code moves on to the second
-arm, which does match, and this program prints `no`. The reason is that the
-`if` condition applies to the whole pattern `4 | 5 | 6`, not just to the last
-value `6`. In other words, the precedence of a match guard in relation to a
-pattern behaves like this:
+match-এর শর্ত বলে যে arm-টি কেবল তখনই মিলবে, যখন `x`-এর মান `4`, `5` বা `6`-এর সমান _এবং_ `y` হলো `true`। এই কোড চলার সময় প্রথম arm-এর pattern মেলে, কারণ `x` হলো `4`, কিন্তু match guard `if y`
+হলো `false`, তাই প্রথম arm বাছাই হয় না। কোড দ্বিতীয় arm-এ যায়, যা মেলে, এবং এই প্রোগ্রাম print করে `no`। কারণ `if` শর্তটি শুধু শেষ মান `6`-এ নয়, পুরো pattern `4 | 5 | 6`-এ প্রযোজ্য। অন্যভাবে বললে,
+একটি pattern-এর তুলনায় match guard-এর অগ্রাধিকার এমন আচরণ করে:
 
 ```text
 (4 | 5 | 6) if y => ...
 ```
 
-rather than this:
+এমন নয়:
 
 ```text
 4 | 5 | (6 if y) => ...
 ```
 
-After running the code, the precedence behavior is evident: If the match guard
-were applied only to the final value in the list of values specified using the
-`|` operator, the arm would have matched, and the program would have printed
-`yes`.
+কোড চালানোর পর অগ্রাধিকারের আচরণ স্পষ্ট: match guard যদি শুধু `|` operator দিয়ে উল্লেখ করা মানের তালিকার শেষ মানে প্রযোজ্য হতো, তাহলে arm-টি মিলত, আর প্রোগ্রাম print করত
+`yes`।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="-bindings"></a>
 
-### Using `@` Bindings
+### `@` binding ব্যবহার করা {#using--bindings}
 
-The _at_ operator `@` lets us create a variable that holds a value at the same
-time we’re testing that value for a pattern match. In Listing 19-29, we want to
-test that a `Message::Hello` `id` field is within the range `3..=7`. We also
-want to bind the value to the variable `id` so that we can use it in the code
-associated with the arm.
+_at_ operator `@` দিয়ে এমন একটি variable তৈরি করা যায়, যা একটি মান রাখে, আর একই সময়ে আমরা সেই মান একটি pattern-এর সঙ্গে মেলে কি না যাচাই করি। Listing 19-29-এ আমরা যাচাই করতে চাই যে একটি
+`Message::Hello`-এর `id` field `3..=7` range-এর ভেতরে আছে কি না। সঙ্গে মানটিকে `id` variable-এর সঙ্গে bind করতেও চাই, যাতে arm-এর সঙ্গে যুক্ত কোডে এটি ব্যবহার করতে পারি।
 
-<Listing number="19-29" caption="Using `@` to bind to a value in a pattern while also testing it">
+<Listing number="19-29" caption="একটি pattern-এ একটি মান যাচাই করার পাশাপাশি তার সঙ্গে bind করতে `@` ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-29/src/main.rs:here}}
@@ -607,35 +462,23 @@ associated with the arm.
 
 </Listing>
 
-This example will print `Found an id in range: 5`. By specifying `id @` before
-the range `3..=7`, we’re capturing whatever value matched the range in a
-variable named `id` while also testing that the value matched the range pattern.
+এই উদাহরণ print করবে `Found an id in range: 5`। `3..=7` range-এর আগে `id @` উল্লেখ করে আমরা range-এর সঙ্গে মিলে যাওয়া মানটি `id` নামের একটি variable-এ capture করছি, পাশাপাশি যাচাই করছি যে মানটি
+range pattern-এর সঙ্গে মিলেছে।
 
-In the second arm, where we only have a range specified in the pattern, the code
-associated with the arm doesn’t have a variable that contains the actual value
-of the `id` field. The `id` field’s value could have been 10, 11, or 12, but
-the code that goes with that pattern doesn’t know which it is. The pattern code
-isn’t able to use the value from the `id` field because we haven’t saved the
-`id` value in a variable.
+দ্বিতীয় arm-এ, যেখানে pattern-এ শুধু একটি range উল্লেখ করা আছে, arm-এর সঙ্গে যুক্ত কোডে এমন কোনো variable নেই, যাতে `id` field-এর আসল মান আছে। `id` field-এর মান 10, 11 বা 12 হতে পারত, কিন্তু
+সেই pattern-এর সঙ্গে যাওয়া কোড জানে না কোনটি। pattern-এর কোড `id` field-এর মান ব্যবহার করতে পারে না, কারণ আমরা `id` মান একটি variable-এ রাখিনি।
 
-In the last arm, where we’ve specified a variable without a range, we do have
-the value available to use in the arm’s code in a variable named `id`. The
-reason is that we’ve used the struct field shorthand syntax. But we haven’t
-applied any test to the value in the `id` field in this arm, as we did with the
-first two arms: Any value would match this pattern.
+শেষ arm-এ, যেখানে range ছাড়া একটি variable উল্লেখ করেছি, সেখানে arm-এর কোডে ব্যবহারের জন্য `id` নামের একটি variable-এ মানটি পাওয়া যায়। কারণ আমরা struct field-এর সংক্ষিপ্ত syntax ব্যবহার করেছি।
+কিন্তু প্রথম দুটি arm-এর মতো এই arm-এ `id` field-এর মানের ওপর কোনো যাচাই প্রয়োগ করিনি: যেকোনো মান এই pattern-এর সঙ্গে মিলবে।
 
-Using `@` lets us test a value and save it in a variable within one pattern.
+`@` ব্যবহার করে একটি pattern-এর ভেতরেই একটি মান যাচাই করে একটি variable-এ রেখে দেওয়া যায়।
 
 {{#quiz ../quizzes/ch18-03-pattern-syntax.toml}}
 
-## Summary
+## সারসংক্ষেপ {#summary}
 
-Rust’s patterns are very useful in distinguishing between different kinds of
-data. When used in `match` expressions, Rust ensures that your patterns cover
-every possible value, or your program won’t compile. Patterns in `let`
-statements and function parameters make those constructs more useful, enabling
-the destructuring of values into smaller parts and assigning those parts to
-variables. We can create simple or complex patterns to suit our needs.
+বিভিন্ন ধরনের ডেটার মধ্যে পার্থক্য করতে Rust-এর pattern খুবই কাজের। `match` expression-এ ব্যবহার করলে Rust নিশ্চিত করে যে আপনার pattern প্রতিটি সম্ভাব্য মান ঢেকে দেয়, নইলে প্রোগ্রাম compile হবে না।
+`let` statement আর function parameter-এর pattern এই গঠনগুলোকে আরও কাজের করে, মানকে ছোট ছোট অংশে destructure করে সেই অংশগুলো variable-এ বসাতে দেয়। প্রয়োজন অনুযায়ী আমরা সরল বা জটিল pattern
+তৈরি করতে পারি।
 
-Next, for the penultimate chapter of the book, we’ll look at some advanced
-aspects of a variety of Rust’s features.
+এরপর, বইয়ের শেষের আগের অধ্যায়ে আমরা Rust-এর নানা বৈশিষ্ট্যের কিছু উন্নত দিক দেখব।
