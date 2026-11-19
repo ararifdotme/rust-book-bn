@@ -411,6 +411,24 @@ tested with this repo's build.
 | type system | type system | ভাষার type-সংক্রান্ত নিয়মের ব্যবস্থা | 2 |
 | unwrap | unwrap করা | `Option`/`Result`-এর ভেতরের মান বের করা | 6 |
 | wildcard | wildcard | যেকোনো মানের সঙ্গে মেলে এমন pattern | 6 |
+| module system | module system | package, crate, module আর path নিয়ে কোড সংগঠনের ব্যবস্থা | 7 |
+| path | path | কোনো item-এর নাম লেখার পথ (যেমন `a::b::c`) | 7 |
+| item | item | function, struct, enum, module, constant-এর মতো সংজ্ঞায়িত জিনিস | 7 |
+| crate root | crate root | crate-এর মূল ফাইল, যেখান থেকে compiler শুরু করে | 7 |
+| module tree | module tree | module-গুলোর গাছের মতো কাঠামো | 7 |
+| submodule | submodule | module-এর ভেতরের module | 7 |
+| parent / child / sibling module | parent / child / sibling | ওপরের module / ভেতরের module / একই স্তরের module | 7 |
+| ancestor module | ancestor | ওপরের যেকোনো স্তরের module | 7 |
+| absolute path / relative path | absolute path / relative path | crate root থেকে শুরু হওয়া পূর্ণ পথ / বর্তমান module থেকে শুরু হওয়া পথ | 7 |
+| encapsulate | encapsulate করা | ভেতরের খুঁটিনাটি লুকিয়ে রাখা | 7 |
+| workspace | workspace | একসঙ্গে বেড়ে ওঠা package-গুলোর সমষ্টি | 7 |
+| glob operator | glob operator | `*` দিয়ে সব public item একসঙ্গে আনার চিহ্ন | 7 |
+| re-export | re-export করা | আনা নামকে আবার বাইরে প্রকাশ করা | 7 |
+| alias | alias | বিকল্প নাম | 7 |
+| nested path | nested path | একই শুরুর অংশের পথগুলো `{}` দিয়ে একত্র করা | 7 |
+| symbolic link | symbolic link | ফাইল বা ডিরেক্টরির শর্টকাট-লিংক | 7 |
+| build script | build script | build-এর আগে চলা Rust স্ক্রিপ্ট (`build.rs`) | 7 |
+| static method | static method | instance ছাড়াই call করা যায় এমন associated function | 7 |
 
 ### Everyday computing words
 
@@ -474,6 +492,10 @@ Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
 | cursor / scrollbar | কার্সর / স্ক্রলবার | 6 |
 | enumerate | একে একে তালিকাভুক্ত করা | 6 |
 | hover (the mouse) | মাউস রাখা | 6 |
+| filesystem | ফাইল সিস্টেম | 7 |
+| shortcut | শর্টকাট | 7 |
+| codebase | কোডবেস | 7 |
+| front of house / back of house (restaurant) | front of house (সামনের অংশ) / back of house (পেছনের অংশ) | 7 |
 
 ## Progress
 
@@ -492,7 +514,7 @@ use.
 - [x] Chapter 4: Understanding Ownership (ch04-*)
 - [x] Chapter 5: Using Structs to Structure Related Data (ch05-*)
 - [x] Chapter 6: Enums and Pattern Matching (ch06-*)
-- [ ] Chapter 7: Packages, Crates, and Modules (ch07-*)
+- [x] Chapter 7: Packages, Crates, and Modules (ch07-*)
 - [ ] Chapter 8: Common Collections (ch08-*)
 - [ ] Chapter 9: Error Handling (ch09-*)
 - [ ] Chapter 10: Generic Types, Traits, and Lifetimes (ch10-*)

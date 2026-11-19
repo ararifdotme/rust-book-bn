@@ -2,14 +2,14 @@
 id = "23c95879-aae2-4121-bf89-21278f7b6ec6"
 type = "MultipleChoice"
 prompt.prompt = """
-Which of the following is NOT a benefit of using modules?
+module ব্যবহারের সুবিধা নিচের কোনটি **নয়**?
 """
-answer.answer = "Modules boost the runtime performance of interdependent code within the same module"
+answer.answer = "module একই module-এর পরস্পর-নির্ভর কোডের runtime পারফরম্যান্স বাড়ায়"
 prompt.distractors = [
-  "Modules group related code so programmers can more easily work on a large codebase",
-  "Modules encapsulate implementation details that shouldn't be used by external clients",
-  "Modules provide a scope to avoid naming conflicts across parts of a codebase"
+  "module সম্পর্কিত কোড একত্র করে, ফলে প্রোগ্রামাররা বড় কোডবেসে সহজে কাজ করতে পারেন",
+  "module implementation-এর এমন খুঁটিনাটি লুকিয়ে রাখে, যা বাইরের ব্যবহারকারীদের ব্যবহার করা উচিত নয়",
+  "module একটি scope দেয়, যাতে কোডবেসের বিভিন্ন অংশে নামের সংঘাত এড়ানো যায়"
 ]
 context = """
-Modules have no effect on runtime, they are purely for compile-time organization.
+runtime-এ module-এর কোনো প্রভাব নেই, এগুলো শুধু compile-time-এর সংগঠনের জন্য।
 """

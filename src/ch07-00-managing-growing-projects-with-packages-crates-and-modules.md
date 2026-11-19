@@ -2,51 +2,49 @@
 
 <a id="managing-growing-projects-with-packages-crates-and-modules"></a>
 
-# Packages, Crates, and Modules
+# package, crate ও module {#packages-crates-and-modules}
 
-As you write large programs, organizing your code will become increasingly
-important. By grouping related functionality and separating code with distinct
-features, you’ll clarify where to find code that implements a particular
-feature and where to go to change how a feature works.
+বড় প্রোগ্রাম লেখার সময় কোড গুছিয়ে রাখা ক্রমশ আরও গুরুত্বপূর্ণ হয়ে উঠবে। সম্পর্কিত
+কার্যকারিতা একত্র করে এবং আলাদা বৈশিষ্ট্যের কোড আলাদা করে রাখলে স্পষ্ট হবে, কোনো নির্দিষ্ট
+বৈশিষ্ট্য implement (বাস্তবায়ন) করা কোড কোথায় খুঁজতে হবে, আর কোনো বৈশিষ্ট্য কীভাবে কাজ করে
+তা বদলাতে কোথায় যেতে হবে।
 
-The programs we’ve written so far have been in one module in one file. As a
-project grows, you should organize code by splitting it into multiple modules
-and then multiple files. A package can contain multiple binary crates and
-optionally one library crate. As a package grows, you can extract parts into
-separate crates that become external dependencies. This chapter covers all
-these techniques. For very large projects comprising a set of interrelated
-packages that evolve together, Cargo provides workspaces, which we’ll cover in
-[“Cargo Workspaces”][workspaces]<!-- ignore --> in Chapter 14.
+এ পর্যন্ত আমরা যেসব প্রোগ্রাম লিখেছি, সেগুলো একটি ফাইলের একটি module (কোডের অংশ ভাগ করার একক)-এ
+ছিল। প্রজেক্ট বড় হতে থাকলে কোডকে একাধিক module-এ, তারপর একাধিক ফাইলে ভাগ করে গুছিয়ে রাখা
+উচিত। একটি package (প্যাকেজ, কোডের বিতরণযোগ্য একক)-এ একাধিক binary crate (চালানো যায় এমন crate)
+এবং ঐচ্ছিকভাবে একটি library crate (অন্য প্রোগ্রামে ব্যবহারের জন্য লেখা crate) থাকতে পারে।
+package বড় হতে থাকলে এর অংশগুলো আলাদা crate-এ বের করে আনতে পারেন, যেগুলো বাইরের dependency
+(নির্ভরতা) হয়ে যায়। এই অধ্যায়ে এই সব কৌশল আলোচনা করা হয়েছে। একসঙ্গে বেড়ে ওঠা পরস্পর-সম্পর্কিত
+কয়েকটি package নিয়ে গঠিত খুব বড় প্রজেক্টের জন্য Cargo workspace (একসঙ্গে বেড়ে ওঠা package-গুলোর
+সমষ্টি) দেয়, যা নিয়ে আমরা অধ্যায় 14-এর [“Cargo workspace”][workspaces]<!-- ignore --> অংশে আলোচনা করব।
 
-We’ll also discuss encapsulating implementation details, which lets you reuse
-code at a higher level: Once you’ve implemented an operation, other code can
-call your code via its public interface without having to know how the
-implementation works. The way you write code defines which parts are public for
-other code to use and which parts are private implementation details that you
-reserve the right to change. This is another way to limit the amount of detail
-you have to keep in your head.
+আমরা implementation-এর খুঁটিনাটি encapsulate (ভেতরের খুঁটিনাটি লুকিয়ে রাখা) করা নিয়েও আলোচনা
+করব, যা দিয়ে আরও উঁচু স্তরে কোড আবার ব্যবহার করা যায়: একবার কোনো operation implement করে ফেললে
+অন্য কোড আপনার কোডের public ইন্টারফেসের মাধ্যমে তা call করতে পারে, implementation কীভাবে কাজ
+করে তা না জেনেই। আপনি কীভাবে কোড লেখেন, তা-ই ঠিক করে কোন অংশগুলো অন্য কোডের ব্যবহারের জন্য
+public, আর কোন অংশগুলো private implementation-এর খুঁটিনাটি, যা বদলানোর অধিকার আপনি নিজের
+কাছে রাখেন। মাথায় রাখতে হয় এমন খুঁটিনাটির পরিমাণ সীমিত রাখার এটি আরেকটি উপায়।
 
-A related concept is scope: The nested context in which code is written has a
-set of names that are defined as “in scope.” When reading, writing, and
-compiling code, programmers and compilers need to know whether a particular
-name at a particular spot refers to a variable, function, struct, enum, module,
-constant, or other item and what that item means. You can create scopes and
-change which names are in or out of scope. You can’t have two items with the
-same name in the same scope; tools are available to resolve name conflicts.
+এর সঙ্গে সম্পর্কিত একটি ধারণা হলো scope (কোডের যে অংশে একটি নাম ব্যবহার করা যায়): যে স্তরবিন্যস্ত
+প্রেক্ষাপটে কোড লেখা হয়, তাতে কিছু নাম “scope-এর ভেতরে” বলে সংজ্ঞায়িত থাকে। কোড পড়া, লেখা আর
+compile করার সময় প্রোগ্রামার আর compiler-কে জানতে হয়, একটি নির্দিষ্ট জায়গায় একটি নির্দিষ্ট নাম
+কোনো variable, function, struct, enum, module, constant নাকি অন্য কোনো item-কে বোঝায়, আর সেই item-এর
+অর্থ কী। আপনি scope তৈরি করতে পারেন এবং কোন নাম scope-এর ভেতরে বা বাইরে থাকবে তা বদলাতে পারেন।
+একই scope-এ একই নামের দুটি item রাখা যায় না; নামের সংঘাত মেটানোর জন্য নানা উপায় আছে।
 
-Rust has a number of features that allow you to manage your code’s
-organization, including which details are exposed, which details are private,
-and what names are in each scope in your programs. These features, sometimes
-collectively referred to as the _module system_, include:
+Rust-এ এমন কয়েকটি বৈশিষ্ট্য আছে, যা দিয়ে আপনার কোডের সংগঠন সামলানো যায়, যেমন কোন খুঁটিনাটি
+প্রকাশ করা হবে, কোনগুলো private থাকবে, আর আপনার প্রোগ্রামের প্রতিটি scope-এ কোন কোন নাম থাকবে।
+এই বৈশিষ্ট্যগুলোকে কখনো কখনো একসঙ্গে _module system_ (package, crate, module আর path নিয়ে কোড
+সংগঠনের ব্যবস্থা) বলা হয়, যার মধ্যে আছে:
 
-* **Packages**: A Cargo feature that lets you build, test, and share crates
-* **Crates**: A tree of modules that produces a library or executable
-* **Modules and use**: Let you control the organization, scope, and privacy of
-paths
-* **Paths**: A way of naming an item, such as a struct, function, or module
+* **package**: Cargo-র একটি বৈশিষ্ট্য, যা দিয়ে crate build, test আর শেয়ার করা যায়
+* **crate**: module-এর একটি গাছ, যা একটি library বা executable তৈরি করে
+* **module ও use**: path-এর সংগঠন, scope আর privacy নিয়ন্ত্রণ করতে
+দেয়
+* **path**: struct, function বা module-এর মতো একটি item-এর নাম লেখার একটি উপায়
 
-In this chapter, we’ll cover all these features, discuss how they interact, and
-explain how to use them to manage scope. By the end, you should have a solid
-understanding of the module system and be able to work with scopes like a pro!
+এই অধ্যায়ে আমরা এই সব বৈশিষ্ট্য আলোচনা করব, এরা কীভাবে পরস্পরের সঙ্গে কাজ করে তা দেখব, আর scope
+সামলাতে এগুলো কীভাবে ব্যবহার করতে হয় তা ব্যাখ্যা করব। শেষে module system সম্পর্কে আপনার পোক্ত
+ধারণা থাকা উচিত, আর একজন দক্ষ প্রোগ্রামারের মতো scope নিয়ে কাজ করতে পারা উচিত!
 
 [workspaces]: ch14-03-cargo-workspaces.html

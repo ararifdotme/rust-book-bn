@@ -1,18 +1,16 @@
-## Bringing Paths into Scope with the `use` Keyword
+## `use` keyword দিয়ে path-কে scope-এ আনা {#bringing-paths-into-scope-with-the-use-keyword}
 
-Having to write out the paths to call functions can feel inconvenient and
-repetitive. In Listing 7-7, whether we chose the absolute or relative path to
-the `add_to_waitlist` function, every time we wanted to call `add_to_waitlist`
-we had to specify `front_of_house` and `hosting` too. Fortunately, there’s a
-way to simplify this process: We can create a shortcut to a path with the `use`
-keyword once and then use the shorter name everywhere else in the scope.
+function call করতে path লিখে যেতে হওয়াটা অসুবিধাজনক আর একঘেয়ে লাগতে পারে। Listing 7-7-এ
+`add_to_waitlist` function-এর জন্য absolute বা relative যে path-ই বেছে নিই না কেন, যতবার
+`add_to_waitlist` call করতে চেয়েছি, ততবার `front_of_house` আর `hosting`-ও লিখতে হয়েছে। সৌভাগ্যক্রমে,
+এই প্রক্রিয়া সহজ করার একটি উপায় আছে: `use` keyword দিয়ে একবার একটি path-এর শর্টকাট তৈরি করে scope-এর
+বাকি সবখানে ছোট নামটি ব্যবহার করতে পারি।
 
-In Listing 7-11, we bring the `crate::front_of_house::hosting` module into the
-scope of the `eat_at_restaurant` function so that we only have to specify
-`hosting::add_to_waitlist` to call the `add_to_waitlist` function in
-`eat_at_restaurant`.
+Listing 7-11-এ আমরা `crate::front_of_house::hosting` module-টিকে `eat_at_restaurant` function-এর
+scope-এ আনি, যাতে `eat_at_restaurant`-এ `add_to_waitlist` function call করতে শুধু
+`hosting::add_to_waitlist` লিখলেই চলে।
 
-<Listing number="7-11" file-name="src/lib.rs" caption="Bringing a module into scope with `use`">
+<Listing number="7-11" file-name="src/lib.rs" caption="`use` দিয়ে একটি module-কে scope-এ আনা">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-11/src/lib.rs}}
@@ -20,18 +18,16 @@ scope of the `eat_at_restaurant` function so that we only have to specify
 
 </Listing>
 
-Adding `use` and a path in a scope is similar to creating a symbolic link in
-the filesystem. By adding `use crate::front_of_house::hosting` in the crate
-root, `hosting` is now a valid name in that scope, just as though the `hosting`
-module had been defined in the crate root. Paths brought into scope with `use`
-also check privacy, like any other paths.
+একটি scope-এ `use` আর একটি path যোগ করা ফাইল সিস্টেমে একটি symbolic link (ফাইল বা ডিরেক্টরির
+শর্টকাট-লিংক) তৈরির মতো। crate root-এ `use crate::front_of_house::hosting` যোগ করায় `hosting` এখন ওই
+scope-এ একটি বৈধ নাম, ঠিক যেন `hosting` module crate root-এই সংজ্ঞায়িত হয়েছিল। `use` দিয়ে scope-এ
+আনা path-ও অন্য যেকোনো path-এর মতো privacy যাচাই করে।
 
-Note that `use` only creates the shortcut for the particular scope in which the
-`use` occurs. Listing 7-12 moves the `eat_at_restaurant` function into a new
-child module named `customer`, which is then a different scope than the `use`
-statement, so the function body won’t compile.
+লক্ষ করুন, `use` শুধু সেই নির্দিষ্ট scope-এর জন্যই শর্টকাট তৈরি করে, যেখানে `use` আছে। Listing 7-12-এ
+`eat_at_restaurant` function-কে `customer` নামের একটি নতুন child module-এ সরানো হয়েছে, যা তখন `use`
+statement-এর থেকে আলাদা একটি scope, তাই function body compile হবে না।
 
-<Listing number="7-12" file-name="src/lib.rs" caption="A `use` statement only applies in the scope it’s in.">
+<Listing number="7-12" file-name="src/lib.rs" caption="একটি `use` statement শুধু সেই scope-এই প্রযোজ্য, যেখানে এটি আছে।">
 
 ```rust,noplayground,test_harness,does_not_compile,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-12/src/lib.rs}}
@@ -39,26 +35,24 @@ statement, so the function body won’t compile.
 
 </Listing>
 
-The compiler error shows that the shortcut no longer applies within the
-`customer` module:
+compiler error দেখায় যে `customer` module-এর ভেতরে শর্টকাটটি আর প্রযোজ্য
+নয়:
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-12/output.txt}}
 ```
 
-Notice there’s also a warning that the `use` is no longer used in its scope! To
-fix this problem, move the `use` within the `customer` module too, or reference
-the shortcut in the parent module with `super::hosting` within the child
-`customer` module.
+লক্ষ করুন, একটি সতর্কবার্তাও আছে যে `use`-টি তার scope-এ আর ব্যবহার হচ্ছে না! এই সমস্যা ঠিক করতে `use`-টিকেও
+`customer` module-এর ভেতরে সরিয়ে নিন, অথবা child `customer` module-এর ভেতর থেকে `super::hosting` দিয়ে
+parent module-এর শর্টকাটটি উল্লেখ করুন।
 
-### Creating Idiomatic `use` Paths
+### Rust-সুলভ `use` path তৈরি করা {#creating-idiomatic-use-paths}
 
-In Listing 7-11, you might have wondered why we specified `use
-crate::front_of_house::hosting` and then called `hosting::add_to_waitlist` in
-`eat_at_restaurant`, rather than specifying the `use` path all the way out to
-the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
+Listing 7-11-এ আপনি হয়তো ভেবেছেন, Listing 7-13-এর মতো একই ফল পেতে `use` path-টি একেবারে
+`add_to_waitlist` function পর্যন্ত লেখার বদলে আমরা কেন `use
+crate::front_of_house::hosting` লিখে তারপর `eat_at_restaurant`-এ `hosting::add_to_waitlist` call করলাম।
 
-<Listing number="7-13" file-name="src/lib.rs" caption="Bringing the `add_to_waitlist` function into scope with `use`, which is unidiomatic">
+<Listing number="7-13" file-name="src/lib.rs" caption="`use` দিয়ে `add_to_waitlist` function-কে scope-এ আনা, যা Rust-সুলভ নয়">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-13/src/lib.rs}}
@@ -66,20 +60,17 @@ the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
 
 </Listing>
 
-Although both Listing 7-11 and Listing 7-13 accomplish the same task, Listing
-7-11 is the idiomatic way to bring a function into scope with `use`. Bringing
-the function’s parent module into scope with `use` means we have to specify the
-parent module when calling the function. Specifying the parent module when
-calling the function makes it clear that the function isn’t locally defined
-while still minimizing repetition of the full path. The code in Listing 7-13 is
-unclear as to where `add_to_waitlist` is defined.
+Listing 7-11 আর Listing 7-13 দুটোই একই কাজ করলেও `use` দিয়ে একটি function-কে scope-এ আনার Rust-সুলভ
+উপায় হলো Listing
+7-11। `use` দিয়ে function-এর parent module-কে scope-এ আনা মানে function call করার সময় আমাদের parent
+module লিখতে হবে। function call করার সময় parent module লিখলে স্পষ্ট হয় যে function-টি লোকালভাবে
+সংজ্ঞায়িত নয়, আবার পুরো path বারবার লেখাও কম হয়। Listing 7-13-এর কোডে `add_to_waitlist` কোথায়
+সংজ্ঞায়িত, তা অস্পষ্ট।
 
-On the other hand, when bringing in structs, enums, and other items with `use`,
-it’s idiomatic to specify the full path. Listing 7-14 shows the idiomatic way
-to bring the standard library’s `HashMap` struct into the scope of a binary
-crate.
+অন্যদিকে, `use` দিয়ে struct, enum আর অন্যান্য item আনার সময় পুরো path লেখাই Rust-সুলভ। Listing 7-14-এ
+একটি binary crate-এর scope-এ standard library-র `HashMap` struct আনার Rust-সুলভ উপায় দেখানো হয়েছে।
 
-<Listing number="7-14" file-name="src/main.rs" caption="Bringing `HashMap` into scope in an idiomatic way">
+<Listing number="7-14" file-name="src/main.rs" caption="Rust-সুলভ উপায়ে `HashMap`-কে scope-এ আনা">
 
 ```rust
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-14/src/main.rs}}
@@ -87,15 +78,14 @@ crate.
 
 </Listing>
 
-There’s no strong reason behind this idiom: It’s just the convention that has
-emerged, and folks have gotten used to reading and writing Rust code this way.
+এই idiom (Rust-এর প্রচলিত লেখার ধরন)-এর পেছনে জোরালো কোনো কারণ নেই: এটি শুধু একটি রীতি, যা গড়ে উঠেছে,
+আর মানুষজন এভাবে Rust কোড পড়তে ও লিখতে অভ্যস্ত হয়ে গেছেন।
 
-The exception to this idiom is if we’re bringing two items with the same name
-into scope with `use` statements, because Rust doesn’t allow that. Listing 7-15
-shows how to bring two `Result` types into scope that have the same name but
-different parent modules, and how to refer to them.
+এই idiom-এর ব্যতিক্রম হলো, যদি আমরা `use` statement দিয়ে একই নামের দুটি item scope-এ আনি, কারণ Rust
+তা করতে দেয় না। Listing 7-15-এ দেখানো হয়েছে, একই নামের কিন্তু আলাদা parent module-এর দুটি `Result`
+type কীভাবে scope-এ আনতে হয় এবং কীভাবে সেগুলো উল্লেখ করতে হয়।
 
-<Listing number="7-15" file-name="src/lib.rs" caption="Bringing two types with the same name into the same scope requires using their parent modules.">
+<Listing number="7-15" file-name="src/lib.rs" caption="একই নামের দুটি type একই scope-এ আনতে তাদের parent module ব্যবহার করতে হয়।">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-15/src/lib.rs:here}}
@@ -103,19 +93,17 @@ different parent modules, and how to refer to them.
 
 </Listing>
 
-As you can see, using the parent modules distinguishes the two `Result` types.
-If instead we specified `use std::fmt::Result` and `use std::io::Result`, we’d
-have two `Result` types in the same scope, and Rust wouldn’t know which one we
-meant when we used `Result`.
+দেখতেই পাচ্ছেন, parent module ব্যবহার করে দুটি `Result` type আলাদা করা যায়। এর বদলে আমরা যদি
+`use std::fmt::Result` আর `use std::io::Result` লিখতাম, তাহলে একই scope-এ দুটি `Result` type থাকত, আর
+`Result` ব্যবহার করলে আমরা কোনটি বোঝাচ্ছি, Rust তা জানত না।
 
-### Providing New Names with the `as` Keyword
+### `as` keyword দিয়ে নতুন নাম দেওয়া {#providing-new-names-with-the-as-keyword}
 
-There’s another solution to the problem of bringing two types of the same name
-into the same scope with `use`: After the path, we can specify `as` and a new
-local name, or _alias_, for the type. Listing 7-16 shows another way to write
-the code in Listing 7-15 by renaming one of the two `Result` types using `as`.
+`use` দিয়ে একই নামের দুটি type একই scope-এ আনার সমস্যার আরেকটি সমাধান আছে: path-এর পরে আমরা `as`
+আর type-টির জন্য একটি নতুন লোকাল নাম, বা _alias_ (বিকল্প নাম), লিখতে পারি। Listing 7-16-এ `as` ব্যবহার
+করে দুটি `Result` type-এর একটির নাম বদলে Listing 7-15-এর কোড লেখার আরেকটি উপায় দেখানো হয়েছে।
 
-<Listing number="7-16" file-name="src/lib.rs" caption="Renaming a type when it’s brought into scope with the `as` keyword">
+<Listing number="7-16" file-name="src/lib.rs" caption="scope-এ আনার সময় `as` keyword দিয়ে একটি type-এর নাম বদলানো">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-16/src/lib.rs:here}}
@@ -123,24 +111,22 @@ the code in Listing 7-15 by renaming one of the two `Result` types using `as`.
 
 </Listing>
 
-In the second `use` statement, we chose the new name `IoResult` for the
-`std::io::Result` type, which won’t conflict with the `Result` from `std::fmt`
-that we’ve also brought into scope. Listing 7-15 and Listing 7-16 are
-considered idiomatic, so the choice is up to you!
+দ্বিতীয় `use` statement-এ আমরা `std::io::Result` type-এর জন্য নতুন নাম `IoResult` বেছে নিয়েছি, যা
+`std::fmt`-এর `Result`-এর সঙ্গে সংঘাত ঘটাবে না, যেটিও আমরা scope-এ এনেছি। Listing 7-15 আর Listing
+7-16 দুটোই Rust-সুলভ বলে গণ্য, তাই বেছে নেওয়া আপনার ওপর!
 
-### Re-exporting Names with `pub use`
+### `pub use` দিয়ে নাম re-export করা {#re-exporting-names-with-pub-use}
 
-When we bring a name into scope with the `use` keyword, the name is private to
-the scope into which we imported it. To enable code outside that scope to refer
-to that name as if it had been defined in that scope, we can combine `pub` and
-`use`. This technique is called _re-exporting_ because we’re bringing an item
-into scope but also making that item available for others to bring into their
-scope.
+`use` keyword দিয়ে কোনো নাম scope-এ আনলে নামটি সেই scope-এর কাছে private থাকে, যেখানে আমরা এটি
+import করেছি। ওই scope-এর বাইরের কোডকে নামটি এমনভাবে উল্লেখ করতে দিতে, যেন এটি ওই scope-এই সংজ্ঞায়িত,
+আমরা `pub` আর `use` মিলিয়ে ব্যবহার করতে পারি। এই কৌশলকে বলা হয় _re-exporting_ (আনা নামকে আবার বাইরে
+প্রকাশ করা), কারণ আমরা একটি item-কে scope-এ আনছি, আবার সেই item-কে অন্যদের নিজেদের scope-এ আনার জন্যও
+উন্মুক্ত করছি।
 
-Listing 7-17 shows the code in Listing 7-11 with `use` in the root module
-changed to `pub use`.
+Listing 7-17-এ Listing 7-11-এর কোডটি দেখানো হয়েছে, যেখানে root module-এর `use` বদলে `pub use` করা
+হয়েছে।
 
-<Listing number="7-17" file-name="src/lib.rs" caption="Making a name available for any code to use from a new scope with `pub use`">
+<Listing number="7-17" file-name="src/lib.rs" caption="`pub use` দিয়ে একটি নামকে নতুন scope থেকে যেকোনো কোডের ব্যবহারের জন্য উন্মুক্ত করা">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-17/src/lib.rs}}
@@ -148,29 +134,26 @@ changed to `pub use`.
 
 </Listing>
 
-Before this change, external code would have to call the `add_to_waitlist`
-function by using the path
-`restaurant::front_of_house::hosting::add_to_waitlist()`, which also would have
-required the `front_of_house` module to be marked as `pub`. Now that this `pub
-use` has re-exported the `hosting` module from the root module, external code
-can use the path `restaurant::hosting::add_to_waitlist()` instead.
+এই পরিবর্তনের আগে বাইরের কোডকে `add_to_waitlist` function call করতে হতো
+`restaurant::front_of_house::hosting::add_to_waitlist()` path ব্যবহার করে, যার জন্য `front_of_house`
+module-কেও `pub` হিসেবে চিহ্নিত করতে হতো। এখন এই `pub
+use` root module থেকে `hosting` module-টি re-export করায় বাইরের কোড এর বদলে
+`restaurant::hosting::add_to_waitlist()` path ব্যবহার করতে পারে।
 
-Re-exporting is useful when the internal structure of your code is different
-from how programmers calling your code would think about the domain. For
-example, in this restaurant metaphor, the people running the restaurant think
-about “front of house” and “back of house.” But customers visiting a restaurant
-probably won’t think about the parts of the restaurant in those terms. With `pub
-use`, we can write our code with one structure but expose a different structure.
-Doing so makes our library well organized for programmers working on the library
-and programmers calling the library. We’ll look at another example of `pub use`
-and how it affects your crate’s documentation in [“Exporting a Convenient Public
-API”][ch14-pub-use]<!-- ignore --> in Chapter 14.
+re-export কাজে আসে, যখন আপনার কোডের ভেতরের কাঠামো আপনার কোড call করা প্রোগ্রামাররা বিষয়টি যেভাবে
+ভাবেন, তার থেকে আলাদা। যেমন, এই রেস্তোরাঁর রূপকে রেস্তোরাঁ চালানো মানুষেরা “front of house” আর “back
+of house” হিসেবে ভাবেন। কিন্তু রেস্তোরাঁয় আসা খদ্দেররা সম্ভবত রেস্তোরাঁর অংশগুলোকে এই শব্দে ভাবেন না।
+`pub
+use` দিয়ে আমরা এক কাঠামোয় কোড লিখে ভিন্ন একটি কাঠামো প্রকাশ করতে পারি। এতে আমাদের library, library-তে
+কাজ করা প্রোগ্রামার আর library call করা প্রোগ্রামার—দুই দলের জন্যই সুসংগঠিত হয়। `pub use`-এর আরেকটি
+উদাহরণ আর এটি কীভাবে আপনার crate-এর ডকুমেন্টেশনকে প্রভাবিত করে, তা আমরা অধ্যায় 14-এর [“সুবিধাজনক
+public API export করা”][ch14-pub-use]<!-- ignore --> অংশে দেখব।
 
-### Using External Packages
+### বাইরের package ব্যবহার করা {#using-external-packages}
 
-In Chapter 2, we programmed a guessing game project that used an external
-package called `rand` to get random numbers. To use `rand` in our project, we
-added this line to _Cargo.toml_:
+অধ্যায় 2-এ আমরা একটি সংখ্যা আন্দাজের খেলার প্রজেক্ট প্রোগ্রাম করেছিলাম, যা র‍্যান্ডম সংখ্যা পেতে
+`rand` নামের একটি বাইরের package ব্যবহার করেছিল। আমাদের প্রজেক্টে `rand` ব্যবহার করতে আমরা
+_Cargo.toml_-এ এই লাইনটি যোগ করেছিলাম:
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
@@ -186,48 +169,43 @@ added this line to _Cargo.toml_:
 
 </Listing>
 
-Adding `rand` as a dependency in _Cargo.toml_ tells Cargo to download the
-`rand` package and any dependencies from [crates.io](https://crates.io/) and
-make `rand` available to our project.
+_Cargo.toml_-এ `rand`-কে dependency হিসেবে যোগ করলে Cargo-কে বলা হয় [crates.io](https://crates.io/)
+থেকে `rand` package আর এর সব dependency ডাউনলোড করে `rand`-কে আমাদের প্রজেক্টের জন্য উন্মুক্ত করতে।
 
-Then, to bring `rand` definitions into the scope of our package, we added a
-`use` line starting with the name of the crate, `rand`, and listed the items we
-wanted to bring into scope. Recall that in [“Generating a Random
-Number”][rand]<!-- ignore --> in Chapter 2, we brought the `Rng` trait into
-scope and called the `rand::thread_rng` function:
+তারপর আমাদের package-এর scope-এ `rand`-এর সংজ্ঞাগুলো আনতে আমরা crate-এর নাম `rand` দিয়ে শুরু হওয়া
+একটি `use` লাইন যোগ করেছিলাম, আর যে item-গুলো scope-এ আনতে চেয়েছিলাম, সেগুলো তালিকাভুক্ত করেছিলাম।
+মনে করুন, অধ্যায় 2-এর [“একটি র‍্যান্ডম সংখ্যা তৈরি
+করা”][rand]<!-- ignore --> অংশে আমরা `Rng` trait-কে scope-এ এনে `rand::thread_rng` function call
+করেছিলাম:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:ch07-04}}
 ```
 
-Members of the Rust community have made many packages available at
-[crates.io](https://crates.io/), and pulling any of them into your package
-involves these same steps: listing them in your package’s _Cargo.toml_ file and
-using `use` to bring items from their crates into scope.
+Rust কমিউনিটির সদস্যরা [crates.io](https://crates.io/)-তে অনেক package উন্মুক্ত করেছেন, আর সেগুলোর
+যেকোনোটি আপনার package-এ আনতে এই একই ধাপগুলো অনুসরণ করতে হয়: আপনার package-এর _Cargo.toml_ ফাইলে
+সেগুলো তালিকাভুক্ত করা, আর তাদের crate থেকে item scope-এ আনতে `use` ব্যবহার করা।
 
-Note that the standard `std` library is also a crate that’s external to our
-package. Because the standard library is shipped with the Rust language, we
-don’t need to change _Cargo.toml_ to include `std`. But we do need to refer to
-it with `use` to bring items from there into our package’s scope. For example,
-with `HashMap` we would use this line:
+লক্ষ করুন, standard `std` library-ও একটি crate, যা আমাদের package-এর বাইরের। standard library যেহেতু
+Rust ভাষার সঙ্গেই আসে, তাই `std` যোগ করতে আমাদের _Cargo.toml_ বদলাতে হয় না। কিন্তু সেখান থেকে item
+আমাদের package-এর scope-এ আনতে `use` দিয়ে একে উল্লেখ করতে হয়। যেমন, `HashMap`-এর জন্য আমরা এই লাইনটি
+ব্যবহার করতাম:
 
 ```rust
 use std::collections::HashMap;
 ```
 
-This is an absolute path starting with `std`, the name of the standard library
-crate.
+এটি একটি absolute path, যা শুরু হয়েছে standard library crate-এর নাম `std` দিয়ে।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-nested-paths-to-clean-up-large-use-lists"></a>
 
-### Using Nested Paths to Clean Up `use` Lists
+### nested path দিয়ে `use` তালিকা পরিষ্কার করা {#using-nested-paths-to-clean-up-use-lists}
 
-If we’re using multiple items defined in the same crate or same module, listing
-each item on its own line can take up a lot of vertical space in our files. For
-example, these two `use` statements we had in the guessing game in Listing 2-4
-bring items from `std` into scope:
+একই crate বা একই module-এ সংজ্ঞায়িত একাধিক item ব্যবহার করলে প্রতিটি item আলাদা লাইনে লিখলে আমাদের
+ফাইলে অনেকটা খাড়া জায়গা নিতে পারে। যেমন, Listing 2-4-এর সংখ্যা আন্দাজের খেলায় আমাদের এই দুটি `use`
+statement `std` থেকে item scope-এ আনে:
 
 <Listing file-name="src/main.rs">
 
@@ -237,12 +215,11 @@ bring items from `std` into scope:
 
 </Listing>
 
-Instead, we can use nested paths to bring the same items into scope in one
-line. We do this by specifying the common part of the path, followed by two
-colons, and then curly brackets around a list of the parts of the paths that
-differ, as shown in Listing 7-18.
+এর বদলে আমরা nested path (একই শুরুর অংশের পথগুলো `{}` দিয়ে একত্র করা) ব্যবহার করে একই item-গুলো এক
+লাইনেই scope-এ আনতে পারি। এটি করতে path-এর সাধারণ অংশটি লিখি, তারপর দুটি কোলন, আর তারপর কার্লি
+ব্র্যাকেটের ভেতরে path-গুলোর আলাদা অংশগুলোর একটি তালিকা, Listing 7-18-এ যেমন দেখানো হয়েছে।
 
-<Listing number="7-18" file-name="src/main.rs" caption="Specifying a nested path to bring multiple items with the same prefix into scope">
+<Listing number="7-18" file-name="src/main.rs" caption="একই উপসর্গের একাধিক item scope-এ আনতে একটি nested path লেখা">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-18/src/main.rs:here}}
@@ -250,16 +227,14 @@ differ, as shown in Listing 7-18.
 
 </Listing>
 
-In bigger programs, bringing many items into scope from the same crate or
-module using nested paths can reduce the number of separate `use` statements
-needed by a lot!
+বড় প্রোগ্রামে nested path ব্যবহার করে একই crate বা module থেকে অনেক item scope-এ আনলে দরকারি আলাদা
+`use` statement-এর সংখ্যা অনেক কমে যেতে পারে!
 
-We can use a nested path at any level in a path, which is useful when combining
-two `use` statements that share a subpath. For example, Listing 7-19 shows two
-`use` statements: one that brings `std::io` into scope and one that brings
-`std::io::Write` into scope.
+path-এর যেকোনো স্তরে nested path ব্যবহার করা যায়, যা কাজে আসে যখন একটি উপ-path ভাগ করে এমন দুটি `use`
+statement মেলাতে হয়। যেমন, Listing 7-19-এ দুটি `use` statement দেখানো হয়েছে: একটি `std::io`-কে scope-এ
+আনে, আর অন্যটি `std::io::Write`-কে।
 
-<Listing number="7-19" file-name="src/lib.rs" caption="Two `use` statements where one is a subpath of the other">
+<Listing number="7-19" file-name="src/lib.rs" caption="দুটি `use` statement, যেখানে একটি অন্যটির উপ-path">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-19/src/lib.rs}}
@@ -267,11 +242,10 @@ two `use` statements that share a subpath. For example, Listing 7-19 shows two
 
 </Listing>
 
-The common part of these two paths is `std::io`, and that’s the complete first
-path. To merge these two paths into one `use` statement, we can use `self` in
-the nested path, as shown in Listing 7-20.
+এই দুটি path-এর সাধারণ অংশ হলো `std::io`, আর সেটিই প্রথম path-টির পুরোটা। এই দুটি path-কে একটি `use`
+statement-এ মেলাতে আমরা nested path-এ `self` ব্যবহার করতে পারি, Listing 7-20-এ যেমন দেখানো হয়েছে।
 
-<Listing number="7-20" file-name="src/lib.rs" caption="Combining the paths in Listing 7-19 into one `use` statement">
+<Listing number="7-20" file-name="src/lib.rs" caption="Listing 7-19-এর path-গুলোকে একটি `use` statement-এ মেলানো">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-20/src/lib.rs}}
@@ -279,35 +253,32 @@ the nested path, as shown in Listing 7-20.
 
 </Listing>
 
-This line brings `std::io` and `std::io::Write` into scope.
+এই লাইনটি `std::io` আর `std::io::Write` দুটোকেই scope-এ আনে।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="the-glob-operator"></a>
 
-### Importing Items with the Glob Operator
+### glob operator দিয়ে item import করা {#importing-items-with-the-glob-operator}
 
-If we want to bring _all_ public items defined in a path into scope, we can
-specify that path followed by the `*` glob operator:
+একটি path-এ সংজ্ঞায়িত _সব_ public item scope-এ আনতে চাইলে সেই path-এর পরে `*` glob operator (`*` দিয়ে
+সব public item একসঙ্গে আনার চিহ্ন) লিখতে পারি:
 
 ```rust
 use std::collections::*;
 ```
 
-This `use` statement brings all public items defined in `std::collections` into
-the current scope. Be careful when using the glob operator! Glob can make it
-harder to tell what names are in scope and where a name used in your program
-was defined. Additionally, if the dependency changes its definitions, what
-you’ve imported changes as well, which may lead to compiler errors when you
-upgrade the dependency if the dependency adds a definition with the same name
-as a definition of yours in the same scope, for example.
+এই `use` statement `std::collections`-এ সংজ্ঞায়িত সব public item বর্তমান scope-এ আনে। glob operator
+ব্যবহারের সময় সতর্ক থাকুন! glob ব্যবহার করলে কোন কোন নাম scope-এ আছে, আর আপনার প্রোগ্রামে ব্যবহৃত
+একটি নাম কোথায় সংজ্ঞায়িত, তা বোঝা কঠিন হয়ে যেতে পারে। এছাড়া dependency তার সংজ্ঞা বদলালে আপনি যা
+import করেছেন তা-ও বদলে যায়, যার ফলে dependency আপগ্রেড করলে compiler error হতে পারে, যেমন যদি
+dependency এমন একটি সংজ্ঞা যোগ করে, যার নাম একই scope-এ আপনার একটি সংজ্ঞার নামের সমান।
 
-The glob operator is often used when testing to bring everything under test into
-the `tests` module; we’ll talk about that in [“How to Write
-Tests”][writing-tests]<!-- ignore --> in Chapter 11. The glob operator is also
-sometimes used as part of the prelude pattern: See [the standard library
-documentation](https://doc.rust-lang.org/std/prelude/index.html#other-preludes)<!-- ignore --> for more
-information on that pattern.
+glob operator প্রায়ই testing-এর সময় ব্যবহার হয়, পরীক্ষাধীন সবকিছু `tests` module-এ আনতে; এ নিয়ে আমরা
+অধ্যায় 11-এর [“test কীভাবে
+লিখতে হয়”][writing-tests]<!-- ignore --> অংশে কথা বলব। glob operator কখনো কখনো prelude ধরনের অংশ
+হিসেবেও ব্যবহার হয়: এই ধরন সম্পর্কে আরও জানতে [standard library-র
+ডকুমেন্টেশন](https://doc.rust-lang.org/std/prelude/index.html#other-preludes)<!-- ignore --> দেখুন।
 
 {{#quiz ../quizzes/ch07-04-use.toml}}
 

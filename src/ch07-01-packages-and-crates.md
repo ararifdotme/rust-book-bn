@@ -1,45 +1,41 @@
-## Packages and Crates
+## package ও crate {#packages-and-crates}
 
-The first parts of the module system we’ll cover are packages and crates.
+module system-এর যে অংশগুলো আমরা প্রথমে আলোচনা করব, সেগুলো হলো package আর crate।
 
-A _crate_ is the smallest amount of code that the Rust compiler considers at a
-time. Even if you run `rustc` rather than `cargo` and pass a single source code
-file (as we did all the way back in [“Rust Program Basics”][basics]<!-- ignore
---> in Chapter 1), the compiler considers that file to be a crate. Crates can
-contain modules, and the modules may be defined in other files that get
-compiled with the crate, as we’ll see in the coming sections.
+একটি _crate_ (Rust-এর কোডের একক) হলো এক সময়ে Rust compiler যতটুকু কোড বিবেচনা করে, তার
+ক্ষুদ্রতম একক। এমনকি আপনি যদি `cargo`-র বদলে `rustc` চালান এবং একটিমাত্র সোর্স কোড ফাইল দেন
+(যেমনটি আমরা সেই অধ্যায় 1-এর [“Rust প্রোগ্রামের প্রাথমিক কথা”][basics]<!-- ignore
+-->-তে করেছিলাম), compiler সেই ফাইলটিকেই একটি crate হিসেবে বিবেচনা করে। crate-এ module থাকতে পারে,
+আর module-গুলো এমন অন্য ফাইলে সংজ্ঞায়িত থাকতে পারে, যেগুলো crate-এর সঙ্গে compile হয়, যা আমরা
+পরের অংশগুলোতে দেখব।
 
-A crate can come in one of two forms: a binary crate or a library crate.
-_Binary crates_ are programs you can compile to an executable that you can run,
-such as a command line program or a server. Each must have a function called
-`main` that defines what happens when the executable runs. All the crates we’ve
-created so far have been binary crates.
+একটি crate দুটি রূপের যেকোনো একটিতে থাকতে পারে: binary crate বা library crate।
+_binary crate_ হলো এমন প্রোগ্রাম, যা compile করে চালানো যায় এমন একটি executable তৈরি করা যায়,
+যেমন একটি কমান্ড লাইন প্রোগ্রাম বা একটি সার্ভার। প্রতিটির `main` নামে একটি function থাকতে হবে,
+যা নির্ধারণ করে executable চললে কী ঘটবে। এ পর্যন্ত আমরা যত crate তৈরি করেছি, সবই binary crate।
 
-_Library crates_ don’t have a `main` function, and they don’t compile to an
-executable. Instead, they define functionality intended to be shared with
-multiple projects. For example, the `rand` crate we used in [Chapter
-2][rand]<!-- ignore --> provides functionality that generates random numbers.
-Most of the time when Rustaceans say “crate,” they mean library crate, and they
-use “crate” interchangeably with the general programming concept of a “library.”
+_library crate_-এর কোনো `main` function থাকে না, আর এগুলো compile হয়ে executable হয় না। বরং এরা
+এমন কার্যকারিতা সংজ্ঞায়িত করে, যা একাধিক প্রজেক্টের সঙ্গে ভাগ করে নেওয়ার উদ্দেশ্যে লেখা। যেমন,
+[অধ্যায় 2][rand]<!-- ignore -->-এ আমরা যে `rand` crate ব্যবহার করেছিলাম, তা র‍্যান্ডম সংখ্যা তৈরির
+কার্যকারিতা দেয়। বেশিরভাগ সময় Rustacean-রা “crate” বললে library crate বোঝান, আর “crate” শব্দটি
+প্রোগ্রামিংয়ের সাধারণ ধারণা “library”-র সঙ্গে অদলবদল করে ব্যবহার করেন।
 
-The _crate root_ is a source file that the Rust compiler starts from and makes
-up the root module of your crate (we’ll explain modules in depth in [“Control
-Scope and Privacy with Modules”][modules]<!-- ignore -->).
+_crate root_ (crate-এর মূল ফাইল) হলো এমন একটি সোর্স ফাইল, যেখান থেকে Rust compiler শুরু করে এবং
+যা আপনার crate-এর root module গঠন করে (module নিয়ে আমরা [“module দিয়ে scope আর privacy
+নিয়ন্ত্রণ”][modules]<!-- ignore -->-এ বিস্তারিত ব্যাখ্যা করব)।
 
-A _package_ is a bundle of one or more crates that provides a set of
-functionality. A package contains a _Cargo.toml_ file that describes how to
-build those crates. Cargo is actually a package that contains the binary crate
-for the command line tool you’ve been using to build your code. The Cargo
-package also contains a library crate that the binary crate depends on. Other
-projects can depend on the Cargo library crate to use the same logic the Cargo
-command line tool uses.
+একটি _package_ হলো এক বা একাধিক crate-এর একটি বান্ডেল, যা কিছু কার্যকারিতা দেয়। একটি package-এ
+একটি _Cargo.toml_ ফাইল থাকে, যা সেই crate-গুলো কীভাবে build করতে হবে তা বর্ণনা করে। Cargo নিজেও
+আসলে একটি package, যাতে আছে সেই কমান্ড লাইন টুলের binary crate, যা দিয়ে আপনি এতক্ষণ কোড build
+করছেন। Cargo package-এ একটি library crate-ও আছে, যার ওপর binary crate-টি নির্ভর করে। Cargo কমান্ড
+লাইন টুল যে যুক্তি ব্যবহার করে, সেটিই ব্যবহার করতে অন্য প্রজেক্টগুলো Cargo library crate-এর ওপর
+নির্ভর করতে পারে।
 
-A package can contain as many binary crates as you like, but at most only one
-library crate. A package must contain at least one crate, whether that’s a
-library or binary crate.
+একটি package-এ যত খুশি binary crate থাকতে পারে, কিন্তু library crate থাকতে পারে সর্বোচ্চ একটি।
+একটি package-এ অন্তত একটি crate থাকতেই হবে, তা library crate হোক বা binary crate।
 
-Let’s walk through what happens when we create a package. First, we enter the
-command `cargo new my-project`:
+চলুন দেখি একটি package তৈরি করলে কী ঘটে। প্রথমে আমরা `cargo new my-project` কমান্ডটি
+লিখি:
 
 ```console
 $ cargo new my-project
@@ -51,21 +47,18 @@ $ ls my-project/src
 main.rs
 ```
 
-After we run `cargo new my-project`, we use `ls` to see what Cargo creates. In
-the _my-project_ directory, there’s a _Cargo.toml_ file, giving us a package.
-There’s also a _src_ directory that contains _main.rs_. Open _Cargo.toml_ in
-your text editor and note that there’s no mention of _src/main.rs_. Cargo
-follows a convention that _src/main.rs_ is the crate root of a binary crate
-with the same name as the package. Likewise, Cargo knows that if the package
-directory contains _src/lib.rs_, the package contains a library crate with the
-same name as the package, and _src/lib.rs_ is its crate root. Cargo passes the
-crate root files to `rustc` to build the library or binary.
+`cargo new my-project` চালানোর পর Cargo কী তৈরি করে তা দেখতে আমরা `ls` ব্যবহার করি।
+_my-project_ ডিরেক্টরিতে একটি _Cargo.toml_ ফাইল আছে, যা আমাদের একটি package দেয়। একটি _src_
+ডিরেক্টরিও আছে, যাতে আছে _main.rs_। টেক্সট এডিটরে _Cargo.toml_ খুলে লক্ষ করুন, এতে _src/main.rs_-এর
+কোনো উল্লেখ নেই। Cargo একটি রীতি মেনে চলে: _src/main.rs_ হলো package-এর নামের সমান নামের একটি
+binary crate-এর crate root। একইভাবে Cargo জানে, package ডিরেক্টরিতে _src/lib.rs_ থাকলে package-টিতে
+package-এর নামের সমান নামের একটি library crate আছে, আর _src/lib.rs_ হলো তার crate root। library বা
+binary build করতে Cargo crate root ফাইলগুলো `rustc`-কে দেয়।
 
-Here, we have a package that only contains _src/main.rs_, meaning it only
-contains a binary crate named `my-project`. If a package contains _src/main.rs_
-and _src/lib.rs_, it has two crates: a binary and a library, both with the same
-name as the package. A package can have multiple binary crates by placing files
-in the _src/bin_ directory: Each file will be a separate binary crate.
+এখানে আমাদের একটি package আছে, যাতে শুধু _src/main.rs_ আছে, অর্থাৎ এতে শুধু `my-project` নামের একটি
+binary crate আছে। কোনো package-এ যদি _src/main.rs_ আর _src/lib.rs_ দুটোই থাকে, তাহলে এর দুটি crate
+আছে: একটি binary আর একটি library, দুটোরই নাম package-এর নামের সমান। _src/bin_ ডিরেক্টরিতে ফাইল রেখে
+একটি package-এ একাধিক binary crate রাখা যায়: প্রতিটি ফাইল হবে একটি আলাদা binary crate।
 
 {{#quiz ../quizzes/ch07-01-packages-and-crates.toml}}
 

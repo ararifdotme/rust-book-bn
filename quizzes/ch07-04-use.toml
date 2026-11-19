@@ -1,15 +1,15 @@
 [[questions]]
 id = "a162c2c8-aadf-4963-a997-02a1035f2459"
 type = "MultipleChoice"
-prompt.prompt = "Which of the following statements best describes the function of the `use` keyword?"
-answer.answer = "`use` reduces the verbosity of referring to items in the used path"
+prompt.prompt = "`use` keyword-এর কাজ নিচের কোন বক্তব্যটি সবচেয়ে ভালোভাবে বর্ণনা করে?"
+answer.answer = "`use` ব্যবহৃত path-এর item উল্লেখ করার দৈর্ঘ্য কমায়"
 prompt.distractors = [
-  "`use` copies the contents of an item from one module to another",
-  "`use` allows access to items that circumvents normal privacy rules",
-  "`use` indicates to the compiler that an item will be used and should be optimized"
+  "`use` একটি item-এর বিষয়বস্তু এক module থেকে আরেকটিতে কপি করে",
+  "`use` সাধারণ privacy-র নিয়ম পাশ কাটিয়ে item-এ প্রবেশাধিকার দেয়",
+  "`use` compiler-কে জানায় যে একটি item ব্যবহার হবে এবং সেটি optimize করা উচিত"
 ]
 context = """
-`use` allows references to items in the used path that are shorter than without the `use`, reducing the verbosity of reference.
+`use` ব্যবহৃত path-এর item-গুলোকে `use` ছাড়া যতটা লম্বা লিখতে হতো, তার চেয়ে ছোট করে উল্লেখ করতে দেয়, ফলে উল্লেখের দৈর্ঘ্য কমে।
 """
 
 
@@ -17,7 +17,7 @@ context = """
 id = "eccc2099-9880-4628-8474-f1d55e2a4a4a"
 type = "ShortAnswer"
 prompt.prompt = """
-Consider this module and `use` statement:
+এই module আর `use` statement দেখুন:
 
 ```
 pub mod parent {
@@ -34,11 +34,11 @@ fn main() {
 }
 ```
 
-Inside `main`, what is the total number of paths that can refer to `a`, `b`, or `c` (not including those that use `self`, `super`, or `crate`)?
-Write your answer as a digit such as 0 or 1. For example, if the only two valid paths were `a` and `parent::b`, then the answer would be 2.
+`main`-এর ভেতরে মোট কয়টি path `a`, `b` বা `c` উল্লেখ করতে পারে (`self`, `super` বা `crate` ব্যবহার করা path বাদে)?
+উত্তর একটি অঙ্ক হিসেবে লিখুন, যেমন 0 বা 1। যেমন, শুধু `a` আর `parent::b` দুটি বৈধ path হলে উত্তর হতো 2।
 """
 answer.answer = "5"
 context = """
-There are two paths to `a`: `parent::a` and `a`. There are no paths to `b`, because it is private. There are three paths to `c`:
-`parent::child::c`, `child::c`, `alias::c`.
+`a`-এর দুটি path আছে: `parent::a` আর `a`। `b`-এর কোনো path নেই, কারণ এটি private। `c`-এর তিনটি path আছে:
+`parent::child::c`, `child::c`, `alias::c`।
 """

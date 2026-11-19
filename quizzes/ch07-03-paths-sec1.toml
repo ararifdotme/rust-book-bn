@@ -1,10 +1,10 @@
 [[questions]]
 id = "4e18f340-e336-43c5-9a95-79dec1f49945"
 type = "ShortAnswer"
-prompt.prompt = "What is the keyword you use at the start of an absolute path to an item in the current crate?"
+prompt.prompt = "বর্তমান crate-এর কোনো item-এর absolute path-এর শুরুতে আপনি কোন keyword ব্যবহার করেন?"
 answer.answer = "crate"
 context = """
-For example, an absolute path to item `b` in module `a` would be `crate::a::b`.
+যেমন, module `a`-এর item `b`-এর absolute path হবে `crate::a::b`।
 """
 
 [[questions]]
@@ -25,7 +25,7 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 9
 context = """
-`b` is not accessible to `main` because the module `bar` is not marked as `pub`.
+`main`-এর পক্ষে `b`-তে পৌঁছানো সম্ভব নয়, কারণ module `bar` `pub` হিসেবে চিহ্নিত নয়।
 """
 
 [[questions]]
@@ -46,5 +46,5 @@ fn main() {
 answer.doesCompile = true
 answer.stdout = "b"
 context = """
-It is valid within `foo` to use a relative path to refer to items within `bar`.
+`foo`-এর ভেতরে `bar`-এর item উল্লেখ করতে relative path ব্যবহার করা বৈধ।
 """

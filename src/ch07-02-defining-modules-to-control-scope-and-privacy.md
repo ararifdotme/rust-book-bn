@@ -2,57 +2,51 @@
 
 <a id="defining-modules-to-control-scope-and-privacy"></a>
 
-## Control Scope and Privacy with Modules
+## module দিয়ে scope আর privacy নিয়ন্ত্রণ {#control-scope-and-privacy-with-modules}
 
-In this section, we’ll talk about modules and other parts of the module system,
-namely _paths_, which allow you to name items; the `use` keyword that brings a
-path into scope; and the `pub` keyword to make items public. We’ll also discuss
-the `as` keyword, external packages, and the glob operator.
+এই অংশে আমরা module আর module system-এর অন্যান্য অংশ নিয়ে কথা বলব, যেমন _path_ (কোনো item-এর
+নাম লেখার পথ, যেমন `a::b::c`), যা দিয়ে item-এর নাম দেওয়া যায়; `use` keyword, যা একটি path-কে
+scope-এ আনে; আর `pub` keyword, যা item-কে public করে। আমরা `as` keyword, বাইরের package আর glob
+operator নিয়েও আলোচনা করব।
 
-### Modules Cheat Sheet
+### module-এর এক নজরের সারাংশ {#modules-cheat-sheet}
 
-Before we get to the details of modules and paths, here we provide a quick
-reference on how modules, paths, the `use` keyword, and the `pub` keyword work
-in the compiler, and how most developers organize their code. We’ll be going
-through examples of each of these rules throughout this chapter, but this is a
-great place to refer to as a reminder of how modules work.
+module আর path-এর খুঁটিনাটিতে যাওয়ার আগে এখানে একটি দ্রুত রেফারেন্স দেওয়া হলো: compiler-এ module,
+path, `use` keyword আর `pub` keyword কীভাবে কাজ করে, আর বেশিরভাগ ডেভেলপার কীভাবে তাদের কোড গুছিয়ে
+রাখেন। এই অধ্যায়জুড়ে আমরা এই প্রতিটি নিয়মের উদাহরণ দেখব, তবে module কীভাবে কাজ করে তা মনে করার
+জন্য এটি ফিরে দেখার চমৎকার জায়গা।
 
-- **Start from the crate root**: When compiling a crate, the compiler first
-  looks in the crate root file (usually _src/lib.rs_ for a library crate and
-  _src/main.rs_ for a binary crate) for code to compile.
-- **Declaring modules**: In the crate root file, you can declare new modules;
-  say you declare a “garden” module with `mod garden;`. The compiler will look
-  for the module’s code in these places:
-  - Inline, within curly brackets that replace the semicolon following `mod
-    garden`
-  - In the file _src/garden.rs_
-  - In the file _src/garden/mod.rs_
-- **Declaring submodules**: In any file other than the crate root, you can
-  declare submodules. For example, you might declare `mod vegetables;` in
-  _src/garden.rs_. The compiler will look for the submodule’s code within the
-  directory named for the parent module in these places:
-  - Inline, directly following `mod vegetables`, within curly brackets instead
-    of the semicolon
-  - In the file _src/garden/vegetables.rs_
-  - In the file _src/garden/vegetables/mod.rs_
-- **Paths to code in modules**: Once a module is part of your crate, you can
-  refer to code in that module from anywhere else in that same crate, as long
-  as the privacy rules allow, using the path to the code. For example, an
-  `Asparagus` type in the garden vegetables module would be found at
-  `crate::garden::vegetables::Asparagus`.
-- **Private vs. public**: Code within a module is private from its parent
-  modules by default. To make a module public, declare it with `pub mod`
-  instead of `mod`. To make items within a public module public as well, use
-  `pub` before their declarations.
-- **The `use` keyword**: Within a scope, the `use` keyword creates shortcuts to
-  items to reduce repetition of long paths. In any scope that can refer to
-  `crate::garden::vegetables::Asparagus`, you can create a shortcut with `use
-  crate::garden::vegetables::Asparagus;`, and from then on you only need to
-  write `Asparagus` to make use of that type in the scope.
+- **crate root থেকে শুরু**: একটি crate compile করার সময় compiler প্রথমে compile করার মতো কোড
+  খোঁজে crate root ফাইলে (সাধারণত library crate-এর জন্য _src/lib.rs_ আর binary crate-এর জন্য
+  _src/main.rs_)।
+- **module ঘোষণা করা**: crate root ফাইলে আপনি নতুন module ঘোষণা করতে পারেন; ধরুন আপনি `mod garden;`
+  দিয়ে একটি “garden” module ঘোষণা করলেন। compiler module-টির কোড খুঁজবে এই জায়গাগুলোতে:
+  - সেখানেই (inline), কার্লি ব্র্যাকেটের ভেতরে, যা `mod
+    garden`-এর পরের সেমিকোলনের জায়গা নেয়
+  - _src/garden.rs_ ফাইলে
+  - _src/garden/mod.rs_ ফাইলে
+- **submodule ঘোষণা করা**: crate root ছাড়া অন্য যেকোনো ফাইলে আপনি submodule (module-এর ভেতরের
+  module) ঘোষণা করতে পারেন। যেমন, আপনি _src/garden.rs_-এ `mod vegetables;` ঘোষণা করতে পারেন।
+  compiler submodule-টির কোড খুঁজবে parent module-এর নামের ডিরেক্টরির ভেতরে, এই জায়গাগুলোতে:
+  - সেখানেই (inline), ঠিক `mod vegetables`-এর পরে, সেমিকোলনের বদলে কার্লি ব্র্যাকেটের
+    ভেতরে
+  - _src/garden/vegetables.rs_ ফাইলে
+  - _src/garden/vegetables/mod.rs_ ফাইলে
+- **module-এর কোডের path**: একবার একটি module আপনার crate-এর অংশ হয়ে গেলে, privacy-র নিয়ম অনুমতি
+  দিলে, কোডের path ব্যবহার করে একই crate-এর যেকোনো জায়গা থেকে সেই module-এর কোড উল্লেখ করতে পারেন।
+  যেমন, garden vegetables module-এর একটি `Asparagus` type পাওয়া যাবে
+  `crate::garden::vegetables::Asparagus`-এ।
+- **private বনাম public**: একটি module-এর ভেতরের কোড ডিফল্টভাবে তার parent module-গুলোর কাছে
+  private। একটি module-কে public করতে `mod`-এর বদলে `pub mod` দিয়ে ঘোষণা করুন। একটি public module-এর
+  ভেতরের item-গুলোকেও public করতে তাদের ঘোষণার আগে `pub` ব্যবহার করুন।
+- **`use` keyword**: একটি scope-এর ভেতরে `use` keyword item-গুলোর শর্টকাট তৈরি করে, যাতে লম্বা
+  path বারবার লিখতে না হয়। যে scope `crate::garden::vegetables::Asparagus` উল্লেখ করতে পারে, সেখানে
+  আপনি `use
+  crate::garden::vegetables::Asparagus;` দিয়ে একটি শর্টকাট তৈরি করতে পারেন, আর তারপর থেকে ওই scope-এ
+  সেই type ব্যবহার করতে শুধু `Asparagus` লিখলেই চলবে।
 
-Here, we create a binary crate named `backyard` that illustrates these rules.
-The crate’s directory, also named _backyard_, contains these files and
-directories:
+এখানে আমরা `backyard` নামে একটি binary crate তৈরি করছি, যা এই নিয়মগুলো দেখায়। crate-টির ডিরেক্টরির
+নামও _backyard_, আর এতে আছে এই ফাইল আর ডিরেক্টরিগুলো:
 
 ```text
 backyard
@@ -65,7 +59,7 @@ backyard
     └── main.rs
 ```
 
-The crate root file in this case is _src/main.rs_, and it contains:
+এই ক্ষেত্রে crate root ফাইল হলো _src/main.rs_, আর এতে আছে:
 
 <Listing file-name="src/main.rs">
 
@@ -75,8 +69,8 @@ The crate root file in this case is _src/main.rs_, and it contains:
 
 </Listing>
 
-The `pub mod garden;` line tells the compiler to include the code it finds in
-_src/garden.rs_, which is:
+`pub mod garden;` লাইনটি compiler-কে বলে _src/garden.rs_-এ যে কোড পাবে, তা যোগ করতে, যা
+হলো:
 
 <Listing file-name="src/garden.rs">
 
@@ -86,43 +80,39 @@ _src/garden.rs_, which is:
 
 </Listing>
 
-Here, `pub mod vegetables;` means the code in _src/garden/vegetables.rs_ is
-included too. That code is:
+এখানে `pub mod vegetables;` মানে _src/garden/vegetables.rs_-এর কোডও যোগ করা হবে। সেই কোডটি
+হলো:
 
 ```rust,noplayground,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden/vegetables.rs}}
 ```
 
-Now let’s get into the details of these rules and demonstrate them in action!
+এবার চলুন এই নিয়মগুলোর খুঁটিনাটিতে ঢুকি এবং কাজের মধ্যে সেগুলো দেখি!
 
-### Grouping Related Code in Modules
+### সম্পর্কিত কোড module-এ একত্র করা {#grouping-related-code-in-modules}
 
-_Modules_ let us organize code within a crate for readability and easy reuse.
-Modules also allow us to control the _privacy_ of items because code within a
-module is private by default. Private items are internal implementation details
-not available for outside use. We can choose to make modules and the items
-within them public, which exposes them to allow external code to use and depend
-on them.
+_module_ দিয়ে আমরা একটি crate-এর ভেতরের কোড পাঠযোগ্যতা আর সহজে আবার ব্যবহারের জন্য গুছিয়ে রাখতে
+পারি। module দিয়ে item-গুলোর _privacy_ (গোপনীয়তা, কে কী দেখতে পারবে)-ও নিয়ন্ত্রণ করা যায়, কারণ একটি
+module-এর ভেতরের কোড ডিফল্টভাবে private (বাইরে থেকে ব্যবহার করা যায় না)। private item হলো ভেতরের
+implementation-এর খুঁটিনাটি, যা বাইরের ব্যবহারের জন্য পাওয়া যায় না। আমরা module আর তাদের ভেতরের
+item-গুলোকে public করতে বেছে নিতে পারি, যা সেগুলোকে প্রকাশ করে, যাতে বাইরের কোড সেগুলো ব্যবহার করতে
+ও তাদের ওপর নির্ভর করতে পারে।
 
-As an example, let’s write a library crate that provides the functionality of a
-restaurant. We’ll define the signatures of functions but leave their bodies
-empty to concentrate on the organization of the code rather than the
-implementation of a restaurant.
+উদাহরণ হিসেবে, চলুন একটি library crate লিখি, যা একটি রেস্তোরাঁর কার্যকারিতা দেয়। আমরা function-এর
+signature সংজ্ঞায়িত করব, কিন্তু body ফাঁকা রাখব, যাতে রেস্তোরাঁর implementation-এর বদলে কোডের
+সংগঠনে মনোযোগ দেওয়া যায়।
 
-In the restaurant industry, some parts of a restaurant are referred to as front
-of house and others as back of house. _Front of house_ is where customers are;
-this encompasses where the hosts seat customers, servers take orders and
-payment, and bartenders make drinks. _Back of house_ is where the chefs and
-cooks work in the kitchen, dishwashers clean up, and managers do administrative
-work.
+রেস্তোরাঁ শিল্পে রেস্তোরাঁর কিছু অংশকে বলা হয় front of house (সামনের অংশ), আর কিছু অংশকে back of
+house (পেছনের অংশ)। _front of house_ হলো যেখানে খদ্দেররা থাকেন; এর মধ্যে আছে যেখানে host খদ্দেরদের
+বসান, পরিবেশনকারীরা অর্ডার আর টাকা নেন, আর bartender পানীয় বানান। _back of house_ হলো যেখানে
+রান্নাঘরে শেফ আর রাঁধুনিরা কাজ করেন, থালাবাসন ধোয়া হয়, আর ম্যানেজাররা প্রশাসনিক কাজ করেন।
 
-To structure our crate in this way, we can organize its functions into nested
-modules. Create a new library named `restaurant` by running `cargo new
-restaurant --lib`. Then, enter the code in Listing 7-1 into _src/lib.rs_ to
-define some modules and function signatures; this code is the front of house
-section.
+আমাদের crate-কে এভাবে সাজাতে আমরা এর function-গুলোকে একটির ভেতরে আরেকটি, এমন module-এ গুছিয়ে
+রাখতে পারি। `cargo new
+restaurant --lib` চালিয়ে `restaurant` নামে একটি নতুন library তৈরি করুন। তারপর কিছু module আর function
+signature সংজ্ঞায়িত করতে Listing 7-1-এর কোডটি _src/lib.rs_-এ লিখুন; এই কোডটি front of house অংশ।
 
-<Listing number="7-1" file-name="src/lib.rs" caption="A `front_of_house` module containing other modules that then contain functions">
+<Listing number="7-1" file-name="src/lib.rs" caption="একটি `front_of_house` module, যার ভেতরে অন্য module আছে, আর সেগুলোর ভেতরে আছে function">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-01/src/lib.rs}}
@@ -130,27 +120,23 @@ section.
 
 </Listing>
 
-We define a module with the `mod` keyword followed by the name of the module
-(in this case, `front_of_house`). The body of the module then goes inside curly
-brackets. Inside modules, we can place other modules, as in this case with the
-modules `hosting` and `serving`. Modules can also hold definitions for other
-items, such as structs, enums, constants, traits, and as in Listing 7-1,
-functions.
+module সংজ্ঞায়িত করতে আমরা `mod` keyword লিখি, তারপর module-এর নাম (এই ক্ষেত্রে `front_of_house`)।
+তারপর module-এর body যায় কার্লি ব্র্যাকেটের ভেতরে। module-এর ভেতরে আমরা অন্য module রাখতে পারি,
+যেমন এই ক্ষেত্রে `hosting` আর `serving` module। module-এ অন্যান্য item-এর সংজ্ঞাও রাখা যায়, যেমন
+struct, enum, constant, trait, এবং Listing 7-1-এর মতো function।
 
-By using modules, we can group related definitions together and name why
-they’re related. Programmers using this code can navigate the code based on the
-groups rather than having to read through all the definitions, making it easier
-to find the definitions relevant to them. Programmers adding new functionality
-to this code would know where to place the code to keep the program organized.
+module ব্যবহার করে আমরা সম্পর্কিত সংজ্ঞাগুলো একত্র করে রাখতে পারি এবং সেগুলো কেন সম্পর্কিত, তার নাম
+দিতে পারি। এই কোড ব্যবহারকারী প্রোগ্রামাররা সব সংজ্ঞা পড়ে যাওয়ার বদলে দলগুলোর ভিত্তিতে কোডে ঘুরে
+বেড়াতে পারেন, ফলে তাদের জন্য প্রাসঙ্গিক সংজ্ঞা খুঁজে পাওয়া সহজ হয়। এই কোডে নতুন কার্যকারিতা যোগ
+করা প্রোগ্রামাররা জানবেন প্রোগ্রাম গোছানো রাখতে কোড কোথায় রাখতে হবে।
 
-Earlier, we mentioned that _src/main.rs_ and _src/lib.rs_ are called _crate
-roots_. The reason for their name is that the contents of either of these two
-files form a module named `crate` at the root of the crate’s module structure,
-known as the _module tree_.
+আগে আমরা বলেছিলাম, _src/main.rs_ আর _src/lib.rs_-কে বলা হয় _crate
+root_। এদের এই নামের কারণ হলো, এই দুটি ফাইলের যেকোনোটির বিষয়বস্তু crate-এর module কাঠামোর মূলে
+`crate` নামের একটি module গঠন করে, যাকে বলা হয় _module tree_ (module-গুলোর গাছের মতো কাঠামো)।
 
-Listing 7-2 shows the module tree for the structure in Listing 7-1.
+Listing 7-2-এ Listing 7-1-এর কাঠামোর module tree দেখানো হয়েছে।
 
-<Listing number="7-2" caption="The module tree for the code in Listing 7-1">
+<Listing number="7-2" caption="Listing 7-1-এর কোডের module tree">
 
 ```text
 crate
@@ -166,17 +152,15 @@ crate
 
 </Listing>
 
-This tree shows how some of the modules nest inside other modules; for example,
-`hosting` nests inside `front_of_house`. The tree also shows that some modules
-are _siblings_, meaning they’re defined in the same module; `hosting` and
-`serving` are siblings defined within `front_of_house`. If module A is
-contained inside module B, we say that module A is the _child_ of module B and
-that module B is the _parent_ of module A. Notice that the entire module tree
-is rooted under the implicit module named `crate`.
+এই গাছটি দেখায় কিছু module কীভাবে অন্য module-এর ভেতরে থাকে; যেমন, `hosting` থাকে `front_of_house`-এর
+ভেতরে। গাছটি এটাও দেখায় যে কিছু module হলো _sibling_ (একই স্তরের module), অর্থাৎ এরা একই module-এ
+সংজ্ঞায়িত; `hosting` আর `serving` হলো `front_of_house`-এর ভেতরে সংজ্ঞায়িত sibling। module A যদি module
+B-এর ভেতরে থাকে, তাহলে আমরা বলি module A হলো module B-এর _child_ (ভেতরের module), আর module B হলো
+module A-এর _parent_ (ওপরের module)। লক্ষ করুন, পুরো module tree-র মূল হলো `crate` নামের অন্তর্নিহিত
+module।
 
-The module tree might remind you of the filesystem’s directory tree on your
-computer; this is a very apt comparison! Just like directories in a filesystem,
-you use modules to organize your code. And just like files in a directory, we
-need a way to find our modules.
+module tree হয়তো আপনাকে আপনার কম্পিউটারের ফাইল সিস্টেমের ডিরেক্টরি-গাছের কথা মনে করিয়ে দেয়; এটি
+খুবই যথার্থ তুলনা! ফাইল সিস্টেমের ডিরেক্টরির মতোই আপনি কোড গুছিয়ে রাখতে module ব্যবহার করেন। আর
+একটি ডিরেক্টরির ফাইলের মতোই আমাদের module-গুলো খুঁজে পাওয়ার একটি উপায় দরকার।
 
 {{#quiz ../quizzes/ch07-02-modules.toml}}

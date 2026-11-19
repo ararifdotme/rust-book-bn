@@ -2,19 +2,19 @@
 id = "904a0808-22d1-45e5-9611-cf143babbc41"
 type = "MultipleChoice"
 prompt.prompt = """
-Which is the correct order, where "A > B" means "A contains B"?
+সঠিক ক্রম কোনটি, যেখানে "A > B" মানে "A-এর ভেতরে B আছে"?
 """
 answer.answer = "package > crate > module"
 prompt.distractors = [ "module > crate > package", "crate > package > module" ]
 context = """
-A package is the top-level organizational unit, containing crates. A crate contains modules.
+package হলো সবচেয়ে ওপরের সাংগঠনিক একক, যার ভেতরে crate থাকে। crate-এর ভেতরে থাকে module।
 """
 
 [[questions]]
 id = "d45c7cbe-6089-40b9-843c-fbb9ff48ca49"
 type = "ShortAnswer"
 prompt.prompt = """
-Imagine you see a Rust package `foobar` with the following files:
+কল্পনা করুন, আপনি নিচের ফাইলগুলোসহ একটি Rust package `foobar` দেখছেন:
 
 ```text
 foobar
@@ -28,10 +28,10 @@ foobar
         └── alt.rs
 ```
 
-How many crates does this package contain? Write your answer as a digit, e.g. 0, 1, and so on.
+এই package-এ কয়টি crate আছে? উত্তর একটি অঙ্ক হিসেবে লিখুন, যেমন 0, 1 ইত্যাদি।
 """
 answer.answer = "3"
 context = """ 
-`main.rs` produces a binary crate, `lib.rs` produces a library crate, and `bin/alt.rs` produces a binary crate. The `util.rs` would presumably be used as a module within
-one of these crates, but it is not a special filename recognized by Rust, so it would not be its own crate. `build.rs` is a build script.
+`main.rs` একটি binary crate তৈরি করে, `lib.rs` একটি library crate তৈরি করে, আর `bin/alt.rs` একটি binary crate তৈরি করে। `util.rs` সম্ভবত এই crate-গুলোর একটির ভেতরে
+module হিসেবে ব্যবহার হবে, কিন্তু এটি Rust-এর চেনা কোনো বিশেষ ফাইলের নাম নয়, তাই এটি নিজে কোনো crate হবে না। `build.rs` হলো একটি build script।
 """
