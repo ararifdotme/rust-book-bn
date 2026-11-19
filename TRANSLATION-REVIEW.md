@@ -445,7 +445,7 @@ handle and link are unchanged.
 
 ## Appendix (A–G)
 
-**Auto-chosen terms:** পরিশিষ্ট (appendix), keyword, raw identifier, edition,
+**Auto-chosen terms:** পরিশিষ্ট (appendix), raw identifier,
 linter / lint, regression, release channel, train model, feature flag / feature
 gate, toolchain, RFC প্রক্রিয়া, “স্থবিরতা ছাড়াই স্থিতিশীলতা” (stability
 without stagnation), “derive করা যায় এমন trait”.
@@ -466,6 +466,8 @@ without stagnation), “derive করা যায় এমন trait”.
   use the Bengali headings. The ch05 link still points at the old-heading
   anchor, which still exists.
 - SUMMARY.md (sidebar titles) is untranslated for the whole book, as before.
+- The glossary form for "derivable trait" stays "derivable trait"; the Appendix C
+  heading writes it as "derive করা যায় এমন trait" for readability.
 
 **Unsure sentences:**
 

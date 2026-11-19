@@ -623,16 +623,13 @@ tested with this repo's build.
 | poisoned (mutex) | poisoned (দূষিত) | — | 21 |
 | double panic | double panic | — | 21 |
 | raw identifier | raw identifier | `r#` দিয়ে keyword-কে identifier হিসেবে ব্যবহার | Appendix |
-| edition | edition | — | Appendix |
 | linter / lint | linter / lint | — | Appendix |
-| regression | regression (আগে কাজ করা জিনিস ভেঙে যাওয়া) | — | Appendix |
 | release channel | release channel | nightly, beta, stable | Appendix |
 | train model | train model | প্রতি ছয় সপ্তাহে release “স্টেশন ছেড়ে যায়” | Appendix |
 | feature flag / feature gate | feature flag / feature gate | — | Appendix |
 | toolchain | toolchain | Rust-এর release ও সংশ্লিষ্ট component | Appendix |
 | RFC (Request For Comments) | RFC প্রক্রিয়া | — | Appendix |
 | stability without stagnation | স্থবিরতা ছাড়াই স্থিতিশীলতা | — | Appendix |
-| derivable trait | derive করা যায় এমন trait | — | Appendix |
 
 ### Everyday computing words
 
