@@ -29,6 +29,6 @@ deref
 0 -1
 """
 context = """
-The `AccessLogger` will print "deref" every time `n` is dereferenced, which occurs twice.
-Note that copying `n` to `n2` does not dereference `n`.
+`n` যতবার dereference হবে, `AccessLogger` ততবার "deref" print করবে, যা দুবার ঘটে।
+খেয়াল করুন, `n`-কে `n2`-তে copy করলে `n` dereference হয় না।
 """

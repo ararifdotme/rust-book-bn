@@ -17,6 +17,6 @@ fn main() {
 answer.doesCompile = true
 answer.stdout = "3 1"
 context = """
-The three strong refs are `r1`, `r5`, and `r6`. The one weak ref is `r4`, which is dropped at the end of `main`.
-`r2` is dropped at the end of its scope.
+তিনটি strong ref হলো `r1`, `r5` আর `r6`। একমাত্র weak ref হলো `r4`, যা `main`-এর শেষে drop হয়।
+`r2` তার scope-এর শেষে drop হয়।
 """

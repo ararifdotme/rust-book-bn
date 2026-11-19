@@ -246,3 +246,27 @@ Everyday: dual license (দুটি license একসঙ্গে), first-come,
 | a faster, Rustier tool for searching files | ফাইলে খোঁজার জন্য আরও দ্রুত, আরও Rust-সুলভ একটি tool |
 | than one big blob of code | একটি বড় কোডের স্তূপের বদলে |
 | If that happens, you must reset those secrets immediately. | এমন হলে সঙ্গে সঙ্গে সেই গোপন তথ্যগুলো (যেমন password বা token) বদলে ফেলতে হবে। (added the example in parentheses) |
+
+## Chapter 15: Smart Pointers
+
+**Auto-chosen terms:** box, recursive type, cons list, indirection, interior
+mutability, reference cycle, memory leak, strong / weak reference, test double
+/ mock object, destructor, double free, static analysis, deep copy,
+single-threaded, wrapper type, stack overflow, tree. Everyday: resource
+(সম্পদ).
+
+**Decisions:**
+- The long `alt` texts of Figures 15-1 to 15-4 are translated in full.
+- Listing 15-26: the two prose comments ("Uncomment the next line…") are
+  translated; the commented-out `println!` line stays as code.
+- "Halting Problem" stays in English (a proper name).
+
+**Unsure sentences:**
+
+| English | Bengali |
+| --- | --- |
+| there would be an uproar from the remaining TV watchers! | বাকি দর্শকদের মধ্যে হইচই পড়ে যেত! |
+| Think of it in the sense of a stunt double in filmmaking | চলচ্চিত্রের stunt double-এর কথা ভাবুন |
+| Static analysis, like the Rust compiler, is inherently conservative. | Rust compiler-এর মতো static analysis স্বভাবতই রক্ষণশীল। |
+| This technique is pretty neat! | এই কৌশলটি বেশ চমৎকার! |
+| If this chapter has piqued your interest | এই অধ্যায় যদি আপনার আগ্রহ জাগিয়ে থাকে |

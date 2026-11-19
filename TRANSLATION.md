@@ -517,6 +517,23 @@ tested with this repo's build.
 | API token | API token | account-এর পরিচয় প্রমাণের গোপন চাবি | 14 |
 | license identifier | license identifier | license শনাক্তকারী মান (যেমন `MIT`) | 14 |
 | subcommand | subcommand | `cargo`-র অধীনের command (যেমন `cargo build`) | 14 |
+| box (`Box<T>`) | box | heap-এ মান রাখার সবচেয়ে সরল smart pointer | 15 |
+| recursive type | recursive type | নিজের ভেতরে নিজেকেই ধারণ করে এমন type | 15 |
+| cons list | cons list | Lisp থেকে আসা, জোড়ার ভেতরে জোড়া দিয়ে তৈরি তালিকা | 15 |
+| indirection | indirection | মান সরাসরি না রেখে pointer দিয়ে পরোক্ষভাবে রাখা | 15 |
+| interior mutability | interior mutability | immutable reference থাকা অবস্থাতেও ভেতরের মান পরিবর্তন করার pattern | 15 |
+| reference cycle | reference cycle | একে অপরকে নির্দেশ করা reference-এর চক্র | 15 |
+| memory leak | memory leak | মেমোরি ফুটো হয়ে যাওয়া: কখনো পরিষ্কার না হওয়া মেমোরি | 15 |
+| strong / weak reference | strong / weak reference | ownership ভাগ করে / করে না এমন reference (`Rc<T>` / `Weak<T>`) | 15 |
+| test double / mock object | test double / mock object | test-এর সময় আসল type-এর বদলি / যা ঘটছে তা লিখে রাখে এমন বদলি | 15 |
+| destructor | destructor | instance পরিষ্কার করে এমন function | 15 |
+| double free | double free | একই মেমোরি দুবার মুক্ত করার error | 15 |
+| static analysis | static analysis | কোড না চালিয়ে বিশ্লেষণ | 15 |
+| deep copy | deep copy | পুরো ডেটার সম্পূর্ণ কপি | 15 |
+| single-threaded | single-threaded | একটিমাত্র thread-যুক্ত | 15 |
+| wrapper type | wrapper type | অন্য মানকে মুড়ে রাখে এমন type | 15 |
+| stack overflow | stack overflow | stack-এর জায়গা ফুরিয়ে যাওয়া | 15 |
+| tree (data structure) | tree | গাছের মতো parent-child কাঠামো | 15 |
 
 ### Everyday computing words
 
@@ -599,6 +616,7 @@ Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
 | spoiler alert | আগেভাগে বলে দিই | 13 |
 | dual license | দুটি license একসঙ্গে (dual license) | 14 |
 | first-come, first-served | আগে এলে আগে পাবেন ভিত্তিতে | 14 |
+| resource | resource (সম্পদ, যেমন ফাইল বা network connection) | 15 |
 
 ## Progress
 
@@ -625,7 +643,7 @@ use.
 - [x] Chapter 12: An I/O Project: Building a Command Line Program (ch12-*)
 - [x] Chapter 13: Functional Language Features: Iterators and Closures (ch13-*)
 - [x] Chapter 14: More about Cargo and Crates.io (ch14-*)
-- [ ] Chapter 15: Smart Pointers (ch15-*)
+- [x] Chapter 15: Smart Pointers (ch15-*)
 - [ ] Chapter 16: Fearless Concurrency (ch16-*)
 - [ ] Chapter 17: Fundamentals of Asynchronous Programming: Async, Await, Futures, and Streams (ch17-*)
 - [ ] Chapter 18: Object Oriented Programming Features (ch18-*)
