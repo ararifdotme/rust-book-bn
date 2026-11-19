@@ -270,3 +270,31 @@ single-threaded, wrapper type, stack overflow, tree. Everyday: resource
 | Static analysis, like the Rust compiler, is inherently conservative. | Rust compiler-এর মতো static analysis স্বভাবতই রক্ষণশীল। |
 | This technique is pretty neat! | এই কৌশলটি বেশ চমৎকার! |
 | If this chapter has piqued your interest | এই অধ্যায় যদি আপনার আগ্রহ জাগিয়ে থাকে |
+
+## Chapter 16: Fearless Concurrency
+
+**Auto-chosen terms:** fearless concurrency (নির্ভয় concurrency), concurrent /
+parallel programming, process, deadlock, spawn, join handle, block, message
+passing, channel (transmitter / receiver), shared-state concurrency, mutex,
+lock, concurrency primitive, atomic, marker trait.
+
+**Decisions:**
+- "spawned thread" became "চালু করা thread" throughout.
+- The Go slogan is translated into Bengali; the link to the Go docs stays.
+- `// oh no!` in listing 16-4 stays in English, because it also appears in
+  `output-only-01-move-drop/output.txt` (compiler output).
+- The INTERVENTION block in ch16-04 is translated; the link label to ch16-03
+  uses that section's Bengali heading.
+- My check script flags the multi-line ``` `` … `` ``` code spans in ch16-03
+  and ch16-04 as changed; the built HTML shows both spans intact, so this is a
+  script false positive.
+
+**Unsure sentences:**
+
+| English | Bengali |
+| --- | --- |
+| Many languages are dogmatic about the solutions they offer | অনেক ভাষা … তাদের দেওয়া সমাধান নিয়ে অনমনীয় |
+| Oh no! | হায় হায়! |
+| Wow, that error message is very wordy! | বাপরে, error message-টি খুবই শব্দবহুল! |
+| it will happily run on multiple threads | এটি … আনন্দের সঙ্গে একাধিক thread-এ চলবে |
+| Go forth and make your programs concurrent, fearlessly! | এগিয়ে যান এবং নির্ভয়ে আপনার প্রোগ্রামগুলোকে concurrent করুন! |

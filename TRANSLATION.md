@@ -534,6 +534,21 @@ tested with this repo's build.
 | wrapper type | wrapper type | অন্য মানকে মুড়ে রাখে এমন type | 15 |
 | stack overflow | stack overflow | stack-এর জায়গা ফুরিয়ে যাওয়া | 15 |
 | tree (data structure) | tree | গাছের মতো parent-child কাঠামো | 15 |
+| fearless concurrency | fearless concurrency | নির্ভয় concurrency: compile time-এই concurrency বাগ ধরা | 16 |
+| concurrent / parallel programming | concurrent / parallel programming | অংশগুলো স্বাধীনভাবে চলে / একই সময়ে চলে এমন প্রোগ্রামিং | 16 |
+| process | process | operating system-এ চলমান একটি প্রোগ্রাম | 16 |
+| deadlock | deadlock | অচলাবস্থা: দুটি thread একে অপরের জন্য চিরকাল অপেক্ষা করে | 16 |
+| spawn (a thread) | spawn করা / চালু করা | নতুন thread চালু করা | 16 |
+| join handle (`JoinHandle<T>`) | join handle | thread শেষ হওয়ার জন্য অপেক্ষা করতে দেয় এমন মান | 16 |
+| block (a thread) | block করা | thread-কে কাজ করা বা বেরোনো থেকে আটকে রাখা | 16 |
+| message passing | message passing | বার্তা আদান-প্রদান করে thread-এর যোগাযোগ | 16 |
+| channel (transmitter / receiver) | channel | এক thread থেকে আরেক thread-এ ডেটা পাঠানোর পথ (প্রেরক / গ্রাহক) | 16 |
+| shared-state concurrency | shared-state concurrency | একাধিক thread একই ডেটায় প্রবেশ করে এমন concurrency | 16 |
+| mutex (mutual exclusion) | mutex | পারস্পরিক বর্জন: একবারে একটি thread-কে ডেটায় ঢুকতে দেয় | 16 |
+| lock | lock | mutex-এর ডেটায় একচেটিয়া প্রবেশাধিকারের ব্যবস্থা | 16 |
+| concurrency primitive | concurrency primitive | concurrency-র মৌলিক গঠন (যেমন mutex, atomic) | 16 |
+| atomic | atomic | অবিভাজ্যভাবে সম্পন্ন, thread-এর মধ্যে নিরাপদ | 16 |
+| marker trait | marker trait | method ছাড়া শুধু একটি বৈশিষ্ট্য চিহ্নিত করে এমন trait (`Send`, `Sync`) | 16 |
 
 ### Everyday computing words
 
@@ -644,7 +659,7 @@ use.
 - [x] Chapter 13: Functional Language Features: Iterators and Closures (ch13-*)
 - [x] Chapter 14: More about Cargo and Crates.io (ch14-*)
 - [x] Chapter 15: Smart Pointers (ch15-*)
-- [ ] Chapter 16: Fearless Concurrency (ch16-*)
+- [x] Chapter 16: Fearless Concurrency (ch16-*)
 - [ ] Chapter 17: Fundamentals of Asynchronous Programming: Async, Await, Futures, and Streams (ch17-*)
 - [ ] Chapter 18: Object Oriented Programming Features (ch18-*)
 - [ ] Chapter 19: Patterns and Matching (ch19-*)

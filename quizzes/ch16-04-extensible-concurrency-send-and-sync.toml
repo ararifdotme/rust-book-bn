@@ -2,7 +2,7 @@
 id = "43081862-aac8-4e18-9c55-1107ea4c7cc1"
 type = "MultipleChoice"
 prompt.prompt = """
-Imagine you are designing an API for a database connection like this:
+ধরুন আপনি এমন একটি database connection-এর API নকশা করছেন:
 
 ```
 struct DbConnection { /* ... */ }
@@ -13,17 +13,17 @@ impl DbConnection {
 }
 ```
 
-Your database does not support concurrent queries from the same connection. 
-Which of the following marker traits should `DbConnection` implement?
+আপনার database একই connection থেকে একসঙ্গে একাধিক query সমর্থন করে না। 
+`DbConnection`-এর নিচের কোন marker trait implement করা উচিত?
 """
 answer.answer = "`Send`"
 prompt.distractors = [
-    "`Send` and `Sync`",
+    "`Send` এবং `Sync`",
     "`Sync`",
-    "Neither `Send` nor `Sync`"
+    "`Send` বা `Sync` কোনোটিই নয়"
 ]
 context = """
-It is fine to send a `DbConnection` between threads, so `DbConnection` should implement `Send`.
-But it would not be valid e.g. for an `Arc<Database>` to be shared such that multiple threads concurrently
-called `db.query()`, so `DbConnection` should not implement `Sync`.
+thread-এর মধ্যে একটি `DbConnection` পাঠানোয় কোনো সমস্যা নেই, তাই `DbConnection`-এর `Send` implement করা উচিত।
+কিন্তু যেমন, একটি `Arc<Database>` এমনভাবে ভাগ করা বৈধ হবে না যাতে একাধিক thread একসঙ্গে
+`db.query()` call করে, তাই `DbConnection`-এর `Sync` implement করা উচিত নয়।
 """

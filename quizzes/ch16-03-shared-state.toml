@@ -2,7 +2,7 @@
 id = "ceb96826-6c98-40e1-bff4-0bb61f35679d"
 type = "MultipleChoice"
 prompt.prompt = """
-In some concurrency APIs, a mutex is separate from the data it guards. For example, imagine a hypothetical Mutex API like this:
+কিছু concurrency API-তে mutex তার পাহারা দেওয়া ডেটা থেকে আলাদা থাকে। যেমন, এমন একটি কাল্পনিক Mutex API কল্পনা করুন:
 
 ```
 let mut data = Vec::new();
@@ -13,17 +13,17 @@ let mx: Mutex = Mutex::new();
 }
 ```
 
-Which of the following best describes why Rust uses `Mutex<T>` instead of just `Mutex`?
+Rust কেন শুধু `Mutex`-এর বদলে `Mutex<T>` ব্যবহার করে, তা নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
-answer.answer = "To prevent accessing a mutex's data without locking the mutex"
+answer.answer = "mutex lock না করে mutex-এর ডেটায় প্রবেশ ঠেকাতে"
 prompt.distractors = [
-    "To require fewer calls to mutex methods",
-    "To improve the efficiency of concurrent programs with mutexes",
-    "To prevent a mutex's data from being moved between threads"
+    "mutex-এর method কম call করতে হয় তার জন্য",
+    "mutex-যুক্ত concurrent প্রোগ্রামের দক্ষতা বাড়াতে",
+    "mutex-এর ডেটা thread-এর মধ্যে সরানো ঠেকাতে"
 ]
 context = """
-The `Mutex<T>` design ensures that a mutex's data can only be accessed when the mutex is locked, and conversely
-that the mutex is unlocked once the data is no longer accessible.
+`Mutex<T>`-এর নকশা নিশ্চিত করে যে mutex lock থাকা অবস্থাতেই কেবল এর ডেটায় প্রবেশ করা যায়, আর উল্টোভাবে,
+ডেটায় আর প্রবেশ করা না গেলেই mutex unlock হয়ে যায়।
 """
 
 [[questions]]
@@ -44,6 +44,6 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 7
 context = """
-An `Arc` is still not safe to use if its data contains a reference, since the reference could (in theory)
-be invalidated before all threads containing the `Arc` finish executing.
+একটি `Arc`-এর ডেটায় reference থাকলে এটি ব্যবহার করা তবুও নিরাপদ নয়, কারণ (তাত্ত্বিকভাবে) `Arc` ধারণ করা সব thread চলা শেষ
+করার আগেই reference-টি অবৈধ হয়ে যেতে পারে।
 """

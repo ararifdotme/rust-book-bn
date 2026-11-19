@@ -19,15 +19,15 @@ fn main() {
 answer.doesCompile = true
 answer.stdout = "2"
 context = """
-The `move` keyword causes `n` to be copied into the closure, so the assignments
-`n = n + 1` within `thread::spawn` have no effect on the outer `n`.
+`move` keyword-এর কারণে `n` closure-এর ভেতরে copy হয়, তাই `thread::spawn`-এর ভেতরের
+`n = n + 1` assignment-গুলো বাইরের `n`-এর ওপর কোনো প্রভাব ফেলে না।
 """
 
 [[questions]]
 id = "c2a84e6d-8143-4944-bf20-b00e49144ac9"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider this example from the text where a vector is improperly captured by a thread:
+পাঠ্যের এই উদাহরণটি বিবেচনা করুন, যেখানে একটি thread একটি vector অনুচিতভাবে capture করে:
 
 ```
 use std::thread;
@@ -43,7 +43,7 @@ fn main() {
 }
 ```
 
-The Rust compiler includes this diagnostic:
+Rust compiler এই diagnostic (সমস্যার বিবরণ) দেয়:
 
 ```text
 note: function requires argument type to outlive `'static`
@@ -56,18 +56,18 @@ note: function requires argument type to outlive `'static`
   | |______^
 ```
 
-Recall that `'static` is the lifetime of references that are valid for the entire program's duration.
+মনে করুন, `'static` হলো সেই reference-এর lifetime, যা পুরো প্রোগ্রামের সময় জুড়ে বৈধ থাকে।
 
-Which of the following best describes the note "function requires argument type to outlive `'static`"?
+"function requires argument type to outlive `'static`" note-টি নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
-answer.answer = "Rust doesn't know how long a thread will run, so the thread's captures must live forever"
+answer.answer = "একটি thread কতক্ষণ চলবে Rust তা জানে না, তাই thread-এর capture করা মানগুলোকে চিরকাল বাঁচতে হবে"
 prompt.distractors = [
-    "The closure passed to `thread::spawn` is not allowed to take any arguments",
-    "The vector `v` contains values that do not outlive `'static`",
-    "A closure may only capture string constants of type `&'static str`"
+    "`thread::spawn`-এ পাঠানো closure-এর কোনো argument নেওয়ার অনুমতি নেই",
+    "`v` vector-এ এমন মান আছে যা `'static`-এর চেয়ে বেশি সময় বাঁচে না",
+    "একটি closure শুধু `&'static str` type-এর string constant capture করতে পারে"
 ]
 context = """
-If a closure captures a reference to a value that lived less than `'static`, it's possible that the thread would live 
-longer than the value and violate memory safety. Note that [`thread::scope`](https://doc.rust-lang.org/std/thread/fn.scope.html) 
-can be used to allow threads to capture non-static references by statically limiting the lifetime of the thread.
+একটি closure যদি এমন একটি মানের reference capture করে যা `'static`-এর চেয়ে কম সময় বাঁচে, তাহলে thread-টি মানটির চেয়ে বেশি সময় 
+বেঁচে থেকে memory safety ভঙ্গ করতে পারে। খেয়াল করুন, [`thread::scope`](https://doc.rust-lang.org/std/thread/fn.scope.html) 
+ব্যবহার করে thread-এর lifetime স্থিরভাবে সীমিত করে thread-কে non-static reference capture করতে দেওয়া যায়।
 """
