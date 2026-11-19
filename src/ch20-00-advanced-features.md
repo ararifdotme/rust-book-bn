@@ -1,22 +1,15 @@
-# Advanced Features
+# উন্নত বৈশিষ্ট্য {#advanced-features}
 
-By now, you’ve learned the most commonly used parts of the Rust programming
-language. Before we do one more project, in Chapter 21, we’ll look at a few
-aspects of the language you might run into every once in a while but may not
-use every day. You can use this chapter as a reference for when you encounter
-any unknowns. The features covered here are useful in very specific situations.
-Although you might not reach for them often, we want to make sure you have a
-grasp of all the features Rust has to offer.
+এতক্ষণে আপনি Rust প্রোগ্রামিং ভাষার সবচেয়ে বেশি ব্যবহৃত অংশগুলো শিখেছেন। অধ্যায় 21-এ আরও একটি project করার আগে আমরা ভাষার এমন কিছু দিক দেখব, যেগুলোর সঙ্গে মাঝে মাঝে দেখা হতে পারে, কিন্তু হয়তো
+প্রতিদিন ব্যবহার করবেন না। অজানা কিছুর মুখোমুখি হলে এই অধ্যায়টি রেফারেন্স হিসেবে ব্যবহার করতে পারেন। এখানে আলোচিত বৈশিষ্ট্যগুলো খুব নির্দিষ্ট পরিস্থিতিতে কাজে লাগে। হয়তো প্রায়ই এগুলোর দরকার পড়বে
+না, তবে আমরা নিশ্চিত করতে চাই যে Rust-এর দেওয়া সব বৈশিষ্ট্য সম্পর্কে আপনার ধারণা আছে।
 
-In this chapter, we’ll cover:
+এই অধ্যায়ে আমরা দেখব:
 
-- Unsafe Rust: How to opt out of some of Rust’s guarantees and take
-  responsibility for manually upholding those guarantees
-- Advanced traits: Associated types, default type parameters, fully qualified
-  syntax, supertraits, and the newtype pattern in relation to traits
-- Advanced types: More about the newtype pattern, type aliases, the never type,
-  and dynamically sized types
-- Advanced functions and closures: Function pointers and returning closures
-- Macros: Ways to define code that defines more code at compile time
+- unsafe Rust: কীভাবে Rust-এর কিছু নিশ্চয়তা থেকে বেরিয়ে এসে সেই নিশ্চয়তাগুলো হাতে বজায় রাখার দায়িত্ব নিজে নিতে হয়
+- উন্নত trait: associated type, default type parameter, fully qualified syntax, supertrait, আর trait-এর সঙ্গে সম্পর্কিত newtype pattern
+- উন্নত type: newtype pattern সম্পর্কে আরও, type alias, never type, আর dynamically sized type
+- উন্নত function ও closure: function pointer আর closure return করা
+- macro: compile time-এ আরও কোড সংজ্ঞায়িত করে এমন কোড সংজ্ঞায়িত করার উপায়
 
-It’s a panoply of Rust features with something for everyone! Let’s dive in!
+এটি Rust-এর বৈশিষ্ট্যের এক বিশাল সম্ভার, যাতে সবার জন্য কিছু না কিছু আছে! চলুন শুরু করি!

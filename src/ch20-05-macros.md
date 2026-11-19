@@ -1,85 +1,53 @@
-## Macros
+## macro {#macros}
 
-We’ve used macros like `println!` throughout this book, but we haven’t fully
-explored what a macro is and how it works. The term _macro_ refers to a family
-of features in Rust—declarative macros with `macro_rules!` and three kinds of
-procedural macros:
+এই বই জুড়ে আমরা `println!`-এর মতো macro ব্যবহার করেছি, কিন্তু macro আসলে কী এবং কীভাবে কাজ করে তা পুরোপুরি দেখিনি। _macro_ পরিভাষাটি Rust-এর একগুচ্ছ বৈশিষ্ট্য বোঝায়—`macro_rules!` দিয়ে declarative
+macro আর তিন ধরনের procedural macro:
 
-- Custom `#[derive]` macros that specify code added with the `derive` attribute
-  used on structs and enums
-- Attribute-like macros that define custom attributes usable on any item
-- Function-like macros that look like function calls but operate on the tokens
-  specified as their argument
+- নিজস্ব `#[derive]` macro, যা struct আর enum-এ ব্যবহৃত `derive` attribute দিয়ে যোগ হওয়া কোড নির্দিষ্ট করে
+- attribute-সদৃশ macro, যা যেকোনো item-এ ব্যবহারযোগ্য নিজস্ব attribute সংজ্ঞায়িত করে
+- function-সদৃশ macro, যা দেখতে function call-এর মতো, কিন্তু argument হিসেবে দেওয়া token-গুলোর ওপর কাজ করে
 
-We’ll talk about each of these in turn, but first, let’s look at why we even
-need macros when we already have functions.
+আমরা এগুলোর প্রতিটি নিয়ে একে একে কথা বলব, তবে প্রথমে দেখা যাক function থাকা সত্ত্বেও macro-র দরকার কেন।
 
-### The Difference Between Macros and Functions
+### macro আর function-এর পার্থক্য {#the-difference-between-macros-and-functions}
 
-Fundamentally, macros are a way of writing code that writes other code, which
-is known as _metaprogramming_. In Appendix C, we discuss the `derive`
-attribute, which generates an implementation of various traits for you. We’ve
-also used the `println!` and `vec!` macros throughout the book. All of these
-macros _expand_ to produce more code than the code you’ve written manually.
+মূলত macro হলো এমন কোড লেখার উপায়, যা অন্য কোড লেখে; একে বলা হয় _metaprogramming_ (কোড নিয়ে কোড লেখা)। Appendix C-তে আমরা `derive` attribute নিয়ে আলোচনা করেছি, যা আপনার জন্য বিভিন্ন trait-এর
+implementation তৈরি করে। বই জুড়ে আমরা `println!` আর `vec!` macro-ও ব্যবহার করেছি। এই সব macro _expand_ হয়ে (বিস্তৃত হয়ে) আপনার হাতে লেখা কোডের চেয়ে বেশি কোড তৈরি করে।
 
-Metaprogramming is useful for reducing the amount of code you have to write and
-maintain, which is also one of the roles of functions. However, macros have
-some additional powers that functions don’t have.
+আপনাকে যতটা কোড লিখতে ও রক্ষণাবেক্ষণ করতে হয় তা কমাতে metaprogramming কাজে লাগে, যা function-এরও একটি ভূমিকা। তবে macro-র কিছু বাড়তি ক্ষমতা আছে, যা function-এর নেই।
 
-A function signature must declare the number and type of parameters the
-function has. Macros, on the other hand, can take a variable number of
-parameters: We can call `println!("hello")` with one argument or
-`println!("hello {}", name)` with two arguments. Also, macros are expanded
-before the compiler interprets the meaning of the code, so a macro can, for
-example, implement a trait on a given type. A function can’t, because it gets
-called at runtime and a trait needs to be implemented at compile time.
+একটি function signature-কে ঘোষণা করতে হয় function-এর কতগুলো এবং কোন type-এর parameter আছে। অন্যদিকে macro পরিবর্তনশীল সংখ্যক parameter নিতে পারে: আমরা একটি argument দিয়ে `println!("hello")`, বা দুটি
+argument দিয়ে `println!("hello {}", name)` call করতে পারি। তা ছাড়া compiler কোডের অর্থ ব্যাখ্যা করার আগেই macro expand হয়, তাই একটি macro, যেমন, একটি নির্দিষ্ট type-এর ওপর একটি trait implement করতে পারে।
+একটি function তা পারে না, কারণ এটি runtime-এ call হয়, আর trait implement করতে হয় compile time-এ।
 
-The downside to implementing a macro instead of a function is that macro
-definitions are more complex than function definitions because you’re writing
-Rust code that writes Rust code. Due to this indirection, macro definitions are
-generally more difficult to read, understand, and maintain than function
-definitions.
+function-এর বদলে macro implement করার অসুবিধা হলো, macro-র সংজ্ঞা function-এর সংজ্ঞার চেয়ে জটিল, কারণ আপনি এমন Rust কোড লিখছেন যা Rust কোড লেখে। এই পরোক্ষতার কারণে macro-র সংজ্ঞা সাধারণত function-এর
+সংজ্ঞার চেয়ে পড়া, বোঝা আর রক্ষণাবেক্ষণ করা কঠিন।
 
-Another important difference between macros and functions is that you must
-define macros or bring them into scope _before_ you call them in a file, as
-opposed to functions you can define anywhere and call anywhere.
+macro আর function-এর আরেকটি গুরুত্বপূর্ণ পার্থক্য হলো, একটি ফাইলে macro call করার _আগে_ এটি সংজ্ঞায়িত করতে বা scope-এ আনতে হয়, অন্যদিকে function যেকোনো জায়গায় সংজ্ঞায়িত করে যেকোনো জায়গায় call করা যায়।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="declarative-macros-with-macro_rules-for-general-metaprogramming"></a>
 
-### Declarative Macros for General Metaprogramming
+### সাধারণ metaprogramming-এর জন্য declarative macro {#declarative-macros-for-general-metaprogramming}
 
-The most widely used form of macros in Rust is the _declarative macro_. These
-are also sometimes referred to as “macros by example,” “`macro_rules!` macros,”
-or just plain “macros.” At their core, declarative macros allow you to write
-something similar to a Rust `match` expression. As discussed in Chapter 6,
-`match` expressions are control structures that take an expression, compare the
-resultant value of the expression to patterns, and then run the code associated
-with the matching pattern. Macros also compare a value to patterns that are
-associated with particular code: In this situation, the value is the literal
-Rust source code passed to the macro; the patterns are compared with the
-structure of that source code; and the code associated with each pattern, when
-matched, replaces the code passed to the macro. This all happens during
-compilation.
+Rust-এ macro-র সবচেয়ে বেশি ব্যবহৃত রূপ হলো _declarative macro_। এগুলোকে কখনো কখনো “macros by example,” “`macro_rules!` macros,” বা শুধু “macros” বলা হয়। মূলত declarative macro আপনাকে Rust-এর `match`
+expression-এর মতো কিছু লিখতে দেয়। অধ্যায় 6-এ যেমন আলোচনা করা হয়েছে, `match` expression হলো এমন control গঠন, যা একটি expression নিয়ে expression-এর ফলাফলের মানকে pattern-এর সঙ্গে তুলনা করে, তারপর মিলে
+যাওয়া pattern-এর সঙ্গে যুক্ত কোড চালায়। macro-ও একটি মানকে নির্দিষ্ট কোডের সঙ্গে যুক্ত pattern-এর সঙ্গে তুলনা করে: এই ক্ষেত্রে মানটি হলো macro-তে পাঠানো Rust-এর হুবহু source code; pattern-গুলো সেই source
+code-এর গঠনের সঙ্গে তুলনা করা হয়; আর মিলে গেলে প্রতিটি pattern-এর সঙ্গে যুক্ত কোড macro-তে পাঠানো কোডের জায়গা নেয়। এই সবকিছু ঘটে compilation-এর সময়।
 
-To define a macro, you use the `macro_rules!` construct. Let’s explore how to
-use `macro_rules!` by looking at how the `vec!` macro is defined. Chapter 8
-covered how we can use the `vec!` macro to create a new vector with particular
-values. For example, the following macro creates a new vector containing three
-integers:
+macro সংজ্ঞায়িত করতে `macro_rules!` গঠন ব্যবহার করেন। চলুন `vec!` macro কীভাবে সংজ্ঞায়িত তা দেখে `macro_rules!` কীভাবে ব্যবহার করতে হয় তা দেখি। অধ্যায় 8-এ আমরা দেখেছি নির্দিষ্ট মানসহ একটি নতুন
+vector তৈরি করতে কীভাবে `vec!` macro ব্যবহার করা যায়। যেমন, নিচের macro তিনটি integer-যুক্ত একটি নতুন vector তৈরি করে:
 
 ```rust
 let v: Vec<u32> = vec![1, 2, 3];
 ```
 
-We could also use the `vec!` macro to make a vector of two integers or a vector
-of five string slices. We wouldn’t be able to use a function to do the same
-because we wouldn’t know the number or type of values up front.
+`vec!` macro দিয়ে দুটি integer-এর vector বা পাঁচটি string slice-এর vector-ও বানাতে পারতাম। একই কাজ function দিয়ে করতে পারতাম না, কারণ মানের সংখ্যা বা type আগে থেকে জানতাম না।
 
-Listing 20-35 shows a slightly simplified definition of the `vec!` macro.
+Listing 20-35-এ `vec!` macro-র একটু সরলীকৃত একটি সংজ্ঞা দেখানো হয়েছে।
 
-<Listing number="20-35" file-name="src/lib.rs" caption="A simplified version of the `vec!` macro definition">
+<Listing number="20-35" file-name="src/lib.rs" caption="`vec!` macro-র সংজ্ঞার একটি সরলীকৃত রূপ">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-35/src/lib.rs}}
@@ -87,54 +55,29 @@ Listing 20-35 shows a slightly simplified definition of the `vec!` macro.
 
 </Listing>
 
-> Note: The actual definition of the `vec!` macro in the standard library
-> includes code to pre-allocate the correct amount of memory up front. That code
-> is an optimization that we don’t include here, to make the example simpler.
+> Note: standard library-তে `vec!` macro-র আসল সংজ্ঞায় শুরুতেই সঠিক পরিমাণ মেমোরি আগাম allocate করার কোড আছে। সেই কোড একটি optimization, যা উদাহরণ সরল রাখতে আমরা এখানে রাখিনি।
 
-The `#[macro_export]` annotation indicates that this macro should be made
-available whenever the crate in which the macro is defined is brought into
-scope. Without this annotation, the macro can’t be brought into scope.
+`#[macro_export]` annotation বোঝায় যে macro যে crate-এ সংজ্ঞায়িত সেই crate scope-এ আনা হলেই এই macro-টি পাওয়া যাবে। এই annotation ছাড়া macro-টি scope-এ আনা যায় না।
 
-We then start the macro definition with `macro_rules!` and the name of the
-macro we’re defining _without_ the exclamation mark. The name, in this case
-`vec`, is followed by curly brackets denoting the body of the macro definition.
+তারপর আমরা macro-র সংজ্ঞা শুরু করি `macro_rules!` আর যে macro সংজ্ঞায়িত করছি তার নাম দিয়ে, বিস্ময়চিহ্ন _ছাড়া_। নামের পরে, এই ক্ষেত্রে `vec`, macro-র সংজ্ঞার body বোঝাতে curly bracket আসে।
 
-The structure in the `vec!` body is similar to the structure of a `match`
-expression. Here we have one arm with the pattern `( $( $x:expr ),* )`,
-followed by `=>` and the block of code associated with this pattern. If the
-pattern matches, the associated block of code will be emitted. Given that this
-is the only pattern in this macro, there is only one valid way to match; any
-other pattern will result in an error. More complex macros will have more than
-one arm.
+`vec!`-এর body-র গঠন একটি `match` expression-এর গঠনের মতো। এখানে আমাদের একটি arm আছে, যার pattern `( $( $x:expr ),* )`, তারপর `=>` আর এই pattern-এর সঙ্গে যুক্ত কোডের block। pattern মিললে সংশ্লিষ্ট
+কোডের block তৈরি হবে। এই macro-তে এটিই যেহেতু একমাত্র pattern, তাই মেলার একটিই বৈধ উপায় আছে; অন্য যেকোনো pattern-এ error হবে। আরও জটিল macro-তে একাধিক arm থাকবে।
 
-Valid pattern syntax in macro definitions is different from the pattern syntax
-covered in Chapter 19 because macro patterns are matched against Rust code
-structure rather than values. Let’s walk through what the pattern pieces in
-Listing 20-29 mean; for the full macro pattern syntax, see the [Rust
-Reference][ref].
+macro-র সংজ্ঞায় বৈধ pattern syntax অধ্যায় 19-এ আলোচিত pattern syntax থেকে আলাদা, কারণ macro pattern মানের সঙ্গে নয়, Rust কোডের গঠনের সঙ্গে মেলানো হয়। চলুন Listing 20-29-এর pattern-এর অংশগুলোর মানে কী
+তা একে একে দেখি; macro pattern-এর পূর্ণ syntax-এর জন্য [Rust
+Reference][ref] দেখুন।
 
-First, we use a set of parentheses to encompass the whole pattern. We use a
-dollar sign (`$`) to declare a variable in the macro system that will contain
-the Rust code matching the pattern. The dollar sign makes it clear this is a
-macro variable as opposed to a regular Rust variable. Next comes a set of
-parentheses that captures values that match the pattern within the parentheses
-for use in the replacement code. Within `$()` is `$x:expr`, which matches any
-Rust expression and gives the expression the name `$x`.
+প্রথমে পুরো pattern ঘিরে রাখতে আমরা এক জোড়া বন্ধনী ব্যবহার করি। macro system-এ এমন একটি variable ঘোষণা করতে ডলার চিহ্ন (`$`) ব্যবহার করি, যাতে pattern-এর সঙ্গে মেলা Rust কোড থাকবে। ডলার চিহ্ন স্পষ্ট
+করে দেয় যে এটি একটি সাধারণ Rust variable নয়, বরং একটি macro variable। এরপর আসে এক জোড়া বন্ধনী, যা বন্ধনীর ভেতরের pattern-এর সঙ্গে মেলা মানগুলো প্রতিস্থাপনের কোডে ব্যবহারের জন্য capture করে। `$()`-এর
+ভেতরে আছে `$x:expr`, যা যেকোনো Rust expression-এর সঙ্গে মেলে এবং expression-টিকে `$x` নাম দেয়।
 
-The comma following `$()` indicates that a literal comma separator character
-must appear between each instance of the code that matches the code in `$()`.
-The `*` specifies that the pattern matches zero or more of whatever precedes
-the `*`.
+`$()`-এর পরের কমা বোঝায় যে `$()`-এর কোডের সঙ্গে মেলা কোডের প্রতিটি instance-এর মাঝে একটি আক্ষরিক কমা বিভাজক থাকতে হবে। `*` বলে দেয় যে pattern-টি `*`-এর আগে যা আছে তার শূন্য বা তার বেশি সংখ্যকের সঙ্গে মেলে।
 
-When we call this macro with `vec![1, 2, 3];`, the `$x` pattern matches three
-times with the three expressions `1`, `2`, and `3`.
+`vec![1, 2, 3];` দিয়ে এই macro call করলে `$x` pattern তিনটি expression `1`, `2` আর `3`-এর সঙ্গে তিনবার মেলে।
 
-Now let’s look at the pattern in the body of the code associated with this arm:
-`temp_vec.push()` within `$()*` is generated for each part that matches `$()`
-in the pattern zero or more times depending on how many times the pattern
-matches. The `$x` is replaced with each expression matched. When we call this
-macro with `vec![1, 2, 3];`, the code generated that replaces this macro call
-will be the following:
+এবার এই arm-এর সঙ্গে যুক্ত কোডের body-র pattern দেখা যাক: pattern কতবার মেলে তার ওপর নির্ভর করে pattern-এ `$()`-এর সঙ্গে মেলা প্রতিটি অংশের জন্য `$()*`-এর ভেতরের `temp_vec.push()` শূন্য বা তার বেশিবার
+তৈরি হয়। `$x`-এর জায়গায় মিলে যাওয়া প্রতিটি expression বসে। `vec![1, 2, 3];` দিয়ে এই macro call করলে এই macro call-এর জায়গায় তৈরি হওয়া কোড হবে এই:
 
 ```rust,ignore
 {
@@ -146,29 +89,20 @@ will be the following:
 }
 ```
 
-We’ve defined a macro that can take any number of arguments of any type and can
-generate code to create a vector containing the specified elements.
+আমরা এমন একটি macro সংজ্ঞায়িত করেছি, যা যেকোনো type-এর যেকোনো সংখ্যক argument নিতে পারে এবং উল্লিখিত উপাদানগুলো রাখা একটি vector তৈরির কোড তৈরি করতে পারে।
 
-To learn more about how to write macros, consult the online documentation or
-other resources, such as [“The Little Book of Rust Macros”][tlborm] started by
-Daniel Keep and continued by Lukas Wirth.
+macro কীভাবে লিখতে হয় সে সম্পর্কে আরও জানতে online documentation বা অন্য উৎস দেখুন, যেমন Daniel Keep-এর শুরু করা এবং Lukas Wirth-এর এগিয়ে নেওয়া [“The Little Book of Rust Macros”][tlborm]।
 
-### Procedural Macros for Generating Code from Attributes
+### attribute থেকে কোড তৈরির জন্য procedural macro {#procedural-macros-for-generating-code-from-attributes}
 
-The second form of macros is the procedural macro, which acts more like a
-function (and is a type of procedure). _Procedural macros_ accept some code as
-an input, operate on that code, and produce some code as an output rather than
-matching against patterns and replacing the code with other code as declarative
-macros do. The three kinds of procedural macros are custom `derive`,
-attribute-like, and function-like, and all work in a similar fashion.
+macro-র দ্বিতীয় রূপ হলো procedural macro, যা অনেকটা function-এর মতো আচরণ করে (এবং এক ধরনের procedure)। declarative macro যেমন pattern-এর সঙ্গে মিলিয়ে কোডকে অন্য কোড দিয়ে প্রতিস্থাপন করে, তেমন না করে
+_Procedural macros_ (procedural macro) input হিসেবে কিছু কোড নেয়, সেই কোডের ওপর কাজ করে, এবং output হিসেবে কিছু কোড তৈরি করে। তিন ধরনের procedural macro হলো নিজস্ব `derive`, attribute-সদৃশ আর
+function-সদৃশ, এবং সবগুলোই একই রকমভাবে কাজ করে।
 
-When creating procedural macros, the definitions must reside in their own crate
-with a special crate type. This is for complex technical reasons that we hope
-to eliminate in the future. In Listing 20-36, we show how to define a
-procedural macro, where `some_attribute` is a placeholder for using a specific
-macro variety.
+procedural macro তৈরির সময় সংজ্ঞাগুলোকে একটি বিশেষ crate type-এর নিজস্ব crate-এ থাকতে হয়। এটি জটিল কারিগরি কারণে, যা আমরা ভবিষ্যতে দূর করার আশা রাখি। Listing 20-36-এ আমরা দেখাই কীভাবে একটি
+procedural macro সংজ্ঞায়িত করতে হয়, যেখানে `some_attribute` হলো নির্দিষ্ট কোনো ধরনের macro ব্যবহারের একটি placeholder।
 
-<Listing number="20-36" file-name="src/lib.rs" caption="An example of defining a procedural macro">
+<Listing number="20-36" file-name="src/lib.rs" caption="একটি procedural macro সংজ্ঞায়িত করার উদাহরণ">
 
 ```rust,ignore
 use proc_macro::TokenStream;
@@ -180,36 +114,24 @@ pub fn some_name(input: TokenStream) -> TokenStream {
 
 </Listing>
 
-The function that defines a procedural macro takes a `TokenStream` as an input
-and produces a `TokenStream` as an output. The `TokenStream` type is defined by
-the `proc_macro` crate that is included with Rust and represents a sequence of
-tokens. This is the core of the macro: The source code that the macro is
-operating on makes up the input `TokenStream`, and the code the macro produces
-is the output `TokenStream`. The function also has an attribute attached to it
-that specifies which kind of procedural macro we’re creating. We can have
-multiple kinds of procedural macros in the same crate.
+একটি procedural macro সংজ্ঞায়িত করা function input হিসেবে একটি `TokenStream` নেয় এবং output হিসেবে একটি `TokenStream` তৈরি করে। `TokenStream` type সংজ্ঞায়িত করে Rust-এর সঙ্গে আসা `proc_macro` crate,
+আর এটি token-এর একটি ধারা বোঝায়। এটিই macro-র মূল: macro যে source code-এর ওপর কাজ করছে তা input `TokenStream` গঠন করে, আর macro যে কোড তৈরি করে তা output `TokenStream`। function-টির সঙ্গে একটি
+attribute-ও যুক্ত থাকে, যা বলে দেয় আমরা কোন ধরনের procedural macro তৈরি করছি। একই crate-এ একাধিক ধরনের procedural macro থাকতে পারে।
 
-Let’s look at the different kinds of procedural macros. We’ll start with a
-custom `derive` macro and then explain the small dissimilarities that make the
-other forms different.
+চলুন বিভিন্ন ধরনের procedural macro দেখি। আমরা শুরু করব একটি নিজস্ব `derive` macro দিয়ে, তারপর ব্যাখ্যা করব কোন ছোট ছোট অমিল অন্য রূপগুলোকে আলাদা করে।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="how-to-write-a-custom-derive-macro"></a>
 
-### Custom `derive` Macros
+### নিজস্ব `derive` macro {#custom-derive-macros}
 
-Let’s create a crate named `hello_macro` that defines a trait named
-`HelloMacro` with one associated function named `hello_macro`. Rather than
-making our users implement the `HelloMacro` trait for each of their types,
-we’ll provide a procedural macro so that users can annotate their type with
-`#[derive(HelloMacro)]` to get a default implementation of the `hello_macro`
-function. The default implementation will print `Hello, Macro! My name is
-TypeName!` where `TypeName` is the name of the type on which this trait has
-been defined. In other words, we’ll write a crate that enables another
-programmer to write code like Listing 20-37 using our crate.
+চলুন `hello_macro` নামে একটি crate তৈরি করি, যা `hello_macro` নামের একটি associated function-যুক্ত `HelloMacro` নামের একটি trait সংজ্ঞায়িত করে। ব্যবহারকারীদের দিয়ে তাদের প্রতিটি type-এর জন্য `HelloMacro`
+trait implement করানোর বদলে আমরা একটি procedural macro দেব, যাতে ব্যবহারকারীরা তাদের type-কে `#[derive(HelloMacro)]` দিয়ে annotate করে `hello_macro` function-এর একটি default implementation পায়। default
+implementation print করবে `Hello, Macro! My name is
+TypeName!`, যেখানে `TypeName` হলো সেই type-এর নাম, যার ওপর এই trait সংজ্ঞায়িত হয়েছে। অন্যভাবে বললে, আমরা এমন একটি crate লিখব, যা ব্যবহার করে আরেকজন প্রোগ্রামার Listing 20-37-এর মতো কোড লিখতে পারবে।
 
-<Listing number="20-37" file-name="src/main.rs" caption="The code a user of our crate will be able to write when using our procedural macro">
+<Listing number="20-37" file-name="src/main.rs" caption="আমাদের procedural macro ব্যবহার করে আমাদের crate-এর একজন ব্যবহারকারী যে কোড লিখতে পারবে">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-37/src/main.rs}}
@@ -217,17 +139,15 @@ programmer to write code like Listing 20-37 using our crate.
 
 </Listing>
 
-This code will print `Hello, Macro! My name is Pancakes!` when we’re done. The
-first step is to make a new library crate, like this:
+কাজ শেষ হলে এই কোড print করবে `Hello, Macro! My name is Pancakes!`। প্রথম ধাপ হলো একটি নতুন library crate বানানো, এভাবে:
 
 ```console
 $ cargo new hello_macro --lib
 ```
 
-Next, in Listing 20-38, we’ll define the `HelloMacro` trait and its associated
-function.
+এরপর Listing 20-38-এ আমরা `HelloMacro` trait আর এর associated function সংজ্ঞায়িত করব।
 
-<Listing file-name="src/lib.rs" number="20-38" caption="A simple trait that we will use with the `derive` macro">
+<Listing file-name="src/lib.rs" number="20-38" caption="একটি সরল trait, যা আমরা `derive` macro-র সঙ্গে ব্যবহার করব">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-38/hello_macro/src/lib.rs}}
@@ -235,10 +155,9 @@ function.
 
 </Listing>
 
-We have a trait and its function. At this point, our crate user could implement
-the trait to achieve the desired functionality, as in Listing 20-39.
+আমাদের একটি trait আর এর function আছে। এই পর্যায়ে আমাদের crate-এর ব্যবহারকারী কাঙ্ক্ষিত কার্যক্ষমতা পেতে trait-টি implement করতে পারত, যেমনটি Listing 20-39-এ।
 
-<Listing number="20-39" file-name="src/main.rs" caption="How it would look if users wrote a manual implementation of the `HelloMacro` trait">
+<Listing number="20-39" file-name="src/main.rs" caption="ব্যবহারকারীরা হাতে `HelloMacro` trait-এর implementation লিখলে যেমন দেখাত">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-39/pancakes/src/main.rs}}
@@ -246,41 +165,25 @@ the trait to achieve the desired functionality, as in Listing 20-39.
 
 </Listing>
 
-However, they would need to write the implementation block for each type they
-wanted to use with `hello_macro`; we want to spare them from having to do this
-work.
+কিন্তু `hello_macro`-এর সঙ্গে যে প্রতিটি type ব্যবহার করতে চাইত, তার জন্য তাদের implementation block লিখতে হতো; আমরা তাদের এই কাজ থেকে রেহাই দিতে চাই।
 
-Additionally, we can’t yet provide the `hello_macro` function with default
-implementation that will print the name of the type the trait is implemented
-on: Rust doesn’t have reflection capabilities, so it can’t look up the type’s
-name at runtime. We need a macro to generate code at compile time.
+তা ছাড়া আমরা এখনো `hello_macro` function-কে এমন default implementation দিতে পারি না, যা trait যে type-এর ওপর implement করা সেই type-এর নাম print করবে: Rust-এ reflection (চলার সময় নিজের গঠন
+পরীক্ষার ক্ষমতা) নেই, তাই runtime-এ type-এর নাম খুঁজে বের করতে পারে না। compile time-এ কোড তৈরি করতে আমাদের একটি macro দরকার।
 
-The next step is to define the procedural macro. At the time of this writing,
-procedural macros need to be in their own crate. Eventually, this restriction
-might be lifted. The convention for structuring crates and macro crates is as
-follows: For a crate named `foo`, a custom `derive` procedural macro crate is
-called `foo_derive`. Let’s start a new crate called `hello_macro_derive` inside
-our `hello_macro` project:
+পরের ধাপ হলো procedural macro সংজ্ঞায়িত করা। এই লেখার সময় procedural macro-কে নিজস্ব crate-এ থাকতে হয়। একসময় এই সীমাবদ্ধতা হয়তো তুলে নেওয়া হবে। crate আর macro crate সাজানোর রীতি হলো: `foo`
+নামের একটি crate-এর জন্য নিজস্ব `derive` procedural macro crate-এর নাম হয় `foo_derive`। চলুন আমাদের `hello_macro` project-এর ভেতরে `hello_macro_derive` নামে একটি নতুন crate শুরু করি:
 
 ```console
 $ cargo new hello_macro_derive --lib
 ```
 
-Our two crates are tightly related, so we create the procedural macro crate
-within the directory of our `hello_macro` crate. If we change the trait
-definition in `hello_macro`, we’ll have to change the implementation of the
-procedural macro in `hello_macro_derive` as well. The two crates will need to
-be published separately, and programmers using these crates will need to add
-both as dependencies and bring them both into scope. We could instead have the
-`hello_macro` crate use `hello_macro_derive` as a dependency and re-export the
-procedural macro code. However, the way we’ve structured the project makes it
-possible for programmers to use `hello_macro` even if they don’t want the
-`derive` functionality.
+আমাদের দুটি crate ঘনিষ্ঠভাবে সম্পর্কিত, তাই আমরা `hello_macro` crate-এর directory-র ভেতরে procedural macro crate তৈরি করি। `hello_macro`-এ trait-এর সংজ্ঞা বদলালে `hello_macro_derive`-এ procedural
+macro-র implementation-ও বদলাতে হবে। দুটি crate আলাদাভাবে প্রকাশ করতে হবে, আর এই crate ব্যবহার করা প্রোগ্রামারদের দুটিকেই dependency হিসেবে যোগ করে দুটিকেই scope-এ আনতে হবে। এর বদলে `hello_macro`
+crate-কে দিয়ে `hello_macro_derive`-কে dependency হিসেবে ব্যবহার করিয়ে procedural macro-র কোড re-export করাতে পারতাম। তবে আমরা project যেভাবে সাজিয়েছি, তাতে প্রোগ্রামাররা `derive` কার্যক্ষমতা না চাইলেও
+`hello_macro` ব্যবহার করতে পারে।
 
-We need to declare the `hello_macro_derive` crate as a procedural macro crate.
-We’ll also need functionality from the `syn` and `quote` crates, as you’ll see
-in a moment, so we need to add them as dependencies. Add the following to the
-_Cargo.toml_ file for `hello_macro_derive`:
+`hello_macro_derive` crate-কে একটি procedural macro crate হিসেবে ঘোষণা করতে হবে। একটু পরেই দেখবেন, `syn` আর `quote` crate-এর কার্যক্ষমতাও লাগবে, তাই এগুলোকে dependency হিসেবে যোগ করতে হবে।
+`hello_macro_derive`-এর _Cargo.toml_ ফাইলে নিচেরটি যোগ করুন:
 
 <Listing file-name="hello_macro_derive/Cargo.toml">
 
@@ -290,11 +193,10 @@ _Cargo.toml_ file for `hello_macro_derive`:
 
 </Listing>
 
-To start defining the procedural macro, place the code in Listing 20-40 into
-your _src/lib.rs_ file for the `hello_macro_derive` crate. Note that this code
-won’t compile until we add a definition for the `impl_hello_macro` function.
+procedural macro সংজ্ঞায়িত করা শুরু করতে `hello_macro_derive` crate-এর _src/lib.rs_ ফাইলে Listing 20-40-এর কোড রাখুন। খেয়াল করুন, `impl_hello_macro` function-এর সংজ্ঞা যোগ না করা পর্যন্ত এই কোড compile
+হবে না।
 
-<Listing number="20-40" file-name="hello_macro_derive/src/lib.rs" caption="Code that most procedural macro crates will require in order to process Rust code">
+<Listing number="20-40" file-name="hello_macro_derive/src/lib.rs" caption="Rust কোড প্রক্রিয়া করতে বেশিরভাগ procedural macro crate-এর যে কোড লাগবে">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-40/hello_macro/hello_macro_derive/src/lib.rs}}
@@ -302,41 +204,25 @@ won’t compile until we add a definition for the `impl_hello_macro` function.
 
 </Listing>
 
-Notice that we’ve split the code into the `hello_macro_derive` function, which
-is responsible for parsing the `TokenStream`, and the `impl_hello_macro`
-function, which is responsible for transforming the syntax tree: This makes
-writing a procedural macro more convenient. The code in the outer function
-(`hello_macro_derive` in this case) will be the same for almost every
-procedural macro crate you see or create. The code you specify in the body of
-the inner function (`impl_hello_macro` in this case) will be different
-depending on your procedural macro’s purpose.
+খেয়াল করুন, আমরা কোডকে `hello_macro_derive` function, যা `TokenStream` parse করার দায়িত্বে, আর `impl_hello_macro` function, যা syntax tree রূপান্তরের দায়িত্বে, এই দুই ভাগে ভাগ করেছি: এতে procedural
+macro লেখা আরও সুবিধাজনক হয়। বাইরের function-এর কোড (এই ক্ষেত্রে `hello_macro_derive`) আপনার দেখা বা তৈরি প্রায় প্রতিটি procedural macro crate-এ একই থাকবে। ভেতরের function-এর body-তে (এই ক্ষেত্রে
+`impl_hello_macro`) আপনি যে কোড লিখবেন, তা আপনার procedural macro-র উদ্দেশ্য অনুযায়ী আলাদা হবে।
 
-We’ve introduced three new crates: `proc_macro`, [`syn`][syn]<!-- ignore -->,
-and [`quote`][quote]<!-- ignore -->. The `proc_macro` crate comes with Rust,
-so we didn’t need to add that to the dependencies in _Cargo.toml_. The
-`proc_macro` crate is the compiler’s API that allows us to read and manipulate
-Rust code from our code.
+আমরা তিনটি নতুন crate এনেছি: `proc_macro`, [`syn`][syn]<!-- ignore -->,
+আর [`quote`][quote]<!-- ignore -->। `proc_macro` crate Rust-এর সঙ্গে আসে, তাই _Cargo.toml_-এর dependency-তে এটি যোগ করতে হয়নি। `proc_macro` crate হলো compiler-এর API, যা আমাদের কোড থেকে Rust কোড পড়তে
+ও পরিবর্তন করতে দেয়।
 
-The `syn` crate parses Rust code from a string into a data structure that we
-can perform operations on. The `quote` crate turns `syn` data structures back
-into Rust code. These crates make it much simpler to parse any sort of Rust
-code we might want to handle: Writing a full parser for Rust code is no simple
-task.
+`syn` crate একটি string থেকে Rust কোড parse করে এমন একটি data structure-এ পরিণত করে, যার ওপর আমরা operation চালাতে পারি। `quote` crate `syn`-এর data structure-কে আবার Rust কোডে পরিণত করে। এই crate-গুলো
+আমাদের সামলাতে চাওয়া যেকোনো ধরনের Rust কোড parse করা অনেক সহজ করে দেয়: Rust কোডের জন্য একটি পূর্ণ parser লেখা সহজ কাজ নয়।
 
-The `hello_macro_derive` function will be called when a user of our library
-specifies `#[derive(HelloMacro)]` on a type. This is possible because we’ve
-annotated the `hello_macro_derive` function here with `proc_macro_derive` and
-specified the name `HelloMacro`, which matches our trait name; this is the
-convention most procedural macros follow.
+আমাদের library-র একজন ব্যবহারকারী একটি type-এ `#[derive(HelloMacro)]` উল্লেখ করলে `hello_macro_derive` function call হবে। এটা সম্ভব, কারণ আমরা এখানে `hello_macro_derive` function-কে `proc_macro_derive`
+দিয়ে annotate করে `HelloMacro` নামটি উল্লেখ করেছি, যা আমাদের trait-এর নামের সঙ্গে মেলে; বেশিরভাগ procedural macro এই রীতি মেনে চলে।
 
-The `hello_macro_derive` function first converts the `input` from a
-`TokenStream` to a data structure that we can then interpret and perform
-operations on. This is where `syn` comes into play. The `parse` function in
-`syn` takes a `TokenStream` and returns a `DeriveInput` struct representing the
-parsed Rust code. Listing 20-41 shows the relevant parts of the `DeriveInput`
-struct we get from parsing the `struct Pancakes;` string.
+`hello_macro_derive` function প্রথমে `input`-কে একটি `TokenStream` থেকে এমন একটি data structure-এ রূপান্তর করে, যা তারপর ব্যাখ্যা করে operation চালাতে পারি। এখানেই কাজে আসে `syn`। `syn`-এর `parse`
+function একটি `TokenStream` নিয়ে parse করা Rust কোড বোঝানো একটি `DeriveInput` struct return করে। Listing 20-41-এ `struct Pancakes;` string parse করে পাওয়া `DeriveInput` struct-এর প্রাসঙ্গিক অংশগুলো
+দেখানো হয়েছে।
 
-<Listing number="20-41" caption="The `DeriveInput` instance we get when parsing the code that has the macro’s attribute in Listing 20-37">
+<Listing number="20-41" caption="Listing 20-37-এর macro-র attribute-যুক্ত কোড parse করলে যে `DeriveInput` instance পাই">
 
 ```rust,ignore
 DeriveInput {
@@ -360,31 +246,21 @@ DeriveInput {
 
 </Listing>
 
-The fields of this struct show that the Rust code we’ve parsed is a unit struct
-with the `ident` (_identifier_, meaning the name) of `Pancakes`. There are more
-fields on this struct for describing all sorts of Rust code; check the [`syn`
-documentation for `DeriveInput`][syn-docs] for more information.
+এই struct-এর field-গুলো দেখায় যে আমাদের parse করা Rust কোড একটি unit struct, যার `ident` (_identifier_, অর্থাৎ নাম) হলো `Pancakes`। সব রকম Rust কোড বর্ণনার জন্য এই struct-এ আরও field আছে; আরও
+তথ্যের জন্য [`DeriveInput`-এর `syn`
+documentation][syn-docs] দেখুন।
 
-Soon we’ll define the `impl_hello_macro` function, which is where we’ll build
-the new Rust code we want to include. But before we do, note that the output
-for our `derive` macro is also a `TokenStream`. The returned `TokenStream` is
-added to the code that our crate users write, so when they compile their crate,
-they’ll get the extra functionality that we provide in the modified
-`TokenStream`.
+শিগগিরই আমরা `impl_hello_macro` function সংজ্ঞায়িত করব, যেখানে আমাদের যোগ করতে চাওয়া নতুন Rust কোড তৈরি করব। তবে তার আগে খেয়াল করুন, আমাদের `derive` macro-র output-ও একটি `TokenStream`। return
+হওয়া `TokenStream` আমাদের crate-এর ব্যবহারকারীদের লেখা কোডে যুক্ত হয়, তাই তারা তাদের crate compile করলে পরিবর্তিত `TokenStream`-এ আমাদের দেওয়া বাড়তি কার্যক্ষমতা পাবে।
 
-You might have noticed that we’re calling `unwrap` to cause the
-`hello_macro_derive` function to panic if the call to the `syn::parse` function
-fails here. It’s necessary for our procedural macro to panic on errors because
-`proc_macro_derive` functions must return `TokenStream` rather than `Result` to
-conform to the procedural macro API. We’ve simplified this example by using
-`unwrap`; in production code, you should provide more specific error messages
-about what went wrong by using `panic!` or `expect`.
+হয়তো খেয়াল করেছেন, এখানে `syn::parse` function-এর call ব্যর্থ হলে `hello_macro_derive` function-কে panic করাতে আমরা `unwrap` call করছি। error-এ আমাদের procedural macro-র panic করা দরকার, কারণ procedural
+macro API মেনে চলতে `proc_macro_derive` function-কে `Result`-এর বদলে `TokenStream` return করতে হয়। `unwrap` ব্যবহার করে আমরা এই উদাহরণ সরল রেখেছি; production কোডে `panic!` বা `expect` ব্যবহার করে কী ভুল
+হয়েছে সে সম্পর্কে আরও নির্দিষ্ট error message দেওয়া উচিত।
 
-Now that we have the code to turn the annotated Rust code from a `TokenStream`
-into a `DeriveInput` instance, let’s generate the code that implements the
-`HelloMacro` trait on the annotated type, as shown in Listing 20-42.
+annotate করা Rust কোডকে একটি `TokenStream` থেকে একটি `DeriveInput` instance-এ রূপান্তরের কোড আমাদের আছে, এবার annotate করা type-এর ওপর `HelloMacro` trait implement করার কোড তৈরি করি, যেমনটি Listing
+20-42-এ দেখানো হয়েছে।
 
-<Listing number="20-42" file-name="hello_macro_derive/src/lib.rs" caption="Implementing the `HelloMacro` trait using the parsed Rust code">
+<Listing number="20-42" file-name="hello_macro_derive/src/lib.rs" caption="parse করা Rust কোড ব্যবহার করে `HelloMacro` trait implement করা">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-42/hello_macro/hello_macro_derive/src/lib.rs:here}}
@@ -392,136 +268,88 @@ into a `DeriveInput` instance, let’s generate the code that implements the
 
 </Listing>
 
-We get an `Ident` struct instance containing the name (identifier) of the
-annotated type using `ast.ident`. The struct in Listing 20-41 shows that when
-we run the `impl_hello_macro` function on the code in Listing 20-37, the
-`ident` we get will have the `ident` field with a value of `"Pancakes"`. Thus,
-the `name` variable in Listing 20-42 will contain an `Ident` struct instance
-that, when printed, will be the string `"Pancakes"`, the name of the struct in
-Listing 20-37.
+`ast.ident` ব্যবহার করে আমরা annotate করা type-এর নাম (identifier) রাখা একটি `Ident` struct instance পাই। Listing 20-41-এর struct দেখায় যে Listing 20-37-এর কোডের ওপর `impl_hello_macro` function চালালে
+আমরা যে `ident` পাব, তার `ident` field-এর মান হবে `"Pancakes"`। তাই Listing 20-42-এর `name` variable-এ একটি `Ident` struct instance থাকবে, যা print করলে হবে string `"Pancakes"`, অর্থাৎ Listing
+20-37-এর struct-এর নাম।
 
-The `quote!` macro lets us define the Rust code that we want to return. The
-compiler expects something different from the direct result of the `quote!`
-macro’s execution, so we need to convert it to a `TokenStream`. We do this by
-calling the `into` method, which consumes this intermediate representation and
-returns a value of the required `TokenStream` type.
+`quote!` macro দিয়ে আমরা যে Rust কোড return করতে চাই তা সংজ্ঞায়িত করা যায়। `quote!` macro চলার সরাসরি ফল থেকে compiler ভিন্ন কিছু আশা করে, তাই একে একটি `TokenStream`-এ রূপান্তর করতে হয়। এটা করি `into`
+method call করে, যা এই মধ্যবর্তী রূপটি খরচ করে দরকারি `TokenStream` type-এর একটি মান return করে।
 
-The `quote!` macro also provides some very cool templating mechanics: We can
-enter `#name`, and `quote!` will replace it with the value in the variable
-`name`. You can even do some repetition similar to the way regular macros work.
-Check out [the `quote` crate’s docs][quote-docs] for a thorough introduction.
+`quote!` macro কিছু দারুণ templating ব্যবস্থাও দেয়: আমরা `#name` লিখতে পারি, আর `quote!` একে `name` variable-এর মান দিয়ে প্রতিস্থাপন করবে। সাধারণ macro যেভাবে কাজ করে, তেমনভাবে কিছু পুনরাবৃত্তিও করা যায়।
+পূর্ণাঙ্গ পরিচিতির জন্য [`quote` crate-এর docs][quote-docs] দেখুন।
 
-We want our procedural macro to generate an implementation of our `HelloMacro`
-trait for the type the user annotated, which we can get by using `#name`. The
-trait implementation has the one function `hello_macro`, whose body contains the
-functionality we want to provide: printing `Hello, Macro! My name is` and then
-the name of the annotated type.
+আমরা চাই আমাদের procedural macro ব্যবহারকারীর annotate করা type-এর জন্য আমাদের `HelloMacro` trait-এর একটি implementation তৈরি করুক, যা `#name` ব্যবহার করে পেতে পারি। trait-এর implementation-এ একটি
+function আছে, `hello_macro`, যার body-তে আমাদের দিতে চাওয়া কার্যক্ষমতা আছে: `Hello, Macro! My name is` আর তারপর annotate করা type-এর নাম print করা।
 
-The `stringify!` macro used here is built into Rust. It takes a Rust
-expression, such as `1 + 2`, and at compile time turns the expression into a
-string literal, such as `"1 + 2"`. This is different from `format!` or
-`println!`, which are macros that evaluate the expression and then turn the
-result into a `String`. There is a possibility that the `#name` input might be
-an expression to print literally, so we use `stringify!`. Using `stringify!`
-also saves an allocation by converting `#name` to a string literal at compile
-time.
+এখানে ব্যবহৃত `stringify!` macro Rust-এর ভেতরেই আছে। এটি `1 + 2`-এর মতো একটি Rust expression নিয়ে compile time-এ expression-টিকে `"1 + 2"`-এর মতো একটি string literal-এ পরিণত করে। এটি `format!` বা
+`println!` থেকে আলাদা, যেগুলো expression-টি মূল্যায়ন করে তারপর ফলকে একটি `String`-এ পরিণত করে। `#name` input হয়তো হুবহু print করার মতো একটি expression হতে পারে, তাই আমরা `stringify!` ব্যবহার করি।
+`stringify!` ব্যবহার করলে compile time-এ `#name`-কে একটি string literal-এ রূপান্তর করায় একটি allocation-ও বাঁচে।
 
-At this point, `cargo build` should complete successfully in both `hello_macro`
-and `hello_macro_derive`. Let’s hook up these crates to the code in Listing
-20-37 to see the procedural macro in action! Create a new binary project in
-your _projects_ directory using `cargo new pancakes`. We need to add
-`hello_macro` and `hello_macro_derive` as dependencies in the `pancakes`
-crate’s _Cargo.toml_. If you’re publishing your versions of `hello_macro` and
-`hello_macro_derive` to [crates.io](https://crates.io/)<!-- ignore -->, they
-would be regular dependencies; if not, you can specify them as `path`
-dependencies as follows:
+এই পর্যায়ে `hello_macro` আর `hello_macro_derive` দুটিতেই `cargo build` সফলভাবে শেষ হওয়ার কথা। procedural macro কাজ করতে দেখতে চলুন এই crate-গুলোকে Listing
+20-37-এর কোডের সঙ্গে জুড়ে দিই! `cargo new pancakes` দিয়ে আপনার _projects_ directory-তে একটি নতুন binary project তৈরি করুন। `pancakes` crate-এর _Cargo.toml_-এ `hello_macro` আর `hello_macro_derive`-কে
+dependency হিসেবে যোগ করতে হবে। আপনি যদি `hello_macro` আর `hello_macro_derive`-এর আপনার সংস্করণ [crates.io](https://crates.io/)<!-- ignore -->-তে প্রকাশ করেন, তাহলে এগুলো সাধারণ dependency হবে;
+না করলে এগুলোকে এভাবে `path` dependency হিসেবে উল্লেখ করতে পারেন:
 
 ```toml
 {{#include ../listings/ch20-advanced-features/no-listing-21-pancakes/pancakes/Cargo.toml:6:8}}
 ```
 
-Put the code in Listing 20-37 into _src/main.rs_, and run `cargo run`: It
-should print `Hello, Macro! My name is Pancakes!`. The implementation of the
-`HelloMacro` trait from the procedural macro was included without the
-`pancakes` crate needing to implement it; the `#[derive(HelloMacro)]` added the
-trait implementation.
+Listing 20-37-এর কোড _src/main.rs_-এ রেখে `cargo run` চালান: এটি print করার কথা `Hello, Macro! My name is Pancakes!`। procedural macro থেকে আসা `HelloMacro` trait-এর implementation যুক্ত হয়েছে,
+`pancakes` crate-কে তা implement করতে হয়নি; `#[derive(HelloMacro)]` trait-এর implementation যোগ করে দিয়েছে।
 
-Next, let’s explore how the other kinds of procedural macros differ from custom
-`derive` macros.
+এরপর দেখা যাক অন্য ধরনের procedural macro নিজস্ব
+`derive` macro থেকে কীভাবে আলাদা।
 
-### Attribute-Like Macros
+### attribute-সদৃশ macro {#attribute-like-macros}
 
-Attribute-like macros are similar to custom `derive` macros, but instead of
-generating code for the `derive` attribute, they allow you to create new
-attributes. They’re also more flexible: `derive` only works for structs and
-enums; attributes can be applied to other items as well, such as functions.
-Here’s an example of using an attribute-like macro. Say you have an attribute
-named `route` that annotates functions when using a web application framework:
+attribute-সদৃশ macro নিজস্ব `derive` macro-র মতো, তবে `derive` attribute-এর জন্য কোড তৈরি না করে এরা নতুন attribute তৈরি করতে দেয়। এরা আরও নমনীয়ও: `derive` শুধু struct আর enum-এর জন্য কাজ করে; attribute
+অন্য item-এও প্রয়োগ করা যায়, যেমন function-এ।
+attribute-সদৃশ macro ব্যবহারের একটি উদাহরণ এই। ধরুন একটি web application framework ব্যবহারের সময় `route` নামের একটি attribute আছে, যা function annotate করে:
 
 ```rust,ignore
 #[route(GET, "/")]
 fn index() {
 ```
 
-This `#[route]` attribute would be defined by the framework as a procedural
-macro. The signature of the macro definition function would look like this:
+এই `#[route]` attribute framework-টি একটি procedural macro হিসেবে সংজ্ঞায়িত করত। macro-র সংজ্ঞা function-এর signature দেখতে এমন হতো:
 
 ```rust,ignore
 #[proc_macro_attribute]
 pub fn route(attr: TokenStream, item: TokenStream) -> TokenStream {
 ```
 
-Here, we have two parameters of type `TokenStream`. The first is for the
-contents of the attribute: the `GET, "/"` part. The second is the body of the
-item the attribute is attached to: in this case, `fn index() {}` and the rest
-of the function’s body.
+এখানে `TokenStream` type-এর দুটি parameter আছে। প্রথমটি attribute-এর বিষয়বস্তুর জন্য: `GET, "/"` অংশটি। দ্বিতীয়টি হলো attribute যে item-এর সঙ্গে যুক্ত তার body: এই ক্ষেত্রে `fn index() {}` আর
+function-এর body-র বাকি অংশ।
 
-Other than that, attribute-like macros work the same way as custom `derive`
-macros: You create a crate with the `proc-macro` crate type and implement a
-function that generates the code you want!
+এ ছাড়া attribute-সদৃশ macro নিজস্ব `derive` macro-র মতোই কাজ করে: আপনি `proc-macro` crate type-সহ একটি crate তৈরি করে এমন একটি function implement করেন, যা আপনার কাঙ্ক্ষিত কোড তৈরি করে!
 
-### Function-Like Macros
+### function-সদৃশ macro {#function-like-macros}
 
-Function-like macros define macros that look like function calls. Similarly to
-`macro_rules!` macros, they’re more flexible than functions; for example, they
-can take an unknown number of arguments. However, `macro_rules!` macros can
-only be defined using the match-like syntax we discussed in the [“Declarative
-Macros for General Metaprogramming”][decl]<!-- ignore --> section earlier.
-Function-like macros take a `TokenStream` parameter, and their definition
-manipulates that `TokenStream` using Rust code as the other two types of
-procedural macros do. An example of a function-like macro is an `sql!` macro
-that might be called like so:
+function-সদৃশ macro এমন macro সংজ্ঞায়িত করে, যা দেখতে function call-এর মতো। `macro_rules!` macro-র মতোই এরা function-এর চেয়ে বেশি নমনীয়; যেমন, এরা অজানা সংখ্যক argument নিতে পারে। তবে `macro_rules!` macro
+শুধু আগের [“সাধারণ metaprogramming-এর জন্য declarative macro”][decl]<!-- ignore --> অংশে আলোচিত match-সদৃশ syntax দিয়েই সংজ্ঞায়িত করা যায়। function-সদৃশ macro একটি `TokenStream` parameter নেয়, আর অন্য
+দুই ধরনের procedural macro-র মতোই এদের সংজ্ঞা Rust কোড দিয়ে সেই `TokenStream` পরিবর্তন করে। function-সদৃশ macro-র একটি উদাহরণ হলো একটি `sql!` macro, যা এভাবে call করা হতে পারে:
 
 ```rust,ignore
 let sql = sql!(SELECT * FROM posts WHERE id=1);
 ```
 
-This macro would parse the SQL statement inside it and check that it’s
-syntactically correct, which is much more complex processing than a
-`macro_rules!` macro can do. The `sql!` macro would be defined like this:
+এই macro এর ভেতরের SQL statement parse করে যাচাই করত যে এটি syntax-এর দিক থেকে সঠিক, যা একটি `macro_rules!` macro যা করতে পারে তার চেয়ে অনেক জটিল প্রক্রিয়া। `sql!` macro এভাবে সংজ্ঞায়িত হতো:
 
 ```rust,ignore
 #[proc_macro]
 pub fn sql(input: TokenStream) -> TokenStream {
 ```
 
-This definition is similar to the custom `derive` macro’s signature: We receive
-the tokens that are inside the parentheses and return the code we wanted to
-generate.
+এই সংজ্ঞা নিজস্ব `derive` macro-র signature-এর মতো: আমরা বন্ধনীর ভেতরের token-গুলো পাই এবং যে কোড তৈরি করতে চেয়েছিলাম তা return করি।
 
 {{#quiz ../quizzes/ch19-06-macros.toml}}
 
-## Summary
+## সারসংক্ষেপ {#summary}
 
-Whew! Now you have some Rust features in your toolbox that you likely won’t use
-often, but you’ll know they’re available in very particular circumstances.
-We’ve introduced several complex topics so that when you encounter them in
-error message suggestions or in other people’s code, you’ll be able to
-recognize these concepts and syntax. Use this chapter as a reference to guide
-you to solutions.
+উফ! এখন আপনার হাতিয়ারের বাক্সে Rust-এর এমন কিছু বৈশিষ্ট্য আছে, যা সম্ভবত প্রায়ই ব্যবহার করবেন না, তবে আপনি জানবেন খুব নির্দিষ্ট পরিস্থিতিতে এগুলো পাওয়া যায়। আমরা কয়েকটি জটিল বিষয়ের সঙ্গে পরিচয়
+করিয়েছি, যাতে error message-এর পরামর্শে বা অন্যের কোডে এগুলোর মুখোমুখি হলে এই ধারণা আর syntax চিনতে পারেন। সমাধানের পথ খুঁজতে এই অধ্যায়টি রেফারেন্স হিসেবে ব্যবহার করুন।
 
-Next, we’ll put everything we’ve discussed throughout the book into practice
-and do one more project!
+এরপর আমরা বই জুড়ে আলোচিত সবকিছু কাজে লাগিয়ে আরও একটি project করব!
 
 [ref]: https://doc.rust-lang.org/reference/macros-by-example.html
 [tlborm]: https://veykril.github.io/tlborm/

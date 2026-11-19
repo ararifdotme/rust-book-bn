@@ -578,6 +578,28 @@ tested with this repo's build.
 | `@` binding | `@` binding | pattern যাচাইয়ের পাশাপাশি মানটি variable-এ রেখে দেওয়া | 19 |
 | nested | nested | একটির ভেতরে আরেকটি | 19 |
 | precedence | অগ্রাধিকার (precedence) | কোন অংশ আগে প্রযোজ্য হবে | 19 |
+| unsafe superpowers | unsafe superpowers | unsafe Rust-এর পাঁচটি বাড়তি ক্ষমতা | 20 |
+| Foreign Function Interface (FFI) | FFI | অন্য ভাষার function call করার ব্যবস্থা | 20 |
+| application binary interface (ABI) | ABI | assembly স্তরে function call করার নিয়ম | 20 |
+| name mangling | mangling | compiler-এর function-এর নাম বদলে দেওয়া | 20 |
+| static variable | static variable | Rust-এর global variable, মেমোরিতে নির্দিষ্ট ঠিকানা | 20 |
+| union | union | একবারে একটি field ব্যবহৃত হয় এমন struct-সদৃশ type | 20 |
+| Miri | Miri | undefined behavior খোঁজার Rust-এর দাপ্তরিক tool | 20 |
+| lint | lint | সম্ভাব্য সমস্যার সতর্কতা | 20 |
+| operator overloading | operator overloading | নিজের type-এর জন্য `+`-এর মতো operator-এর আচরণ সংজ্ঞায়িত করা | 20 |
+| default type parameter | default type parameter | generic type parameter-এর পূর্বনির্ধারিত type | 20 |
+| fully qualified syntax | fully qualified syntax | পূর্ণ পরিচয়সহ syntax (`<Type as Trait>::f`) | 20 |
+| supertrait | supertrait | যে trait-এর ওপর আরেকটি trait নির্ভর করে | 20 |
+| newtype pattern | newtype pattern | একটি type-কে এক field-এর tuple struct-এ মুড়ে নতুন type বানানো | 20 |
+| never type (`!`) | never type | কখনো return করে না এমন function-এর type | 20 |
+| diverging function | diverging function | কখনো return করে না এমন function | 20 |
+| dynamically sized type (DST) | dynamically sized type | শুধু runtime-এ আকার জানা যায় এমন type | 20 |
+| function pointer (`fn`) | function pointer | function-কে মান হিসেবে পাঠানোর type | 20 |
+| opaque type | opaque type | অস্বচ্ছ type: যার ভেতরটা দেখা বা লেখা যায় না | 20 |
+| declarative / procedural macro | declarative / procedural macro | pattern মিলিয়ে কোড বসায় / কোড নিয়ে কোড তৈরি করে এমন macro | 20 |
+| metaprogramming | metaprogramming | কোড নিয়ে কোড লেখা | 20 |
+| token / `TokenStream` | token | কোডের ক্ষুদ্রতম একক / token-এর ধারা | 20 |
+| reflection | reflection | চলার সময় নিজের গঠন পরীক্ষার ক্ষমতা | 20 |
 
 ### Everyday computing words
 
@@ -694,7 +716,7 @@ use.
 - [x] Chapter 17: Fundamentals of Asynchronous Programming: Async, Await, Futures, and Streams (ch17-*)
 - [x] Chapter 18: Object Oriented Programming Features (ch18-*)
 - [x] Chapter 19: Patterns and Matching (ch19-*)
-- [ ] Chapter 20: Advanced Features (ch20-*)
+- [x] Chapter 20: Advanced Features (ch20-*)
 - [ ] Chapter 21: Final Project: Building a Multithreaded Web Server (ch21-*)
 - [ ] End of Experiment (end-of-experiment)
 - [ ] Appendix (appendix-00 to appendix-07)

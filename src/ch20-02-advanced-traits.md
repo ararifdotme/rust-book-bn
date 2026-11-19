@@ -1,36 +1,27 @@
-## Advanced Traits
+## উন্নত trait {#advanced-traits}
 
-We first covered traits in the [“Defining Shared Behavior with
-Traits”][traits]<!-- ignore --> section in Chapter 10, but we didn’t discuss
-the more advanced details. Now that you know more about Rust, we can get into
-the nitty-gritty.
+trait নিয়ে আমরা প্রথম আলোচনা করেছিলাম অধ্যায় 10-এর [“trait দিয়ে সাধারণ আচরণ সংজ্ঞায়িত
+করা”][traits]<!-- ignore --> অংশে, কিন্তু আরও উন্নত খুঁটিনাটি নিয়ে আলোচনা করিনি। Rust সম্পর্কে আরও জানার পর এখন আমরা খুঁটিনাটির গভীরে যেতে পারি।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="specifying-placeholder-types-in-trait-definitions-with-associated-types"></a>
 <a id="associated-types"></a>
 
-### Defining Traits with Associated Types
+### associated type দিয়ে trait সংজ্ঞায়িত করা {#defining-traits-with-associated-types}
 
-_Associated types_ connect a type placeholder with a trait such that the trait
-method definitions can use these placeholder types in their signatures. The
-implementor of a trait will specify the concrete type to be used instead of the
-placeholder type for the particular implementation. That way, we can define a
-trait that uses some types without needing to know exactly what those types are
-until the trait is implemented.
+_Associated types_ (associated type) একটি type placeholder-কে একটি trait-এর সঙ্গে এমনভাবে যুক্ত করে যে trait-এর method-এর সংজ্ঞাগুলো তাদের signature-এ এই placeholder type ব্যবহার করতে পারে।
+trait-এর implement-কারী নির্দিষ্ট implementation-এর জন্য placeholder type-এর বদলে কোন concrete type ব্যবহার হবে তা উল্লেখ করবে। এভাবে আমরা এমন একটি trait সংজ্ঞায়িত করতে পারি, যা কিছু type
+ব্যবহার করে, trait implement না হওয়া পর্যন্ত সেই type-গুলো ঠিক কী তা না জেনেই।
 
-We’ve described most of the advanced features in this chapter as being rarely
-needed. Associated types are somewhere in the middle: They’re used more rarely
-than features explained in the rest of the book but more commonly than many of
-the other features discussed in this chapter.
+এই অধ্যায়ের বেশিরভাগ উন্নত বৈশিষ্ট্যকে আমরা কদাচিৎ দরকার হয় বলে বর্ণনা করেছি। associated type মাঝামাঝি কোথাও: বইয়ের বাকি অংশে ব্যাখ্যা করা বৈশিষ্ট্যগুলোর চেয়ে এগুলো কম ব্যবহৃত হয়, তবে এই
+অধ্যায়ে আলোচিত অন্য অনেক বৈশিষ্ট্যের চেয়ে বেশি।
 
-One example of a trait with an associated type is the `Iterator` trait that the
-standard library provides. The associated type is named `Item` and stands in
-for the type of the values the type implementing the `Iterator` trait is
-iterating over. The definition of the `Iterator` trait is as shown in Listing
-20-13.
+associated type-যুক্ত trait-এর একটি উদাহরণ হলো standard library-র দেওয়া `Iterator` trait। associated type-টির নাম `Item`, আর এটি `Iterator` trait implement করা type যে মানগুলোর ওপর দিয়ে
+iterate করছে তাদের type-এর বদলি। `Iterator` trait-এর সংজ্ঞা Listing
+20-13-এ দেখানো হয়েছে।
 
-<Listing number="20-13" caption="The definition of the `Iterator` trait that has an associated type `Item`">
+<Listing number="20-13" caption="associated type `Item`-যুক্ত `Iterator` trait-এর সংজ্ঞা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-13/src/lib.rs}}
@@ -38,16 +29,11 @@ iterating over. The definition of the `Iterator` trait is as shown in Listing
 
 </Listing>
 
-The type `Item` is a placeholder, and the `next` method’s definition shows that
-it will return values of type `Option<Self::Item>`. Implementors of the
-`Iterator` trait will specify the concrete type for `Item`, and the `next`
-method will return an `Option` containing a value of that concrete type.
+`Item` type একটি placeholder, আর `next` method-এর সংজ্ঞা দেখায় যে এটি `Option<Self::Item>` type-এর মান return করবে। `Iterator` trait-এর implement-কারীরা `Item`-এর জন্য concrete type উল্লেখ করবে,
+আর `next` method সেই concrete type-এর একটি মানযুক্ত একটি `Option` return করবে।
 
-Associated types might seem like a similar concept to generics, in that the
-latter allow us to define a function without specifying what types it can
-handle. To examine the difference between the two concepts, we’ll look at an
-implementation of the `Iterator` trait on a type named `Counter` that specifies
-the `Item` type is `u32`:
+associated type-কে generics-এর মতো একটি ধারণা মনে হতে পারে, কারণ generics দিয়ে একটি function কোন type সামলাতে পারে তা উল্লেখ না করেই সংজ্ঞায়িত করা যায়। দুটি ধারণার পার্থক্য পরীক্ষা করতে আমরা
+`Counter` নামের একটি type-এর ওপর `Iterator` trait-এর একটি implementation দেখব, যা উল্লেখ করে যে `Item` type হলো `u32`:
 
 <Listing file-name="src/lib.rs">
 
@@ -57,10 +43,9 @@ the `Item` type is `u32`:
 
 </Listing>
 
-This syntax seems comparable to that of generics. So, why not just define the
-`Iterator` trait with generics, as shown in Listing 20-14?
+এই syntax generics-এর syntax-এর সঙ্গে তুলনীয় মনে হয়। তাহলে কেন শুধু generics দিয়ে `Iterator` trait সংজ্ঞায়িত করা হয় না, যেমনটি Listing 20-14-এ দেখানো হয়েছে?
 
-<Listing number="20-14" caption="A hypothetical definition of the `Iterator` trait using generics">
+<Listing number="20-14" caption="generics ব্যবহার করে `Iterator` trait-এর একটি কাল্পনিক সংজ্ঞা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-14/src/lib.rs}}
@@ -68,50 +53,33 @@ This syntax seems comparable to that of generics. So, why not just define the
 
 </Listing>
 
-The difference is that when using generics, as in Listing 20-14, we must
-annotate the types in each implementation; because we can also implement
-`Iterator<String> for Counter` or any other type, we could have multiple
-implementations of `Iterator` for `Counter`. In other words, when a trait has a
-generic parameter, it can be implemented for a type multiple times, changing
-the concrete types of the generic type parameters each time. When we use the
-`next` method on `Counter`, we would have to provide type annotations to
-indicate which implementation of `Iterator` we want to use.
+পার্থক্য হলো, Listing 20-14-এর মতো generics ব্যবহার করলে প্রতিটি implementation-এ type annotate করতে হয়; কারণ আমরা `Iterator<String> for Counter` বা অন্য যেকোনো type-ও implement করতে পারি, তাই
+`Counter`-এর জন্য `Iterator`-এর একাধিক implementation থাকতে পারত। অন্যভাবে বললে, একটি trait-এর generic parameter থাকলে একে একটি type-এর জন্য একাধিকবার implement করা যায়, প্রতিবার generic type
+parameter-এর concrete type বদলে। `Counter`-এর ওপর `next` method ব্যবহার করলে `Iterator`-এর কোন implementation ব্যবহার করতে চাই তা বোঝাতে type annotation দিতে হতো।
 
-With associated types, we don’t need to annotate types, because we can’t
-implement a trait on a type multiple times. In Listing 20-13 with the
-definition that uses associated types, we can choose what the type of `Item`
-will be only once because there can be only one `impl Iterator for Counter`. We
-don’t have to specify that we want an iterator of `u32` values everywhere we
-call `next` on `Counter`.
+associated type-এর ক্ষেত্রে type annotate করতে হয় না, কারণ একটি type-এর ওপর একটি trait একাধিকবার implement করা যায় না। associated type ব্যবহার করা Listing 20-13-এর সংজ্ঞায় `Item`-এর type কী
+হবে তা আমরা মাত্র একবারই বেছে নিতে পারি, কারণ শুধু একটি `impl Iterator for Counter` থাকতে পারে। `Counter`-এর ওপর যেখানেই `next` call করি, সেখানেই আমরা `u32` মানের iterator চাই তা উল্লেখ করতে
+হয় না।
 
-Associated types also become part of the trait’s contract: Implementors of the
-trait must provide a type to stand in for the associated type placeholder.
-Associated types often have a name that describes how the type will be used,
-and documenting the associated type in the API documentation is a good practice.
+associated type trait-এর চুক্তির অংশও হয়ে যায়: trait-এর implement-কারীদের associated type placeholder-এর বদলি হিসেবে একটি type দিতে হবে। associated type-এর নাম প্রায়ই বর্ণনা করে type-টি কীভাবে
+ব্যবহার হবে, আর API documentation-এ associated type-এর বিবরণ লেখা একটি ভালো অভ্যাস।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="default-generic-type-parameters-and-operator-overloading"></a>
 
-### Using Default Generic Parameters and Operator Overloading
+### default generic parameter ও operator overloading ব্যবহার {#using-default-generic-parameters-and-operator-overloading}
 
-When we use generic type parameters, we can specify a default concrete type for
-the generic type. This eliminates the need for implementors of the trait to
-specify a concrete type if the default type works. You specify a default type
-when declaring a generic type with the `<PlaceholderType=ConcreteType>` syntax.
+generic type parameter ব্যবহারের সময় generic type-এর জন্য একটি default concrete type উল্লেখ করা যায়। default type কাজ করলে trait-এর implement-কারীদের আর concrete type উল্লেখ করতে হয় না।
+`<PlaceholderType=ConcreteType>` syntax দিয়ে একটি generic type ঘোষণার সময় default type উল্লেখ করেন।
 
-A great example of a situation where this technique is useful is with _operator
-overloading_, in which you customize the behavior of an operator (such as `+`)
-in particular situations.
+এই কৌশল কাজে লাগে এমন পরিস্থিতির একটি চমৎকার উদাহরণ হলো _operator
+overloading_, যেখানে নির্দিষ্ট পরিস্থিতিতে একটি operator-এর (যেমন `+`) আচরণ নিজের মতো সাজান।
 
-Rust doesn’t allow you to create your own operators or overload arbitrary
-operators. But you can overload the operations and corresponding traits listed
-in `std::ops` by implementing the traits associated with the operator. For
-example, in Listing 20-15, we overload the `+` operator to add two `Point`
-instances together. We do this by implementing the `Add` trait on a `Point`
-struct.
+Rust আপনাকে নিজস্ব operator তৈরি করতে বা ইচ্ছামতো operator overload করতে দেয় না। তবে operator-এর সঙ্গে যুক্ত trait implement করে `std::ops`-এ তালিকাভুক্ত operation আর সংশ্লিষ্ট trait overload করতে
+পারেন। যেমন, Listing 20-15-এ আমরা দুটি `Point` instance যোগ করতে `+` operator overload করি। এটা করি একটি `Point` struct-এর ওপর `Add` trait implement করে।
 
-<Listing number="20-15" file-name="src/main.rs" caption="Implementing the `Add` trait to overload the `+` operator for `Point` instances">
+<Listing number="20-15" file-name="src/main.rs" caption="`Point` instance-এর জন্য `+` operator overload করতে `Add` trait implement করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-15/src/main.rs}}
@@ -119,13 +87,10 @@ struct.
 
 </Listing>
 
-The `add` method adds the `x` values of two `Point` instances and the `y`
-values of two `Point` instances to create a new `Point`. The `Add` trait has an
-associated type named `Output` that determines the type returned from the `add`
-method.
+`add` method দুটি `Point` instance-এর `x` মান আর দুটি `Point` instance-এর `y` মান যোগ করে একটি নতুন `Point` তৈরি করে। `Add` trait-এর `Output` নামের একটি associated type আছে, যা ঠিক করে `add`
+method থেকে কোন type return হবে।
 
-The default generic type in this code is within the `Add` trait. Here is its
-definition:
+এই কোডের default generic type `Add` trait-এর ভেতরে। এর সংজ্ঞা এই:
 
 ```rust
 trait Add<Rhs=Self> {
@@ -135,28 +100,19 @@ trait Add<Rhs=Self> {
 }
 ```
 
-This code should look generally familiar: a trait with one method and an
-associated type. The new part is `Rhs=Self`: This syntax is called _default
-type parameters_. The `Rhs` generic type parameter (short for “right-hand
-side”) defines the type of the `rhs` parameter in the `add` method. If we don’t
-specify a concrete type for `Rhs` when we implement the `Add` trait, the type
-of `Rhs` will default to `Self`, which will be the type we’re implementing
-`Add` on.
+এই কোড মোটামুটি পরিচিত লাগার কথা: একটি method আর একটি associated type-যুক্ত একটি trait। নতুন অংশটি হলো `Rhs=Self`: এই syntax-কে বলা হয় _default
+type parameters_ (default type parameter)। `Rhs` generic type parameter (“right-hand
+side”, অর্থাৎ ডান পাশ-এর সংক্ষেপ) `add` method-এর `rhs` parameter-এর type সংজ্ঞায়িত করে। `Add` trait implement করার সময় `Rhs`-এর জন্য কোনো concrete type উল্লেখ না করলে `Rhs`-এর type default-ভাবে
+`Self` হবে, যা সেই type, যার ওপর আমরা `Add` implement করছি।
 
-When we implemented `Add` for `Point`, we used the default for `Rhs` because we
-wanted to add two `Point` instances. Let’s look at an example of implementing
-the `Add` trait where we want to customize the `Rhs` type rather than using the
-default.
+`Point`-এর জন্য `Add` implement করার সময় আমরা `Rhs`-এর default ব্যবহার করেছিলাম, কারণ দুটি `Point` instance যোগ করতে চেয়েছিলাম। চলুন `Add` trait implement করার এমন একটি উদাহরণ দেখি, যেখানে
+default ব্যবহার না করে `Rhs` type নিজের মতো সাজাতে চাই।
 
-We have two structs, `Millimeters` and `Meters`, holding values in different
-units. This thin wrapping of an existing type in another struct is known as the
-_newtype pattern_, which we describe in more detail in the [“Implementing
-External Traits with the Newtype Pattern”][newtype]<!-- ignore --> section. We
-want to add values in millimeters to values in meters and have the
-implementation of `Add` do the conversion correctly. We can implement `Add` for
-`Millimeters` with `Meters` as the `Rhs`, as shown in Listing 20-16.
+আমাদের দুটি struct আছে, `Millimeters` আর `Meters`, যা ভিন্ন ভিন্ন এককে মান রাখে। একটি বিদ্যমান type-কে আরেকটি struct-এ এই পাতলা মোড়ানোকে বলা হয় _newtype pattern_, যা [“newtype pattern দিয়ে বাইরের
+trait implement করা”][newtype]<!-- ignore --> অংশে আরও বিস্তারিত বর্ণনা করব। আমরা millimeter-এর মান meter-এর মানের সঙ্গে যোগ করতে চাই এবং `Add`-এর implementation দিয়ে রূপান্তরটি সঠিকভাবে করাতে চাই।
+`Rhs` হিসেবে `Meters` দিয়ে `Millimeters`-এর জন্য `Add` implement করতে পারি, যেমনটি Listing 20-16-এ দেখানো হয়েছে।
 
-<Listing number="20-16" file-name="src/lib.rs" caption="Implementing the `Add` trait on `Millimeters` to add `Millimeters` and `Meters`">
+<Listing number="20-16" file-name="src/lib.rs" caption="`Millimeters` আর `Meters` যোগ করতে `Millimeters`-এর ওপর `Add` trait implement করা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-16/src/lib.rs}}
@@ -164,45 +120,33 @@ implementation of `Add` do the conversion correctly. We can implement `Add` for
 
 </Listing>
 
-To add `Millimeters` and `Meters`, we specify `impl Add<Meters>` to set the
-value of the `Rhs` type parameter instead of using the default of `Self`.
+`Millimeters` আর `Meters` যোগ করতে আমরা `Self`-এর default ব্যবহার না করে `Rhs` type parameter-এর মান বসাতে `impl Add<Meters>` উল্লেখ করি।
 
-You’ll use default type parameters in two main ways:
+default type parameter আপনি দুটি প্রধান উপায়ে ব্যবহার করবেন:
 
-1. To extend a type without breaking existing code
-2. To allow customization in specific cases most users won’t need
+1. বিদ্যমান কোড না ভেঙে একটি type বাড়াতে
+2. এমন নির্দিষ্ট ক্ষেত্রে নিজের মতো সাজানোর সুযোগ দিতে, যা বেশিরভাগ ব্যবহারকারীর দরকার হবে না
 
-The standard library’s `Add` trait is an example of the second purpose:
-Usually, you’ll add two like types, but the `Add` trait provides the ability to
-customize beyond that. Using a default type parameter in the `Add` trait
-definition means you don’t have to specify the extra parameter most of the
-time. In other words, a bit of implementation boilerplate isn’t needed, making
-it easier to use the trait.
+standard library-র `Add` trait দ্বিতীয় উদ্দেশ্যের একটি উদাহরণ: সাধারণত আপনি একই ধরনের দুটি type যোগ করবেন, তবে `Add` trait এর বাইরেও নিজের মতো সাজানোর ক্ষমতা দেয়। `Add` trait-এর সংজ্ঞায় একটি default
+type parameter ব্যবহার করার মানে বেশিরভাগ সময় বাড়তি parameter উল্লেখ করতে হয় না। অন্যভাবে বললে, implementation-এর কিছু গৎবাঁধা কোড লাগে না, ফলে trait ব্যবহার সহজ হয়।
 
-The first purpose is similar to the second but in reverse: If you want to add a
-type parameter to an existing trait, you can give it a default to allow
-extension of the functionality of the trait without breaking the existing
-implementation code.
+প্রথম উদ্দেশ্যটি দ্বিতীয়টির মতোই, তবে উল্টো দিক থেকে: একটি বিদ্যমান trait-এ একটি type parameter যোগ করতে চাইলে একে একটি default দিতে পারেন, যাতে বিদ্যমান implementation-এর কোড না ভেঙেই trait-এর
+কার্যক্ষমতা বাড়ানো যায়।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="fully-qualified-syntax-for-disambiguation-calling-methods-with-the-same-name"></a>
 <a id="disambiguating-between-methods-with-the-same-name"></a>
 
-### Disambiguating Between Identically Named Methods
+### একই নামের method-এর মধ্যে দ্ব্যর্থতা দূর করা {#disambiguating-between-identically-named-methods}
 
-Nothing in Rust prevents a trait from having a method with the same name as
-another trait’s method, nor does Rust prevent you from implementing both traits
-on one type. It’s also possible to implement a method directly on the type with
-the same name as methods from traits.
+Rust-এ এমন কিছু নেই যা একটি trait-কে অন্য trait-এর method-এর একই নামের method রাখতে বাধা দেয়, আর Rust আপনাকে একটি type-এর ওপর দুটি trait-ই implement করতেও বাধা দেয় না। trait-এর method-এর
+একই নামে সরাসরি type-এর ওপর একটি method implement করাও সম্ভব।
 
-When calling methods with the same name, you’ll need to tell Rust which one you
-want to use. Consider the code in Listing 20-17 where we’ve defined two traits,
-`Pilot` and `Wizard`, that both have a method called `fly`. We then implement
-both traits on a type `Human` that already has a method named `fly` implemented
-on it. Each `fly` method does something different.
+একই নামের method call করার সময় Rust-কে বলে দিতে হবে কোনটি ব্যবহার করতে চান। Listing 20-17-এর কোডটি দেখুন, যেখানে আমরা দুটি trait, `Pilot` আর `Wizard`, সংজ্ঞায়িত করেছি, যাদের দুটিরই `fly` নামের
+একটি method আছে। তারপর এমন একটি type `Human`-এর ওপর দুটি trait-ই implement করি, যার ওপর আগে থেকেই `fly` নামের একটি method implement করা আছে। প্রতিটি `fly` method ভিন্ন কিছু করে।
 
-<Listing number="20-17" file-name="src/main.rs" caption="Two traits are defined to have a `fly` method and are implemented on the `Human` type, and a `fly` method is implemented on `Human` directly.">
+<Listing number="20-17" file-name="src/main.rs" caption="`fly` method-যুক্ত দুটি trait সংজ্ঞায়িত করে `Human` type-এর ওপর implement করা হয়েছে, আর সরাসরি `Human`-এর ওপর একটি `fly` method implement করা হয়েছে।">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-17/src/main.rs:here}}
@@ -210,10 +154,9 @@ on it. Each `fly` method does something different.
 
 </Listing>
 
-When we call `fly` on an instance of `Human`, the compiler defaults to calling
-the method that is directly implemented on the type, as shown in Listing 20-18.
+`Human`-এর একটি instance-এর ওপর `fly` call করলে compiler default-ভাবে সেই method call করে, যা সরাসরি type-টির ওপর implement করা, যেমনটি Listing 20-18-এ দেখানো হয়েছে।
 
-<Listing number="20-18" file-name="src/main.rs" caption="Calling `fly` on an instance of `Human`">
+<Listing number="20-18" file-name="src/main.rs" caption="`Human`-এর একটি instance-এর ওপর `fly` call করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-18/src/main.rs:here}}
@@ -221,14 +164,11 @@ the method that is directly implemented on the type, as shown in Listing 20-18.
 
 </Listing>
 
-Running this code will print `*waving arms furiously*`, showing that Rust
-called the `fly` method implemented on `Human` directly.
+এই কোড চালালে print হবে `*waving arms furiously*`, যা দেখায় যে Rust সরাসরি `Human`-এর ওপর implement করা `fly` method call করেছে।
 
-To call the `fly` methods from either the `Pilot` trait or the `Wizard` trait,
-we need to use more explicit syntax to specify which `fly` method we mean.
-Listing 20-19 demonstrates this syntax.
+`Pilot` trait বা `Wizard` trait-এর `fly` method call করতে আমরা কোন `fly` method বোঝাচ্ছি তা উল্লেখ করতে আরও স্পষ্ট syntax ব্যবহার করতে হবে। Listing 20-19-এ এই syntax দেখানো হয়েছে।
 
-<Listing number="20-19" file-name="src/main.rs" caption="Specifying which trait’s `fly` method we want to call">
+<Listing number="20-19" file-name="src/main.rs" caption="কোন trait-এর `fly` method call করতে চাই তা উল্লেখ করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-19/src/main.rs:here}}
@@ -236,32 +176,24 @@ Listing 20-19 demonstrates this syntax.
 
 </Listing>
 
-Specifying the trait name before the method name clarifies to Rust which
-implementation of `fly` we want to call. We could also write
-`Human::fly(&person)`, which is equivalent to the `person.fly()` that we used
-in Listing 20-19, but this is a bit longer to write if we don’t need to
-disambiguate.
+method-এর নামের আগে trait-এর নাম উল্লেখ করলে Rust-এর কাছে স্পষ্ট হয় আমরা `fly`-এর কোন implementation call করতে চাই। আমরা
+`Human::fly(&person)`-ও লিখতে পারতাম, যা Listing 20-19-এ ব্যবহার করা `person.fly()`-এর সমতুল্য, তবে দ্ব্যর্থতা দূর করার দরকার না থাকলে এটি লিখতে একটু লম্বা।
 
-Running this code prints the following:
+এই কোড চালালে এই output print হয়:
 
 ```console
 {{#include ../listings/ch20-advanced-features/listing-20-19/output.txt}}
 ```
 
-Because the `fly` method takes a `self` parameter, if we had two _types_ that
-both implement one _trait_, Rust could figure out which implementation of a
-trait to use based on the type of `self`.
+`fly` method যেহেতু একটি `self` parameter নেয়, তাই যদি দুটি _type_ থাকত যারা দুজনেই একটি _trait_ implement করে, তাহলে `self`-এর type-এর ভিত্তিতে Rust বের করতে পারত একটি trait-এর কোন implementation
+ব্যবহার করতে হবে।
 
-However, associated functions that are not methods don’t have a `self`
-parameter. When there are multiple types or traits that define non-method
-functions with the same function name, Rust doesn’t always know which type you
-mean unless you use fully qualified syntax. For example, in Listing 20-20, we
-create a trait for an animal shelter that wants to name all baby dogs Spot. We
-make an `Animal` trait with an associated non-method function `baby_name`. The
-`Animal` trait is implemented for the struct `Dog`, on which we also provide an
-associated non-method function `baby_name` directly.
+তবে method নয় এমন associated function-এর `self` parameter থাকে না। যখন একাধিক type বা trait একই function নামে method নয় এমন function সংজ্ঞায়িত করে, তখন fully qualified syntax (পূর্ণ পরিচয়সহ
+syntax) ব্যবহার না করলে Rust সবসময় জানে না আপনি কোন type বোঝাচ্ছেন। যেমন, Listing 20-20-এ আমরা এমন একটি পশু আশ্রয়কেন্দ্রের জন্য trait তৈরি করি, যা সব কুকুরছানার নাম রাখতে চায় Spot। আমরা method
+নয় এমন একটি associated function `baby_name`-সহ একটি `Animal` trait বানাই। `Animal` trait implement করা হয় struct `Dog`-এর জন্য, যার ওপর আমরা সরাসরি method নয় এমন একটি associated function `baby_name`-ও
+দিই।
 
-<Listing number="20-20" file-name="src/main.rs" caption="A trait with an associated function and a type with an associated function of the same name that also implements the trait">
+<Listing number="20-20" file-name="src/main.rs" caption="একটি associated function-যুক্ত একটি trait, আর একই নামের একটি associated function-যুক্ত একটি type, যা trait-টিও implement করে">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-20/src/main.rs}}
@@ -269,26 +201,19 @@ associated non-method function `baby_name` directly.
 
 </Listing>
 
-We implement the code for naming all puppies Spot in the `baby_name` associated
-function that is defined on `Dog`. The `Dog` type also implements the trait
-`Animal`, which describes characteristics that all animals have. Baby dogs are
-called puppies, and that is expressed in the implementation of the `Animal`
-trait on `Dog` in the `baby_name` function associated with the `Animal` trait.
+সব কুকুরছানার নাম Spot রাখার কোড আমরা `Dog`-এর ওপর সংজ্ঞায়িত `baby_name` associated function-এ implement করি। `Dog` type `Animal` trait-ও implement করে, যা সব পশুর সাধারণ বৈশিষ্ট্য বর্ণনা করে।
+কুকুরের বাচ্চাকে বলা হয় puppy, আর তা প্রকাশ পায় `Dog`-এর ওপর `Animal` trait-এর implementation-এ, `Animal` trait-এর সঙ্গে যুক্ত `baby_name` function-এ।
 
-In `main`, we call the `Dog::baby_name` function, which calls the associated
-function defined on `Dog` directly. This code prints the following:
+`main`-এ আমরা `Dog::baby_name` function call করি, যা সরাসরি `Dog`-এর ওপর সংজ্ঞায়িত associated function call করে। এই কোড এই output print করে:
 
 ```console
 {{#include ../listings/ch20-advanced-features/listing-20-20/output.txt}}
 ```
 
-This output isn’t what we wanted. We want to call the `baby_name` function that
-is part of the `Animal` trait that we implemented on `Dog` so that the code
-prints `A baby dog is called a puppy`. The technique of specifying the trait
-name that we used in Listing 20-19 doesn’t help here; if we change `main` to
-the code in Listing 20-21, we’ll get a compilation error.
+এই output আমরা চাইনি। আমরা চাই `Dog`-এর ওপর implement করা `Animal` trait-এর অংশ `baby_name` function call করতে, যাতে কোড print করে `A baby dog is called a puppy`। Listing 20-19-এ ব্যবহার
+করা trait-এর নাম উল্লেখের কৌশল এখানে সাহায্য করে না; `main` বদলে Listing 20-21-এর কোড করলে compilation error পাব।
 
-<Listing number="20-21" file-name="src/main.rs" caption="Attempting to call the `baby_name` function from the `Animal` trait, but Rust doesn’t know which implementation to use">
+<Listing number="20-21" file-name="src/main.rs" caption="`Animal` trait থেকে `baby_name` function call করার চেষ্টা, কিন্তু কোন implementation ব্যবহার করতে হবে Rust তা জানে না">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-21/src/main.rs:here}}
@@ -296,20 +221,17 @@ the code in Listing 20-21, we’ll get a compilation error.
 
 </Listing>
 
-Because `Animal::baby_name` doesn’t have a `self` parameter, and there could be
-other types that implement the `Animal` trait, Rust can’t figure out which
-implementation of `Animal::baby_name` we want. We’ll get this compiler error:
+`Animal::baby_name`-এর যেহেতু কোনো `self` parameter নেই, এবং `Animal` trait implement করা অন্য type-ও থাকতে পারে, তাই আমরা `Animal::baby_name`-এর কোন implementation চাই তা Rust বের করতে পারে না।
+আমরা এই compiler error পাব:
 
 ```console
 {{#include ../listings/ch20-advanced-features/listing-20-21/output.txt}}
 ```
 
-To disambiguate and tell Rust that we want to use the implementation of
-`Animal` for `Dog` as opposed to the implementation of `Animal` for some other
-type, we need to use fully qualified syntax. Listing 20-22 demonstrates how to
-use fully qualified syntax.
+দ্ব্যর্থতা দূর করে Rust-কে বলতে যে আমরা অন্য কোনো type-এর জন্য `Animal`-এর implementation নয়, বরং `Dog`-এর জন্য `Animal`-এর implementation ব্যবহার করতে চাই, fully qualified syntax ব্যবহার করতে হবে।
+Listing 20-22-এ দেখানো হয়েছে কীভাবে fully qualified syntax ব্যবহার করতে হয়।
 
-<Listing number="20-22" file-name="src/main.rs" caption="Using fully qualified syntax to specify that we want to call the `baby_name` function from the `Animal` trait as implemented on `Dog`">
+<Listing number="20-22" file-name="src/main.rs" caption="`Dog`-এর ওপর implement করা `Animal` trait-এর `baby_name` function call করতে চাই তা উল্লেখ করতে fully qualified syntax ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-22/src/main.rs:here}}
@@ -317,47 +239,34 @@ use fully qualified syntax.
 
 </Listing>
 
-We’re providing Rust with a type annotation within the angle brackets, which
-indicates we want to call the `baby_name` method from the `Animal` trait as
-implemented on `Dog` by saying that we want to treat the `Dog` type as an
-`Animal` for this function call. This code will now print what we want:
+আমরা angle bracket-এর ভেতরে Rust-কে একটি type annotation দিচ্ছি, যা বোঝায় যে এই function call-এর জন্য `Dog` type-কে একটি `Animal` হিসেবে গণ্য করতে চাই বলে আমরা `Dog`-এর ওপর implement করা `Animal`
+trait-এর `baby_name` method call করতে চাই। এই কোড এখন আমাদের কাঙ্ক্ষিত output print করবে:
 
 ```console
 {{#include ../listings/ch20-advanced-features/listing-20-22/output.txt}}
 ```
 
-In general, fully qualified syntax is defined as follows:
+সাধারণভাবে fully qualified syntax এভাবে সংজ্ঞায়িত:
 
 ```rust,ignore
 <Type as Trait>::function(receiver_if_method, next_arg, ...);
 ```
 
-For associated functions that aren’t methods, there would not be a `receiver`:
-There would only be the list of other arguments. You could use fully qualified
-syntax everywhere that you call functions or methods. However, you’re allowed
-to omit any part of this syntax that Rust can figure out from other information
-in the program. You only need to use this more verbose syntax in cases where
-there are multiple implementations that use the same name and Rust needs help
-to identify which implementation you want to call.
+method নয় এমন associated function-এর ক্ষেত্রে কোনো `receiver` থাকবে না: শুধু অন্য argument-গুলোর তালিকা থাকবে। function বা method call করার সব জায়গায় fully qualified syntax ব্যবহার করতে পারতেন। তবে
+প্রোগ্রামের অন্য তথ্য থেকে Rust এই syntax-এর যে অংশ বের করতে পারে, তা বাদ দেওয়ার অনুমতি আছে। শুধু সেসব ক্ষেত্রেই এই বেশি শব্দবহুল syntax ব্যবহার করতে হয়, যেখানে একই নাম ব্যবহার করা একাধিক
+implementation আছে এবং আপনি কোন implementation call করতে চান তা শনাক্ত করতে Rust-এর সাহায্য দরকার।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-supertraits-to-require-one-traits-functionality-within-another-trait"></a>
 
-### Using Supertraits
+### supertrait ব্যবহার করা {#using-supertraits}
 
-Sometimes you might write a trait definition that depends on another trait: For
-a type to implement the first trait, you want to require that type to also
-implement the second trait. You would do this so that your trait definition can
-make use of the associated items of the second trait. The trait your trait
-definition is relying on is called a _supertrait_ of your trait.
+কখনো কখনো আপনি এমন একটি trait-এর সংজ্ঞা লিখতে পারেন, যা আরেকটি trait-এর ওপর নির্ভর করে: একটি type-কে প্রথম trait implement করতে হলে আপনি চান সেই type দ্বিতীয় trait-ও implement করুক। এটা করবেন যাতে
+আপনার trait-এর সংজ্ঞা দ্বিতীয় trait-এর associated item ব্যবহার করতে পারে। আপনার trait-এর সংজ্ঞা যে trait-এর ওপর নির্ভর করছে তাকে বলা হয় আপনার trait-এর _supertrait_ (ঊর্ধ্বতন trait)।
 
-For example, let’s say we want to make an `OutlinePrint` trait with an
-`outline_print` method that will print a given value formatted so that it’s
-framed in asterisks. That is, given a `Point` struct that implements the
-standard library trait `Display` to result in `(x, y)`, when we call
-`outline_print` on a `Point` instance that has `1` for `x` and `3` for `y`, it
-should print the following:
+যেমন ধরুন, আমরা একটি `outline_print` method-যুক্ত `OutlinePrint` trait বানাতে চাই, যা একটি প্রদত্ত মান তারকাচিহ্নের ফ্রেমে বাঁধিয়ে print করবে। অর্থাৎ, standard library-র `Display` trait implement করে
+`(x, y)` দেয় এমন একটি `Point` struct দেওয়া থাকলে, `x`-এ `1` আর `y`-এ `3` থাকা একটি `Point` instance-এর ওপর `outline_print` call করলে এটি এই output print করবে:
 
 ```text
 **********
@@ -367,15 +276,11 @@ should print the following:
 **********
 ```
 
-In the implementation of the `outline_print` method, we want to use the
-`Display` trait’s functionality. Therefore, we need to specify that the
-`OutlinePrint` trait will work only for types that also implement `Display` and
-provide the functionality that `OutlinePrint` needs. We can do that in the
-trait definition by specifying `OutlinePrint: Display`. This technique is
-similar to adding a trait bound to the trait. Listing 20-23 shows an
-implementation of the `OutlinePrint` trait.
+`outline_print` method-এর implementation-এ আমরা `Display` trait-এর কার্যক্ষমতা ব্যবহার করতে চাই। তাই বলে দিতে হবে যে `OutlinePrint` trait কেবল সেই type-গুলোর জন্য কাজ করবে, যা `Display`-ও implement
+করে এবং `OutlinePrint`-এর দরকারি কার্যক্ষমতা দেয়। trait-এর সংজ্ঞায় `OutlinePrint: Display` উল্লেখ করে তা করা যায়। এই কৌশল trait-এ একটি trait bound যোগ করার মতো। Listing 20-23-এ `OutlinePrint`
+trait-এর একটি implementation দেখানো হয়েছে।
 
-<Listing number="20-23" file-name="src/main.rs" caption="Implementing the `OutlinePrint` trait that requires the functionality from `Display`">
+<Listing number="20-23" file-name="src/main.rs" caption="`Display`-এর কার্যক্ষমতা দরকার এমন `OutlinePrint` trait implement করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-23/src/main.rs:here}}
@@ -383,15 +288,10 @@ implementation of the `OutlinePrint` trait.
 
 </Listing>
 
-Because we’ve specified that `OutlinePrint` requires the `Display` trait, we
-can use the `to_string` function that is automatically implemented for any type
-that implements `Display`. If we tried to use `to_string` without adding a
-colon and specifying the `Display` trait after the trait name, we’d get an
-error saying that no method named `to_string` was found for the type `&Self` in
-the current scope.
+আমরা যেহেতু উল্লেখ করেছি যে `OutlinePrint`-এর `Display` trait দরকার, তাই `Display` implement করা যেকোনো type-এর জন্য স্বয়ংক্রিয়ভাবে implement হওয়া `to_string` function ব্যবহার করতে পারি। trait-এর
+নামের পরে colon দিয়ে `Display` trait উল্লেখ না করে `to_string` ব্যবহারের চেষ্টা করলে error পেতাম, যা বলত বর্তমান scope-এ `&Self` type-এর জন্য `to_string` নামের কোনো method পাওয়া যায়নি।
 
-Let’s see what happens when we try to implement `OutlinePrint` on a type that
-doesn’t implement `Display`, such as the `Point` struct:
+চলুন দেখি `Display` implement করে না এমন একটি type-এর ওপর, যেমন `Point` struct, `OutlinePrint` implement করার চেষ্টা করলে কী ঘটে:
 
 <Listing file-name="src/main.rs">
 
@@ -401,14 +301,13 @@ doesn’t implement `Display`, such as the `Point` struct:
 
 </Listing>
 
-We get an error saying that `Display` is required but not implemented:
+আমরা একটি error পাই, যা বলে `Display` দরকার কিন্তু implement করা নেই:
 
 ```console
 {{#include ../listings/ch20-advanced-features/no-listing-02-impl-outlineprint-for-point/output.txt}}
 ```
 
-To fix this, we implement `Display` on `Point` and satisfy the constraint that
-`OutlinePrint` requires, like so:
+এটি ঠিক করতে আমরা `Point`-এর ওপর `Display` implement করি এবং `OutlinePrint`-এর দরকারি শর্ত পূরণ করি, এভাবে:
 
 <Listing file-name="src/main.rs">
 
@@ -418,37 +317,26 @@ To fix this, we implement `Display` on `Point` and satisfy the constraint that
 
 </Listing>
 
-Then, implementing the `OutlinePrint` trait on `Point` will compile
-successfully, and we can call `outline_print` on a `Point` instance to display
-it within an outline of asterisks.
+তারপর `Point`-এর ওপর `OutlinePrint` trait implement করা সফলভাবে compile হবে, আর একটি `Point` instance-এর ওপর `outline_print` call করে একে তারকাচিহ্নের ফ্রেমের ভেতরে দেখাতে পারি।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-the-newtype-pattern-to-implement-external-traits-on-external-types"></a>
 <a id="using-the-newtype-pattern-to-implement-external-traits"></a>
 
-### Implementing External Traits with the Newtype Pattern
+### newtype pattern দিয়ে বাইরের trait implement করা {#implementing-external-traits-with-the-newtype-pattern}
 
-In the [“Implementing a Trait on a Type”][implementing-a-trait-on-a-type]<!--
-ignore --> section in Chapter 10, we mentioned the orphan rule that states
-we’re only allowed to implement a trait on a type if either the trait or the
-type, or both, are local to our crate. It’s possible to get around this
-restriction using the newtype pattern, which involves creating a new type in a
-tuple struct. (We covered tuple structs in the [“Creating Different Types with
-Tuple Structs”][tuple-structs]<!-- ignore --> section in Chapter 5.) The tuple
-struct will have one field and be a thin wrapper around the type for which we
-want to implement a trait. Then, the wrapper type is local to our crate, and we
-can implement the trait on the wrapper. _Newtype_ is a term that originates
-from the Haskell programming language. There is no runtime performance penalty
-for using this pattern, and the wrapper type is elided at compile time.
+অধ্যায় 10-এর [“একটি type-এর ওপর trait implement করা”][implementing-a-trait-on-a-type]<!--
+ignore --> অংশে আমরা orphan rule-এর কথা বলেছিলাম, যা বলে একটি type-এর ওপর trait implement করা যায় কেবল তখনই, যখন trait অথবা type, কিংবা দুটোই, আমাদের crate-এর নিজস্ব। newtype pattern ব্যবহার করে এই
+সীমাবদ্ধতা এড়ানো সম্ভব, যার মধ্যে আছে একটি tuple struct-এ একটি নতুন type তৈরি করা। (tuple struct নিয়ে অধ্যায় 5-এর [“tuple struct দিয়ে আলাদা type তৈরি
+করা”][tuple-structs]<!-- ignore --> অংশে আলোচনা করেছি।) tuple struct-টির একটি field থাকবে এবং এটি সেই type-এর চারপাশে একটি পাতলা মোড়ক হবে, যার জন্য আমরা একটি trait implement করতে চাই। তখন মোড়ক
+type-টি আমাদের crate-এর নিজস্ব, আর মোড়কটির ওপর trait implement করা যায়। _Newtype_ পরিভাষাটি এসেছে Haskell প্রোগ্রামিং ভাষা থেকে। এই pattern ব্যবহারের জন্য runtime-এ performance-এর কোনো মাশুল নেই,
+আর compile time-এ মোড়ক type-টি বাদ পড়ে যায়।
 
-As an example, let’s say we want to implement `Display` on `Vec<T>`, which the
-orphan rule prevents us from doing directly because the `Display` trait and the
-`Vec<T>` type are defined outside our crate. We can make a `Wrapper` struct
-that holds an instance of `Vec<T>`; then, we can implement `Display` on
-`Wrapper` and use the `Vec<T>` value, as shown in Listing 20-24.
+উদাহরণ হিসেবে ধরুন আমরা `Vec<T>`-এর ওপর `Display` implement করতে চাই, যা orphan rule সরাসরি করতে দেয় না, কারণ `Display` trait আর `Vec<T>` type আমাদের crate-এর বাইরে সংজ্ঞায়িত। আমরা একটি
+`Wrapper` struct বানাতে পারি, যা `Vec<T>`-এর একটি instance রাখে; তারপর `Wrapper`-এর ওপর `Display` implement করে `Vec<T>` মান ব্যবহার করতে পারি, যেমনটি Listing 20-24-এ দেখানো হয়েছে।
 
-<Listing number="20-24" file-name="src/main.rs" caption="Creating a `Wrapper` type around `Vec<String>` to implement `Display`">
+<Listing number="20-24" file-name="src/main.rs" caption="`Display` implement করতে `Vec<String>`-এর চারপাশে একটি `Wrapper` type তৈরি করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-24/src/main.rs}}
@@ -456,24 +344,16 @@ that holds an instance of `Vec<T>`; then, we can implement `Display` on
 
 </Listing>
 
-The implementation of `Display` uses `self.0` to access the inner `Vec<T>`
-because `Wrapper` is a tuple struct and `Vec<T>` is the item at index 0 in the
-tuple. Then, we can use the functionality of the `Display` trait on `Wrapper`.
+`Display`-এর implementation ভেতরের `Vec<T>` পেতে `self.0` ব্যবহার করে, কারণ `Wrapper` একটি tuple struct, আর `Vec<T>` হলো tuple-এর index 0-এর item। তারপর `Wrapper`-এর ওপর `Display` trait-এর
+কার্যক্ষমতা ব্যবহার করতে পারি।
 
-The downside of using this technique is that `Wrapper` is a new type, so it
-doesn’t have the methods of the value it’s holding. We would have to implement
-all the methods of `Vec<T>` directly on `Wrapper` such that the methods
-delegate to `self.0`, which would allow us to treat `Wrapper` exactly like a
-`Vec<T>`. If we wanted the new type to have every method the inner type has,
-implementing the `Deref` trait on the `Wrapper` to return the inner type would
-be a solution (we discussed implementing the `Deref` trait in the [“Treating
-Smart Pointers Like Regular References”][smart-pointer-deref]<!-- ignore -->
-section in Chapter 15). If we didn’t want the `Wrapper` type to have all the
-methods of the inner type—for example, to restrict the `Wrapper` type’s
-behavior—we would have to implement just the methods we do want manually.
+এই কৌশল ব্যবহারের অসুবিধা হলো `Wrapper` একটি নতুন type, তাই এর ভেতরে রাখা মানের method-গুলো এতে নেই। `Vec<T>`-এর সব method সরাসরি `Wrapper`-এর ওপর implement করতে হতো, যাতে method-গুলো `self.0`-এর
+হাতে কাজ তুলে দেয়, তাহলে `Wrapper`-কে হুবহু একটি `Vec<T>`-এর মতো ব্যবহার করা যেত। আমরা যদি চাইতাম নতুন type-টিতে ভেতরের type-এর প্রতিটি method থাকুক, তাহলে ভেতরের type return করতে `Wrapper`-এর
+ওপর `Deref` trait implement করা একটি সমাধান হতো (অধ্যায় 15-এর [“smart pointer-কে সাধারণ reference-এর মতো ব্যবহার
+করা”][smart-pointer-deref]<!-- ignore --> অংশে `Deref` trait implement করা নিয়ে আলোচনা করেছি)। আর যদি না চাইতাম যে `Wrapper` type-এ ভেতরের type-এর সব method থাকুক—যেমন, `Wrapper` type-এর আচরণ
+সীমিত রাখতে—তাহলে শুধু যে method-গুলো চাই সেগুলো হাতে implement করতে হতো।
 
-This newtype pattern is also useful even when traits are not involved. Let’s
-switch focus and look at some advanced ways to interact with Rust’s type system.
+trait জড়িত না থাকলেও এই newtype pattern কাজে লাগে। চলুন মনোযোগ বদলে Rust-এর type system-এর সঙ্গে কাজ করার কিছু উন্নত উপায় দেখি।
 
 {{#quiz ../quizzes/ch19-03-advanced-traits.toml}}
 

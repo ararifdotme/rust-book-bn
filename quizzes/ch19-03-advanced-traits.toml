@@ -2,7 +2,7 @@
 id = "7859b06e-72ba-4c07-a3e2-b4f8cb7fd903"
 type = "MultipleChoice"
 prompt.prompt = """
-Recall the definition of the `Add` trait:
+`Add` trait-এর সংজ্ঞাটি মনে করুন:
 
 ```
 trait Add<Rhs=Self> {
@@ -11,24 +11,24 @@ trait Add<Rhs=Self> {
 }
 ```
 
-Which of the following best describes why `Output` is an associated type, while `Rhs` is a type parameter?
+`Output` কেন একটি associated type, আর `Rhs` কেন একটি type parameter, তা নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
-answer.answer = "A type `T` should be addable to many other types `S`, but a given `T + S` operation should always have a single output type"
+answer.answer = "একটি type `T`-কে আরও অনেক type `S`-এর সঙ্গে যোগ করা যাওয়া উচিত, কিন্তু একটি নির্দিষ্ট `T + S` operation-এর output type সবসময় একটিই হওয়া উচিত"
 prompt.distractors = [
-    "The add operation takes `Rhs` as input and produces `Output` as output, and type parameters are used for input while associated types are used for output",
-    "A trait can only have a single associated type, so `Rhs` must be a type parameter to `Add`",
-    "An associated type cannot have a default, while a trait type parameter can have a default"
+    "add operation input হিসেবে `Rhs` নেয় এবং output হিসেবে `Output` তৈরি করে, আর type parameter input-এর জন্য ও associated type output-এর জন্য ব্যবহৃত হয়",
+    "একটি trait-এর মাত্র একটি associated type থাকতে পারে, তাই `Rhs`-কে `Add`-এর একটি type parameter হতে হবে",
+    "একটি associated type-এর default থাকতে পারে না, কিন্তু trait-এর type parameter-এর default থাকতে পারে"
 ]
 context = """
-It is true that an associated type cannot currently have a default, but that is not the main
-motivating factor for having `Rhs` be a type parameter in the `Add` trait.
+এটা সত্য যে এই মুহূর্তে একটি associated type-এর default থাকতে পারে না, তবে `Add` trait-এ `Rhs`-কে
+type parameter রাখার মূল প্রেরণা সেটি নয়।
 """
 
 [[questions]]
 id = "d2c77d93-3887-40a2-b93a-501aa315d676"
 type = "MultipleChoice"
 prompt.prompt = """
-Recall the definition of the `Add` trait:
+`Add` trait-এর সংজ্ঞাটি মনে করুন:
 
 ```
 trait Add<Rhs=Self> {
@@ -37,7 +37,7 @@ trait Add<Rhs=Self> {
 }
 ```
 
-Which of the following best describes why `Rhs` is a type parameter to the trait `Add` rather than the function `add`? That is, why is `Add` not designed like this:
+`Rhs` কেন `add` function-এর নয়, বরং `Add` trait-এর type parameter, তা নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে? অর্থাৎ `Add` কেন এভাবে নকশা করা হয়নি:
 
 ```
 trait Add {
@@ -46,15 +46,15 @@ trait Add {
 }
 ```
 """
-answer.answer = "If `Rhs` were a function-level type parameter, then the definition of `add` could not assume any structure to `Rhs`"
+answer.answer = "`Rhs` function-স্তরের type parameter হলে `add`-এর সংজ্ঞা `Rhs`-এর কোনো গঠন ধরে নিতে পারত না"
 prompt.distractors = [
-    "The type-checker executes more efficiently when `Rhs` is a trait-level type parameter than a function-level type parameter",
-    "`Rhs` cannot have a default type as a function-level type parameter",
-    "Code generation for the `add` function would require additional time for monomorphization due to the function-level type parameter"
+    "`Rhs` function-স্তরের চেয়ে trait-স্তরের type parameter হলে type-checker বেশি দক্ষভাবে চলে",
+    "function-স্তরের type parameter হিসেবে `Rhs`-এর default type থাকতে পারে না",
+    "function-স্তরের type parameter-এর কারণে `add` function-এর কোড তৈরিতে monomorphization-এর জন্য বাড়তি সময় লাগত"
 ]
 context = """
-Such a design would not make much sense because `add<Rhs>` would not have any information about
-the structure of `Rhs`, so it would be impossible to implement any sensible addition function this way.
+এমন নকশা খুব একটা অর্থবহ হতো না, কারণ `add<Rhs>`-এর কাছে `Rhs`-এর গঠন সম্পর্কে কোনো তথ্য
+থাকত না, তাই এভাবে কোনো অর্থবহ যোগের function implement করা অসম্ভব হতো।
 """
 
 [[questions]]
@@ -80,27 +80,27 @@ fn main() {
 answer.doesCompile = true
 answer.stdout = "1"
 context = """
-When only one of two conflicting trait implementations is imported, then Rust uses the imported
-implementation. Fully-qualified syntax is not necessary here.
+পরস্পরবিরোধী দুটি trait implementation-এর মধ্যে মাত্র একটি import করা হলে Rust import করা
+implementation-টিই ব্যবহার করে। এখানে fully-qualified syntax দরকার নেই।
 """
 
 [[questions]]
 id = "cb7e4d54-e95b-4153-99d6-e8f380e4f8b4"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider implementing a trait `Trait` for a type `T`. In which of the following situations
-do you need to wrap `T` in a newtype?
+একটি type `T`-এর জন্য একটি trait `Trait` implement করার কথা ভাবুন। নিচের কোন পরিস্থিতিতে
+`T`-কে একটি newtype-এ মুড়তে হবে?
 """
 answer.answer = [
-    "`Trait` is defined in an external crate and `T` is defined in an external crate",
+    "`Trait` একটি বাইরের crate-এ সংজ্ঞায়িত এবং `T`-ও একটি বাইরের crate-এ সংজ্ঞায়িত",
 ]
 prompt.distractors = [
-    "`Trait` is defined in the local crate and `T` is defined in an external crate",
-    "`Trait` is defined in an external crate and `T` is defined in the local crate",
-    "`Trait` is defined in the local crate and `T` is defined in the local crate",
+    "`Trait` নিজস্ব crate-এ সংজ্ঞায়িত এবং `T` একটি বাইরের crate-এ সংজ্ঞায়িত",
+    "`Trait` একটি বাইরের crate-এ সংজ্ঞায়িত এবং `T` নিজস্ব crate-এ সংজ্ঞায়িত",
+    "`Trait` নিজস্ব crate-এ সংজ্ঞায়িত এবং `T`-ও নিজস্ব crate-এ সংজ্ঞায়িত",
 ]
 context = """
-The orphan rule dictates that a trait cannot be implemented for a type if both are
-defined in an external crate, thus necessitating a newtype. If either the trait or the type
-are defined locally, then a newtype is unnecessary.
+orphan rule অনুযায়ী trait আর type দুটিই একটি বাইরের crate-এ সংজ্ঞায়িত হলে সেই type-এর জন্য trait implement করা যায় না,
+তাই newtype দরকার হয়। trait বা type, যেকোনো একটি নিজস্ব crate-এ সংজ্ঞায়িত হলে
+newtype অপ্রয়োজনীয়।
 """

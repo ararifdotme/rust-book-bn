@@ -20,48 +20,48 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 11
 context = """
-The `manylet` macro syntactically duplicates the expression `e` as a binding to each
-variable on the left-hand side of the equals. However, because `s` is an owned string, 
-then the first binding to `x` moves `s`, and the second binding to `y` is invalid.
+`manylet` macro সমান চিহ্নের বাম পাশের প্রতিটি variable-এর binding হিসেবে
+`e` expression-টিকে syntax-গতভাবে নকল করে। কিন্তু `s` যেহেতু একটি owned string, 
+তাই `x`-এর প্রথম binding `s`-কে সরিয়ে নেয়, আর `y`-এর দ্বিতীয় binding অবৈধ।
 """
 
 [[questions]]
 id = "f4f664ef-4b0b-43ac-ba90-5051a4ef89fb"
 type = "MultipleChoice"
 prompt.prompt = """
-Which of the following are valid reasons for implementing a macro as a
-procedural macro instead of a declarative macro?
+একটি macro-কে declarative macro-র বদলে
+procedural macro হিসেবে implement করার বৈধ কারণ নিচের কোনগুলো?
 """
 answer.answer = [
-    "You want to integrate with Rust's derive system",
-    "Your macro requires nontrivial analysis of the macro user's syntax",
+    "আপনি Rust-এর derive ব্যবস্থার সঙ্গে যুক্ত হতে চান",
+    "আপনার macro-র জন্য macro ব্যবহারকারীর syntax-এর জটিল বিশ্লেষণ দরকার",
 ]
 prompt.distractors = [
-  "You want to generate variable-length sequences of code",
-  "Your macro requires an entire item as input, not just an expression"
+  "আপনি পরিবর্তনশীল দৈর্ঘ্যের কোড-ধারা তৈরি করতে চান",
+  "আপনার macro-র input হিসেবে শুধু একটি expression নয়, একটি পুরো item দরকার"
 ]
 context = """
-Procedural macros are the only way to create a custom derive. Procedural macros
-are also useful when you need code to analyze the macro user's syntax &mdash; declarative
-macros only permit shuffling around the input, not e.g. computing its size.
+নিজস্ব derive তৈরির একমাত্র উপায় হলো procedural macro। macro ব্যবহারকারীর syntax বিশ্লেষণ করার কোড দরকার হলেও
+procedural macro কাজে লাগে &mdash; declarative
+macro শুধু input এদিক-ওদিক সাজাতে দেয়, যেমন এর আকার হিসাব করতে দেয় না।
 
-Declarative macros can generate variable-length sequences of code, and can wrap/produce
-items and not just expressions.
+declarative macro পরিবর্তনশীল দৈর্ঘ্যের কোড-ধারা তৈরি করতে পারে, এবং শুধু expression নয়,
+item-ও মুড়তে/তৈরি করতে পারে।
 """
 
 [[questions]]
 id = "4c7dce03-99c6-41e3-8482-ccf4e30974ff"
 type = "MultipleChoice"
 prompt.prompt = """
-Which of the following best describes the input to a procedural macro? 
+একটি procedural macro-র input নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে? 
 """
-answer.answer = "The input is a sequence of tokens"
+answer.answer = "input হলো token-এর একটি ধারা"
 prompt.distractors = [
-  "The input is a typed control-flow graph",
-   "The input is an abstract syntax tree",
-  "The input is a byte-string"
+  "input হলো type-যুক্ত একটি control-flow graph",
+   "input হলো একটি abstract syntax tree",
+  "input হলো একটি byte-string"
 ]
 context = """
-Procedural macros take as input (and produce as output) token streams.
-You can use crates like `syn` to convert tokens to syntax trees.
+procedural macro input হিসেবে token stream নেয় (এবং output হিসেবে তৈরি করে)।
+token-কে syntax tree-তে রূপান্তর করতে `syn`-এর মতো crate ব্যবহার করতে পারেন।
 """

@@ -373,3 +373,33 @@ in the glossary.)
 | Patterns pop up in a number of places in Rust | Rust-এ অনেক জায়গায় pattern দেখা যায় |
 | We’ve given the code an out! | আমরা কোডকে বেরোনোর একটি পথ দিয়েছি! |
 | the penultimate chapter of the book | বইয়ের শেষের আগের অধ্যায় |
+
+## Chapter 20: Advanced Features
+
+**Auto-chosen terms:** unsafe superpowers, FFI, ABI, name mangling, static
+variable, union, Miri, lint, operator overloading, default type parameter,
+fully qualified syntax, supertrait, newtype pattern, never type, diverging
+function, dynamically sized type, function pointer, opaque type, declarative /
+procedural macro, metaprogramming, token / `TokenStream`, reflection.
+
+**Decisions:**
+- "superpowers" became "অতিমানবীয় ক্ষমতা".
+- Listing 20-11's doc and `SAFETY:` comments are translated but keep the
+  `SAFETY:` prefix, because the text tells readers to start such comments with
+  `SAFETY`. Listing 20-12's placeholder comments are translated.
+- Link labels to Appendix G and to chapter 17-related sections use the Bengali
+  heading where the target is already translated; the Appendix G link stays in
+  English.
+- Quiz files are `quizzes/ch19-*` upstream; names unchanged.
+- My check script flags a caption in ch20-04 (Listing 20-33) because of the `<T>`
+  inside a code span in an attribute; the rendered caption is correct.
+
+**Unsure sentences:**
+
+| English | Bengali |
+| --- | --- |
+| It’s a panoply of Rust features with something for everyone! | এটি Rust-এর বৈশিষ্ট্যের এক বিশাল সম্ভার, যাতে সবার জন্য কিছু না কিছু আছে! |
+| Another reason Rust has an unsafe alter ego | Rust-এর একটি unsafe দ্বিতীয় সত্তা থাকার আরেকটি কারণ |
+| “Trust me, I know what I’m doing.” | “আমাকে বিশ্বাস করো, আমি জানি কী করছি।” |
+| we can get into the nitty-gritty | আমরা খুঁটিনাটির গভীরে যেতে পারি |
+| The golden rule of dynamically sized types | dynamically sized type-এর সোনালি নিয়ম |

@@ -2,20 +2,20 @@
 id = "05a7959b-4fe7-4ee6-9c25-bfa9a4e72535"
 type = "MultipleChoice"
 prompt.prompt = """
-Which of the following are "superpowers" that Rust enables inside an `unsafe` block?
+একটি `unsafe` block-এর ভেতরে Rust কোন কোন "অতিমানবীয় ক্ষমতা" চালু করে?
 """
 answer.answer = [
-    "Dereferencing a raw pointer",
-    "Calling a function marked as `unsafe`",
+    "একটি raw pointer dereference করা",
+    "`unsafe` হিসেবে চিহ্নিত একটি function call করা",
 ]
 prompt.distractors = [
-    "Disabling the borrow checker",
-    "Converting a reference to a raw pointer",
+    "borrow checker নিষ্ক্রিয় করা",
+    "একটি reference-কে raw pointer-এ রূপান্তর করা",
 ]
 context = """
-`unsafe` blocks enable you to dereference raw pointers and call `unsafe` functions. However,
-`unsafe` does not disable the borrow checker (operations on safe references are still checked).
-A reference can be converted to a raw pointer in normal safe code.
+`unsafe` block আপনাকে raw pointer dereference করতে আর `unsafe` function call করতে দেয়। তবে
+`unsafe` borrow checker নিষ্ক্রিয় করে না (নিরাপদ reference-এর ওপর operation তবুও যাচাই হয়)।
+সাধারণ নিরাপদ কোডেই একটি reference-কে raw pointer-এ রূপান্তর করা যায়।
 """
 
 
@@ -36,35 +36,35 @@ fn main() {
 answer.doesCompile = true
 answer.stdout = "0"
 context = """
-This program is dangerous! It compiles correctly and executes without issue
-because `Vec` has enough capacity such that `v.push(4)` does not resize it. However,
-if the capacity were 3, then `n` would point to deallocated memory.
+এই প্রোগ্রাম বিপজ্জনক! এটি ঠিকমতো compile হয় এবং কোনো সমস্যা ছাড়াই চলে,
+কারণ `Vec`-এর যথেষ্ট ধারণক্ষমতা আছে, ফলে `v.push(4)` এর আকার বদলায় না। কিন্তু
+ধারণক্ষমতা 3 হলে `n` deallocate হওয়া মেমোরিকে নির্দেশ করত।
 """
 
 [[questions]]
 id = "015941ed-d375-4070-a8dc-2f368584b302"
 type = "MultipleChoice"
 prompt.prompt = """
-Which of the following are situations where using `unsafe` code (or a safe wrapper around `unsafe` code) 
-is an idiomatic method for working around the borrow checker?
+নিচের কোন পরিস্থিতিগুলোতে `unsafe` কোড (বা `unsafe` কোডের চারপাশে একটি নিরাপদ মোড়ক) ব্যবহার 
+borrow checker-এর সীমাবদ্ধতা এড়ানোর একটি idiomatic উপায়?
 """
 answer.answer = [    
-    "Getting two mutable references to disjoint indices in an array",
-    "Allowing values to be uninitialized when they are not being read",
-    "Having a reference to one field of a struct sit in another field of the same struct"
+    "একটি array-র আলাদা আলাদা (একে অপরের সঙ্গে না মেশা) index-এর দুটি mutable reference পাওয়া",
+    "পড়া না হলে মানগুলোকে প্রাথমিক মান ছাড়া থাকতে দেওয়া",
+    "একটি struct-এর এক field-এর reference একই struct-এর আরেকটি field-এ রাখা"
 ]
 prompt.distractors = [
-    "Returning a pointer to a stack-allocated variable out of a function",    
+    "একটি function থেকে stack-এ allocate করা একটি variable-এর pointer বাইরে return করা",    
 ]
 context = """
-Two mutable references to disjoint indices is reasonable because the borrow checker doesn't understand when indices are disjoint. See: [`slice::split_at_mut`](https://doc.rust-lang.org/stable/std/primitive.slice.html#method.split_at_mut).
+আলাদা index-এর দুটি mutable reference যুক্তিসঙ্গত, কারণ index-গুলো কখন আলাদা তা borrow checker বোঝে না। দেখুন: [`slice::split_at_mut`](https://doc.rust-lang.org/stable/std/primitive.slice.html#method.split_at_mut)।
 
-Allowing values to be uninitialized is reasonable because the borrow checker adopts a conservative policy that values must be always initialized, but it's sometimes useful to work with uninitialized values. See [`MaybeUninit`](https://doc.rust-lang.org/stable/std/mem/union.MaybeUninit.html) and the [`take_mut`](https://docs.rs/take_mut/0.2.2/take_mut/index.html) crate.
+মানগুলোকে প্রাথমিক মান ছাড়া থাকতে দেওয়া যুক্তিসঙ্গত, কারণ borrow checker একটি রক্ষণশীল নীতি নেয় যে মান সবসময় প্রাথমিক মানসহ থাকতে হবে, কিন্তু কখনো কখনো প্রাথমিক মান ছাড়া মান নিয়ে কাজ করা কাজে লাগে। দেখুন [`MaybeUninit`](https://doc.rust-lang.org/stable/std/mem/union.MaybeUninit.html) আর [`take_mut`](https://docs.rs/take_mut/0.2.2/take_mut/index.html) crate।
 
-Having a struct hold a reference to itself is reasonable because the borrow checker cannot
-reason about the lifetime of self-references. See the [`std::pin`](https://doc.rust-lang.org/stable/std/pin/index.html) module.
+একটি struct-কে দিয়ে নিজেরই reference রাখানো যুক্তিসঙ্গত, কারণ borrow checker নিজের দিকে reference-এর lifetime নিয়ে
+যুক্তি দিয়ে বিচার করতে পারে না। দেখুন [`std::pin`](https://doc.rust-lang.org/stable/std/pin/index.html) module।
 
-However, returning a pointer to a stack-allocated variable is *never* valid to do with unsafe
-code. The only appropriate workaround is to use garbage collection, e.g. returning an `Rc<T>`
-instead of `&T`.
+তবে stack-এ allocate করা একটি variable-এর pointer return করা unsafe কোড দিয়েও *কখনো* বৈধ
+নয়। একমাত্র উপযুক্ত বিকল্প হলো garbage collection (স্বয়ংক্রিয় মেমোরি পুনরুদ্ধার) ব্যবহার করা, যেমন `&T`-এর বদলে
+একটি `Rc<T>` return করা।
 """

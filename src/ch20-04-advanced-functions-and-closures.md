@@ -1,28 +1,18 @@
-## Advanced Functions and Closures
+## উন্নত function ও closure {#advanced-functions-and-closures}
 
-This section explores some advanced features related to functions and closures,
-including function pointers and returning closures.
+এই অংশে function আর closure সংক্রান্ত কিছু উন্নত বৈশিষ্ট্য দেখা হবে, function pointer আর closure return করাসহ।
 
-### Function Pointers
+### function pointer {#function-pointers}
 
-We’ve talked about how to pass closures to functions; you can also pass regular
-functions to functions! This technique is useful when you want to pass a
-function you’ve already defined rather than defining a new closure. Functions
-coerce to the type `fn` (with a lowercase _f_), not to be confused with the
-`Fn` closure trait. The `fn` type is called a _function pointer_. Passing
-functions with function pointers will allow you to use functions as arguments
-to other functions.
+function-এ কীভাবে closure পাঠাতে হয় তা নিয়ে কথা বলেছি; function-এ সাধারণ function-ও পাঠানো যায়! নতুন closure সংজ্ঞায়িত না করে আগে থেকে সংজ্ঞায়িত একটি function পাঠাতে চাইলে এই কৌশল কাজে লাগে।
+function `fn` type-এ (ছোট হাতের _f_ দিয়ে) রূপান্তরিত হয়, যাকে `Fn` closure trait-এর সঙ্গে গুলিয়ে ফেলবেন না। `fn` type-কে বলা হয় _function pointer_। function pointer দিয়ে function পাঠালে function-কে
+অন্য function-এর argument হিসেবে ব্যবহার করা যায়।
 
-The syntax for specifying that a parameter is a function pointer is similar to
-that of closures, as shown in Listing 20-28, where we’ve defined a function
-`add_one` that adds 1 to its parameter. The function `do_twice` takes two
-parameters: a function pointer to any function that takes an `i32` parameter
-and returns an `i32`, and one `i32` value. The `do_twice` function calls the
-function `f` twice, passing it the `arg` value, then adds the two function call
-results together. The `main` function calls `do_twice` with the arguments
-`add_one` and `5`.
+একটি parameter যে function pointer তা উল্লেখ করার syntax closure-এর মতোই, যেমনটি Listing 20-28-এ দেখানো হয়েছে, যেখানে আমরা `add_one` নামের একটি function সংজ্ঞায়িত করেছি, যা তার parameter-এর সঙ্গে 1 যোগ
+করে। `do_twice` function দুটি parameter নেয়: `i32` parameter নিয়ে `i32` return করে এমন যেকোনো function-এর একটি function pointer, আর একটি `i32` মান। `do_twice` function `f` function-কে দুবার call
+করে, প্রতিবার `arg` মান পাঠিয়ে, তারপর দুটি function call-এর ফল যোগ করে। `main` function `add_one` আর `5` argument দিয়ে `do_twice` call করে।
 
-<Listing number="20-28" file-name="src/main.rs" caption="Using the `fn` type to accept a function pointer as an argument">
+<Listing number="20-28" file-name="src/main.rs" caption="argument হিসেবে একটি function pointer গ্রহণ করতে `fn` type ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-28/src/main.rs}}
@@ -30,31 +20,20 @@ results together. The `main` function calls `do_twice` with the arguments
 
 </Listing>
 
-This code prints `The answer is: 12`. We specify that the parameter `f` in
-`do_twice` is an `fn` that takes one parameter of type `i32` and returns an
-`i32`. We can then call `f` in the body of `do_twice`. In `main`, we can pass
-the function name `add_one` as the first argument to `do_twice`.
+এই কোড print করে `The answer is: 12`। আমরা উল্লেখ করি যে `do_twice`-এর `f` parameter একটি `fn`, যা `i32` type-এর একটি parameter নিয়ে একটি `i32` return করে। তারপর `do_twice`-এর body-তে `f` call করা
+যায়। `main`-এ `do_twice`-এর প্রথম argument হিসেবে function-এর নাম `add_one` পাঠাতে পারি।
 
-Unlike closures, `fn` is a type rather than a trait, so we specify `fn` as the
-parameter type directly rather than declaring a generic type parameter with one
-of the `Fn` traits as a trait bound.
+closure-এর মতো নয়, `fn` একটি trait নয়, বরং একটি type, তাই `Fn` trait-গুলোর একটিকে trait bound হিসেবে রেখে generic type parameter ঘোষণা না করে আমরা সরাসরি parameter-এর type হিসেবে `fn` উল্লেখ করি।
 
-Function pointers implement all three of the closure traits (`Fn`, `FnMut`, and
-`FnOnce`), meaning you can always pass a function pointer as an argument for a
-function that expects a closure. It’s best to write functions using a generic
-type and one of the closure traits so that your functions can accept either
-functions or closures.
+function pointer তিনটি closure trait-ই (`Fn`, `FnMut` আর `FnOnce`) implement করে, অর্থাৎ closure আশা করে এমন একটি function-এর argument হিসেবে সবসময় একটি function pointer পাঠাতে পারেন। একটি generic type আর
+closure trait-গুলোর একটি ব্যবহার করে function লেখাই ভালো, যাতে আপনার function function বা closure, দুটিই গ্রহণ করতে পারে।
 
-That said, one example of where you would want to only accept `fn` and not
-closures is when interfacing with external code that doesn’t have closures: C
-functions can accept functions as arguments, but C doesn’t have closures.
+তবে যেখানে closure নয়, শুধু `fn` গ্রহণ করতে চাইবেন তার একটি উদাহরণ হলো closure নেই এমন বাইরের কোডের সঙ্গে যুক্ত হওয়া: C function argument হিসেবে function গ্রহণ করতে পারে, কিন্তু C-তে closure নেই।
 
-As an example of where you could use either a closure defined inline or a named
-function, let’s look at a use of the `map` method provided by the `Iterator`
-trait in the standard library. To use the `map` method to turn a vector of
-numbers into a vector of strings, we could use a closure, as in Listing 20-29.
+যেখানে inline সংজ্ঞায়িত একটি closure বা নাম দেওয়া একটি function, যেকোনোটি ব্যবহার করা যায়, তার উদাহরণ হিসেবে চলুন standard library-র `Iterator` trait-এর দেওয়া `map` method-এর একটি ব্যবহার দেখি।
+সংখ্যার একটি vector-কে string-এর vector-এ রূপান্তর করতে `map` method ব্যবহার করতে আমরা একটি closure ব্যবহার করতে পারি, যেমনটি Listing 20-29-এ।
 
-<Listing number="20-29" caption="Using a closure with the `map` method to convert numbers to strings">
+<Listing number="20-29" caption="সংখ্যাকে string-এ রূপান্তর করতে `map` method-এর সঙ্গে একটি closure ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-29/src/main.rs:here}}
@@ -62,10 +41,9 @@ numbers into a vector of strings, we could use a closure, as in Listing 20-29.
 
 </Listing>
 
-Or we could name a function as the argument to `map` instead of the closure.
-Listing 20-30 shows what this would look like.
+অথবা closure-এর বদলে `map`-এর argument হিসেবে একটি function-এর নাম দিতে পারি। Listing 20-30-এ দেখানো হয়েছে এটি দেখতে কেমন হবে।
 
-<Listing number="20-30" caption="Using the `String::to_string` function with the `map` method to convert numbers to strings">
+<Listing number="20-30" caption="সংখ্যাকে string-এ রূপান্তর করতে `map` method-এর সঙ্গে `String::to_string` function ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-30/src/main.rs:here}}
@@ -73,21 +51,15 @@ Listing 20-30 shows what this would look like.
 
 </Listing>
 
-Note that we must use the fully qualified syntax that we talked about in the
-[“Advanced Traits”][advanced-traits]<!-- ignore --> section because there are
-multiple functions available named `to_string`.
+খেয়াল করুন, [“উন্নত trait”][advanced-traits]<!-- ignore --> অংশে আলোচিত fully qualified syntax আমাদের ব্যবহার করতেই হবে, কারণ `to_string` নামে একাধিক function পাওয়া যায়।
 
-Here, we’re using the `to_string` function defined in the `ToString` trait,
-which the standard library has implemented for any type that implements
-`Display`.
+এখানে আমরা `ToString` trait-এ সংজ্ঞায়িত `to_string` function ব্যবহার করছি, যা standard library `Display` implement করা যেকোনো type-এর জন্য implement করেছে।
 
-Recall from the [“Enum Values”][enum-values]<!-- ignore --> section in Chapter
-6 that the name of each enum variant that we define also becomes an initializer
-function. We can use these initializer functions as function pointers that
-implement the closure traits, which means we can specify the initializer
-functions as arguments for methods that take closures, as seen in Listing 20-31.
+অধ্যায়
+6-এর [“enum-এর মান”][enum-values]<!-- ignore --> অংশ থেকে মনে করুন, আমাদের সংজ্ঞায়িত প্রতিটি enum variant-এর নাম একটি initializer function-ও হয়ে যায়। এই initializer function-গুলোকে closure trait implement করা
+function pointer হিসেবে ব্যবহার করা যায়, অর্থাৎ closure নেয় এমন method-এর argument হিসেবে initializer function উল্লেখ করা যায়, যেমনটি Listing 20-31-এ দেখা যাচ্ছে।
 
-<Listing number="20-31" caption="Using an enum initializer with the `map` method to create a `Status` instance from numbers">
+<Listing number="20-31" caption="সংখ্যা থেকে একটি `Status` instance তৈরি করতে `map` method-এর সঙ্গে একটি enum initializer ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-31/src/main.rs:here}}
@@ -95,26 +67,18 @@ functions as arguments for methods that take closures, as seen in Listing 20-31.
 
 </Listing>
 
-Here, we create `Status::Value` instances using each `u32` value in the range
-that `map` is called on by using the initializer function of `Status::Value`.
-Some people prefer this style and some people prefer to use closures. They
-compile to the same code, so use whichever style is clearer to you.
+এখানে আমরা `Status::Value`-এর initializer function ব্যবহার করে, `map` যে range-এর ওপর call হয়েছে তার প্রতিটি `u32` মান দিয়ে `Status::Value` instance তৈরি করি। কেউ কেউ এই ধাঁচ পছন্দ করেন, আবার কেউ
+closure ব্যবহার করতে পছন্দ করেন। এরা একই কোডে compile হয়, তাই আপনার কাছে যেটি বেশি পরিষ্কার সেটি ব্যবহার করুন।
 
-### Returning Closures
+### closure return করা {#returning-closures}
 
-Closures are represented by traits, which means you can’t return closures
-directly. In most cases where you might want to return a trait, you can instead
-use the concrete type that implements the trait as the return value of the
-function. However, you can’t usually do that with closures because they don’t
-have a concrete type that is returnable; you’re not allowed to use the function
-pointer `fn` as a return type if the closure captures any values from its
-scope, for example.
+closure trait দিয়ে প্রকাশ করা হয়, অর্থাৎ সরাসরি closure return করা যায় না। যেসব ক্ষেত্রে একটি trait return করতে চাইতে পারেন, তার বেশিরভাগে এর বদলে function-এর return মান হিসেবে trait implement করা concrete
+type ব্যবহার করা যায়। কিন্তু closure-এর ক্ষেত্রে সাধারণত তা করা যায় না, কারণ এদের return করার মতো concrete type নেই; যেমন, closure যদি তার scope থেকে কোনো মান capture করে, তাহলে return type হিসেবে
+function pointer `fn` ব্যবহার করার অনুমতি নেই।
 
-Instead, you will normally use the `impl Trait` syntax we learned about in
-Chapter 10. You can return any function type, using `Fn`, `FnOnce`, and `FnMut`.
-For example, the code in Listing 20-32 will compile just fine.
+বরং আপনি সাধারণত অধ্যায় 10-এ শেখা `impl Trait` syntax ব্যবহার করবেন। `Fn`, `FnOnce` আর `FnMut` ব্যবহার করে যেকোনো function type return করা যায়। যেমন, Listing 20-32-এর কোড ঠিকঠাক compile হবে।
 
-<Listing number="20-32" caption="Returning a closure from a function using the `impl Trait` syntax">
+<Listing number="20-32" caption="`impl Trait` syntax ব্যবহার করে একটি function থেকে একটি closure return করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-32/src/lib.rs}}
@@ -122,14 +86,11 @@ For example, the code in Listing 20-32 will compile just fine.
 
 </Listing>
 
-However, as we noted in the [“Inferring and Annotating Closure
-Types”][closure-types]<!-- ignore --> section in Chapter 13, each closure is
-also its own distinct type. If you need to work with multiple functions that
-have the same signature but different implementations, you will need to use a
-trait object for them. Consider what happens if you write code like that shown
-in Listing 20-33.
+তবে অধ্যায় 13-এর [“closure-এর type অনুমান ও annotate
+করা”][closure-types]<!-- ignore --> অংশে যেমন বলেছিলাম, প্রতিটি closure-ও নিজস্ব আলাদা type। একই signature কিন্তু ভিন্ন implementation-এর একাধিক function নিয়ে কাজ করতে হলে সেগুলোর জন্য একটি
+trait object ব্যবহার করতে হবে। Listing 20-33-এর মতো কোড লিখলে কী ঘটে ভাবুন।
 
-<Listing file-name="src/main.rs" number="20-33" caption="Creating a `Vec<T>` of closures defined by functions that return `impl Fn` types">
+<Listing file-name="src/main.rs" number="20-33" caption="`impl Fn` type return করা function দিয়ে সংজ্ঞায়িত closure-এর একটি `Vec<T>` তৈরি করা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-33/src/main.rs}}
@@ -137,27 +98,19 @@ in Listing 20-33.
 
 </Listing>
 
-Here we have two functions, `returns_closure` and `returns_initialized_closure`,
-which both return `impl Fn(i32) -> i32`. Notice that the closures that they
-return are different, even though they implement the same type. If we try to
-compile this, Rust lets us know that it won’t work:
+এখানে আমাদের দুটি function আছে, `returns_closure` আর `returns_initialized_closure`, যা দুটিই `impl Fn(i32) -> i32` return করে। খেয়াল করুন, এরা যে closure return করে সেগুলো ভিন্ন, যদিও এরা একই
+type implement করে। এটি compile করার চেষ্টা করলে Rust জানায় যে এটি কাজ করবে না:
 
 ```text
 {{#include ../listings/ch20-advanced-features/listing-20-33/output.txt}}
 ```
 
-The error message tells us that whenever we return an `impl Trait`, Rust
-creates a unique _opaque type_, a type where we cannot see into the details of
-what Rust constructs for us, nor can we guess the type Rust will generate to
-write ourselves. So, even though these functions return closures that implement
-the same trait, `Fn(i32) -> i32`, the opaque types Rust generates for each are
-distinct. (This is similar to how Rust produces different concrete types for
-distinct async blocks even when they have the same output type, as we saw in
-[“The `Pin` Type and the `Unpin` Trait”][future-types]<!-- ignore --> in
-Chapter 17.) We have seen a solution to this problem a few times now: We can
-use a trait object, as in Listing 20-34.
+error message আমাদের বলে যে যখনই একটি `impl Trait` return করি, Rust একটি অনন্য _opaque type_ (অস্বচ্ছ type) তৈরি করে, এমন একটি type, যার ভেতরের খুঁটিনাটি আমরা দেখতে পাই না, আর Rust কোন type তৈরি
+করবে তা আন্দাজ করে নিজেরাও লিখতে পারি না। তাই এই function-গুলো একই trait, `Fn(i32) -> i32`, implement করা closure return করলেও প্রতিটির জন্য Rust-এর তৈরি opaque type আলাদা। (এটি অনেকটা অধ্যায় 17-এর
+[“`Pin` type ও `Unpin` trait”][future-types]<!-- ignore --> অংশে দেখা আচরণের মতো, যেখানে একই output type থাকলেও ভিন্ন ভিন্ন async block-এর জন্য Rust ভিন্ন concrete type তৈরি করে।) এই সমস্যার
+একটি সমাধান আমরা কয়েকবার দেখেছি: একটি trait object ব্যবহার করা যায়, যেমনটি Listing 20-34-এ।
 
-<Listing number="20-34" caption="Creating a `Vec<T>` of closures defined by functions that return `Box<dyn Fn>` so that they have the same type">
+<Listing number="20-34" caption="`Box<dyn Fn>` return করা function দিয়ে সংজ্ঞায়িত closure-এর একটি `Vec<T>` তৈরি করা, যাতে এদের type একই হয়">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-34/src/main.rs:here}}
@@ -165,11 +118,10 @@ use a trait object, as in Listing 20-34.
 
 </Listing>
 
-This code will compile just fine. For more about trait objects, refer to the
-section [“Using Trait Objects To Abstract over Shared
-Behavior”][trait-objects]<!-- ignore --> in Chapter 18.
+এই কোড ঠিকঠাক compile হবে। trait object সম্পর্কে আরও জানতে অধ্যায় 18-এর [“সাধারণ আচরণের ওপর abstraction করতে trait object
+ব্যবহার”][trait-objects]<!-- ignore --> অংশটি দেখুন।
 
-Next, let’s look at macros!
+এরপর macro দেখা যাক!
 
 {{#quiz ../quizzes/ch19-05-advanced-functions-and-closures.toml}}
 
