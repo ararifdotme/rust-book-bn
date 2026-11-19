@@ -480,3 +480,16 @@ without stagnation), “derive করা যায় এমন trait”.
 | Collection indexing pretending to be collection slicing | collection slicing-এর ভান করা collection indexing |
 | Always-empty bottom type for diverging functions | diverging function-এর জন্য সবসময় খালি bottom type |
 | Right-exclusive / Right-inclusive range literal | ডান প্রান্ত বাদ দেওয়া / অন্তর্ভুক্ত range literal |
+
+## SUMMARY.md (sidebar)
+
+**Decisions:**
+- Each sidebar title is copied from the translated top heading of the page it
+  links to, so the sidebar and the page headings always match.
+- Two pages needed hand-written titles. ch17-03 has no top heading; it became
+  "যেকোনো সংখ্যক future নিয়ে কাজ করা". ch17-06's page heading is longer
+  ("Putting It All Together…"); the sidebar keeps the shorter "future, task ও
+  thread".
+- Appendix entries keep the upstream "A - …" format with the letter in Latin.
+- "Ownership Inventory #N" stays in English, matching those pages.
+- File paths and list structure are unchanged; the build is clean.
