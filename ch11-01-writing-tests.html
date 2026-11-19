@@ -1,0 +1,1146 @@
+<!DOCTYPE HTML>
+<html lang="bn" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>test কীভাবে লিখতে হয় - Rust প্রোগ্রামিং ভাষা</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris-d33b75bf.css">
+        <link rel="stylesheet" href="theme/semantic-notes-9b5766c0.css">
+        <link rel="stylesheet" href="theme/listing-cab26221.css">
+        <link rel="stylesheet" href="theme/2018-edition-4e126c62.css">
+        <link rel="stylesheet" href="theme/bengali-4de2f0b6.css">
+        <link rel="stylesheet" href="js-extensions/packages/feedback/dist/index-c9d186bd.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-03403162.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-485378fe.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust প্রোগ্রামিং ভাষা</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/ararifdotme/rust-book-bn" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h2 id="how-to-write-tests"><a class="header" href="#how-to-write-tests">test কীভাবে লিখতে হয়</a></h2>
+<p><em>Tests</em> (test) হলো এমন Rust function, যা যাচাই করে যে test নয় এমন কোড প্রত্যাশিতভাবে কাজ করছে কি না। test function-এর
+body সাধারণত এই তিনটি কাজ করে:</p>
+<ul>
+<li>প্রয়োজনীয় ডেটা বা অবস্থা প্রস্তুত করা।</li>
+<li>যে কোড test করতে চান তা চালানো।</li>
+<li>ফল যে প্রত্যাশামতো হয়েছে তা assert করা।</li>
+</ul>
+<p>এই কাজগুলো করে এমন test লেখার জন্য Rust বিশেষভাবে যে বৈশিষ্ট্যগুলো দেয় সেগুলো দেখা যাক, যার মধ্যে আছে <code>test</code>
+attribute, কয়েকটি macro, আর <code>should_panic</code> attribute।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="the-anatomy-of-a-test-function"></a></p>
+<h3 id="structuring-test-functions"><a class="header" href="#structuring-test-functions">test function-এর গঠন</a></h3>
+<p>সবচেয়ে সরল রূপে, Rust-এ একটি test হলো <code>test</code> attribute (কোডের সঙ্গে জুড়ে দেওয়া বাড়তি নির্দেশ) দিয়ে annotate করা একটি
+function। attribute হলো Rust কোডের বিভিন্ন অংশ সম্পর্কে মেটাডেটা; একটি উদাহরণ হলো অধ্যায় 5-এ struct-এর সঙ্গে ব্যবহার করা
+<code>derive</code> attribute। একটি function-কে test function-এ পরিণত করতে <code>fn</code>-এর আগের লাইনে <code>#[test]</code> যোগ করুন। <code>cargo test</code>
+command দিয়ে test চালালে Rust একটি test runner (test চালানোর প্রোগ্রাম) binary তৈরি করে, যা annotate করা function-গুলো চালায়
+এবং প্রতিটি test function pass করল নাকি fail করল তা জানায়।</p>
+<p>Cargo দিয়ে যখনই নতুন library project বানাই, তখনই আমাদের জন্য স্বয়ংক্রিয়ভাবে একটি test module তৈরি হয়, যাতে একটি test
+function থাকে। এই module আপনাকে test লেখার একটি template (কাঠামো) দেয়, যাতে প্রতিবার নতুন project শুরু করার সময় সঠিক
+গঠন ও syntax খুঁজে দেখতে না হয়। যত খুশি বাড়তি test function আর যত খুশি test module যোগ করতে পারেন!</p>
+<p>কোনো কোড আসলে test করার আগে আমরা template test নিয়ে পরীক্ষা-নিরীক্ষা করে test কীভাবে কাজ করে তার কিছু দিক দেখব। তারপর
+বাস্তব জীবনের কিছু test লিখব, যা আমাদের লেখা কোড call করে এবং তার আচরণ সঠিক কি না তা assert করে।</p>
+<p>চলুন <code>adder</code> নামে একটি নতুন library project বানাই, যা দুটি সংখ্যা যোগ করবে:</p>
+<pre><code class="language-console">$ cargo new adder --lib
+     Created library `adder` project
+$ cd adder
+</code></pre>
+<p>আপনার <code>adder</code> library-র <em>src/lib.rs</em> ফাইলের বিষয়বস্তু দেখতে Listing 11-1-এর মতো হওয়ার কথা।</p>
+<figure class="listing" id="listing-11-1">
+<span class="file-name">Filename: src/lib.rs</span>
+<!-- manual-regeneration
+cd listings/ch11-writing-automated-tests
+rm -rf listing-11-01
+cargo new listing-11-01 --lib --name adder
+cd listing-11-01
+echo "$ cargo test" > output.txt
+RUSTFLAGS="-A unused_variables -A dead_code" RUST_TEST_THREADS=1 cargo test >> output.txt 2>&1
+git diff output.txt # commit any relevant changes; discard irrelevant ones
+cd ../../..
+-->
+<pre><code class="language-rust noplayground">pub fn add(left: u64, right: u64) -&gt; u64 {
+    left + right
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_works() {
+        let result = add(2, 2);
+        assert_eq!(result, 4);
+    }
+}</code></pre>
+<figcaption><a href="#listing-11-1">Listing 11-1</a>: <code>cargo new</code>-এর স্বয়ংক্রিয়ভাবে তৈরি করা কোড</figcaption>
+</figure>
+<p>ফাইলটি শুরু হয় একটি উদাহরণ <code>add</code> function দিয়ে, যাতে test করার মতো কিছু একটা থাকে।</p>
+<p>আপাতত শুধু <code>it_works</code> function-এর দিকে মনোযোগ দিই। <code>#[test]</code> annotation খেয়াল করুন: এই attribute বোঝায় যে এটি একটি test
+function, তাই test runner জানে এই function-কে test হিসেবে গণ্য করতে হবে। <code>tests</code> module-এ test নয় এমন function-ও থাকতে
+পারে, যা সাধারণ পরিস্থিতি প্রস্তুত করতে বা সাধারণ কোনো কাজ করতে সাহায্য করে, তাই কোন function-গুলো test তা সবসময় বলে দিতে
+হয়।</p>
+<p>উদাহরণ function-এর body <code>assert_eq!</code> macro ব্যবহার করে assert করে যে <code>result</code>, যাতে 2 ও 2 দিয়ে <code>add</code> call করার ফল আছে, 4-এর
+সমান। এই assertion একটি সাধারণ test-এর ধরনের উদাহরণ। চলুন এটি চালিয়ে দেখি test-টি pass করে কি না।</p>
+<p><code>cargo test</code> command আমাদের project-এর সব test চালায়, যেমনটি Listing 11-2-এ দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-11-2">
+<pre><code class="language-console">$ cargo test
+   Compiling adder v0.1.0 (file:///projects/adder)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.57s
+     Running unittests src/lib.rs (target/debug/deps/adder-01ad14159ff659ab)
+
+running 1 test
+test tests::it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+</code></pre>
+<figcaption><a href="#listing-11-2">Listing 11-2</a>: স্বয়ংক্রিয়ভাবে তৈরি test চালানোর output</figcaption>
+</figure>
+<p>Cargo test-টি compile করে চালিয়েছে। আমরা <code>running 1 test</code> লাইনটি দেখি। পরের লাইনে তৈরি হওয়া test function-এর নাম
+<code>tests::it_works</code> দেখানো হয়েছে, আর দেখানো হয়েছে যে test-টি চালানোর ফল <code>ok</code>। সামগ্রিক সারসংক্ষেপ <code>test result: ok.</code> মানে সব test pass করেছে, আর <code>1 passed; 0 failed</code> অংশটি কতগুলো test pass বা fail করেছে তার মোট হিসাব দেয়।</p>
+<p>একটি test-কে ignored (উপেক্ষিত) হিসেবে চিহ্নিত করা যায়, যাতে নির্দিষ্ট কোনো ক্ষেত্রে সেটি না চলে; এটি আমরা এই অধ্যায়ের
+পরে <a href="ch11-02-running-tests.html#ignoring-tests-unless-specifically-requested">“বিশেষভাবে না চাইলে test উপেক্ষা করা”</a><!-- ignore --> অংশে দেখব। এখানে আমরা তা করিনি বলে সারসংক্ষেপে
+দেখাচ্ছে <code>0 ignored</code>। <code>cargo test</code> command-এ একটি argument দিয়ে শুধু সেই test-গুলো চালানো যায় যাদের নাম একটি string-এর সঙ্গে
+মেলে; একে বলে <em>filtering</em> (ছেঁকে নেওয়া), যা আমরা <a href="ch11-02-running-tests.html#running-a-subset-of-tests-by-name">“নাম দিয়ে test-এর একটি অংশ চালানো”</a><!-- ignore --> অংশে দেখব। এখানে
+চালানো test-গুলো আমরা ছেঁকে নিইনি, তাই সারসংক্ষেপের শেষে দেখাচ্ছে <code>0 filtered out</code>।</p>
+<p><code>0 measured</code> পরিসংখ্যানটি performance মাপে এমন benchmark test-এর জন্য। এই লেখার সময় পর্যন্ত benchmark test শুধু nightly
+Rust-এ পাওয়া যায়। আরও জানতে <a href="https://doc.rust-lang.org/unstable-book/library-features/test.html">benchmark test নিয়ে documentation</a> দেখুন।</p>
+<p>test output-এর পরের অংশ, যা <code>Doc-tests adder</code> থেকে শুরু, তা documentation test-এর ফলের জন্য। আমাদের এখনো কোনো documentation
+test নেই, তবে আমাদের API documentation-এ থাকা যেকোনো কোডের উদাহরণ Rust compile করতে পারে। এই বৈশিষ্ট্য আপনার docs আর
+কোডকে মিলিয়ে রাখতে সাহায্য করে! documentation test কীভাবে লিখতে হয় তা আমরা অধ্যায় 14-এর <a href="ch14-02-publishing-to-crates-io.html#documentation-comments-as-tests">“Documentation Comments as
+Tests”</a><!-- ignore --> অংশে আলোচনা করব। আপাতত <code>Doc-tests</code> output উপেক্ষা করব।</p>
+<p>চলুন test-টিকে নিজেদের প্রয়োজন অনুযায়ী সাজাতে শুরু করি। প্রথমে <code>it_works</code> function-এর নাম বদলে অন্য কোনো নাম দিন, যেমন
+<code>exploration</code>, এভাবে:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust noplayground">pub fn add(left: u64, right: u64) -&gt; u64 {
+    left + right
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn exploration() {
+        let result = add(2, 2);
+        assert_eq!(result, 4);
+    }
+}</code></pre>
+<p>তারপর আবার <code>cargo test</code> চালান। output এখন <code>it_works</code>-এর বদলে <code>exploration</code> দেখায়:</p>
+<pre><code class="language-console">$ cargo test
+   Compiling adder v0.1.0 (file:///projects/adder)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.59s
+     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
+
+running 1 test
+test tests::exploration ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+</code></pre>
+<p>এবার আমরা আরেকটি test যোগ করব, তবে এবার এমন একটি test বানাব যা fail করবে! test function-এর ভেতরে কোনো কিছু panic করলে
+test fail করে। প্রতিটি test একটি নতুন thread-এ চলে, আর main thread যখন দেখে যে কোনো test thread মারা গেছে, তখন test-টিকে
+failed হিসেবে চিহ্নিত করা হয়। অধ্যায় 9-এ আমরা বলেছিলাম যে panic করার সবচেয়ে সহজ উপায় হলো <code>panic!</code> macro call করা।
+নতুন test-টি <code>another</code> নামের একটি function হিসেবে লিখুন, যাতে আপনার <em>src/lib.rs</em> ফাইল দেখতে Listing 11-3-এর মতো হয়।</p>
+<figure class="listing" id="listing-11-3">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust panics noplayground">pub fn add(left: u64, right: u64) -&gt; u64 {
+    left + right
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn exploration() {
+        let result = add(2, 2);
+        assert_eq!(result, 4);
+    }
+
+    #[test]
+    fn another() {
+        panic!("Make this test fail");
+    }
+}</code></pre>
+<figcaption><a href="#listing-11-3">Listing 11-3</a>: দ্বিতীয় একটি test যোগ করা, যা fail করবে কারণ আমরা <code>panic!</code> macro call করি</figcaption>
+</figure>
+<p><code>cargo test</code> দিয়ে আবার test চালান। output দেখতে Listing 11-4-এর মতো হওয়ার কথা, যা দেখায় যে আমাদের <code>exploration</code> test pass
+করেছে আর <code>another</code> fail করেছে।</p>
+<figure class="listing" id="listing-11-4">
+<pre><code class="language-console">$ cargo test
+   Compiling adder v0.1.0 (file:///projects/adder)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.72s
+     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
+
+running 2 tests
+test tests::another ... FAILED
+test tests::exploration ... ok
+
+failures:
+
+---- tests::another stdout ----
+
+thread 'tests::another' panicked at src/lib.rs:17:9:
+Make this test fail
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    tests::another
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
+</code></pre>
+<figcaption><a href="#listing-11-4">Listing 11-4</a>: একটি test pass ও একটি test fail করলে test-এর ফল</figcaption>
+</figure>
+<!-- manual-regeneration
+rg panicked listings/ch11-writing-automated-tests/listing-11-03/output.txt
+check the line number of the panic matches the line number in the following paragraph
+ -->
+<p><code>ok</code>-এর বদলে <code>test tests::another</code> লাইনটি দেখায় <code>FAILED</code>। আলাদা আলাদা ফল আর সারসংক্ষেপের মাঝে দুটি নতুন অংশ দেখা যায়:
+প্রথমটি প্রতিটি test fail করার বিস্তারিত কারণ দেখায়। এই ক্ষেত্রে আমরা বিস্তারিত পাই যে <code>tests::another</code> fail করেছে, কারণ
+এটি <em>src/lib.rs</em> ফাইলের 17 নম্বর লাইনে <code>Make this test fail</code> message দিয়ে panic করেছে। পরের অংশে শুধু fail করা সব test-এর নামের তালিকা থাকে, যা অনেক test আর fail করা
+test-এর অনেক বিস্তারিত output থাকলে কাজে লাগে। fail করা কোনো test-এর নাম ব্যবহার করে শুধু সেই test-টি চালিয়ে সহজে debug
+করা যায়; test চালানোর উপায় নিয়ে আমরা <a href="ch11-02-running-tests.html#controlling-how-tests-are-run">“test কীভাবে চলবে তা নিয়ন্ত্রণ
+করা”</a><!-- ignore --> অংশে আরও কথা বলব।</p>
+<p>শেষে সারসংক্ষেপের লাইনটি দেখা যায়: সামগ্রিকভাবে আমাদের test-এর ফল <code>FAILED</code>। আমাদের একটি test pass করেছে আর একটি fail
+করেছে।</p>
+<p>বিভিন্ন পরিস্থিতিতে test-এর ফল দেখতে কেমন তা দেখলেন, এবার <code>panic!</code> ছাড়া test-এ কাজে লাগে এমন আরও কিছু macro দেখা যাক।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="checking-results-with-the-assert-macro"></a></p>
+<h3 id="checking-results-with-assert"><a class="header" href="#checking-results-with-assert"><code>assert!</code> দিয়ে ফল যাচাই করা</a></h3>
+<p>standard library-র দেওয়া <code>assert!</code> macro কাজে লাগে যখন আপনি নিশ্চিত হতে চান যে test-এর কোনো শর্তের মান <code>true</code>। আমরা
+<code>assert!</code> macro-কে এমন একটি argument দিই যার মান একটি Boolean। মান <code>true</code> হলে কিছুই ঘটে না এবং test pass করে। মান <code>false</code>
+হলে <code>assert!</code> macro <code>panic!</code> call করে test-টিকে fail করায়। <code>assert!</code> macro ব্যবহার করে যাচাই করা যায় যে আমাদের কোড আমাদের
+উদ্দেশ্য অনুযায়ী কাজ করছে।</p>
+<p>অধ্যায় 5-এর Listing 5-15-এ আমরা একটি <code>Rectangle</code> struct আর একটি <code>can_hold</code> method ব্যবহার করেছিলাম, যা এখানে Listing 11-5-এ
+আবার দেওয়া হলো। চলুন এই কোড <em>src/lib.rs</em> ফাইলে রাখি, তারপর <code>assert!</code> macro ব্যবহার করে এর জন্য কিছু test লিখি।</p>
+<figure class="listing" id="listing-11-5">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust noplayground">#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    fn can_hold(&amp;self, other: &amp;Rectangle) -&gt; bool {
+        self.width &gt; other.width &amp;&amp; self.height &gt; other.height
+    }
+}</code></pre>
+<figcaption><a href="#listing-11-5">Listing 11-5</a>: অধ্যায় 5-এর <code>Rectangle</code> struct ও এর <code>can_hold</code> method</figcaption>
+</figure>
+<p><code>can_hold</code> method একটি Boolean return করে, অর্থাৎ এটি <code>assert!</code> macro-র জন্য একেবারে উপযুক্ত। Listing 11-6-এ আমরা এমন একটি
+test লিখি যা <code>can_hold</code> method পরীক্ষা করে: 8 প্রস্থ ও 7 উচ্চতার একটি <code>Rectangle</code> instance তৈরি করে assert করে যে এটি 5
+প্রস্থ ও 1 উচ্চতার আরেকটি <code>Rectangle</code> instance ধারণ করতে পারে।</p>
+<figure class="listing" id="listing-11-6">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust noplayground"><span class="boring">#[derive(Debug)]
+</span><span class="boring">struct Rectangle {
+</span><span class="boring">    width: u32,
+</span><span class="boring">    height: u32,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Rectangle {
+</span><span class="boring">    fn can_hold(&amp;self, other: &amp;Rectangle) -&gt; bool {
+</span><span class="boring">        self.width &gt; other.width &amp;&amp; self.height &gt; other.height
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span>#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn larger_can_hold_smaller() {
+        let larger = Rectangle {
+            width: 8,
+            height: 7,
+        };
+        let smaller = Rectangle {
+            width: 5,
+            height: 1,
+        };
+
+        assert!(larger.can_hold(&amp;smaller));
+    }
+}</code></pre>
+<figcaption><a href="#listing-11-6">Listing 11-6</a>: <code>can_hold</code>-এর একটি test, যা যাচাই করে বড় একটি আয়তক্ষেত্র সত্যিই ছোট একটি আয়তক্ষেত্র ধারণ করতে পারে কি না</figcaption>
+</figure>
+<p><code>tests</code> module-এর ভেতরে <code>use super::*;</code> লাইনটি খেয়াল করুন। <code>tests</code> module একটি সাধারণ module, যা অধ্যায় 7-এর <a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html">“module
+tree-র কোনো item উল্লেখ করার path”</a><!-- ignore -->
+অংশে আলোচিত দৃশ্যমানতার সাধারণ নিয়ম মেনে চলে। <code>tests</code> module যেহেতু একটি ভেতরের module, তাই বাইরের module-এর যে কোড test
+করা হচ্ছে তাকে ভেতরের module-এর scope-এ আনতে হবে। এখানে আমরা একটি glob ব্যবহার করি, ফলে বাইরের module-এ সংজ্ঞায়িত সবকিছু
+এই <code>tests</code> module-এ পাওয়া যায়।</p>
+<p>আমরা test-টির নাম দিয়েছি <code>larger_can_hold_smaller</code>, আর প্রয়োজনীয় দুটি <code>Rectangle</code> instance তৈরি করেছি। তারপর <code>assert!</code>
+macro call করে তাকে <code>larger.can_hold(&amp;smaller)</code> call করার ফল পাঠিয়েছি। এই expression-এর <code>true</code> return করার কথা, তাই আমাদের
+test pass করার কথা। চলুন দেখি!</p>
+<pre><code class="language-console">$ cargo test
+   Compiling rectangle v0.1.0 (file:///projects/rectangle)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.66s
+     Running unittests src/lib.rs (target/debug/deps/rectangle-6584c4561e48942e)
+
+running 1 test
+test tests::larger_can_hold_smaller ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests rectangle
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+</code></pre>
+<p>সত্যিই pass করেছে! এবার আরেকটি test যোগ করি, এবার assert করব যে ছোট একটি আয়তক্ষেত্র বড় একটি আয়তক্ষেত্র ধারণ করতে পারে
+না:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust noplayground"><span class="boring">#[derive(Debug)]
+</span><span class="boring">struct Rectangle {
+</span><span class="boring">    width: u32,
+</span><span class="boring">    height: u32,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Rectangle {
+</span><span class="boring">    fn can_hold(&amp;self, other: &amp;Rectangle) -&gt; bool {
+</span><span class="boring">        self.width &gt; other.width &amp;&amp; self.height &gt; other.height
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span>#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn larger_can_hold_smaller() {
+        // --snip--
+<span class="boring">        let larger = Rectangle {
+</span><span class="boring">            width: 8,
+</span><span class="boring">            height: 7,
+</span><span class="boring">        };
+</span><span class="boring">        let smaller = Rectangle {
+</span><span class="boring">            width: 5,
+</span><span class="boring">            height: 1,
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        assert!(larger.can_hold(&amp;smaller));
+</span>    }
+
+    #[test]
+    fn smaller_cannot_hold_larger() {
+        let larger = Rectangle {
+            width: 8,
+            height: 7,
+        };
+        let smaller = Rectangle {
+            width: 5,
+            height: 1,
+        };
+
+        assert!(!smaller.can_hold(&amp;larger));
+    }
+}</code></pre>
+<p>এই ক্ষেত্রে <code>can_hold</code> function-এর সঠিক ফল যেহেতু <code>false</code>, তাই <code>assert!</code> macro-তে পাঠানোর আগে ফলটিকে উল্টে (negate) দিতে
+হবে। ফলে <code>can_hold</code> <code>false</code> return করলে আমাদের test pass করবে:</p>
+<pre><code class="language-console">$ cargo test
+   Compiling rectangle v0.1.0 (file:///projects/rectangle)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.66s
+     Running unittests src/lib.rs (target/debug/deps/rectangle-6584c4561e48942e)
+
+running 2 tests
+test tests::larger_can_hold_smaller ... ok
+test tests::smaller_cannot_hold_larger ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests rectangle
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+</code></pre>
+<p>দুটি test pass করল! এবার দেখা যাক আমাদের কোডে একটি বাগ ঢোকালে test-এর ফলে কী ঘটে। <code>can_hold</code> method-এর implementation
+বদলে প্রস্থ তুলনা করার সময় বড়-চিহ্ন (<code>&gt;</code>)-এর জায়গায় ছোট-চিহ্ন (<code>&lt;</code>) বসাব:</p>
+<pre><code class="language-rust not_desired_behavior noplayground"><span class="boring">#[derive(Debug)]
+</span><span class="boring">struct Rectangle {
+</span><span class="boring">    width: u32,
+</span><span class="boring">    height: u32,
+</span><span class="boring">}
+</span><span class="boring">
+</span>// --snip--
+impl Rectangle {
+    fn can_hold(&amp;self, other: &amp;Rectangle) -&gt; bool {
+        self.width &lt; other.width &amp;&amp; self.height &gt; other.height
+    }
+}
+<span class="boring">
+</span><span class="boring">#[cfg(test)]
+</span><span class="boring">mod tests {
+</span><span class="boring">    use super::*;
+</span><span class="boring">
+</span><span class="boring">    #[test]
+</span><span class="boring">    fn larger_can_hold_smaller() {
+</span><span class="boring">        let larger = Rectangle {
+</span><span class="boring">            width: 8,
+</span><span class="boring">            height: 7,
+</span><span class="boring">        };
+</span><span class="boring">        let smaller = Rectangle {
+</span><span class="boring">            width: 5,
+</span><span class="boring">            height: 1,
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        assert!(larger.can_hold(&amp;smaller));
+</span><span class="boring">    }
+</span><span class="boring">
+</span><span class="boring">    #[test]
+</span><span class="boring">    fn smaller_cannot_hold_larger() {
+</span><span class="boring">        let larger = Rectangle {
+</span><span class="boring">            width: 8,
+</span><span class="boring">            height: 7,
+</span><span class="boring">        };
+</span><span class="boring">        let smaller = Rectangle {
+</span><span class="boring">            width: 5,
+</span><span class="boring">            height: 1,
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        assert!(!smaller.can_hold(&amp;larger));
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<p>এখন test চালালে এই ফল পাওয়া যায়:</p>
+<pre><code class="language-console">$ cargo test
+   Compiling rectangle v0.1.0 (file:///projects/rectangle)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.66s
+     Running unittests src/lib.rs (target/debug/deps/rectangle-6584c4561e48942e)
+
+running 2 tests
+test tests::larger_can_hold_smaller ... FAILED
+test tests::smaller_cannot_hold_larger ... ok
+
+failures:
+
+---- tests::larger_can_hold_smaller stdout ----
+
+thread 'tests::larger_can_hold_smaller' panicked at src/lib.rs:28:9:
+assertion failed: larger.can_hold(&amp;smaller)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    tests::larger_can_hold_smaller
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
+</code></pre>
+<p>আমাদের test বাগটি ধরে ফেলেছে! <code>larger.width</code> হলো <code>8</code> আর <code>smaller.width</code> হলো <code>5</code>, তাই <code>can_hold</code>-এ প্রস্থের তুলনা এখন <code>false</code>
+return করে: 8, 5-এর চেয়ে ছোট নয়।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="testing-equality-with-the-assert_eq-and-assert_ne-macros"></a></p>
+<h3 id="testing-equality-with-assert_eq-and-assert_ne"><a class="header" href="#testing-equality-with-assert_eq-and-assert_ne"><code>assert_eq!</code> ও <code>assert_ne!</code> দিয়ে সমতা যাচাই করা</a></h3>
+<p>কার্যক্ষমতা যাচাইয়ের একটি প্রচলিত উপায় হলো test করা কোডের ফল আর কোডটি যে মান return করবে বলে আশা করছেন, এ দুটির সমতা
+যাচাই করা। এটা <code>assert!</code> macro-তে <code>==</code> operator ব্যবহার করা একটি expression পাঠিয়ে করা যায়। কিন্তু এটি এত প্রচলিত test যে
+standard library এই test আরও সুবিধাজনকভাবে করার জন্য এক জোড়া macro দেয়—<code>assert_eq!</code> ও <code>assert_ne!</code>। এই macro-গুলো দুটি
+argument যথাক্রমে সমান নাকি অসমান তা তুলনা করে। assertion fail করলে এরা দুটি মানও print করে, ফলে test <em>কেন</em> fail করল তা
+বোঝা সহজ হয়; অন্যদিকে <code>assert!</code> macro শুধু জানায় যে <code>==</code> expression-এর জন্য এটি <code>false</code> মান পেয়েছে, কোন মানগুলোর কারণে
+<code>false</code> হলো তা print করে না।</p>
+<p>Listing 11-7-এ আমরা <code>add_two</code> নামের একটি function লিখি, যা তার parameter-এর সঙ্গে <code>2</code> যোগ করে, তারপর <code>assert_eq!</code> macro দিয়ে
+এই function test করি।</p>
+<figure class="listing" id="listing-11-7">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust noplayground">pub fn add_two(a: u64) -&gt; u64 {
+    a + 2
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_adds_two() {
+        let result = add_two(2);
+        assert_eq!(result, 4);
+    }
+}</code></pre>
+<figcaption><a href="#listing-11-7">Listing 11-7</a>: <code>assert_eq!</code> macro দিয়ে <code>add_two</code> function test করা</figcaption>
+</figure>
+<p>চলুন দেখি এটি pass করে কি না!</p>
+<pre><code class="language-console">$ cargo test
+   Compiling adder v0.1.0 (file:///projects/adder)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.58s
+     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
+
+running 1 test
+test tests::it_adds_two ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+</code></pre>
+<p>আমরা <code>result</code> নামের একটি variable তৈরি করি, যাতে <code>add_two(2)</code> call করার ফল থাকে। তারপর <code>assert_eq!</code> macro-তে argument হিসেবে
+<code>result</code> আর <code>4</code> পাঠাই। এই test-এর output লাইন হলো <code>test tests::it_adds_two ... ok</code>, আর <code>ok</code> লেখাটি বোঝায় আমাদের test pass করেছে!</p>
+<p><code>assert_eq!</code> fail করলে দেখতে কেমন হয় তা দেখতে চলুন কোডে একটি বাগ ঢোকাই। <code>add_two</code> function-এর implementation বদলে এর বদলে <code>3</code>
+যোগ করান:</p>
+<pre><code class="language-rust not_desired_behavior noplayground">pub fn add_two(a: u64) -&gt; u64 {
+    a + 3
+}
+<span class="boring">
+</span><span class="boring">#[cfg(test)]
+</span><span class="boring">mod tests {
+</span><span class="boring">    use super::*;
+</span><span class="boring">
+</span><span class="boring">    #[test]
+</span><span class="boring">    fn it_adds_two() {
+</span><span class="boring">        let result = add_two(2);
+</span><span class="boring">        assert_eq!(result, 4);
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<p>আবার test চালান:</p>
+<pre><code class="language-console">$ cargo test
+   Compiling adder v0.1.0 (file:///projects/adder)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.61s
+     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
+
+running 1 test
+test tests::it_adds_two ... FAILED
+
+failures:
+
+---- tests::it_adds_two stdout ----
+
+thread 'tests::it_adds_two' panicked at src/lib.rs:12:9:
+assertion `left == right` failed
+  left: 5
+ right: 4
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    tests::it_adds_two
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
+</code></pre>
+<p>আমাদের test বাগটি ধরে ফেলেছে! <code>tests::it_adds_two</code> test fail করেছে, আর message আমাদের জানাচ্ছে যে fail করা assertion-টি ছিল
+<code>left == right</code>, এবং <code>left</code> ও <code>right</code>-এর মান কী। এই message debug শুরু করতে সাহায্য করে: <code>left</code> argument, যেখানে আমাদের
+<code>add_two(2)</code> call করার ফল ছিল, তা ছিল <code>5</code>, কিন্তু <code>right</code> argument ছিল <code>4</code>। ভেবে দেখুন, অনেক test একসঙ্গে চললে এটি বিশেষভাবে
+কাজে লাগবে।</p>
+<p>খেয়াল করুন, কিছু ভাষা ও test framework-এ সমতা যাচাইয়ের assertion function-এর parameter-গুলোকে বলা হয় <code>expected</code> আর <code>actual</code>,
+আর argument কোন ক্রমে দেওয়া হচ্ছে তা গুরুত্বপূর্ণ। কিন্তু Rust-এ এদের বলা হয় <code>left</code> আর <code>right</code>, এবং প্রত্যাশিত মান আর কোডের
+তৈরি মান কোন ক্রমে দিচ্ছি তাতে কিছু যায় আসে না। এই test-এর assertion-টি আমরা <code>assert_eq!(4, result)</code> হিসেবেও লিখতে পারতাম,
+তাতেও <code>assertion `left == right` failed</code> দেখানো একই failure message আসত।</p>
+<p><code>assert_ne!</code> macro pass করবে যদি আমাদের দেওয়া দুটি মান সমান না হয়, আর fail করবে যদি সমান হয়। এই macro সবচেয়ে কাজে লাগে
+যখন আমরা নিশ্চিত নই একটি মান কী <em>হবে</em>, কিন্তু জানি মানটি নিশ্চিতভাবে কী <em>হওয়া উচিত নয়</em>। যেমন, যদি এমন একটি function
+test করি যা নিশ্চিতভাবে তার input-কে কোনো না কোনোভাবে বদলায়, কিন্তু কীভাবে বদলায় তা নির্ভর করে সপ্তাহের কোন দিনে test
+চালাচ্ছি তার ওপর, তাহলে সবচেয়ে ভালো assertion হতে পারে এটা যে function-এর output তার input-এর সমান নয়।</p>
+<p>ভেতরে ভেতরে <code>assert_eq!</code> ও <code>assert_ne!</code> macro যথাক্রমে <code>==</code> ও <code>!=</code> operator ব্যবহার করে। assertion fail করলে এই macro-গুলো
+debug formatting ব্যবহার করে তাদের argument print করে, অর্থাৎ তুলনা করা মানগুলোকে <code>PartialEq</code> ও <code>Debug</code> trait implement করতে
+হবে। সব primitive type আর standard library-র বেশিরভাগ type এই trait-গুলো implement করে। নিজের সংজ্ঞায়িত struct ও enum-এর
+সমতা assert করতে আপনাকে <code>PartialEq</code> implement করতে হবে। assertion fail করলে মানগুলো print করতে <code>Debug</code>-ও implement করতে
+হবে। অধ্যায় 5-এর Listing 5-12-এ যেমন বলা হয়েছে, দুটি trait-ই derivable trait (স্বয়ংক্রিয়ভাবে যুক্ত করা যায় এমন trait),
+তাই সাধারণত আপনার struct বা enum-এর সংজ্ঞায় <code>#[derive(PartialEq, Debug)]</code> annotation যোগ করলেই চলে। এগুলো ও অন্যান্য
+derivable trait সম্পর্কে আরও বিস্তারিত জানতে Appendix C, <a href="appendix-03-derivable-traits.html">“Derivable Traits,”</a><!-- ignore --> দেখুন।</p>
+<h3 id="adding-custom-failure-messages"><a class="header" href="#adding-custom-failure-messages">নিজস্ব failure message যোগ করা</a></h3>
+<p><code>assert!</code>, <code>assert_eq!</code> ও <code>assert_ne!</code> macro-তে ঐচ্ছিক argument হিসেবে একটি নিজস্ব message-ও যোগ করা যায়, যা failure
+message-এর সঙ্গে print হবে। বাধ্যতামূলক argument-গুলোর পরে দেওয়া যেকোনো argument <code>format!</code> macro-তে পাঠানো হয় (অধ্যায় 8-এর
+<a href="ch08-02-strings.html#concatenating-with--or-format">“<code>+</code> বা <code>format!</code> দিয়ে জোড়া
+লাগানো”</a><!--
+ignore --> অংশে আলোচিত), তাই <code>{}</code> placeholder-যুক্ত একটি format string আর সেই placeholder-গুলোতে বসানোর মান পাঠাতে পারেন।
+একটি assertion-এর মানে কী তা লিখে রাখতে নিজস্ব message কাজে লাগে; test fail করলে কোডের সমস্যাটা কী তা আরও ভালোভাবে
+বুঝতে পারবেন।</p>
+<p>যেমন ধরুন, আমাদের একটি function আছে যা মানুষকে নাম ধরে শুভেচ্ছা জানায়, আর আমরা test করতে চাই যে function-এ পাঠানো নামটি
+output-এ আছে:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust noplayground">pub fn greeting(name: &amp;str) -&gt; String {
+    format!("Hello {name}!")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn greeting_contains_name() {
+        let result = greeting("Carol");
+        assert!(result.contains("Carol"));
+    }
+}</code></pre>
+<p>এই প্রোগ্রামের চাহিদা এখনো চূড়ান্ত হয়নি, আর আমরা প্রায় নিশ্চিত যে শুভেচ্ছার শুরুতে থাকা <code>Hello</code> লেখাটি বদলাবে। আমরা ঠিক
+করেছি চাহিদা বদলালে test হালনাগাদ করতে চাই না, তাই <code>greeting</code> function-এর return করা মানের সঙ্গে হুবহু সমতা যাচাই না করে
+শুধু assert করব যে output-এ input parameter-এর লেখাটি আছে।</p>
+<p>এবার <code>greeting</code>-কে বদলে <code>name</code> বাদ দিয়ে এই কোডে একটি বাগ ঢোকাই, যাতে দেখতে পারি default test failure দেখতে কেমন:</p>
+<pre><code class="language-rust not_desired_behavior noplayground">pub fn greeting(name: &amp;str) -&gt; String {
+    String::from("Hello!")
+}
+<span class="boring">
+</span><span class="boring">#[cfg(test)]
+</span><span class="boring">mod tests {
+</span><span class="boring">    use super::*;
+</span><span class="boring">
+</span><span class="boring">    #[test]
+</span><span class="boring">    fn greeting_contains_name() {
+</span><span class="boring">        let result = greeting("Carol");
+</span><span class="boring">        assert!(result.contains("Carol"));
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<p>এই test চালালে এই ফল পাওয়া যায়:</p>
+<pre><code class="language-console">$ cargo test
+   Compiling greeter v0.1.0 (file:///projects/greeter)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.91s
+     Running unittests src/lib.rs (target/debug/deps/greeter-170b942eb5bf5e3a)
+
+running 1 test
+test tests::greeting_contains_name ... FAILED
+
+failures:
+
+---- tests::greeting_contains_name stdout ----
+
+thread 'tests::greeting_contains_name' panicked at src/lib.rs:12:9:
+assertion failed: result.contains("Carol")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    tests::greeting_contains_name
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
+</code></pre>
+<p>এই ফল শুধু জানায় যে assertion fail করেছে এবং assertion-টি কোন লাইনে। আরও কাজের failure message হতো যদি <code>greeting</code> function
+থেকে পাওয়া মানটি print করত। চলুন একটি নিজস্ব failure message যোগ করি, যা একটি format string দিয়ে তৈরি, যার placeholder-এ
+বসবে <code>greeting</code> function থেকে আসলে পাওয়া মানটি:</p>
+<pre><code class="language-rust ignore"><span class="boring">pub fn greeting(name: &amp;str) -&gt; String {
+</span><span class="boring">    String::from("Hello!")
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">#[cfg(test)]
+</span><span class="boring">mod tests {
+</span><span class="boring">    use super::*;
+</span><span class="boring">
+</span>    #[test]
+    fn greeting_contains_name() {
+        let result = greeting("Carol");
+        assert!(
+            result.contains("Carol"),
+            "Greeting did not contain name, value was `{result}`"
+        );
+    }
+<span class="boring">}</span></code></pre>
+<p>এখন test চালালে আরও তথ্যপূর্ণ error message পাব:</p>
+<pre><code class="language-console">$ cargo test
+   Compiling greeter v0.1.0 (file:///projects/greeter)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.93s
+     Running unittests src/lib.rs (target/debug/deps/greeter-170b942eb5bf5e3a)
+
+running 1 test
+test tests::greeting_contains_name ... FAILED
+
+failures:
+
+---- tests::greeting_contains_name stdout ----
+
+thread 'tests::greeting_contains_name' panicked at src/lib.rs:12:9:
+Greeting did not contain name, value was `Hello!`
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    tests::greeting_contains_name
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
+</code></pre>
+<p>test output-এ আসলে কোন মান পেয়েছি তা দেখতে পাচ্ছি, যা আমরা যা ঘটবে আশা করেছিলাম তার বদলে কী ঘটল তা debug করতে সাহায্য
+করবে।</p>
+<h3 id="checking-for-panics-with-should_panic"><a class="header" href="#checking-for-panics-with-should_panic"><code>should_panic</code> দিয়ে panic যাচাই করা</a></h3>
+<p>return মান যাচাইয়ের পাশাপাশি এটাও যাচাই করা গুরুত্বপূর্ণ যে আমাদের কোড error-এর পরিস্থিতিগুলো প্রত্যাশামতো সামলায়। যেমন,
+অধ্যায় 9-এর Listing 9-13-এ তৈরি করা <code>Guess</code> type-টির কথা ভাবুন। <code>Guess</code> ব্যবহার করা অন্য কোড এই নিশ্চয়তার ওপর নির্ভর করে যে
+<code>Guess</code> instance-এ শুধু 1 থেকে 100-এর মধ্যের মান থাকবে। আমরা এমন একটি test লিখতে পারি যা নিশ্চিত করে যে ওই সীমার বাইরের
+মান দিয়ে <code>Guess</code> instance তৈরির চেষ্টা করলে panic হয়।</p>
+<p>এটা করতে আমরা test function-এ <code>should_panic</code> attribute যোগ করি। function-এর ভেতরের কোড panic করলে test pass করে; function-এর
+ভেতরের কোড panic না করলে test fail করে।</p>
+<p>Listing 11-8-এ এমন একটি test দেখানো হয়েছে যা যাচাই করে যে <code>Guess::new</code>-এর error-এর পরিস্থিতিগুলো আমাদের প্রত্যাশিত সময়েই
+ঘটে।</p>
+<figure class="listing" id="listing-11-8">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust noplayground">pub struct Guess {
+    value: i32,
+}
+
+impl Guess {
+    pub fn new(value: i32) -&gt; Guess {
+        if value &lt; 1 || value &gt; 100 {
+            panic!("Guess value must be between 1 and 100, got {value}.");
+        }
+
+        Guess { value }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    #[should_panic]
+    fn greater_than_100() {
+        Guess::new(200);
+    }
+}</code></pre>
+<figcaption><a href="#listing-11-8">Listing 11-8</a>: একটি শর্ত যে <code>panic!</code> ঘটাবে তা test করা</figcaption>
+</figure>
+<p>আমরা <code>#[should_panic]</code> attribute বসাই <code>#[test]</code> attribute-এর পরে এবং যে test function-এর ওপর এটি প্রযোজ্য তার আগে। এই test pass
+করলে ফল কেমন হয় দেখা যাক:</p>
+<pre><code class="language-console">$ cargo test
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.58s
+     Running unittests src/lib.rs (target/debug/deps/guessing_game-57d70c3acb738f4d)
+
+running 1 test
+test tests::greater_than_100 - should panic ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests guessing_game
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+</code></pre>
+<p>ভালোই দেখাচ্ছে! এবার মান 100-এর বেশি হলে <code>new</code> function panic করবে, এই শর্তটি সরিয়ে দিয়ে আমাদের কোডে একটি বাগ ঢোকাই:</p>
+<pre><code class="language-rust not_desired_behavior noplayground"><span class="boring">pub struct Guess {
+</span><span class="boring">    value: i32,
+</span><span class="boring">}
+</span><span class="boring">
+</span>// --snip--
+impl Guess {
+    pub fn new(value: i32) -&gt; Guess {
+        if value &lt; 1 {
+            panic!("Guess value must be between 1 and 100, got {value}.");
+        }
+
+        Guess { value }
+    }
+}
+<span class="boring">
+</span><span class="boring">#[cfg(test)]
+</span><span class="boring">mod tests {
+</span><span class="boring">    use super::*;
+</span><span class="boring">
+</span><span class="boring">    #[test]
+</span><span class="boring">    #[should_panic]
+</span><span class="boring">    fn greater_than_100() {
+</span><span class="boring">        Guess::new(200);
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<p>Listing 11-8-এর test চালালে এটি fail করবে:</p>
+<pre><code class="language-console">$ cargo test
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.62s
+     Running unittests src/lib.rs (target/debug/deps/guessing_game-57d70c3acb738f4d)
+
+running 1 test
+test tests::greater_than_100 - should panic ... FAILED
+
+failures:
+
+---- tests::greater_than_100 stdout ----
+note: test did not panic as expected at src/lib.rs:21:8
+
+failures:
+    tests::greater_than_100
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
+</code></pre>
+<p>এই ক্ষেত্রে আমরা খুব একটা কাজের message পাই না, তবে test function-টি দেখলে বুঝি যে এটি <code>#[should_panic]</code> দিয়ে annotate করা।
+আমরা যে failure পেয়েছি তার মানে test function-এর কোড panic ঘটায়নি।</p>
+<p><code>should_panic</code> ব্যবহার করা test অস্পষ্ট হতে পারে। আমরা যে কারণে panic আশা করছিলাম তার বদলে অন্য কোনো কারণে panic করলেও
+<code>should_panic</code> test pass করত। <code>should_panic</code> test-কে আরও নিখুঁত করতে <code>should_panic</code> attribute-এ একটি ঐচ্ছিক <code>expected</code>
+parameter যোগ করা যায়। test harness (test চালানোর কাঠামো) নিশ্চিত করবে যে failure message-এ দেওয়া লেখাটি আছে। যেমন, Listing
+11-9-এ <code>Guess</code>-এর পরিবর্তিত কোডটি দেখুন, যেখানে মান খুব ছোট নাকি খুব বড় তার ওপর নির্ভর করে <code>new</code> function ভিন্ন ভিন্ন message
+দিয়ে panic করে।</p>
+<figure class="listing" id="listing-11-9">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust noplayground"><span class="boring">pub struct Guess {
+</span><span class="boring">    value: i32,
+</span><span class="boring">}
+</span><span class="boring">
+</span>// --snip--
+
+impl Guess {
+    pub fn new(value: i32) -&gt; Guess {
+        if value &lt; 1 {
+            panic!(
+                "Guess value must be greater than or equal to 1, got {value}."
+            );
+        } else if value &gt; 100 {
+            panic!(
+                "Guess value must be less than or equal to 100, got {value}."
+            );
+        }
+
+        Guess { value }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    #[should_panic(expected = "less than or equal to 100")]
+    fn greater_than_100() {
+        Guess::new(200);
+    }
+}</code></pre>
+<figcaption><a href="#listing-11-9">Listing 11-9</a>: নির্দিষ্ট একটি substring আছে এমন panic message-সহ <code>panic!</code> test করা</figcaption>
+</figure>
+<p>এই test pass করবে, কারণ <code>should_panic</code> attribute-এর <code>expected</code> parameter-এ আমরা যে মান দিয়েছি, তা <code>Guess::new</code> function যে
+message দিয়ে panic করে তার একটি substring (string-এর অংশ)। আমরা প্রত্যাশিত পুরো panic message-টিও দিতে পারতাম, যা এই
+ক্ষেত্রে হতো <code>Guess value must be less than or equal to 100, got 200</code>। কতটুকু উল্লেখ করবেন তা নির্ভর করে panic message-এর কতটুকু অনন্য বা পরিবর্তনশীল, আর আপনি test কতটা নিখুঁত
+চান তার ওপর। এই ক্ষেত্রে panic message-এর একটি substring-ই যথেষ্ট এটা নিশ্চিত করতে যে test function-এর কোড
+<code>else if value &gt; 100</code> অংশটি চালায়।</p>
+<p><code>expected</code> message-যুক্ত একটি <code>should_panic</code> test fail করলে কী ঘটে তা দেখতে চলুন আবার কোডে একটি বাগ ঢোকাই, <code>if value &lt; 1</code>
+আর <code>else if value &gt; 100</code> block-এর body অদলবদল করে:</p>
+<pre><code class="language-rust ignore not_desired_behavior"><span class="boring">pub struct Guess {
+</span><span class="boring">    value: i32,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Guess {
+</span><span class="boring">    pub fn new(value: i32) -&gt; Guess {
+</span>        if value &lt; 1 {
+            panic!(
+                "Guess value must be less than or equal to 100, got {value}."
+            );
+        } else if value &gt; 100 {
+            panic!(
+                "Guess value must be greater than or equal to 1, got {value}."
+            );
+        }
+<span class="boring">
+</span><span class="boring">        Guess { value }
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">#[cfg(test)]
+</span><span class="boring">mod tests {
+</span><span class="boring">    use super::*;
+</span><span class="boring">
+</span><span class="boring">    #[test]
+</span><span class="boring">    #[should_panic(expected = "less than or equal to 100")]
+</span><span class="boring">    fn greater_than_100() {
+</span><span class="boring">        Guess::new(200);
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<p>এবার <code>should_panic</code> test চালালে এটি fail করবে:</p>
+<pre><code class="language-console">$ cargo test
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.66s
+     Running unittests src/lib.rs (target/debug/deps/guessing_game-57d70c3acb738f4d)
+
+running 1 test
+test tests::greater_than_100 - should panic ... FAILED
+
+failures:
+
+---- tests::greater_than_100 stdout ----
+
+thread 'tests::greater_than_100' panicked at src/lib.rs:12:13:
+Guess value must be greater than or equal to 1, got 200.
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+note: panic did not contain expected string
+      panic message: "Guess value must be greater than or equal to 1, got 200."
+ expected substring: "less than or equal to 100"
+
+failures:
+    tests::greater_than_100
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
+</code></pre>
+<p>failure message বোঝায় যে এই test আমাদের প্রত্যাশামতো সত্যিই panic করেছে, কিন্তু panic message-এ প্রত্যাশিত string <code>less than or equal to 100</code> ছিল না। এই ক্ষেত্রে আমরা যে panic message পেয়েছি তা হলো <code>Guess value must be greater than or equal to 1, got 200</code>। এখন আমরা খুঁজতে শুরু করতে পারি বাগটি কোথায়!</p>
+<h3 id="using-resultt-e-in-tests"><a class="header" href="#using-resultt-e-in-tests">test-এ <code>Result&lt;T, E&gt;</code> ব্যবহার করা</a></h3>
+<p>এ পর্যন্ত আমাদের সব test fail করলে panic করে। আমরা <code>Result&lt;T, E&gt;</code> ব্যবহার করে এমন test-ও লিখতে পারি! Listing 11-1-এর test-টিকে
+এখানে নতুন করে লেখা হয়েছে, যাতে এটি <code>Result&lt;T, E&gt;</code> ব্যবহার করে এবং panic না করে একটি <code>Err</code> return করে:</p>
+<pre><code class="language-rust noplayground"><span class="boring">pub fn add(left: u64, right: u64) -&gt; u64 {
+</span><span class="boring">    left + right
+</span><span class="boring">}
+</span><span class="boring">
+</span>#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_works() -&gt; Result&lt;(), String&gt; {
+        let result = add(2, 2);
+
+        if result == 4 {
+            Ok(())
+        } else {
+            Err(String::from("two plus two does not equal four"))
+        }
+    }
+}</code></pre>
+<p><code>it_works</code> function-এর return type এখন <code>Result&lt;(), String&gt;</code>। function-এর body-তে <code>assert_eq!</code> macro call না করে test pass
+করলে আমরা <code>Ok(())</code> return করি, আর test fail করলে ভেতরে একটি <code>String</code>-সহ একটি <code>Err</code> return করি।</p>
+<p>test-কে <code>Result&lt;T, E&gt;</code> return করার মতো করে লিখলে test-এর body-তে প্রশ্নবোধক চিহ্নের operator ব্যবহার করা যায়, যা এমন test
+লেখার একটি সুবিধাজনক উপায় হতে পারে, যেগুলোর ভেতরের কোনো operation <code>Err</code> variant return করলে test fail করা উচিত।</p>
+<p><code>Result&lt;T, E&gt;</code> ব্যবহার করা test-এ <code>#[should_panic]</code> annotation ব্যবহার করা যায় না। কোনো operation যে <code>Err</code> variant return করে তা assert করতে
+<code>Result&lt;T, E&gt;</code> মানের ওপর প্রশ্নবোধক চিহ্নের operator ব্যবহার করবেন <em>না</em>। বরং <code>assert!(value.is_err())</code> ব্যবহার করুন।</p>
+<p>test লেখার কয়েকটি উপায় জানলেন, এবার দেখা যাক test চালালে কী ঘটে, আর <code>cargo test</code>-এর সঙ্গে কী কী বিকল্প ব্যবহার করা যায়।</p>
+<div class="quiz-placeholder" data-quiz-name="&quot;ch11-01-writing-tests&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot;এটি cargo-র testing harness-কে জানায় যে function-টিকে library কোড নয়, test হিসেবে গণ্য করতে হবে।&#92;n&quot;,&quot;id&quot;:&quot;7a7bb518-b06e-4756-9510-6a8d0d1c84fa&quot;,&quot;type&quot;:&quot;ShortAnswer&quot;,&quot;answer&quot;:{&quot;answer&quot;:&quot;#[test]&quot;},&quot;prompt&quot;:{&quot;prompt&quot;:&quot;একটি function যে unit test তা বোঝাতে আপনি এতে কোন annotation যোগ করেন?&quot;}},{&quot;context&quot;:&quot;Rust-এ `should_err` বলে কিছু নেই &amp;mdash; `Result` return করে এমন যেকোনো test-কে pass করতে হলে `Ok` return করতে হবে।&#92;n&quot;,&quot;id&quot;:&quot;cd77485f-723a-4978-8da6-c4ca3df44c44&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:&quot;```&#92;n#[test]&#92;n#[should_err]&#92;nfn test() -&gt; Result&lt;usize, String&gt; {&#92;n  f(0)&#92;n}&#92;n```&#92;n  &quot;},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;```&#92;n#[test]&#92;nfn test() {&#92;n  assert!(f(0).is_err());&#92;n}&#92;n```&#92;n  &quot;,&quot;```&#92;n#[test]&#92;n#[should_panic]&#92;nfn test() { &#92;n  f(0).unwrap();&#92;n}&#92;n```&#92;n  &quot;,&quot;```&#92;n#[test]&#92;nfn test() {&#92;n  assert!(match f(0) {&#92;n    Ok(_) =&gt; false,&#92;n    Err(_) =&gt; true&#92;n  });  &#92;n}&#92;n```&#92;n  &quot;],&quot;prompt&quot;:&quot;ধরুন আপনার কাছে এই type signature-এর একটি function আছে:&#92;n&#92;n```&#92;nfn f(x: usize) -&gt; Result&lt;usize, String&gt;;&#92;n```&#92;n&#92;nআর আপনি test করতে চান যে `f(0)` `Err(_)` return করবে। &#92;nনিচের কোনটি তা test করার বৈধ উপায় **নয়**?&#92;n&quot;}}]}" data-quiz-fullscreen="true"></div>
+
+<script type="text/javascript" src="quiz/quiz-embed.iife.js"></script><link rel="stylesheet" type="text/css" href="quiz/style.css">
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch11-00-testing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ch11-02-running-tests.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch11-00-testing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ch11-02-running-tests.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris-2317480c.js"></script>
+        <script src="js-extensions/packages/feedback/dist/index-f1290d8b.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,557 @@
+<!DOCTYPE HTML>
+<html lang="bn" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>সাধারণ আচরণের ওপর abstraction করতে trait object ব্যবহার - Rust প্রোগ্রামিং ভাষা</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris-d33b75bf.css">
+        <link rel="stylesheet" href="theme/semantic-notes-9b5766c0.css">
+        <link rel="stylesheet" href="theme/listing-cab26221.css">
+        <link rel="stylesheet" href="theme/2018-edition-4e126c62.css">
+        <link rel="stylesheet" href="theme/bengali-4de2f0b6.css">
+        <link rel="stylesheet" href="js-extensions/packages/feedback/dist/index-c9d186bd.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-03403162.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-485378fe.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust প্রোগ্রামিং ভাষা</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/ararifdotme/rust-book-bn" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <!-- Old headings. Do not remove or links may break. -->
+<p><a id="using-trait-objects-that-allow-for-values-of-different-types"></a></p>
+<h2 id="using-trait-objects-to-abstract-over-shared-behavior"><a class="header" href="#using-trait-objects-to-abstract-over-shared-behavior">সাধারণ আচরণের ওপর abstraction করতে trait object ব্যবহার</a></h2>
+<p>অধ্যায় 8-এ আমরা বলেছিলাম যে vector-এর একটি সীমাবদ্ধতা হলো এতে শুধু একটি type-এর উপাদান রাখা যায়। Listing 8-9-এ আমরা একটি বিকল্প উপায় তৈরি করেছিলাম, যেখানে integer, float আর লেখা রাখার
+variant-যুক্ত একটি <code>SpreadsheetCell</code> enum সংজ্ঞায়িত করেছিলাম। এতে প্রতিটি cell-এ ভিন্ন ভিন্ন type-এর ডেটা রাখা যেত, আর তবুও cell-এর একটি সারি বোঝানো একটি vector রাখা যেত। আমাদের অদলবদলযোগ্য
+item-গুলো যখন এমন নির্দিষ্ট কিছু type-এর সেট, যা কোড compile হওয়ার সময় জানা, তখন এটি একেবারে ভালো একটি সমাধান।</p>
+<p>তবে কখনো কখনো আমরা চাই আমাদের library-র ব্যবহারকারী একটি নির্দিষ্ট পরিস্থিতিতে বৈধ type-এর সেট বাড়াতে পারুক। কীভাবে তা করা যায় দেখাতে আমরা একটি graphical user interface (GUI) tool-এর
+উদাহরণ তৈরি করব, যা item-এর একটি তালিকার ওপর দিয়ে iterate করে প্রতিটির ওপর একটি <code>draw</code> method call করে স্ক্রিনে আঁকে—GUI tool-এর একটি প্রচলিত কৌশল। আমরা <code>gui</code> নামে একটি library crate তৈরি
+করব, যাতে একটি GUI library-র কাঠামো থাকবে। এই crate-এ মানুষের ব্যবহারের জন্য কিছু type থাকতে পারে, যেমন <code>Button</code> বা <code>TextField</code>। তা ছাড়া <code>gui</code>-এর ব্যবহারকারীরা আঁকা যায় এমন নিজস্ব type তৈরি
+করতে চাইবে: যেমন, একজন প্রোগ্রামার হয়তো একটি <code>Image</code> যোগ করবেন, আরেকজন একটি <code>SelectBox</code>।</p>
+<p>library লেখার সময় আমরা জানতে বা সংজ্ঞায়িত করতে পারি না অন্য প্রোগ্রামাররা কোন কোন type তৈরি করতে চাইতে পারেন। তবে আমরা জানি যে <code>gui</code>-কে ভিন্ন ভিন্ন type-এর অনেক মানের হিসাব রাখতে হবে, এবং
+এই ভিন্ন type-এর মানগুলোর প্রতিটির ওপর একটি <code>draw</code> method call করতে হবে। <code>draw</code> method call করলে ঠিক কী ঘটবে তা এর জানার দরকার নেই, শুধু এটুকু জানলেই চলে যে মানটিতে আমাদের call করার মতো সেই
+method আছে।</p>
+<p>inheritance আছে এমন ভাষায় এটা করতে আমরা হয়তো <code>Component</code> নামের একটি class সংজ্ঞায়িত করতাম, যাতে <code>draw</code> নামের একটি method আছে। <code>Button</code>, <code>Image</code> আর <code>SelectBox</code>-এর মতো অন্য class-গুলো
+<code>Component</code> থেকে উত্তরাধিকার পেত এবং তাই <code>draw</code> method-ও উত্তরাধিকার সূত্রে পেত। এরা প্রত্যেকে নিজস্ব আচরণ সংজ্ঞায়িত করতে <code>draw</code> method override করতে পারত, কিন্তু framework সব type-কে
+<code>Component</code> instance হিসেবে গণ্য করে এদের ওপর <code>draw</code> call করতে পারত। কিন্তু Rust-এ inheritance নেই বলে ব্যবহারকারীদের library-র সঙ্গে সামঞ্জস্যপূর্ণ নতুন type তৈরি করতে দিতে <code>gui</code> library
+সাজানোর অন্য উপায় লাগবে।</p>
+<h3 id="defining-a-trait-for-common-behavior"><a class="header" href="#defining-a-trait-for-common-behavior">সাধারণ আচরণের জন্য একটি trait সংজ্ঞায়িত করা</a></h3>
+<p><code>gui</code>-এর কাছ থেকে আমরা যে আচরণ চাই তা implement করতে <code>Draw</code> নামের একটি trait সংজ্ঞায়িত করব, যার <code>draw</code> নামের একটি method থাকবে। তারপর এমন একটি vector সংজ্ঞায়িত করতে পারি যা একটি trait object
+নেয়। একটি <em>trait object</em> আমাদের উল্লিখিত trait implement করা একটি type-এর instance আর runtime-এ সেই type-এর trait method খুঁজে বের করতে ব্যবহৃত একটি table, দুটিকেই নির্দেশ করে। trait object
+তৈরি করতে আমরা কোনো এক ধরনের pointer, যেমন একটি reference বা একটি <code>Box&lt;T&gt;</code> smart pointer উল্লেখ করি, তারপর <code>dyn</code> keyword, তারপর প্রাসঙ্গিক trait। (trait object-কে কেন pointer ব্যবহার করতে হয়,
+তা নিয়ে অধ্যায় 20-এর <a href="ch20-03-advanced-types.html#dynamically-sized-types-and-the-sized-trait">“Dynamically Sized Types and the
+<code>Sized</code> Trait”</a><!-- ignore -->-এ কথা বলব।) generic বা concrete type-এর জায়গায় trait object ব্যবহার করা যায়। যেখানেই trait object ব্যবহার করি, Rust-এর type system compile
+time-এ নিশ্চিত করবে যে সেই প্রেক্ষাপটে ব্যবহৃত যেকোনো মান trait object-এর trait implement করবে। ফলে compile time-এ সব সম্ভাব্য type জানার দরকার নেই।</p>
+<p>আমরা বলেছি যে Rust-এ অন্য ভাষার object থেকে আলাদা করতে struct আর enum-কে “object” বলা থেকে বিরত থাকি। একটি struct বা enum-এ struct-এর field-এর ডেটা আর <code>impl</code> block-এর আচরণ আলাদা থাকে,
+অন্যদিকে অন্য ভাষায় ডেটা আর আচরণকে একটি ধারণায় মেলানো হলে প্রায়ই তাকে object বলা হয়। trait object অন্য ভাষার object থেকে এই দিক দিয়ে আলাদা যে trait object-এ ডেটা যোগ করা যায় না। অন্য ভাষার
+object-এর মতো trait object সাধারণভাবে অতটা কাজের নয়: এদের নির্দিষ্ট উদ্দেশ্য হলো সাধারণ আচরণের ওপর abstraction সম্ভব করা।</p>
+<p>Listing 18-3-এ দেখানো হয়েছে <code>draw</code> নামের একটি method-যুক্ত <code>Draw</code> নামের trait কীভাবে সংজ্ঞায়িত করতে হয়।</p>
+<figure class="listing" id="listing-18-3">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust noplayground">pub trait Draw {
+    fn draw(&amp;self);
+}</code></pre>
+<figcaption><a href="#listing-18-3">Listing 18-3</a>: <code>Draw</code> trait-এর সংজ্ঞা</figcaption>
+</figure>
+<p>অধ্যায় 10-এ trait কীভাবে সংজ্ঞায়িত করতে হয় তা নিয়ে আলোচনা থেকে এই syntax পরিচিত লাগার কথা। এরপর আসছে কিছু নতুন syntax: Listing 18-4 <code>Screen</code> নামের একটি struct সংজ্ঞায়িত করে, যা <code>components</code>
+নামের একটি vector রাখে। এই vector-এর type <code>Box&lt;dyn Draw&gt;</code>, যা একটি trait object; এটি একটি <code>Box</code>-এর ভেতরে থাকা <code>Draw</code> trait implement করা যেকোনো type-এর বদলি।</p>
+<figure class="listing" id="listing-18-4">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust noplayground"><span class="boring">pub trait Draw {
+</span><span class="boring">    fn draw(&amp;self);
+</span><span class="boring">}
+</span><span class="boring">
+</span>pub struct Screen {
+    pub components: Vec&lt;Box&lt;dyn Draw&gt;&gt;,
+}</code></pre>
+<figcaption><a href="#listing-18-4">Listing 18-4</a>: <code>Draw</code> trait implement করা trait object-এর একটি vector রাখা <code>components</code> field-সহ <code>Screen</code> struct-এর সংজ্ঞা</figcaption>
+</figure>
+<p><code>Screen</code> struct-এ আমরা <code>run</code> নামের একটি method সংজ্ঞায়িত করব, যা এর প্রতিটি <code>components</code>-এর ওপর <code>draw</code> method call করবে, যেমনটি Listing 18-5-এ দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-18-5">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust noplayground"><span class="boring">pub trait Draw {
+</span><span class="boring">    fn draw(&amp;self);
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">pub struct Screen {
+</span><span class="boring">    pub components: Vec&lt;Box&lt;dyn Draw&gt;&gt;,
+</span><span class="boring">}
+</span><span class="boring">
+</span>impl Screen {
+    pub fn run(&amp;self) {
+        for component in self.components.iter() {
+            component.draw();
+        }
+    }
+}</code></pre>
+<figcaption><a href="#listing-18-5">Listing 18-5</a>: <code>Screen</code>-এর ওপর একটি <code>run</code> method, যা প্রতিটি component-এর ওপর <code>draw</code> method call করে</figcaption>
+</figure>
+<p>এটি trait bound-সহ একটি generic type parameter ব্যবহার করা struct সংজ্ঞায়িত করা থেকে ভিন্নভাবে কাজ করে। একটি generic type parameter-এর জায়গায় একবারে শুধু একটি concrete type বসানো যায়, অন্যদিকে
+trait object runtime-এ trait object-এর জায়গায় একাধিক concrete type বসতে দেয়। যেমন, আমরা একটি generic type আর একটি trait bound ব্যবহার করে <code>Screen</code> struct সংজ্ঞায়িত করতে পারতাম, যেমনটি Listing
+18-6-এ।</p>
+<figure class="listing" id="listing-18-6">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust noplayground"><span class="boring">pub trait Draw {
+</span><span class="boring">    fn draw(&amp;self);
+</span><span class="boring">}
+</span><span class="boring">
+</span>pub struct Screen&lt;T: Draw&gt; {
+    pub components: Vec&lt;T&gt;,
+}
+
+impl&lt;T&gt; Screen&lt;T&gt;
+where
+    T: Draw,
+{
+    pub fn run(&amp;self) {
+        for component in self.components.iter() {
+            component.draw();
+        }
+    }
+}</code></pre>
+<figcaption><a href="#listing-18-6">Listing 18-6</a>: generics আর trait bound ব্যবহার করে <code>Screen</code> struct আর এর <code>run</code> method-এর একটি বিকল্প implementation</figcaption>
+</figure>
+<p>এতে আমরা এমন একটি <code>Screen</code> instance-এ সীমাবদ্ধ থাকি, যার component-এর তালিকার সবগুলো <code>Button</code> type-এর অথবা সবগুলো <code>TextField</code> type-এর। আপনার যদি সবসময় শুধু একই ধরনের collection থাকে,
+তাহলে generics আর trait bound ব্যবহার করাই ভালো, কারণ সংজ্ঞাগুলো compile time-এ monomorphize হয়ে concrete type ব্যবহার করবে।</p>
+<p>অন্যদিকে trait object ব্যবহার করা method-এ একটি <code>Screen</code> instance এমন একটি <code>Vec&lt;T&gt;</code> রাখতে পারে, যাতে একটি <code>Box&lt;Button&gt;</code> আর একটি
+<code>Box&lt;TextField&gt;</code> দুটিই থাকে। চলুন দেখি এটি কীভাবে কাজ করে, তারপর runtime performance-এর ওপর এর প্রভাব নিয়ে কথা বলব।</p>
+<h3 id="implementing-the-trait"><a class="header" href="#implementing-the-trait">trait implement করা</a></h3>
+<p>এবার আমরা <code>Draw</code> trait implement করা কিছু type যোগ করব। আমরা <code>Button</code> type দেব। আবারও বলি, আসলে একটি GUI library implement করা এই বইয়ের আওতার বাইরে, তাই <code>draw</code> method-এর body-তে কোনো কাজের
+implementation থাকবে না। implementation দেখতে কেমন হতে পারে তা কল্পনা করতে, একটি <code>Button</code> struct-এ <code>width</code>, <code>height</code> আর <code>label</code>-এর field থাকতে পারে, যেমনটি Listing 18-7-এ দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-18-7">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust noplayground"><span class="boring">pub trait Draw {
+</span><span class="boring">    fn draw(&amp;self);
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">pub struct Screen {
+</span><span class="boring">    pub components: Vec&lt;Box&lt;dyn Draw&gt;&gt;,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Screen {
+</span><span class="boring">    pub fn run(&amp;self) {
+</span><span class="boring">        for component in self.components.iter() {
+</span><span class="boring">            component.draw();
+</span><span class="boring">        }
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span>pub struct Button {
+    pub width: u32,
+    pub height: u32,
+    pub label: String,
+}
+
+impl Draw for Button {
+    fn draw(&amp;self) {
+        // আসলে একটি button আঁকার কোড
+    }
+}</code></pre>
+<figcaption><a href="#listing-18-7">Listing 18-7</a>: <code>Draw</code> trait implement করা একটি <code>Button</code> struct</figcaption>
+</figure>
+<p><code>Button</code>-এর <code>width</code>, <code>height</code> আর <code>label</code> field অন্য component-এর field থেকে আলাদা হবে; যেমন, একটি <code>TextField</code> type-এ সেই একই field-গুলোর সঙ্গে একটি <code>placeholder</code> field-ও থাকতে পারে। স্ক্রিনে যে
+type-গুলো আঁকতে চাই তার প্রতিটি <code>Draw</code> trait implement করবে, কিন্তু সেই নির্দিষ্ট type কীভাবে আঁকা হবে তা সংজ্ঞায়িত করতে <code>draw</code> method-এ ভিন্ন কোড ব্যবহার করবে, যেমন এখানে <code>Button</code> করেছে (আগেই
+যেমন বলা হয়েছে, আসল GUI কোড ছাড়া)। যেমন, <code>Button</code> type-এ ব্যবহারকারী button-এ click করলে কী ঘটে সংক্রান্ত method-যুক্ত একটি বাড়তি <code>impl</code> block থাকতে পারে। এই ধরনের method <code>TextField</code>-এর মতো
+type-এ প্রযোজ্য হবে না।</p>
+<p>আমাদের library ব্যবহার করা কেউ যদি <code>width</code>, <code>height</code> আর <code>options</code> field-যুক্ত একটি <code>SelectBox</code> struct implement করার সিদ্ধান্ত নেন, তাহলে তিনি <code>SelectBox</code> type-এর ওপরও <code>Draw</code> trait implement
+করবেন, যেমনটি Listing 18-8-এ দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-18-8">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore">use gui::Draw;
+
+struct SelectBox {
+    width: u32,
+    height: u32,
+    options: Vec&lt;String&gt;,
+}
+
+impl Draw for SelectBox {
+    fn draw(&amp;self) {
+        // আসলে একটি select box আঁকার কোড
+    }
+}
+<span class="boring">
+</span><span class="boring">fn main() {}</span></code></pre>
+<figcaption><a href="#listing-18-8">Listing 18-8</a>: <code>gui</code> ব্যবহার করা এবং একটি <code>SelectBox</code> struct-এর ওপর <code>Draw</code> trait implement করা আরেকটি crate</figcaption>
+</figure>
+<h3 id="using-the-trait"><a class="header" href="#using-the-trait">trait ব্যবহার করা</a></h3>
+<p>আমাদের library-র ব্যবহারকারী এখন একটি <code>Screen</code> instance তৈরি করতে তাদের <code>main</code> function লিখতে পারেন। <code>Screen</code> instance-এ তারা একটি <code>SelectBox</code> আর একটি <code>Button</code> যোগ করতে পারেন, প্রতিটিকে একটি
+<code>Box&lt;T&gt;</code>-এ রেখে trait object বানিয়ে। তারপর <code>Screen</code> instance-এর ওপর <code>run</code> method call করতে পারেন, যা প্রতিটি component-এর ওপর <code>draw</code> call করবে। Listing 18-9-এ এই implementation দেখানো
+হয়েছে।</p>
+<figure class="listing" id="listing-18-9">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore"><span class="boring">use gui::Draw;
+</span><span class="boring">
+</span><span class="boring">struct SelectBox {
+</span><span class="boring">    width: u32,
+</span><span class="boring">    height: u32,
+</span><span class="boring">    options: Vec&lt;String&gt;,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Draw for SelectBox {
+</span><span class="boring">    fn draw(&amp;self) {
+</span><span class="boring">        // code to actually draw a select box
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span>use gui::{Button, Screen};
+
+fn main() {
+    let screen = Screen {
+        components: vec![
+            Box::new(SelectBox {
+                width: 75,
+                height: 10,
+                options: vec![
+                    String::from("Yes"),
+                    String::from("Maybe"),
+                    String::from("No"),
+                ],
+            }),
+            Box::new(Button {
+                width: 50,
+                height: 10,
+                label: String::from("OK"),
+            }),
+        ],
+    };
+
+    screen.run();
+}</code></pre>
+<figcaption><a href="#listing-18-9">Listing 18-9</a>: একই trait implement করা ভিন্ন ভিন্ন type-এর মান রাখতে trait object ব্যবহার করা</figcaption>
+</figure>
+<p>library লেখার সময় আমরা জানতাম না যে কেউ <code>SelectBox</code> type যোগ করতে পারে, তবু আমাদের <code>Screen</code> implementation নতুন type-টির ওপর কাজ করে একে আঁকতে পেরেছে, কারণ <code>SelectBox</code> <code>Draw</code> trait implement
+করে, অর্থাৎ এটি <code>draw</code> method implement করে।</p>
+<p>এই ধারণা—একটি মানের concrete type নয়, বরং মানটি কোন message-এ সাড়া দেয় শুধু তা নিয়েই মাথা ঘামানো—dynamically typed ভাষার <em>duck
+typing</em>-এর ধারণার মতো: যদি এটি হাঁসের মতো হাঁটে আর হাঁসের মতো প্যাঁকপ্যাঁক করে, তাহলে এটি নিশ্চয়ই হাঁস! Listing 18-5-এ <code>Screen</code>-এর ওপর <code>run</code>-এর implementation-এ <code>run</code>-এর জানার দরকার নেই
+প্রতিটি component-এর concrete type কী। এটি যাচাই করে না একটি component <code>Button</code> নাকি <code>SelectBox</code>-এর instance, শুধু component-এর ওপর <code>draw</code> method call করে। <code>components</code> vector-এর মানগুলোর type
+হিসেবে <code>Box&lt;dyn Draw&gt;</code> উল্লেখ করে আমরা <code>Screen</code>-কে এমনভাবে সংজ্ঞায়িত করেছি যাতে এর এমন মান লাগে যার ওপর <code>draw</code> method call করা যায়।</p>
+<p>duck typing ব্যবহার করা কোডের মতো কোড লিখতে trait object আর Rust-এর type system ব্যবহারের সুবিধা হলো, runtime-এ কখনো যাচাই করতে হয় না একটি মান নির্দিষ্ট কোনো method implement করে কি না, বা
+কোনো মান method implement না করলেও call করে ফেললে error পাওয়ার চিন্তা করতে হয় না। trait object-এর দরকারি trait মানগুলো implement না করলে Rust আমাদের কোড compile করবে না।</p>
+<p>যেমন, Listing 18-10 দেখায় component হিসেবে একটি <code>String</code> দিয়ে একটি <code>Screen</code> তৈরির চেষ্টা করলে কী ঘটে।</p>
+<figure class="listing" id="listing-18-10">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile">use gui::Screen;
+
+fn main() {
+    let screen = Screen {
+        components: vec![Box::new(String::from("Hi"))],
+    };
+
+    screen.run();
+}</code></pre>
+<figcaption><a href="#listing-18-10">Listing 18-10</a>: trait object-এর trait implement করে না এমন একটি type ব্যবহারের চেষ্টা</figcaption>
+</figure>
+<p>এই error পাব, কারণ <code>String</code> <code>Draw</code> trait implement করে না:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling gui v0.1.0 (file:///projects/gui)
+error[E0277]: the trait bound `String: Draw` is not satisfied
+ --&gt; src/main.rs:5:26
+  |
+5 |         components: vec![Box::new(String::from("Hi"))],
+  |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Draw` is not implemented for `String`
+  |
+  = help: the trait `Draw` is implemented for `Button`
+  = note: required for the cast from `Box&lt;String&gt;` to `Box&lt;dyn Draw&gt;`
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `gui` (bin "gui") due to 1 previous error
+</code></pre>
+<p>এই error জানায় যে হয় আমরা <code>Screen</code>-এ এমন কিছু পাঠাচ্ছি যা পাঠাতে চাইনি এবং তাই ভিন্ন একটি type পাঠানো উচিত, নয়তো <code>String</code>-এর ওপর <code>Draw</code> implement করা উচিত, যাতে <code>Screen</code> এর ওপর <code>draw</code> call
+করতে পারে।</p>
+<!-- BEGIN INTERVENTION: cce62358-5291-4eb3-84d6-fbc570873ee3 -->
+<h3 id="trait-objects-and-type-inference"><a class="header" href="#trait-objects-and-type-inference">trait object ও type অনুমান</a></h3>
+<p>trait object ব্যবহারের একটি অসুবিধা হলো type অনুমানের সঙ্গে এদের আচরণ।
+যেমন, <code>Vec&lt;T&gt;</code>-এর type অনুমানের কথা ভাবুন। <code>T</code> যখন trait object নয়,
+তখন <code>T</code> অনুমান করতে Rust-এর শুধু vector-এর একটি উপাদানের type জানলেই চলে। তাই
+একটি খালি vector type অনুমানের error ঘটায়:</p>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
+</span>let v = vec![];
+// error[E0282]: type annotations needed for `Vec&lt;T&gt;`
+<span class="boring">}</span></code></pre>
+<p>কিন্তু একটি উপাদান যোগ করলে Rust vector-এর type অনুমান করতে পারে:</p>
+<pre><code class="language-rust ignore"><span class="boring">fn main() {
+</span>let v = vec!["Hello world"];
+// ok, v : Vec&lt;&amp;str&gt;
+<span class="boring">}</span></code></pre>
+<p>trait object-এর ক্ষেত্রে type অনুমান আরও জটিল। যেমন, ধরুন আমরা Listing 18-9-এর <code>components</code> array-টি
+একটি আলাদা variable-এ বের করে আনার চেষ্টা করলাম, এভাবে:</p>
+<pre><code class="language-rust ignore does_not_compile">fn main() {
+    let components = vec![
+        Box::new(SelectBox { /* .. */ }),
+        Box::new(Button { /* .. */ }),
+    ];
+    let screen = Screen { components };
+    screen.run();
+}</code></pre>
+<p><span class="caption">Listing 18-11: components array বের করে আনলে একটি type error হয়</span></p>
+<p>এই refactor-এর ফলে প্রোগ্রামটি আর compile হয় না! compiler এই error দিয়ে প্রোগ্রামটি বাতিল করে:</p>
+<pre><code class="language-text">error[E0308]: mismatched types
+   --&gt; test.rs:55:14
+    |
+55  |       Box::new(Button {
+    |  _____--------_^
+    | |     |
+    | |     arguments to this function are incorrect
+56  | |       width: 50,
+57  | |       height: 10,
+58  | |       label: String::from("OK"),
+59  | |     }),
+    | |_____^ expected `SelectBox`, found `Button`
+</code></pre>
+<p>Listing 18-09-এ compiler বোঝে যে <code>components</code> vector-এর type হতে হবে
+<code>Vec&lt;Box&lt;dyn Draw&gt;&gt;</code>, কারণ <code>Screen</code> struct-এর সংজ্ঞায় তা উল্লেখ করা আছে। কিন্তু Listing 18-11-এ
+<code>components</code> যেখানে সংজ্ঞায়িত, সেখানে compiler সেই তথ্য হারিয়ে ফেলে। সমস্যাটি ঠিক করতে আপনাকে
+type অনুমানের algorithm-কে একটি ইঙ্গিত দিতে হবে। তা হতে পারে vector-এর যেকোনো উপাদানের ওপর একটি স্পষ্ট cast দিয়ে, এভাবে:</p>
+<pre><code class="language-rust ignore">let components = vec![
+    Box::new(SelectBox { /* .. */ }) as Box&lt;dyn Draw&gt;,
+    Box::new(Button { /* .. */ }),
+];</code></pre>
+<p>অথবা let-binding-এ একটি type annotation দিয়ে, এভাবে:</p>
+<pre><code class="language-rust ignore">let components: Vec&lt;Box&lt;dyn Draw&gt;&gt; = vec![
+    Box::new(SelectBox { /* .. */ }),
+    Box::new(Button { /* .. */ }),
+];</code></pre>
+<p>সাধারণভাবে জেনে রাখা ভালো যে type অনুমানের ক্ষেত্রে trait object ব্যবহার API-র ব্যবহারকারী ডেভেলপারদের অভিজ্ঞতা খারাপ করতে পারে।</p>
+<!-- END INTERVENTION: cce62358-5291-4eb3-84d6-fbc570873ee3 -->
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="trait-objects-perform-dynamic-dispatch"></a></p>
+<h3 id="performing-dynamic-dispatch"><a class="header" href="#performing-dynamic-dispatch">dynamic dispatch সম্পাদন করা</a></h3>
+<p>অধ্যায় 10-এর <a href="ch10-01-syntax.html#performance-of-code-using-generics">“generics ব্যবহার করা কোডের
+performance”</a><!-- ignore -->-এ compiler-এর generics-এর ওপর চালানো monomorphization প্রক্রিয়া নিয়ে আলোচনাটি মনে করুন: generic type parameter-এর জায়গায়
+আমরা যে প্রতিটি concrete type ব্যবহার করি, তার জন্য compiler function আর method-এর generic নয় এমন implementation তৈরি করে। monomorphization থেকে তৈরি কোড <em>static
+dispatch</em> (স্থির dispatch) করে, অর্থাৎ compile time-এই compiler জানে আপনি কোন method call করছেন। এর বিপরীত হলো <em>dynamic dispatch</em> (চলার সময় dispatch), যখন compiler compile time-এ বলতে পারে না
+আপনি কোন method call করছেন। dynamic dispatch-এর ক্ষেত্রে compiler এমন কোড তৈরি করে, যা runtime-এ জানবে কোন method call করতে হবে।</p>
+<p>trait object ব্যবহার করলে Rust-কে dynamic dispatch ব্যবহার করতেই হয়। trait object ব্যবহার করা কোডের সঙ্গে কোন কোন type ব্যবহার হতে পারে তা compiler জানে না, তাই এটি জানে না কোন type-এ implement
+করা কোন method call করতে হবে। বরং runtime-এ কোন method call করতে হবে তা জানতে Rust trait object-এর ভেতরের pointer-গুলো ব্যবহার করে। এই খোঁজাখুঁজিতে runtime-এ একটি খরচ হয়, যা static dispatch-এ
+হয় না। dynamic dispatch compiler-কে একটি method-এর কোড inline (call-এর জায়গায় সরাসরি বসানো) করতেও দেয় না, যা আবার কিছু optimization আটকে দেয়, আর কোথায় dynamic dispatch ব্যবহার করা যায় আর
+কোথায় যায় না সে বিষয়ে Rust-এর কিছু নিয়ম আছে, যাকে বলা হয় <em>dyn compatibility</em>। সেই নিয়মগুলো এই আলোচনার আওতার বাইরে, তবে <a href="https://doc.rust-lang.org/reference/items/traits.html#dyn-compatibility">reference-এ</a><!-- ignore --> এগুলো সম্পর্কে আরও পড়তে
+পারেন। তবে Listing 18-5-এ লেখা কোডে আমরা বাড়তি নমনীয়তা পেয়েছি এবং Listing 18-9-এ তা সমর্থন করতে পেরেছি, তাই এটি বিবেচনা করার মতো একটি আপস।</p>
+<div class="quiz-placeholder" data-quiz-name="&quot;ch17-02-trait-objects&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot;কিছু OOP ভাষার মতো নয়, একটি trait object-কে আরও নির্দিষ্ট একটি type-এ &#92;&quot;downcast&#92;&quot; করা যায় না&#92;n([`Any`](https://doc.rust-lang.org/std/any/index.html) trait-এর ক্ষেত্র ছাড়া)।&#92;n&quot;,&quot;id&quot;:&quot;5d60cfc4-6377-48e7-96e4-fe1de0b0904e&quot;,&quot;type&quot;:&quot;Tracing&quot;,&quot;answer&quot;:{&quot;doesCompile&quot;:false,&quot;lineNumber&quot;:6},&quot;prompt&quot;:{&quot;program&quot;:&quot;use std::fmt::Debug;&#92;nfn main() {&#92;n    let n = 1;&#92;n    let s = String::from(&#92;&quot;Hello&#92;&quot;);&#92;n    let v: Vec&lt;&amp;dyn Debug&gt; = vec![&amp;n, &amp;s];&#92;n    let n_ref = v[0] as &amp;i32;&#92;n    println!(&#92;&quot;{}&#92;&quot;, n_ref + 1);&#92;n}&#92;n&quot;}},{&quot;context&quot;:&quot;monomorphization এড়ানোয় trait-object function দ্রুত compile হয় এবং ছোট binary তৈরি করে। তবে সাধারণত এর জন্য&#92;nruntime performance-এর মূল্য দিতে হয়। trait-bound-যুক্ত generics-এর চেয়ে trait object নিয়ে কাজ করা ডেভেলপারদের জন্য কদাচিৎ সহজ হয়।&#92;n&quot;,&quot;id&quot;:&quot;cce62358-5291-4eb3-84d6-fbc570873ee3&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:[&quot;দ্রুততর compile&quot;,&quot;ছোট binary-র আকার&quot;]},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;runtime performance-এর উন্নতি&quot;,&quot;ডেভেলপারদের জন্য বেশি স্বাচ্ছন্দ্য&quot;],&quot;prompt&quot;:&quot;একটি generic function দুইভাবে implement করার কথা ভাবুন:&#92;n&#92;n```&#92;nfn f_opt1&lt;T: SomeTrait&gt;(t: &amp;T) { /* ... */ }&#92;nfn f_opt2(t: &amp;dyn SomeTrait) { /* ... */ }&#92;n```&#92;n&#92;nবেশিরভাগ ক্ষেত্রে type-parametric সংস্করণ (`f_opt1`)-এর চেয়ে trait object সংস্করণ (`f_opt2`) পছন্দ করার ভালো কারণ নিচের কোনগুলো? &#92;nপ্রযোজ্য প্রতিটি বেছে নিন।&#92;n&quot;}}]}" data-quiz-fullscreen="true"></div>
+
+<script type="text/javascript" src="quiz/quiz-embed.iife.js"></script><link rel="stylesheet" type="text/css" href="quiz/style.css">
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch18-01-what-is-oo.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ch18-03-oo-design-patterns.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch18-01-what-is-oo.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ch18-03-oo-design-patterns.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris-2317480c.js"></script>
+        <script src="js-extensions/packages/feedback/dist/index-f1290d8b.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

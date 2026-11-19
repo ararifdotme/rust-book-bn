@@ -1,0 +1,572 @@
+<!DOCTYPE HTML>
+<html lang="bn" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>enum সংজ্ঞায়িত করা - Rust প্রোগ্রামিং ভাষা</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris-d33b75bf.css">
+        <link rel="stylesheet" href="theme/semantic-notes-9b5766c0.css">
+        <link rel="stylesheet" href="theme/listing-cab26221.css">
+        <link rel="stylesheet" href="theme/2018-edition-4e126c62.css">
+        <link rel="stylesheet" href="theme/bengali-4de2f0b6.css">
+        <link rel="stylesheet" href="js-extensions/packages/feedback/dist/index-c9d186bd.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-03403162.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-485378fe.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust প্রোগ্রামিং ভাষা</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/ararifdotme/rust-book-bn" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h2 id="defining-an-enum"><a class="header" href="#defining-an-enum">enum সংজ্ঞায়িত করা</a></h2>
+<p>struct যেখানে সম্পর্কিত field আর ডেটা একত্র করার উপায় দেয়, যেমন <code>width</code> আর <code>height</code>-সহ
+একটি <code>Rectangle</code>, সেখানে enum বলার উপায় দেয় যে একটি মান সম্ভাব্য কয়েকটি মানের একটি।
+যেমন, আমরা হয়তো বলতে চাই যে <code>Rectangle</code> সম্ভাব্য কয়েকটি আকৃতির একটি, যার মধ্যে
+<code>Circle</code> আর <code>Triangle</code>-ও আছে। এটি করতে Rust আমাদের এই সম্ভাবনাগুলোকে একটি enum হিসেবে
+প্রকাশ করতে দেয়।</p>
+<p>চলুন এমন একটি পরিস্থিতি দেখি, যা আমরা কোডে প্রকাশ করতে চাইতে পারি, আর দেখি এই
+ক্ষেত্রে struct-এর চেয়ে enum কেন বেশি কাজের ও উপযুক্ত। ধরুন আমাদের IP address নিয়ে
+কাজ করতে হবে। বর্তমানে IP address-এর জন্য দুটি প্রধান মানদণ্ড ব্যবহার হয়: version
+four আর version six। আমাদের প্রোগ্রাম যেহেতু IP address-এর শুধু এই দুটি সম্ভাবনারই
+মুখোমুখি হবে, তাই আমরা সব সম্ভাব্য variant একে একে তালিকাভুক্ত (<em>enumerate</em>) করতে পারি,
+আর এখান থেকেই enumeration নামটি এসেছে।</p>
+<p>যেকোনো IP address হয় version four নয়তো version six address হতে পারে, কিন্তু একই সঙ্গে
+দুটোই নয়। IP address-এর এই বৈশিষ্ট্যের কারণে enum data structure (ডেটা সাজানোর কাঠামো)
+এখানে উপযুক্ত, কারণ একটি enum মান তার variant-গুলোর শুধু একটিই হতে পারে। version four
+আর version six দুই ধরনের address-ই মূলত IP address, তাই যেকোনো ধরনের IP address-এর
+ক্ষেত্রে প্রযোজ্য পরিস্থিতি সামলানোর সময় কোডে এদের একই type হিসেবে দেখা উচিত।</p>
+<p>এই ধারণাটি আমরা কোডে প্রকাশ করতে পারি একটি <code>IpAddrKind</code> enumeration সংজ্ঞায়িত করে
+এবং একটি IP address যে সম্ভাব্য ধরনগুলো হতে পারে, অর্থাৎ <code>V4</code> আর <code>V6</code>, তালিকাভুক্ত করে।
+এগুলোই enum-টির variant:</p>
+<pre class="playground"><code class="language-rust edition2024">enum IpAddrKind {
+    V4,
+    V6,
+}
+<span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let four = IpAddrKind::V4;
+</span><span class="boring">    let six = IpAddrKind::V6;
+</span><span class="boring">
+</span><span class="boring">    route(IpAddrKind::V4);
+</span><span class="boring">    route(IpAddrKind::V6);
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn route(ip_kind: IpAddrKind) {}</span></code></pre>
+<p><code>IpAddrKind</code> এখন একটি নিজস্ব data type (ডেটার ধরন), যা আমরা আমাদের কোডের অন্য জায়গায়
+ব্যবহার করতে পারি।</p>
+<h3 id="enum-values"><a class="header" href="#enum-values">enum-এর মান</a></h3>
+<p><code>IpAddrKind</code>-এর দুটি variant-এর প্রতিটির instance (কোনো type-এর একটি নির্দিষ্ট মান) আমরা
+এভাবে তৈরি করতে পারি:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">enum IpAddrKind {
+</span><span class="boring">    V4,
+</span><span class="boring">    V6,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span>    let four = IpAddrKind::V4;
+    let six = IpAddrKind::V6;
+<span class="boring">
+</span><span class="boring">    route(IpAddrKind::V4);
+</span><span class="boring">    route(IpAddrKind::V6);
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn route(ip_kind: IpAddrKind) {}</span></code></pre>
+<p>লক্ষ করুন, enum-এর variant-গুলো তার নামের namespace (নামগুলোর আলাদা একটি পরিসর)-এর
+ভেতরে থাকে, আর দুটিকে আলাদা করতে আমরা দুটি কোলন ব্যবহার করি। এটি কাজের, কারণ এখন
+<code>IpAddrKind::V4</code> আর <code>IpAddrKind::V6</code> দুটি মানই একই type-এর: <code>IpAddrKind</code>। এরপর আমরা,
+যেমন, এমন একটি function সংজ্ঞায়িত করতে পারি, যা যেকোনো <code>IpAddrKind</code> নেয়:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">enum IpAddrKind {
+</span><span class="boring">    V4,
+</span><span class="boring">    V6,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let four = IpAddrKind::V4;
+</span><span class="boring">    let six = IpAddrKind::V6;
+</span><span class="boring">
+</span><span class="boring">    route(IpAddrKind::V4);
+</span><span class="boring">    route(IpAddrKind::V6);
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn route(ip_kind: IpAddrKind) {}</code></pre>
+<p>আর যেকোনো variant দিয়ে এই function call করতে পারি:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">enum IpAddrKind {
+</span><span class="boring">    V4,
+</span><span class="boring">    V6,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let four = IpAddrKind::V4;
+</span><span class="boring">    let six = IpAddrKind::V6;
+</span><span class="boring">
+</span>    route(IpAddrKind::V4);
+    route(IpAddrKind::V6);
+<span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn route(ip_kind: IpAddrKind) {}</span></code></pre>
+<p>enum ব্যবহারের আরও সুবিধা আছে। আমাদের IP address type নিয়ে আরেকটু ভাবলে দেখা যায়,
+এই মুহূর্তে প্রকৃত IP address-এর <em>ডেটা</em> রাখার কোনো উপায় আমাদের নেই; আমরা শুধু জানি
+এটি কোন <em>ধরনের</em>। অধ্যায় 5-এ আপনি সদ্য struct সম্পর্কে শিখেছেন, তাই হয়তো Listing 6-1-এর
+মতো করে struct দিয়ে এই সমস্যা সমাধানের ইচ্ছা হতে পারে।</p>
+<div class="aquascope-embed" data-code="&quot;fn main() {&#92;nenum IpAddrKind {&#92;n    V4,&#92;n    V6,&#92;n}&#92;n&#92;nstruct IpAddr {&#92;n    kind: IpAddrKind,&#92;n    address: String,&#92;n}&#92;n&#92;nlet home = IpAddr {&#92;n    kind: IpAddrKind::V4,&#92;n    address: String::from(&#92;&quot;127.0.0.1&#92;&quot;),&#92;n};&#92;n&#92;nlet loopback = IpAddr {&#92;n    kind: IpAddrKind::V6,&#92;n    address: String::from(&#92;&quot;::1&#92;&quot;),&#92;n};&#92;n}&quot;" data-annotations="{&quot;hidden_lines&quot;:[1,21],&quot;interp&quot;:{&quot;state_locations&quot;:[287]},&quot;stepper&quot;:{&quot;focused_lines&quot;:[],&quot;focused_paths&quot;:{}},&quot;boundaries&quot;:{&quot;focused_lines&quot;:[]}}" data-operations="[&quot;interpreter&quot;]" data-responses="{&quot;interpreter&quot;:{&quot;Ok&quot;:{&quot;result&quot;:{&quot;type&quot;:&quot;Success&quot;},&quot;steps&quot;:[{&quot;heap&quot;:{&quot;locations&quot;:[{&quot;type&quot;:&quot;Array&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;All&quot;,&quot;value&quot;:[{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:49},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:50},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:55},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:46},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:48},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:46},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:48},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:46},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:49}]}}]},&quot;stack&quot;:{&quot;frames&quot;:[{&quot;body_span&quot;:{&quot;end&quot;:{&quot;column&quot;:1,&quot;line&quot;:20},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:0}},&quot;locals&quot;:[{&quot;moved_paths&quot;:[],&quot;name&quot;:&quot;home&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;kind&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[],&quot;name&quot;:&quot;IpAddrKind&quot;,&quot;variant&quot;:&quot;V4&quot;}}],[&quot;address&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:{&quot;type&quot;:&quot;String&quot;,&quot;value&quot;:{&quot;len&quot;:9}},&quot;fields&quot;:[[&quot;vec&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;buf&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;inner&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;ptr&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;pointer&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;pointer&quot;,{&quot;type&quot;:&quot;Pointer&quot;,&quot;value&quot;:{&quot;path&quot;:{&quot;parts&quot;:[{&quot;type&quot;:&quot;Index&quot;,&quot;value&quot;:0}],&quot;segment&quot;:{&quot;type&quot;:&quot;Heap&quot;,&quot;value&quot;:{&quot;index&quot;:0}}},&quot;range&quot;:null}}]],&quot;name&quot;:&quot;NonNull&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;Unique&quot;,&quot;variant&quot;:null}}],[&quot;cap&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:9}]],&quot;name&quot;:&quot;UsizeNoHighBit&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;RawVecInner&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;RawVec&quot;,&quot;variant&quot;:null}}],[&quot;len&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:9}]],&quot;name&quot;:&quot;Vec&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;String&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;IpAddr&quot;,&quot;variant&quot;:null}}}],&quot;location&quot;:{&quot;end&quot;:{&quot;column&quot;:2,&quot;line&quot;:14},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:11}},&quot;name&quot;:&quot;main&quot;}]}},{&quot;heap&quot;:{&quot;locations&quot;:[{&quot;type&quot;:&quot;Array&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;All&quot;,&quot;value&quot;:[{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:49},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:50},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:55},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:46},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:48},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:46},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:48},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:46},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:49}]}},{&quot;type&quot;:&quot;Array&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;All&quot;,&quot;value&quot;:[{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:58},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:58},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:49}]}}]},&quot;stack&quot;:{&quot;frames&quot;:[{&quot;body_span&quot;:{&quot;end&quot;:{&quot;column&quot;:1,&quot;line&quot;:20},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:0}},&quot;locals&quot;:[{&quot;moved_paths&quot;:[],&quot;name&quot;:&quot;home&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;kind&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[],&quot;name&quot;:&quot;IpAddrKind&quot;,&quot;variant&quot;:&quot;V4&quot;}}],[&quot;address&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:{&quot;type&quot;:&quot;String&quot;,&quot;value&quot;:{&quot;len&quot;:9}},&quot;fields&quot;:[[&quot;vec&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;buf&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;inner&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;ptr&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;pointer&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;pointer&quot;,{&quot;type&quot;:&quot;Pointer&quot;,&quot;value&quot;:{&quot;path&quot;:{&quot;parts&quot;:[{&quot;type&quot;:&quot;Index&quot;,&quot;value&quot;:0}],&quot;segment&quot;:{&quot;type&quot;:&quot;Heap&quot;,&quot;value&quot;:{&quot;index&quot;:0}}},&quot;range&quot;:null}}]],&quot;name&quot;:&quot;NonNull&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;Unique&quot;,&quot;variant&quot;:null}}],[&quot;cap&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:9}]],&quot;name&quot;:&quot;UsizeNoHighBit&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;RawVecInner&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;RawVec&quot;,&quot;variant&quot;:null}}],[&quot;len&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:9}]],&quot;name&quot;:&quot;Vec&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;String&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;IpAddr&quot;,&quot;variant&quot;:null}}},{&quot;moved_paths&quot;:[],&quot;name&quot;:&quot;loopback&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;kind&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[],&quot;name&quot;:&quot;IpAddrKind&quot;,&quot;variant&quot;:&quot;V6&quot;}}],[&quot;address&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:{&quot;type&quot;:&quot;String&quot;,&quot;value&quot;:{&quot;len&quot;:3}},&quot;fields&quot;:[[&quot;vec&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;buf&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;inner&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;ptr&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;pointer&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;pointer&quot;,{&quot;type&quot;:&quot;Pointer&quot;,&quot;value&quot;:{&quot;path&quot;:{&quot;parts&quot;:[{&quot;type&quot;:&quot;Index&quot;,&quot;value&quot;:0}],&quot;segment&quot;:{&quot;type&quot;:&quot;Heap&quot;,&quot;value&quot;:{&quot;index&quot;:1}}},&quot;range&quot;:null}}]],&quot;name&quot;:&quot;NonNull&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;Unique&quot;,&quot;variant&quot;:null}}],[&quot;cap&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:3}]],&quot;name&quot;:&quot;UsizeNoHighBit&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;RawVecInner&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;RawVec&quot;,&quot;variant&quot;:null}}],[&quot;len&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:3}]],&quot;name&quot;:&quot;Vec&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;String&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;IpAddr&quot;,&quot;variant&quot;:null}}}],&quot;location&quot;:{&quot;end&quot;:{&quot;column&quot;:2,&quot;line&quot;:19},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:16}},&quot;name&quot;:&quot;main&quot;}]}},{&quot;heap&quot;:{&quot;locations&quot;:[]},&quot;stack&quot;:{&quot;frames&quot;:[{&quot;body_span&quot;:{&quot;end&quot;:{&quot;column&quot;:1,&quot;line&quot;:20},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:0}},&quot;locals&quot;:[],&quot;location&quot;:{&quot;end&quot;:{&quot;column&quot;:1,&quot;line&quot;:20},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:20}},&quot;name&quot;:&quot;main&quot;}]}}]}}}" data-config="{}" data-no-interact="true"></div>
+
+<p>এখানে আমরা <code>IpAddr</code> নামে একটি struct সংজ্ঞায়িত করেছি, যার দুটি field: <code>IpAddrKind</code>
+type-এর (আগে সংজ্ঞায়িত enum) একটি <code>kind</code> field, আর <code>String</code> type-এর একটি <code>address</code>
+field। এই struct-এর দুটি instance আছে আমাদের। প্রথমটি <code>home</code>, এবং এর <code>kind</code> হলো
+<code>IpAddrKind::V4</code> মান, সঙ্গে যুক্ত address ডেটা <code>127.0.0.1</code>। দ্বিতীয় instance হলো
+<code>loopback</code>। এর <code>kind</code> মান হলো <code>IpAddrKind</code>-এর অন্য variant <code>V6</code>, আর এর সঙ্গে যুক্ত
+address হলো <code>::1</code>। <code>kind</code> আর <code>address</code> মান দুটিকে একসঙ্গে বাঁধতে আমরা একটি struct
+ব্যবহার করেছি, তাই এখন variant-টি মানের সঙ্গে যুক্ত।</p>
+<p>তবে শুধু একটি enum দিয়ে একই ধারণা প্রকাশ করা আরও সংক্ষিপ্ত: struct-এর ভেতরে enum রাখার
+বদলে আমরা ডেটা সরাসরি প্রতিটি enum variant-এ রাখতে পারি। <code>IpAddr</code> enum-এর এই নতুন সংজ্ঞা
+বলে যে <code>V4</code> আর <code>V6</code> দুটি variant-এরই সঙ্গে যুক্ত <code>String</code> মান থাকবে:</p>
+<div class="aquascope-embed" data-code="&quot;fn main() {    &#92;nenum IpAddr {&#92;n    V4(String),&#92;n    V6(String),&#92;n}&#92;n&#92;nlet home = IpAddr::V4(String::from(&#92;&quot;127.0.0.1&#92;&quot;));&#92;n&#92;nlet loopback = IpAddr::V6(String::from(&#92;&quot;::1&#92;&quot;));&#92;n}&quot;" data-annotations="{&quot;hidden_lines&quot;:[1,10],&quot;interp&quot;:{&quot;state_locations&quot;:[163]},&quot;stepper&quot;:{&quot;focused_lines&quot;:[],&quot;focused_paths&quot;:{}},&quot;boundaries&quot;:{&quot;focused_lines&quot;:[]}}" data-operations="[&quot;interpreter&quot;]" data-responses="{&quot;interpreter&quot;:{&quot;Ok&quot;:{&quot;result&quot;:{&quot;type&quot;:&quot;Success&quot;},&quot;steps&quot;:[{&quot;heap&quot;:{&quot;locations&quot;:[{&quot;type&quot;:&quot;Array&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;All&quot;,&quot;value&quot;:[{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:49},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:50},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:55},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:46},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:48},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:46},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:48},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:46},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:49}]}}]},&quot;stack&quot;:{&quot;frames&quot;:[{&quot;body_span&quot;:{&quot;end&quot;:{&quot;column&quot;:1,&quot;line&quot;:9},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:0}},&quot;locals&quot;:[{&quot;moved_paths&quot;:[],&quot;name&quot;:&quot;home&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:{&quot;type&quot;:&quot;String&quot;,&quot;value&quot;:{&quot;len&quot;:9}},&quot;fields&quot;:[[&quot;vec&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;buf&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;inner&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;ptr&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;pointer&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;pointer&quot;,{&quot;type&quot;:&quot;Pointer&quot;,&quot;value&quot;:{&quot;path&quot;:{&quot;parts&quot;:[{&quot;type&quot;:&quot;Index&quot;,&quot;value&quot;:0}],&quot;segment&quot;:{&quot;type&quot;:&quot;Heap&quot;,&quot;value&quot;:{&quot;index&quot;:0}}},&quot;range&quot;:null}}]],&quot;name&quot;:&quot;NonNull&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;Unique&quot;,&quot;variant&quot;:null}}],[&quot;cap&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:9}]],&quot;name&quot;:&quot;UsizeNoHighBit&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;RawVecInner&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;RawVec&quot;,&quot;variant&quot;:null}}],[&quot;len&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:9}]],&quot;name&quot;:&quot;Vec&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;String&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;IpAddr&quot;,&quot;variant&quot;:&quot;V4&quot;}}}],&quot;location&quot;:{&quot;end&quot;:{&quot;column&quot;:49,&quot;line&quot;:6},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:6}},&quot;name&quot;:&quot;main&quot;}]}},{&quot;heap&quot;:{&quot;locations&quot;:[{&quot;type&quot;:&quot;Array&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;All&quot;,&quot;value&quot;:[{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:49},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:50},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:55},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:46},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:48},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:46},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:48},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:46},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:49}]}},{&quot;type&quot;:&quot;Array&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;All&quot;,&quot;value&quot;:[{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:58},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:58},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:49}]}}]},&quot;stack&quot;:{&quot;frames&quot;:[{&quot;body_span&quot;:{&quot;end&quot;:{&quot;column&quot;:1,&quot;line&quot;:9},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:0}},&quot;locals&quot;:[{&quot;moved_paths&quot;:[],&quot;name&quot;:&quot;home&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:{&quot;type&quot;:&quot;String&quot;,&quot;value&quot;:{&quot;len&quot;:9}},&quot;fields&quot;:[[&quot;vec&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;buf&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;inner&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;ptr&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;pointer&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;pointer&quot;,{&quot;type&quot;:&quot;Pointer&quot;,&quot;value&quot;:{&quot;path&quot;:{&quot;parts&quot;:[{&quot;type&quot;:&quot;Index&quot;,&quot;value&quot;:0}],&quot;segment&quot;:{&quot;type&quot;:&quot;Heap&quot;,&quot;value&quot;:{&quot;index&quot;:0}}},&quot;range&quot;:null}}]],&quot;name&quot;:&quot;NonNull&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;Unique&quot;,&quot;variant&quot;:null}}],[&quot;cap&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:9}]],&quot;name&quot;:&quot;UsizeNoHighBit&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;RawVecInner&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;RawVec&quot;,&quot;variant&quot;:null}}],[&quot;len&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:9}]],&quot;name&quot;:&quot;Vec&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;String&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;IpAddr&quot;,&quot;variant&quot;:&quot;V4&quot;}}},{&quot;moved_paths&quot;:[],&quot;name&quot;:&quot;loopback&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:{&quot;type&quot;:&quot;String&quot;,&quot;value&quot;:{&quot;len&quot;:3}},&quot;fields&quot;:[[&quot;vec&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;buf&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;inner&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;ptr&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;pointer&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;pointer&quot;,{&quot;type&quot;:&quot;Pointer&quot;,&quot;value&quot;:{&quot;path&quot;:{&quot;parts&quot;:[{&quot;type&quot;:&quot;Index&quot;,&quot;value&quot;:0}],&quot;segment&quot;:{&quot;type&quot;:&quot;Heap&quot;,&quot;value&quot;:{&quot;index&quot;:1}}},&quot;range&quot;:null}}]],&quot;name&quot;:&quot;NonNull&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;Unique&quot;,&quot;variant&quot;:null}}],[&quot;cap&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:3}]],&quot;name&quot;:&quot;UsizeNoHighBit&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;RawVecInner&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;RawVec&quot;,&quot;variant&quot;:null}}],[&quot;len&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:3}]],&quot;name&quot;:&quot;Vec&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;String&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;IpAddr&quot;,&quot;variant&quot;:&quot;V6&quot;}}}],&quot;location&quot;:{&quot;end&quot;:{&quot;column&quot;:47,&quot;line&quot;:8},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:8}},&quot;name&quot;:&quot;main&quot;}]}},{&quot;heap&quot;:{&quot;locations&quot;:[]},&quot;stack&quot;:{&quot;frames&quot;:[{&quot;body_span&quot;:{&quot;end&quot;:{&quot;column&quot;:1,&quot;line&quot;:9},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:0}},&quot;locals&quot;:[],&quot;location&quot;:{&quot;end&quot;:{&quot;column&quot;:1,&quot;line&quot;:9},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:9}},&quot;name&quot;:&quot;main&quot;}]}}]}}}" data-config="{}" data-no-interact="true"></div>
+
+<p>আমরা enum-এর প্রতিটি variant-এ সরাসরি ডেটা জুড়ে দিই, তাই বাড়তি struct-এর দরকার নেই।
+এখানে enum কীভাবে কাজ করে তার আরেকটি খুঁটিনাটিও দেখা সহজ: আমরা যে প্রতিটি enum variant
+সংজ্ঞায়িত করি, তার নামটিও এমন একটি function হয়ে যায়, যা enum-এর একটি instance তৈরি করে।
+অর্থাৎ <code>IpAddr::V4()</code> হলো একটি function call, যা একটি <code>String</code> argument নিয়ে <code>IpAddr</code>
+type-এর একটি instance return করে। enum সংজ্ঞায়িত করার ফলেই আমরা আপনা-আপনি এই constructor
+(নতুন instance তৈরি করে এমন function) function সংজ্ঞায়িত অবস্থায় পেয়ে যাই।</p>
+<p>struct-এর বদলে enum ব্যবহারের আরেকটি সুবিধা আছে: প্রতিটি variant-এর সঙ্গে যুক্ত ডেটার
+type আর পরিমাণ আলাদা হতে পারে। version four IP address-এ সবসময় চারটি সংখ্যার অংশ থাকবে,
+যাদের মান 0 থেকে 255-এর মধ্যে। আমরা যদি <code>V4</code> address-কে চারটি <code>u8</code> মান হিসেবে রাখতে চাই,
+কিন্তু <code>V6</code> address-কে তবু একটি <code>String</code> মান হিসেবে প্রকাশ করতে চাই, তাহলে struct দিয়ে
+তা পারতাম না। enum এই ক্ষেত্রটি সহজেই সামলায়:</p>
+<div class="aquascope-embed" data-code="&quot;fn main() {&#92;nenum IpAddr {&#92;n    V4(u8, u8, u8, u8),&#92;n    V6(String),&#92;n}&#92;n&#92;nlet home = IpAddr::V4(127, 0, 0, 1);&#92;n&#92;nlet loopback = IpAddr::V6(String::from(&#92;&quot;::1&#92;&quot;));&#92;n}&quot;" data-annotations="{&quot;hidden_lines&quot;:[1,10],&quot;interp&quot;:{&quot;state_locations&quot;:[154]},&quot;stepper&quot;:{&quot;focused_lines&quot;:[],&quot;focused_paths&quot;:{}},&quot;boundaries&quot;:{&quot;focused_lines&quot;:[]}}" data-operations="[&quot;interpreter&quot;]" data-responses="{&quot;interpreter&quot;:{&quot;Ok&quot;:{&quot;result&quot;:{&quot;type&quot;:&quot;Success&quot;},&quot;steps&quot;:[{&quot;heap&quot;:{&quot;locations&quot;:[]},&quot;stack&quot;:{&quot;frames&quot;:[{&quot;body_span&quot;:{&quot;end&quot;:{&quot;column&quot;:1,&quot;line&quot;:9},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:0}},&quot;locals&quot;:[{&quot;moved_paths&quot;:[],&quot;name&quot;:&quot;home&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:127}],[&quot;1&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:0}],[&quot;2&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:0}],[&quot;3&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:1}]],&quot;name&quot;:&quot;IpAddr&quot;,&quot;variant&quot;:&quot;V4&quot;}}}],&quot;location&quot;:{&quot;end&quot;:{&quot;column&quot;:36,&quot;line&quot;:6},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:6}},&quot;name&quot;:&quot;main&quot;}]}},{&quot;heap&quot;:{&quot;locations&quot;:[{&quot;type&quot;:&quot;Array&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;All&quot;,&quot;value&quot;:[{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:58},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:58},{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:49}]}}]},&quot;stack&quot;:{&quot;frames&quot;:[{&quot;body_span&quot;:{&quot;end&quot;:{&quot;column&quot;:1,&quot;line&quot;:9},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:0}},&quot;locals&quot;:[{&quot;moved_paths&quot;:[],&quot;name&quot;:&quot;home&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:127}],[&quot;1&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:0}],[&quot;2&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:0}],[&quot;3&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:1}]],&quot;name&quot;:&quot;IpAddr&quot;,&quot;variant&quot;:&quot;V4&quot;}}},{&quot;moved_paths&quot;:[],&quot;name&quot;:&quot;loopback&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:{&quot;type&quot;:&quot;String&quot;,&quot;value&quot;:{&quot;len&quot;:3}},&quot;fields&quot;:[[&quot;vec&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;buf&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;inner&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;ptr&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;pointer&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;pointer&quot;,{&quot;type&quot;:&quot;Pointer&quot;,&quot;value&quot;:{&quot;path&quot;:{&quot;parts&quot;:[{&quot;type&quot;:&quot;Index&quot;,&quot;value&quot;:0}],&quot;segment&quot;:{&quot;type&quot;:&quot;Heap&quot;,&quot;value&quot;:{&quot;index&quot;:0}}},&quot;range&quot;:null}}]],&quot;name&quot;:&quot;NonNull&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;Unique&quot;,&quot;variant&quot;:null}}],[&quot;cap&quot;,{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:3}]],&quot;name&quot;:&quot;UsizeNoHighBit&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;RawVecInner&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;RawVec&quot;,&quot;variant&quot;:null}}],[&quot;len&quot;,{&quot;type&quot;:&quot;Uint&quot;,&quot;value&quot;:3}]],&quot;name&quot;:&quot;Vec&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;String&quot;,&quot;variant&quot;:null}}]],&quot;name&quot;:&quot;IpAddr&quot;,&quot;variant&quot;:&quot;V6&quot;}}}],&quot;location&quot;:{&quot;end&quot;:{&quot;column&quot;:47,&quot;line&quot;:8},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:8}},&quot;name&quot;:&quot;main&quot;}]}},{&quot;heap&quot;:{&quot;locations&quot;:[]},&quot;stack&quot;:{&quot;frames&quot;:[{&quot;body_span&quot;:{&quot;end&quot;:{&quot;column&quot;:1,&quot;line&quot;:9},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:0}},&quot;locals&quot;:[],&quot;location&quot;:{&quot;end&quot;:{&quot;column&quot;:1,&quot;line&quot;:9},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:9}},&quot;name&quot;:&quot;main&quot;}]}}]}}}" data-config="{}" data-no-interact="true"></div>
+
+<p>version four আর version six IP address রাখার জন্য data structure সংজ্ঞায়িত করার কয়েকটি
+আলাদা উপায় আমরা দেখালাম। তবে দেখা যাচ্ছে, IP address রাখা আর সেগুলো কোন ধরনের তা প্রকাশ
+করার প্রয়োজন এতই প্রচলিত যে <a href="https://doc.rust-lang.org/std/net/enum.IpAddr.html">standard library-তে আমাদের ব্যবহারের উপযোগী একটি সংজ্ঞা
+আছে!</a><!-- ignore --> চলুন দেখি standard library (আদর্শ লাইব্রেরি) <code>IpAddr</code> কীভাবে
+সংজ্ঞায়িত করে। এতে হুবহু সেই enum আর variant আছে, যা আমরা সংজ্ঞায়িত ও ব্যবহার করেছি,
+কিন্তু এটি address-এর ডেটা variant-গুলোর ভেতরে রাখে দুটি আলাদা struct-এর আকারে, যেগুলো
+প্রতিটি variant-এর জন্য আলাদাভাবে সংজ্ঞায়িত:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Ipv4Addr {
+    // --snip--
+}
+
+struct Ipv6Addr {
+    // --snip--
+}
+
+enum IpAddr {
+    V4(Ipv4Addr),
+    V6(Ipv6Addr),
+}
+<span class="boring">}</span></code></pre>
+<p>এই কোড দেখায় যে একটি enum variant-এর ভেতরে আপনি যেকোনো ধরনের ডেটা রাখতে পারেন: যেমন
+string, সংখ্যার type, বা struct। এমনকি আরেকটি enum-ও রাখতে পারেন! আর standard library-র
+type-গুলো প্রায়ই আপনি নিজে যা ভেবে বের করতেন, তার চেয়ে খুব বেশি জটিল নয়।</p>
+<p>লক্ষ করুন, standard library-তে <code>IpAddr</code>-এর একটি সংজ্ঞা থাকলেও আমরা কোনো সংঘাত ছাড়াই
+আমাদের নিজস্ব সংজ্ঞা তৈরি ও ব্যবহার করতে পারি, কারণ standard library-র সংজ্ঞাটি আমরা
+আমাদের scope (কোডের যে অংশে একটি নাম ব্যবহার করা যায়)-এ আনিনি। type-কে scope-এ আনা নিয়ে
+আমরা অধ্যায় 7-এ আরও কথা বলব।</p>
+<p>Listing 6-2-এ চলুন enum-এর আরেকটি উদাহরণ দেখি: এর variant-গুলোতে নানা ধরনের type বসানো আছে।</p>
+<figure class="listing" id="listing-6-2">
+<pre class="playground"><code class="language-rust edition2024">enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+<span class="boring">
+</span><span class="boring">fn main() {}</span></code></pre>
+<figcaption><a href="#listing-6-2">Listing 6-2</a>: একটি <code>Message</code> enum, যার প্রতিটি variant আলাদা পরিমাণ ও type-এর মান রাখে</figcaption>
+</figure>
+<p>এই enum-এ আলাদা type-এর চারটি variant আছে:</p>
+<ul>
+<li><code>Quit</code>: এর সঙ্গে কোনো ডেটাই যুক্ত নেই</li>
+<li><code>Move</code>: struct-এর মতো নামযুক্ত field আছে</li>
+<li><code>Write</code>: একটিমাত্র <code>String</code> আছে</li>
+<li><code>ChangeColor</code>: তিনটি <code>i32</code> মান আছে</li>
+</ul>
+<p>Listing 6-2-এর মতো variant-সহ একটি enum সংজ্ঞায়িত করা আলাদা আলাদা ধরনের struct সংজ্ঞা
+লেখার মতোই, শুধু enum <code>struct</code> keyword ব্যবহার করে না এবং সব variant একসঙ্গে <code>Message</code>
+type-এর অধীনে থাকে। নিচের struct-গুলো আগের enum variant-গুলোর রাখা একই ডেটা রাখতে পারত:</p>
+<pre class="playground"><code class="language-rust edition2024">struct QuitMessage; // unit struct
+struct MoveMessage {
+    x: i32,
+    y: i32,
+}
+struct WriteMessage(String); // tuple struct
+struct ChangeColorMessage(i32, i32, i32); // tuple struct
+<span class="boring">
+</span><span class="boring">fn main() {}</span></code></pre>
+<p>কিন্তু আমরা যদি আলাদা আলাদা struct ব্যবহার করতাম, যাদের প্রতিটির নিজস্ব type আছে, তাহলে
+এই যেকোনো ধরনের বার্তা নিতে পারে এমন একটি function সংজ্ঞায়িত করা অত সহজ হতো না, যতটা
+Listing 6-2-এ সংজ্ঞায়িত <code>Message</code> enum-এর ক্ষেত্রে সহজ, কারণ সেটি একটিমাত্র type।</p>
+<p>enum আর struct-এর মধ্যে আরও একটি মিল আছে: যেমন <code>impl</code> ব্যবহার করে struct-এর ওপর method
+(টাইপের সঙ্গে যুক্ত function) সংজ্ঞায়িত করা যায়, তেমনি enum-এর ওপরও method সংজ্ঞায়িত করা যায়।
+এখানে <code>call</code> নামের একটি method আছে, যা আমরা আমাদের <code>Message</code> enum-এর ওপর সংজ্ঞায়িত করতে পারি:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">fn main() {
+</span><span class="boring">    enum Message {
+</span><span class="boring">        Quit,
+</span><span class="boring">        Move { x: i32, y: i32 },
+</span><span class="boring">        Write(String),
+</span><span class="boring">        ChangeColor(i32, i32, i32),
+</span><span class="boring">    }
+</span><span class="boring">
+</span>    impl Message {
+        fn call(&amp;self) {
+            // method-এর body এখানে সংজ্ঞায়িত হবে
+        }
+    }
+
+    let m = Message::Write(String::from("hello"));
+    m.call();
+<span class="boring">}</span></code></pre>
+<p>যে মানের ওপর method-টি call করা হয়েছে, তা পেতে method-এর body <code>self</code> ব্যবহার করবে। এই
+উদাহরণে আমরা <code>m</code> নামের একটি variable তৈরি করেছি, যার মান
+<code>Message::Write(String::from("hello"))</code>, আর <code>m.call()</code> চলার সময় <code>call</code> method-এর body-তে
+<code>self</code> হবে সেটিই।</p>
+<p>চলুন standard library-র আরেকটি enum দেখি, যা খুবই প্রচলিত ও কাজের: <code>Option</code>।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="the-option-enum-and-its-advantages-over-null-values"></a></p>
+<h3 id="the-option-enum"><a class="header" href="#the-option-enum"><code>Option</code> enum</a></h3>
+<p>এই অংশে <code>Option</code>-কে উদাহরণ হিসেবে বিশ্লেষণ করা হয়েছে, যা standard library-তে সংজ্ঞায়িত
+আরেকটি enum। <code>Option</code> type খুবই প্রচলিত একটি পরিস্থিতি প্রকাশ করে, যেখানে একটি মান কিছু
+একটা হতে পারে, আবার কিছুই না-ও হতে পারে।</p>
+<p>যেমন, একটি খালি নয় এমন তালিকার প্রথম আইটেম চাইলে আপনি একটি মান পাবেন। একটি খালি তালিকার
+প্রথম আইটেম চাইলে কিছুই পাবেন না। এই ধারণাটি type system (ভাষার type-সংক্রান্ত নিয়মের
+ব্যবস্থা)-এর ভাষায় প্রকাশ করলে compiler যাচাই করতে পারে যে যেসব ক্ষেত্র সামলানো উচিত,
+তার সবগুলো আপনি সামলেছেন কি না; এই সুবিধা এমন বাগ আটকাতে পারে, যা অন্যান্য প্রোগ্রামিং
+ভাষায় অত্যন্ত প্রচলিত।</p>
+<p>প্রোগ্রামিং ভাষার নকশাকে প্রায়ই দেখা হয় কোন কোন বৈশিষ্ট্য রাখা হলো তার ভিত্তিতে, কিন্তু
+কোন বৈশিষ্ট্য বাদ দেওয়া হলো, সেটাও গুরুত্বপূর্ণ। অন্য অনেক ভাষায় থাকা null বৈশিষ্ট্যটি
+Rust-এ নেই। <em>null</em> (“কোনো মান নেই” বোঝানো বিশেষ মান) এমন একটি মান, যার মানে সেখানে কোনো মান
+নেই। null-যুক্ত ভাষায় variable সবসময় দুটি অবস্থার যেকোনো একটিতে থাকতে পারে: null বা not-null।</p>
+<p>null-এর উদ্ভাবক Tony Hoare তার 2009 সালের উপস্থাপনা “Null References: The Billion Dollar
+Mistake”-এ বলেছিলেন:</p>
+<blockquote>
+<p>আমি এটিকে বলি আমার বিলিয়ন ডলারের ভুল। সে সময় আমি একটি object-oriented ভাষায় reference-এর
+জন্য প্রথম পূর্ণাঙ্গ type system নকশা করছিলাম। আমার লক্ষ্য ছিল নিশ্চিত করা যে reference-এর
+সব ব্যবহার সম্পূর্ণ নিরাপদ হবে, আর compiler নিজে থেকেই তা যাচাই করবে। কিন্তু একটি null
+reference রেখে দেওয়ার লোভ আমি সামলাতে পারিনি, শুধু এ কারণে যে এটি implement করা খুব
+সহজ ছিল। এর ফলে অসংখ্য error, নিরাপত্তা-দুর্বলতা আর সিস্টেম ক্র্যাশ হয়েছে, যা সম্ভবত
+গত চল্লিশ বছরে বিলিয়ন ডলারের কষ্ট আর ক্ষতির কারণ হয়েছে।</p>
+</blockquote>
+<p>null মানের সমস্যা হলো, একটি null মানকে not-null মান হিসেবে ব্যবহারের চেষ্টা করলে কোনো না
+কোনো ধরনের error পাবেন। এই null বা not-null বৈশিষ্ট্যটি সর্বত্র থাকে বলে এ ধরনের ভুল করা
+অত্যন্ত সহজ।</p>
+<p>তবে null যে ধারণাটি প্রকাশ করতে চায়, তা এখনো কাজের: null হলো এমন একটি মান, যা কোনো
+কারণে বর্তমানে অবৈধ বা অনুপস্থিত।</p>
+<p>সমস্যাটি আসলে ধারণায় নয়, বরং নির্দিষ্ট implementation-এ। তাই Rust-এ null নেই, কিন্তু
+এমন একটি enum আছে, যা একটি মান উপস্থিত না অনুপস্থিত, সেই ধারণা প্রকাশ করতে পারে। এই
+enum হলো <code>Option&lt;T&gt;</code>, আর এটি <a href="https://doc.rust-lang.org/std/option/enum.Option.html">standard library-তে সংজ্ঞায়িত</a><!-- ignore -->
+এভাবে:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum Option&lt;T&gt; {
+    None,
+    Some(T),
+}
+<span class="boring">}</span></code></pre>
+<p><code>Option&lt;T&gt;</code> enum এতই কাজের যে এটি এমনকি prelude (প্রতিটি প্রোগ্রামে আপনা-আপনি আসা জিনিসের
+সেট)-এও রাখা আছে; একে স্পষ্টভাবে scope-এ আনতে হয় না। এর variant-গুলোও prelude-এ আছে:
+<code>Option::</code> উপসর্গ ছাড়াই আপনি সরাসরি <code>Some</code> আর <code>None</code> ব্যবহার করতে পারেন। <code>Option&lt;T&gt;</code>
+enum তবু একটি সাধারণ enum-ই, আর <code>Some(T)</code> ও <code>None</code> তবু <code>Option&lt;T&gt;</code> type-এরই variant।</p>
+<p><code>&lt;T&gt;</code> syntax Rust-এর এমন একটি বৈশিষ্ট্য, যা নিয়ে আমরা এখনো কথা বলিনি। এটি একটি generic
+type parameter (যেকোনো type বসানো যায় এমন জায়গা-রাখা নাম), আর generics (একাধিক টাইপের
+জন্য একই কোড) নিয়ে আমরা অধ্যায় 10-এ আরও বিস্তারিত আলোচনা করব। আপাতত শুধু এটুকু জানলেই
+চলবে যে <code>&lt;T&gt;</code> মানে <code>Option</code> enum-এর <code>Some</code> variant যেকোনো type-এর একটি ডেটা রাখতে পারে,
+আর <code>T</code>-এর জায়গায় ব্যবহৃত প্রতিটি নির্দিষ্ট type পুরো <code>Option&lt;T&gt;</code> type-টিকে একটি আলাদা
+type বানিয়ে দেয়। সংখ্যার type আর char type রাখতে <code>Option</code> মান ব্যবহারের কয়েকটি উদাহরণ:</p>
+<div class="aquascope-embed" data-code="&quot;fn main() {&#92;nlet some_number = Some(5);&#92;nlet some_char = Some(&#39;e&#39;);&#92;n&#92;nlet absent_number: Option&lt;i32&gt; = None;&#92;n}&quot;" data-annotations="{&quot;hidden_lines&quot;:[1,6],&quot;interp&quot;:{&quot;state_locations&quot;:[105]},&quot;stepper&quot;:{&quot;focused_lines&quot;:[],&quot;focused_paths&quot;:{}},&quot;boundaries&quot;:{&quot;focused_lines&quot;:[]}}" data-operations="[&quot;interpreter&quot;]" data-responses="{&quot;interpreter&quot;:{&quot;Ok&quot;:{&quot;result&quot;:{&quot;type&quot;:&quot;Success&quot;},&quot;steps&quot;:[{&quot;heap&quot;:{&quot;locations&quot;:[]},&quot;stack&quot;:{&quot;frames&quot;:[{&quot;body_span&quot;:{&quot;end&quot;:{&quot;column&quot;:1,&quot;line&quot;:5},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:0}},&quot;locals&quot;:[{&quot;moved_paths&quot;:[],&quot;name&quot;:&quot;some_number&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Int&quot;,&quot;value&quot;:5}]],&quot;name&quot;:&quot;Option&quot;,&quot;variant&quot;:&quot;Some&quot;}}}],&quot;location&quot;:{&quot;end&quot;:{&quot;column&quot;:26,&quot;line&quot;:1},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:1}},&quot;name&quot;:&quot;main&quot;}]}},{&quot;heap&quot;:{&quot;locations&quot;:[]},&quot;stack&quot;:{&quot;frames&quot;:[{&quot;body_span&quot;:{&quot;end&quot;:{&quot;column&quot;:1,&quot;line&quot;:5},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:0}},&quot;locals&quot;:[{&quot;moved_paths&quot;:[],&quot;name&quot;:&quot;some_number&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Int&quot;,&quot;value&quot;:5}]],&quot;name&quot;:&quot;Option&quot;,&quot;variant&quot;:&quot;Some&quot;}}},{&quot;moved_paths&quot;:[],&quot;name&quot;:&quot;some_char&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:101}]],&quot;name&quot;:&quot;Option&quot;,&quot;variant&quot;:&quot;Some&quot;}}}],&quot;location&quot;:{&quot;end&quot;:{&quot;column&quot;:26,&quot;line&quot;:2},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:2}},&quot;name&quot;:&quot;main&quot;}]}},{&quot;heap&quot;:{&quot;locations&quot;:[]},&quot;stack&quot;:{&quot;frames&quot;:[{&quot;body_span&quot;:{&quot;end&quot;:{&quot;column&quot;:1,&quot;line&quot;:5},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:0}},&quot;locals&quot;:[{&quot;moved_paths&quot;:[],&quot;name&quot;:&quot;some_number&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Int&quot;,&quot;value&quot;:5}]],&quot;name&quot;:&quot;Option&quot;,&quot;variant&quot;:&quot;Some&quot;}}},{&quot;moved_paths&quot;:[],&quot;name&quot;:&quot;some_char&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[[&quot;0&quot;,{&quot;type&quot;:&quot;Char&quot;,&quot;value&quot;:101}]],&quot;name&quot;:&quot;Option&quot;,&quot;variant&quot;:&quot;Some&quot;}}},{&quot;moved_paths&quot;:[],&quot;name&quot;:&quot;absent_number&quot;,&quot;value&quot;:{&quot;type&quot;:&quot;Adt&quot;,&quot;value&quot;:{&quot;alloc_kind&quot;:null,&quot;fields&quot;:[],&quot;name&quot;:&quot;Option&quot;,&quot;variant&quot;:&quot;None&quot;}}}],&quot;location&quot;:{&quot;end&quot;:{&quot;column&quot;:38,&quot;line&quot;:4},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:4}},&quot;name&quot;:&quot;main&quot;}]}},{&quot;heap&quot;:{&quot;locations&quot;:[]},&quot;stack&quot;:{&quot;frames&quot;:[{&quot;body_span&quot;:{&quot;end&quot;:{&quot;column&quot;:1,&quot;line&quot;:5},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:0}},&quot;locals&quot;:[],&quot;location&quot;:{&quot;end&quot;:{&quot;column&quot;:1,&quot;line&quot;:5},&quot;filename&quot;:{&quot;private_use_as_methods_instead&quot;:0},&quot;start&quot;:{&quot;column&quot;:0,&quot;line&quot;:5}},&quot;name&quot;:&quot;main&quot;}]}}]}}}" data-config="{}" data-no-interact="true"></div>
+
+<p><code>some_number</code>-এর type হলো <code>Option&lt;i32&gt;</code>। <code>some_char</code>-এর type হলো <code>Option&lt;char&gt;</code>, যা একটি
+আলাদা type। Rust এই type-গুলো infer (type অনুমান করে নেওয়া) করতে পারে, কারণ আমরা <code>Some</code>
+variant-এর ভেতরে একটি মান দিয়েছি। <code>absent_number</code>-এর জন্য Rust চায় আমরা পুরো <code>Option</code>
+type-টি annotate (type স্পষ্ট করে লিখে দেওয়া) করি: শুধু একটি <code>None</code> মান দেখে compiler
+বুঝতে পারে না সংশ্লিষ্ট <code>Some</code> variant কোন type রাখবে। এখানে আমরা Rust-কে বলছি যে
+<code>absent_number</code>-কে আমরা <code>Option&lt;i32&gt;</code> type-এর হিসেবে চাই।</p>
+<p>আমাদের কাছে একটি <code>Some</code> মান থাকলে আমরা জানি একটি মান উপস্থিত আছে, আর মানটি <code>Some</code>-এর
+ভেতরে রাখা আছে। একটি <code>None</code> মান থাকলে এক অর্থে এটি null-এর মতোই: আমাদের কাছে কোনো বৈধ মান
+নেই। তাহলে null-এর চেয়ে <code>Option&lt;T&gt;</code> থাকা ভালো কেন?</p>
+<p>সংক্ষেপে, যেহেতু <code>Option&lt;T&gt;</code> আর <code>T</code> (যেখানে <code>T</code> যেকোনো type হতে পারে) আলাদা type, তাই
+compiler আমাদের একটি <code>Option&lt;T&gt;</code> মানকে নিশ্চিতভাবে বৈধ মানের মতো করে ব্যবহার করতে দেবে না।
+যেমন, এই কোড compile হবে না, কারণ এটি একটি <code>Option&lt;i8&gt;</code>-এর সঙ্গে একটি <code>i8</code> যোগ করার চেষ্টা
+করছে:</p>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
+</span>    let x: i8 = 5;
+    let y: Option&lt;i8&gt; = Some(5);
+
+    let sum = x + y;
+<span class="boring">}</span></code></pre>
+<p>এই কোড চালালে এরকম একটি error message পাই:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling enums v0.1.0 (file:///projects/enums)
+error[E0277]: cannot add `Option&lt;i8&gt;` to `i8`
+ --&gt; src/main.rs:5:17
+  |
+5 |     let sum = x + y;
+  |                 ^ no implementation for `i8 + Option&lt;i8&gt;`
+  |
+  = help: the trait `Add&lt;Option&lt;i8&gt;&gt;` is not implemented for `i8`
+  = help: the following other types implement trait `Add&lt;Rhs&gt;`:
+            `&amp;i8` implements `Add&lt;i8&gt;`
+            `&amp;i8` implements `Add`
+            `i8` implements `Add&lt;&amp;i8&gt;`
+            `i8` implements `Add`
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `enums` (bin "enums") due to 1 previous error
+</code></pre>
+<p>ভয়ংকর! কার্যত এই error message-এর মানে হলো, একটি <code>i8</code> আর একটি <code>Option&lt;i8&gt;</code> কীভাবে যোগ
+করতে হয়, Rust তা বোঝে না, কারণ এরা আলাদা type। Rust-এ যখন আমাদের কাছে <code>i8</code>-এর মতো কোনো
+type-এর মান থাকে, তখন compiler নিশ্চিত করবে যে আমাদের কাছে সবসময় একটি বৈধ মান আছে। ওই মান
+ব্যবহারের আগে null যাচাই না করেই আমরা আত্মবিশ্বাসের সঙ্গে এগোতে পারি। শুধু যখন আমাদের কাছে
+একটি <code>Option&lt;i8&gt;</code> (বা আমরা যে type-এর মান নিয়েই কাজ করি না কেন) থাকে, তখনই মান না থাকার
+সম্ভাবনা নিয়ে চিন্তা করতে হয়, আর মানটি ব্যবহারের আগে compiler নিশ্চিত করবে যে আমরা সেই
+ক্ষেত্রটি সামলেছি।</p>
+<p>অন্যভাবে বললে, একটি <code>Option&lt;T&gt;</code>-এর ওপর <code>T</code>-এর operation চালানোর আগে আপনাকে সেটিকে একটি
+<code>T</code>-তে রূপান্তর করতে হবে। সাধারণত এটি null-এর সবচেয়ে প্রচলিত সমস্যাগুলোর একটি ধরতে সাহায্য
+করে: কোনো কিছু আসলে null হলেও সেটি null নয় বলে ধরে নেওয়া।</p>
+<p>কোনো মানকে ভুল করে not-null ধরে নেওয়ার ঝুঁকি দূর করলে আপনি আপনার কোড নিয়ে আরও
+আত্মবিশ্বাসী হতে পারেন। null হতে পারে এমন একটি মান রাখতে চাইলে আপনাকে সেই মানের type
+<code>Option&lt;T&gt;</code> করে স্পষ্টভাবে তা বেছে নিতে হবে। তারপর সেই মান ব্যবহারের সময় মানটি null হলে
+সেই ক্ষেত্রটি স্পষ্টভাবে সামলাতে হবে। যেখানেই কোনো মানের type <code>Option&lt;T&gt;</code> নয়, সেখানে আপনি
+নিরাপদে ধরে নিতে <em>পারেন</em> যে মানটি null নয়। null-এর সর্বব্যাপিতা সীমিত করতে এবং Rust কোডের
+নিরাপত্তা বাড়াতে এটি ছিল Rust-এর একটি সচেতন নকশাগত সিদ্ধান্ত।</p>
+<p>তাহলে <code>Option&lt;T&gt;</code> type-এর একটি মান থাকলে <code>Some</code> variant থেকে <code>T</code> মানটি কীভাবে বের করে
+আনবেন, যাতে সেই মান ব্যবহার করতে পারেন? <code>Option&lt;T&gt;</code> enum-এর অনেকগুলো method আছে, যেগুলো
+নানা পরিস্থিতিতে কাজে লাগে; সেগুলো দেখে নিতে পারেন <a href="https://doc.rust-lang.org/std/option/enum.Option.html">এর ডকুমেন্টেশনে</a><!-- ignore -->।
+<code>Option&lt;T&gt;</code>-এর method-গুলোর সঙ্গে পরিচিত হওয়া Rust নিয়ে আপনার যাত্রায় অত্যন্ত কাজে আসবে।</p>
+<p>সাধারণভাবে, একটি <code>Option&lt;T&gt;</code> মান ব্যবহার করতে আপনি এমন কোড চাইবেন, যা প্রতিটি variant
+সামলাবে। কিছু কোড চাইবেন, যা শুধু তখনই চলবে, যখন আপনার কাছে একটি <code>Some(T)</code> মান থাকবে, আর
+এই কোড ভেতরের <code>T</code> ব্যবহার করতে পারবে। অন্য কিছু কোড চাইবেন, যা শুধু তখনই চলবে, যখন আপনার
+কাছে একটি <code>None</code> মান থাকবে, আর সেই কোডের হাতে কোনো <code>T</code> মান থাকবে না। <code>match</code> expression
+হলো এমন একটি control flow (কোড চলার ক্রম নিয়ন্ত্রণ) গঠন, যা enum-এর সঙ্গে ব্যবহার করলে
+ঠিক এই কাজটিই করে: enum-এর কোন variant আছে তার ওপর নির্ভর করে এটি আলাদা কোড চালায়, আর
+সেই কোড মিলে যাওয়া মানের ভেতরের ডেটা ব্যবহার করতে পারে।</p>
+<div class="quiz-placeholder" data-quiz-name="&quot;ch06-01-defining-an-enum&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot; &#92;nRust-এ null pointer নেই, তাই `null` keyword-এর অস্তিত্বই নেই। কোনো বস্তুর null হওয়ার সম্ভাবনা প্রকাশ করতে একটি Option type ব্যবহার করা উচিত।&#92;n&quot;,&quot;id&quot;:&quot;770f09d3-110d-4505-b41a-2af422198d59&quot;,&quot;type&quot;:&quot;Tracing&quot;,&quot;answer&quot;:{&quot;doesCompile&quot;:false,&quot;lineNumber&quot;:6},&quot;prompt&quot;:{&quot;program&quot;:&quot;fn foo(x: &amp;i32) { &#92;n  println!(&#92;&quot;{x}&#92;&quot;);&#92;n}&#92;n&#92;nfn main() {&#92;n  let x = null;&#92;n  foo(x);&#92;n}&#92;n&quot;}},{&quot;context&quot;:&quot;struct-এর field হিসেবে `Option` type রাখা সম্পূর্ণ ঠিক আছে (প্রশ্নে জানতে চাওয়া হয়েছিল কোনটি বৈধ কারণ **নয়**)।&#92;nতবে আপনার data structure-এ যদি &#92;&quot;দুটি ঐচ্ছিক field-এর ঠিক একটিকে `Some` হতে হবে&#92;&quot;-এর মতো invariant থাকে,&#92;nতাহলে একটি enum ব্যবহার করলে সেই invariant আরও ভালোভাবে নিশ্চিত হয়।&#92;n&quot;,&quot;id&quot;:&quot;6226be11-31c3-4cac-b97c-515514a70af2&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:&quot;struct-টিতে `Option` type আছে, যা শুধু struct মোড়ানোর জন্য তৈরি&quot;},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;runtime-এ struct-টি enum-এর চেয়ে মেমোরিতে বেশি জায়গা নেয়&quot;,&quot;struct-টিতে `ok` আর `err` দুটোই `None` হতে পারে, অথচ enum-এ অন্তত একটি থাকতেই হবে&quot;,&quot;enum-এর চেয়ে struct-টি তৈরি করতে syntax-এর দিক থেকে বেশি লম্বা-চওড়া লিখতে হয়&quot;],&quot;prompt&quot;:&quot;একটি `Result` type-এর এই দুটি রূপ দেখুন, যাতে কোনো হিসাব সফল হলে একটি মান `T` থাকে, আর ব্যর্থ হলে একটি error `E` থাকে।&#92;n&#92;n```&#92;nstruct Result1&lt;T, E&gt; {&#92;n  ok: Option&lt;T&gt;,&#92;n  err: Option&lt;E&gt;,&#92;n}&#92;n&#92;nenum Result2&lt;T, E&gt; {&#92;n  Ok(T),&#92;n  Err(E)&#92;n}&#92;n```&#92;n&#92;nRust-এ struct `Result1`-এর চেয়ে enum `Result2`-কে বেশি Rust-সুলভ মনে করা হয়। &#92;nনিচের কোন বক্তব্যটি এর বৈধ কারণ **নয়**?&#92;n&quot;}}]}" data-quiz-fullscreen="true"></div>
+
+<script type="text/javascript" src="aquascope/embed.iife.js"></script><link rel="stylesheet" type="text/css" href="aquascope/style.css">
+<script type="text/javascript" src="quiz/quiz-embed.iife.js"></script><link rel="stylesheet" type="text/css" href="quiz/style.css">
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch06-00-enums.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ch06-02-match.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch06-00-enums.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ch06-02-match.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris-2317480c.js"></script>
+        <script src="js-extensions/packages/feedback/dist/index-f1290d8b.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

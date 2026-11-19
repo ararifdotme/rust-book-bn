@@ -1,0 +1,537 @@
+<!DOCTYPE HTML>
+<html lang="bn" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>smart pointer-কে সাধারণ reference-এর মতো ব্যবহার করা - Rust প্রোগ্রামিং ভাষা</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris-d33b75bf.css">
+        <link rel="stylesheet" href="theme/semantic-notes-9b5766c0.css">
+        <link rel="stylesheet" href="theme/listing-cab26221.css">
+        <link rel="stylesheet" href="theme/2018-edition-4e126c62.css">
+        <link rel="stylesheet" href="theme/bengali-4de2f0b6.css">
+        <link rel="stylesheet" href="js-extensions/packages/feedback/dist/index-c9d186bd.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-03403162.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-485378fe.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust প্রোগ্রামিং ভাষা</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/ararifdotme/rust-book-bn" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <!-- Old headings. Do not remove or links may break. -->
+<p><a id="treating-smart-pointers-like-regular-references-with-the-deref-trait"></a>
+<a id="treating-smart-pointers-like-regular-references-with-deref"></a></p>
+<h2 id="treating-smart-pointers-like-regular-references"><a class="header" href="#treating-smart-pointers-like-regular-references">smart pointer-কে সাধারণ reference-এর মতো ব্যবহার করা</a></h2>
+<p><code>Deref</code> trait implement করে আপনি <em>dereference operator</em> (reference থেকে আসল মানে পৌঁছানোর operator) <code>*</code>-এর আচরণ নিজের মতো সাজাতে পারেন (গুণ বা glob
+operator-এর সঙ্গে গুলিয়ে ফেলবেন না)। <code>Deref</code> এমনভাবে implement করলে যাতে একটি smart pointer-কে সাধারণ reference-এর মতো ব্যবহার করা যায়, আপনি reference-এর
+ওপর কাজ করে এমন কোড লিখে সেই কোড smart pointer-এর সঙ্গেও ব্যবহার করতে পারেন।</p>
+<p>প্রথমে দেখা যাক dereference operator সাধারণ reference-এর সঙ্গে কীভাবে কাজ করে। তারপর <code>Box&lt;T&gt;</code>-এর মতো আচরণ করে এমন একটি নিজস্ব type সংজ্ঞায়িত করার চেষ্টা করব
+এবং দেখব কেন আমাদের নতুন সংজ্ঞায়িত type-এ dereference operator reference-এর মতো কাজ করে না। আমরা দেখব <code>Deref</code> trait implement করলে কীভাবে smart pointer
+reference-এর মতো করে কাজ করতে পারে। তারপর Rust-এর deref coercion বৈশিষ্ট্য দেখব, এবং এটি কীভাবে আমাদের reference বা smart pointer, যেকোনোটির সঙ্গে কাজ
+করতে দেয়।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="following-the-pointer-to-the-value-with-the-dereference-operator"></a>
+<a id="following-the-pointer-to-the-value"></a></p>
+<h3 id="following-the-reference-to-the-value"><a class="header" href="#following-the-reference-to-the-value">reference ধরে মানে পৌঁছানো</a></h3>
+<p>সাধারণ reference এক ধরনের pointer, আর pointer-কে ভাবার একটি উপায় হলো অন্য কোথাও রাখা একটি মানের দিকে একটি তীরচিহ্ন হিসেবে। Listing 15-6-এ আমরা একটি <code>i32</code>
+মানের একটি reference তৈরি করি, তারপর dereference operator ব্যবহার করে reference ধরে মানে পৌঁছাই।</p>
+<figure class="listing" id="listing-15-6">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">fn main() {
+    let x = 5;
+    let y = &amp;x;
+
+    assert_eq!(5, x);
+    assert_eq!(5, *y);
+}</code></pre>
+<figcaption><a href="#listing-15-6">Listing 15-6</a>: dereference operator ব্যবহার করে একটি <code>i32</code> মানের reference ধরে মানে পৌঁছানো</figcaption>
+</figure>
+<p><code>x</code> variable একটি <code>i32</code> মান <code>5</code> রাখে। আমরা <code>y</code>-কে <code>x</code>-এর একটি reference-এর সমান করি। আমরা assert করতে পারি যে <code>x</code>, <code>5</code>-এর সমান। কিন্তু <code>y</code>-এর মান সম্পর্কে
+assertion করতে চাইলে <code>*y</code> ব্যবহার করে reference ধরে এটি যে মানকে নির্দেশ করছে সেখানে পৌঁছাতে হবে (তাই নাম <em>dereference</em>), যাতে compiler আসল মানটি তুলনা
+করতে পারে। <code>y</code>-কে dereference করলে <code>y</code> যে integer মানকে নির্দেশ করছে তা পাই, যা <code>5</code>-এর সঙ্গে তুলনা করা যায়।</p>
+<p>এর বদলে <code>assert_eq!(5, y);</code> লেখার চেষ্টা করলে এই compilation error পেতাম:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling deref-example v0.1.0 (file:///projects/deref-example)
+error[E0277]: can't compare `{integer}` with `&amp;{integer}`
+ --&gt; src/main.rs:6:5
+  |
+6 |     assert_eq!(5, y);
+  |     ^^^^^^^^^^^^^^^^ no implementation for `{integer} == &amp;{integer}`
+  |
+  = help: the trait `PartialEq&lt;&amp;{integer}&gt;` is not implemented for `{integer}`
+  = note: this error originates in the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `deref-example` (bin "deref-example") due to 1 previous error
+</code></pre>
+<p>একটি সংখ্যা আর একটি সংখ্যার reference তুলনা করা অনুমোদিত নয়, কারণ এরা ভিন্ন type। reference ধরে এটি যে মানকে নির্দেশ করছে সেখানে পৌঁছাতে আমাদের dereference
+operator ব্যবহার করতেই হবে।</p>
+<h3 id="using-boxt-like-a-reference"><a class="header" href="#using-boxt-like-a-reference"><code>Box&lt;T&gt;</code>-কে reference-এর মতো ব্যবহার করা</a></h3>
+<p>Listing 15-6-এর কোড reference-এর বদলে একটি <code>Box&lt;T&gt;</code> ব্যবহার করে নতুন করে লিখতে পারি; Listing 15-7-এ <code>Box&lt;T&gt;</code>-এর ওপর ব্যবহৃত dereference operator ঠিক সেভাবেই
+কাজ করে, যেভাবে Listing 15-6-এ reference-এর ওপর ব্যবহৃত dereference operator কাজ করে।</p>
+<figure class="listing" id="listing-15-7">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">fn main() {
+    let x = 5;
+    let y = Box::new(x);
+
+    assert_eq!(5, x);
+    assert_eq!(5, *y);
+}</code></pre>
+<figcaption><a href="#listing-15-7">Listing 15-7</a>: একটি <code>Box&lt;i32&gt;</code>-এর ওপর dereference operator ব্যবহার করা</figcaption>
+</figure>
+<p>Listing 15-7 আর Listing 15-6-এর মূল পার্থক্য হলো, এখানে আমরা <code>y</code>-কে <code>x</code>-এর মানকে নির্দেশ করা reference নয়, বরং <code>x</code>-এর কপি করা মানকে নির্দেশ করা একটি box-এর
+instance বানাই। শেষ assertion-এ আমরা box-এর pointer ধরে মানে পৌঁছাতে dereference operator ব্যবহার করতে পারি, ঠিক যেমন <code>y</code> reference থাকাকালে করেছিলাম। এরপর
+নিজস্ব box type সংজ্ঞায়িত করে দেখব <code>Box&lt;T&gt;</code>-এর কী বিশেষত্ব আমাদের dereference operator ব্যবহার করতে দেয়।</p>
+<h3 id="defining-our-own-smart-pointer"><a class="header" href="#defining-our-own-smart-pointer">নিজস্ব smart pointer সংজ্ঞায়িত করা</a></h3>
+<p>standard library-র দেওয়া <code>Box&lt;T&gt;</code> type-এর মতো একটি wrapper type (অন্য মানকে মুড়ে রাখে এমন type) বানাই, যাতে নিজে দেখতে পারি default-ভাবে smart pointer type
+reference থেকে কীভাবে ভিন্ন আচরণ করে। তারপর দেখব কীভাবে dereference operator ব্যবহারের ক্ষমতা যোগ করা যায়।</p>
+<section class="note" aria-role="note">
+<p>Note: আমরা যে <code>MyBox&lt;T&gt;</code> type বানাতে যাচ্ছি আর আসল <code>Box&lt;T&gt;</code>-এর মধ্যে একটি বড় পার্থক্য আছে: আমাদের সংস্করণ তার ডেটা heap-এ রাখবে না। এই উদাহরণে আমরা
+<code>Deref</code>-এর দিকে মনোযোগ দিচ্ছি, তাই ডেটা আসলে কোথায় রাখা হচ্ছে তার চেয়ে pointer-এর মতো আচরণটিই বেশি গুরুত্বপূর্ণ।</p>
+</section>
+<p><code>Box&lt;T&gt;</code> type মূলত একটি উপাদানের tuple struct হিসেবে সংজ্ঞায়িত, তাই Listing 15-8 একইভাবে একটি <code>MyBox&lt;T&gt;</code> type সংজ্ঞায়িত করে। <code>Box&lt;T&gt;</code>-এর ওপর সংজ্ঞায়িত
+<code>new</code> function-এর সঙ্গে মিল রেখে একটি <code>new</code> function-ও সংজ্ঞায়িত করব।</p>
+<figure class="listing" id="listing-15-8">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">struct MyBox&lt;T&gt;(T);
+
+impl&lt;T&gt; MyBox&lt;T&gt; {
+    fn new(x: T) -&gt; MyBox&lt;T&gt; {
+        MyBox(x)
+    }
+}
+<span class="boring">
+</span><span class="boring">fn main() {}</span></code></pre>
+<figcaption><a href="#listing-15-8">Listing 15-8</a>: একটি <code>MyBox&lt;T&gt;</code> type সংজ্ঞায়িত করা</figcaption>
+</figure>
+<p>আমরা <code>MyBox</code> নামের একটি struct সংজ্ঞায়িত করি এবং একটি generic parameter <code>T</code> ঘোষণা করি, কারণ আমরা চাই আমাদের type যেকোনো type-এর মান রাখতে পারুক। <code>MyBox</code>
+type হলো <code>T</code> type-এর একটি উপাদানের tuple struct। <code>MyBox::new</code> function <code>T</code> type-এর একটি parameter নেয় এবং পাঠানো মানটি রাখা একটি <code>MyBox</code> instance return
+করে।</p>
+<p>চলুন Listing 15-7-এর <code>main</code> function Listing 15-8-এ যোগ করে দেখি, আর এটি বদলে <code>Box&lt;T&gt;</code>-এর বদলে আমাদের সংজ্ঞায়িত <code>MyBox&lt;T&gt;</code> type ব্যবহার করাই। Listing 15-9-এর
+কোড compile হবে না, কারণ Rust জানে না <code>MyBox</code>-কে কীভাবে dereference করতে হয়।</p>
+<figure class="listing" id="listing-15-9">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">struct MyBox&lt;T&gt;(T);
+</span><span class="boring">
+</span><span class="boring">impl&lt;T&gt; MyBox&lt;T&gt; {
+</span><span class="boring">    fn new(x: T) -&gt; MyBox&lt;T&gt; {
+</span><span class="boring">        MyBox(x)
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn main() {
+    let x = 5;
+    let y = MyBox::new(x);
+
+    assert_eq!(5, x);
+    assert_eq!(5, *y);
+}</code></pre>
+<figcaption><a href="#listing-15-9">Listing 15-9</a>: reference আর <code>Box&lt;T&gt;</code> যেভাবে ব্যবহার করেছি, সেভাবেই <code>MyBox&lt;T&gt;</code> ব্যবহারের চেষ্টা</figcaption>
+</figure>
+<p>এর ফলে পাওয়া compilation error এই:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling deref-example v0.1.0 (file:///projects/deref-example)
+error[E0614]: type `MyBox&lt;{integer}&gt;` cannot be dereferenced
+  --&gt; src/main.rs:14:19
+   |
+14 |     assert_eq!(5, *y);
+   |                   ^^ can't be dereferenced
+
+For more information about this error, try `rustc --explain E0614`.
+error: could not compile `deref-example` (bin "deref-example") due to 1 previous error
+</code></pre>
+<p>আমাদের <code>MyBox&lt;T&gt;</code> type dereference করা যায় না, কারণ আমাদের type-এ সেই ক্ষমতা আমরা implement করিনি। <code>*</code> operator দিয়ে dereference সম্ভব করতে আমরা <code>Deref</code>
+trait implement করি।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="treating-a-type-like-a-reference-by-implementing-the-deref-trait"></a></p>
+<h3 id="implementing-the-deref-trait"><a class="header" href="#implementing-the-deref-trait"><code>Deref</code> trait implement করা</a></h3>
+<p>অধ্যায় 10-এর <a href="ch10-02-traits.html#implementing-a-trait-on-a-type">“একটি type-এর ওপর trait implement করা”</a><!-- ignore -->-এ যেমন আলোচনা করেছি, একটি trait implement করতে trait-এর বাধ্যতামূলক
+method-গুলোর implementation দিতে হয়। standard library-র দেওয়া <code>Deref</code> trait আমাদের <code>deref</code> নামের একটি method implement করতে বলে, যা <code>self</code> borrow করে এবং
+ভেতরের ডেটার একটি reference return করে। Listing 15-10-এ <code>MyBox&lt;T&gt;</code>-এর সংজ্ঞায় যোগ করার জন্য <code>Deref</code>-এর একটি implementation আছে।</p>
+<figure class="listing" id="listing-15-10">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">use std::ops::Deref;
+
+impl&lt;T&gt; Deref for MyBox&lt;T&gt; {
+    type Target = T;
+
+    fn deref(&amp;self) -&gt; &amp;Self::Target {
+        &amp;self.0
+    }
+}
+<span class="boring">
+</span><span class="boring">struct MyBox&lt;T&gt;(T);
+</span><span class="boring">
+</span><span class="boring">impl&lt;T&gt; MyBox&lt;T&gt; {
+</span><span class="boring">    fn new(x: T) -&gt; MyBox&lt;T&gt; {
+</span><span class="boring">        MyBox(x)
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let x = 5;
+</span><span class="boring">    let y = MyBox::new(x);
+</span><span class="boring">
+</span><span class="boring">    assert_eq!(5, x);
+</span><span class="boring">    assert_eq!(5, *y);
+</span><span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-15-10">Listing 15-10</a>: <code>MyBox&lt;T&gt;</code>-এর ওপর <code>Deref</code> implement করা</figcaption>
+</figure>
+<p><code>type Target = T;</code> syntax <code>Deref</code> trait-এর ব্যবহারের জন্য একটি associated type সংজ্ঞায়িত করে। associated type হলো generic parameter ঘোষণার একটু ভিন্ন একটি উপায়,
+তবে আপাতত এ নিয়ে চিন্তার দরকার নেই; অধ্যায় 20-এ এগুলো আরও বিস্তারিত আলোচনা করব।</p>
+<p><code>deref</code> method-এর body-তে আমরা <code>&amp;self.0</code> লিখি, যাতে <code>deref</code> সেই মানের একটি reference return করে যা আমরা <code>*</code> operator দিয়ে পেতে চাই; অধ্যায় 5-এর <a href="ch05-01-defining-structs.html#creating-different-types-with-tuple-structs">“tuple
+struct দিয়ে আলাদা type তৈরি করা”</a><!--
+ignore --> থেকে মনে করুন, <code>.0</code> একটি tuple struct-এর প্রথম মান দেয়। Listing 15-9-এর যে <code>main</code> function <code>MyBox&lt;T&gt;</code> মানের ওপর <code>*</code> call করে, তা এখন compile হয়,
+আর assertion-গুলো pass করে!</p>
+<p><code>Deref</code> trait ছাড়া compiler শুধু <code>&amp;</code> reference dereference করতে পারে। <code>deref</code> method compiler-কে এই ক্ষমতা দেয় যে <code>Deref</code> implement করে এমন যেকোনো type-এর একটি
+মান নিয়ে <code>deref</code> method call করে এমন একটি reference পায়, যা কীভাবে dereference করতে হয় তা এটি জানে।</p>
+<p>Listing 15-9-এ আমরা যখন <code>*y</code> লিখেছিলাম, তখন পর্দার আড়ালে Rust আসলে এই কোড চালিয়েছিল:</p>
+<pre><code class="language-rust ignore">*(y.deref())</code></pre>
+<p>Rust <code>*</code> operator-এর জায়গায় <code>deref</code> method-এর একটি call আর তারপর একটি সাধারণ dereference বসিয়ে দেয়, যাতে <code>deref</code> method call করতে হবে কি না তা নিয়ে আমাদের
+ভাবতে না হয়। Rust-এর এই বৈশিষ্ট্য আমাদের এমন কোড লিখতে দেয় যা সাধারণ reference বা <code>Deref</code> implement করা type, যা-ই থাকুক, একইভাবে কাজ করে।</p>
+<p><code>deref</code> method কেন একটি মানের reference return করে, আর <code>*(y.deref())</code>-এ বন্ধনীর বাইরের সাধারণ dereference কেন তবুও দরকার, তার কারণ ownership system-এর সঙ্গে
+জড়িত। <code>deref</code> method যদি মানের reference-এর বদলে সরাসরি মানটি return করত, তাহলে মানটি <code>self</code> থেকে বাইরে সরে যেত। এই ক্ষেত্রে, বা dereference operator ব্যবহারের
+বেশিরভাগ ক্ষেত্রে, আমরা <code>MyBox&lt;T&gt;</code>-এর ভেতরের মানের ownership নিতে চাই না।</p>
+<p>খেয়াল করুন, আমাদের কোডে যতবার <code>*</code> ব্যবহার করি, প্রতিবার <code>*</code> operator-এর জায়গায় <code>deref</code> method-এর একটি call আর তারপর মাত্র একবার <code>*</code> operator-এর একটি call বসে।
+<code>*</code> operator-এর প্রতিস্থাপন অসীম পর্যন্ত recursive-ভাবে চলে না বলে আমরা শেষ পর্যন্ত <code>i32</code> type-এর ডেটা পাই, যা Listing 15-9-এর <code>assert_eq!</code>-এর <code>5</code>-এর সঙ্গে মেলে।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="implicit-deref-coercions-with-functions-and-methods"></a>
+<a id="using-deref-coercions-in-functions-and-methods"></a></p>
+<h3 id="using-deref-coercion-in-functions-and-methods"><a class="header" href="#using-deref-coercion-in-functions-and-methods">function ও method-এ deref coercion ব্যবহার করা</a></h3>
+<p><em>Deref coercion</em> (deref-এর মাধ্যমে স্বয়ংক্রিয় type রূপান্তর) <code>Deref</code> trait implement করে এমন একটি type-এর reference-কে আরেকটি type-এর reference-এ রূপান্তর করে।
+যেমন, deref coercion <code>&amp;String</code>-কে <code>&amp;str</code>-এ রূপান্তর করতে পারে, কারণ <code>String</code> <code>Deref</code> trait এমনভাবে implement করে যে এটি <code>&amp;str</code> return করে। deref coercion হলো
+function ও method-এর argument-এর ওপর Rust-এর দেওয়া একটি সুবিধা, এবং এটি শুধু <code>Deref</code> trait implement করে এমন type-এর ক্ষেত্রেই কাজ করে। এটি স্বয়ংক্রিয়ভাবে
+ঘটে, যখন আমরা কোনো নির্দিষ্ট type-এর মানের reference এমন একটি function বা method-এ argument হিসেবে পাঠাই, যার সংজ্ঞার parameter type-এর সঙ্গে এটি মেলে না।
+<code>deref</code> method-এর পরপর কয়েকটি call আমাদের দেওয়া type-কে parameter-এর দরকারি type-এ রূপান্তর করে।</p>
+<p>deref coercion Rust-এ যোগ করা হয়েছে, যাতে function ও method call লেখা প্রোগ্রামারদের <code>&amp;</code> আর <code>*</code> দিয়ে এত বেশি স্পষ্ট reference আর dereference লিখতে না হয়। deref
+coercion বৈশিষ্ট্য আমাদের এমন আরও বেশি কোড লিখতে দেয় যা reference বা smart pointer, দুটির জন্যই কাজ করতে পারে।</p>
+<p>deref coercion কাজ করতে দেখতে চলুন Listing 15-8-এ সংজ্ঞায়িত <code>MyBox&lt;T&gt;</code> type আর Listing 15-10-এ যোগ করা <code>Deref</code>-এর implementation ব্যবহার করি। Listing 15-11-এ
+string slice parameter-যুক্ত একটি function-এর সংজ্ঞা দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-15-11">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">fn hello(name: &amp;str) {
+    println!("Hello, {name}!");
+}
+<span class="boring">
+</span><span class="boring">fn main() {}</span></code></pre>
+<figcaption><a href="#listing-15-11">Listing 15-11</a>: <code>&amp;str</code> type-এর <code>name</code> parameter-যুক্ত একটি <code>hello</code> function</figcaption>
+</figure>
+<p><code>hello</code> function-কে argument হিসেবে একটি string slice দিয়ে call করা যায়, যেমন <code>hello("Rust");</code>। deref coercion-এর কারণে <code>MyBox&lt;String&gt;</code> type-এর একটি মানের
+reference দিয়েও <code>hello</code> call করা যায়, যেমনটি Listing 15-12-এ দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-15-12">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">use std::ops::Deref;
+</span><span class="boring">
+</span><span class="boring">impl&lt;T&gt; Deref for MyBox&lt;T&gt; {
+</span><span class="boring">    type Target = T;
+</span><span class="boring">
+</span><span class="boring">    fn deref(&amp;self) -&gt; &amp;T {
+</span><span class="boring">        &amp;self.0
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">struct MyBox&lt;T&gt;(T);
+</span><span class="boring">
+</span><span class="boring">impl&lt;T&gt; MyBox&lt;T&gt; {
+</span><span class="boring">    fn new(x: T) -&gt; MyBox&lt;T&gt; {
+</span><span class="boring">        MyBox(x)
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn hello(name: &amp;str) {
+</span><span class="boring">    println!("Hello, {name}!");
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn main() {
+    let m = MyBox::new(String::from("Rust"));
+    hello(&amp;m);
+}</code></pre>
+<figcaption><a href="#listing-15-12">Listing 15-12</a>: একটি <code>MyBox&lt;String&gt;</code> মানের reference দিয়ে <code>hello</code> call করা, যা deref coercion-এর কারণে কাজ করে</figcaption>
+</figure>
+<p>এখানে আমরা <code>&amp;m</code> argument দিয়ে <code>hello</code> function call করছি, যা একটি <code>MyBox&lt;String&gt;</code> মানের reference। Listing 15-10-এ <code>MyBox&lt;T&gt;</code>-এর ওপর <code>Deref</code> trait implement
+করেছি বলে Rust <code>deref</code> call করে <code>&amp;MyBox&lt;String&gt;</code>-কে <code>&amp;String</code>-এ রূপান্তর করতে পারে। standard library <code>String</code>-এর ওপর <code>Deref</code>-এর একটি implementation দেয়, যা
+একটি string slice return করে, আর এটি <code>Deref</code>-এর API documentation-এ আছে। Rust আবার <code>deref</code> call করে <code>&amp;String</code>-কে <code>&amp;str</code>-এ রূপান্তর করে, যা <code>hello</code> function-এর
+সংজ্ঞার সঙ্গে মেলে।</p>
+<p>Rust deref coercion implement না করলে <code>&amp;MyBox&lt;String&gt;</code> type-এর একটি মান দিয়ে <code>hello</code> call করতে Listing 15-12-এর কোডের বদলে Listing 15-13-এর কোড লিখতে হতো।</p>
+<figure class="listing" id="listing-15-13">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">use std::ops::Deref;
+</span><span class="boring">
+</span><span class="boring">impl&lt;T&gt; Deref for MyBox&lt;T&gt; {
+</span><span class="boring">    type Target = T;
+</span><span class="boring">
+</span><span class="boring">    fn deref(&amp;self) -&gt; &amp;T {
+</span><span class="boring">        &amp;self.0
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">struct MyBox&lt;T&gt;(T);
+</span><span class="boring">
+</span><span class="boring">impl&lt;T&gt; MyBox&lt;T&gt; {
+</span><span class="boring">    fn new(x: T) -&gt; MyBox&lt;T&gt; {
+</span><span class="boring">        MyBox(x)
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn hello(name: &amp;str) {
+</span><span class="boring">    println!("Hello, {name}!");
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn main() {
+    let m = MyBox::new(String::from("Rust"));
+    hello(&amp;(*m)[..]);
+}</code></pre>
+<figcaption><a href="#listing-15-13">Listing 15-13</a>: Rust-এ deref coercion না থাকলে যে কোড লিখতে হতো</figcaption>
+</figure>
+<p><code>(*m)</code> <code>MyBox&lt;String&gt;</code>-কে dereference করে একটি <code>String</code>-এ পরিণত করে। তারপর <code>&amp;</code> আর
+<code>[..]</code> <code>hello</code>-এর signature-এর সঙ্গে মেলাতে <code>String</code>-এর এমন একটি string slice নেয়, যা পুরো string-এর সমান। deref coercion ছাড়া এই কোড এত সব চিহ্নের কারণে
+পড়া, লেখা আর বোঝা কঠিন। deref coercion Rust-কে আমাদের হয়ে স্বয়ংক্রিয়ভাবে এই রূপান্তরগুলো সামলাতে দেয়।</p>
+<p>সংশ্লিষ্ট type-গুলোর জন্য <code>Deref</code> trait সংজ্ঞায়িত থাকলে Rust type-গুলো বিশ্লেষণ করবে এবং parameter-এর type-এর সঙ্গে মেলে এমন reference পেতে যতবার দরকার
+ততবার <code>Deref::deref</code> ব্যবহার করবে। <code>Deref::deref</code> কতবার বসাতে হবে তা compile time-এ ঠিক হয়, তাই deref coercion-এর সুবিধা নেওয়ায় runtime-এ কোনো মাশুল নেই!</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="how-deref-coercion-interacts-with-mutability"></a></p>
+<h3 id="handling-deref-coercion-with-mutable-references"><a class="header" href="#handling-deref-coercion-with-mutable-references">mutable reference-এর সঙ্গে deref coercion</a></h3>
+<p>immutable reference-এর ওপর <code>*</code> operator override করতে যেমন <code>Deref</code> trait ব্যবহার করেন, তেমনি mutable reference-এর ওপর <code>*</code> operator override করতে <code>DerefMut</code> trait
+ব্যবহার করতে পারেন।</p>
+<p>Rust তিনটি ক্ষেত্রে type আর trait implementation খুঁজে পেলে deref coercion করে:</p>
+<ol>
+<li><code>&amp;T</code> থেকে <code>&amp;U</code>-তে, যখন <code>T: Deref&lt;Target=U&gt;</code></li>
+<li><code>&amp;mut T</code> থেকে <code>&amp;mut U</code>-তে, যখন <code>T: DerefMut&lt;Target=U&gt;</code></li>
+<li><code>&amp;mut T</code> থেকে <code>&amp;U</code>-তে, যখন <code>T: Deref&lt;Target=U&gt;</code></li>
+</ol>
+<p>প্রথম দুটি ক্ষেত্র একই, শুধু দ্বিতীয়টিতে mutability আছে। প্রথম ক্ষেত্র বলে, আপনার কাছে যদি একটি <code>&amp;T</code> থাকে, আর <code>T</code> কোনো type <code>U</code>-তে <code>Deref</code> implement করে, তাহলে
+আপনি অদৃশ্যভাবে একটি <code>&amp;U</code> পেতে পারেন। দ্বিতীয় ক্ষেত্র বলে, mutable reference-এর জন্যও একই deref coercion ঘটে।</p>
+<p>তৃতীয় ক্ষেত্রটি একটু জটিল: Rust একটি mutable reference-কে immutable reference-এও রূপান্তর করবে। কিন্তু উল্টোটা সম্ভব <em>নয়</em>: immutable reference কখনো mutable
+reference-এ রূপান্তরিত হবে না। borrowing-এর নিয়মের কারণে, আপনার কাছে একটি mutable reference থাকলে সেই mutable reference-ই হতে হবে ওই ডেটার একমাত্র reference
+(নইলে প্রোগ্রাম compile হতো না)। একটি mutable reference-কে একটি immutable reference-এ রূপান্তর করলে borrowing-এর নিয়ম কখনো ভাঙে না। একটি immutable reference-কে
+mutable reference-এ রূপান্তর করতে হলে প্রাথমিক immutable reference-টিকে ওই ডেটার একমাত্র immutable reference হতে হতো, কিন্তু borrowing-এর নিয়ম তার নিশ্চয়তা দেয়
+না। তাই Rust ধরে নিতে পারে না যে একটি immutable reference-কে mutable reference-এ রূপান্তর করা সম্ভব।</p>
+<div class="quiz-placeholder" data-quiz-name="&quot;ch15-02-deref&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot;`n` যতবার dereference হবে, `AccessLogger` ততবার &#92;&quot;deref&#92;&quot; print করবে, যা দুবার ঘটে।&#92;nখেয়াল করুন, `n`-কে `n2`-তে copy করলে `n` dereference হয় না।&#92;n&quot;,&quot;id&quot;:&quot;f4971d37-55d5-48c5-9966-a28b54ed3bee&quot;,&quot;type&quot;:&quot;Tracing&quot;,&quot;answer&quot;:{&quot;doesCompile&quot;:true,&quot;stdout&quot;:&quot;deref&#92;nderef&#92;n0 -1&#92;n&quot;},&quot;prompt&quot;:{&quot;program&quot;:&quot;use std::ops::Deref;&#92;n&#92;n#[derive(Clone, Copy)]&#92;nstruct AccessLogger(i32);&#92;n&#92;nimpl Deref for AccessLogger {&#92;n    type Target = i32;&#92;n    fn deref(&amp;self) -&gt; &amp;Self::Target {&#92;n        println!(&#92;&quot;deref&#92;&quot;);&#92;n        &amp;self.0&#92;n    }&#92;n}&#92;n&#92;nfn main() {&#92;n  let n = AccessLogger(-1);&#92;n  let x = *n + 1;&#92;n  let n2 = n;&#92;n  println!(&#92;&quot;{} {}&#92;&quot;, x, *n)&#92;n}&#92;n&quot;}}]}" data-quiz-fullscreen="true"></div>
+
+<script type="text/javascript" src="quiz/quiz-embed.iife.js"></script><link rel="stylesheet" type="text/css" href="quiz/style.css">
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch15-01-box.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ch15-03-drop.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch15-01-box.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ch15-03-drop.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris-2317480c.js"></script>
+        <script src="js-extensions/packages/feedback/dist/index-f1290d8b.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

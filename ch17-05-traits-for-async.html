@@ -1,0 +1,649 @@
+<!DOCTYPE HTML>
+<html lang="bn" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>async-এর trait-গুলো আরও কাছ থেকে দেখা - Rust প্রোগ্রামিং ভাষা</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris-d33b75bf.css">
+        <link rel="stylesheet" href="theme/semantic-notes-9b5766c0.css">
+        <link rel="stylesheet" href="theme/listing-cab26221.css">
+        <link rel="stylesheet" href="theme/2018-edition-4e126c62.css">
+        <link rel="stylesheet" href="theme/bengali-4de2f0b6.css">
+        <link rel="stylesheet" href="js-extensions/packages/feedback/dist/index-c9d186bd.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-03403162.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-485378fe.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust প্রোগ্রামিং ভাষা</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/ararifdotme/rust-book-bn" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <!-- Old headings. Do not remove or links may break. -->
+<p><a id="digging-into-the-traits-for-async"></a></p>
+<h2 id="a-closer-look-at-the-traits-for-async"><a class="header" href="#a-closer-look-at-the-traits-for-async">async-এর trait-গুলো আরও কাছ থেকে দেখা</a></h2>
+<p>এই অধ্যায় জুড়ে আমরা <code>Future</code>, <code>Stream</code> আর <code>StreamExt</code> trait নানাভাবে ব্যবহার করেছি। তবে এ পর্যন্ত এগুলো কীভাবে কাজ করে বা কীভাবে একসঙ্গে খাপ খায় তার খুঁটিনাটিতে বেশি ঢোকা এড়িয়ে গেছি,
+যা প্রতিদিনের Rust কাজে বেশিরভাগ সময় ঠিকই আছে। তবে কখনো কখনো এমন পরিস্থিতিতে পড়বেন যেখানে এই trait-গুলোর আরও কিছু খুঁটিনাটি বুঝতে হবে, সঙ্গে <code>Pin</code> type আর <code>Unpin</code> trait-ও। এই অংশে
+আমরা ঠিক ততটুকুই গভীরে যাব যতটুকু ওই পরিস্থিতিতে সাহায্য করে, <em>সত্যিকারের</em> গভীর আলোচনা অন্য documentation-এর জন্য রেখে দিয়ে।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="future"></a></p>
+<h3 id="the-future-trait"><a class="header" href="#the-future-trait"><code>Future</code> trait</a></h3>
+<p>চলুন <code>Future</code> trait কীভাবে কাজ করে তা আরও কাছ থেকে দেখা দিয়ে শুরু করি। Rust একে এভাবে সংজ্ঞায়িত করে:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::pin::Pin;
+use std::task::{Context, Poll};
+
+pub trait Future {
+    type Output;
+
+    fn poll(self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;'_&gt;) -&gt; Poll&lt;Self::Output&gt;;
+}
+<span class="boring">}</span></code></pre>
+<p>এই trait-এর সংজ্ঞায় বেশ কিছু নতুন type আর এমন কিছু syntax আছে যা আগে দেখিনি, তাই চলুন সংজ্ঞাটি টুকরো টুকরো করে দেখি।</p>
+<p>প্রথমত, <code>Future</code>-এর associated type <code>Output</code> বলে future-টি শেষে কোন মানে পরিণত হয়। এটি <code>Iterator</code> trait-এর <code>Item</code> associated type-এর মতো। দ্বিতীয়ত, <code>Future</code>-এর <code>poll</code> method আছে, যা
+তার <code>self</code> parameter-এর জন্য একটি বিশেষ <code>Pin</code> reference আর একটি <code>Context</code> type-এর mutable reference নেয়, এবং একটি <code>Poll&lt;Self::Output&gt;</code> return করে। <code>Pin</code> আর <code>Context</code> নিয়ে একটু পরেই আরও
+বলব। আপাতত method-টি কী return করে, অর্থাৎ <code>Poll</code> type-এর দিকে মনোযোগ দিই:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum Poll&lt;T&gt; {
+    Ready(T),
+    Pending,
+}
+<span class="boring">}</span></code></pre>
+<p>এই <code>Poll</code> type একটি <code>Option</code>-এর মতো। এর একটি variant-এ মান আছে, <code>Ready(T)</code>, আর একটিতে নেই, <code>Pending</code>। তবে <code>Poll</code>-এর অর্থ <code>Option</code> থেকে বেশ আলাদা! <code>Pending</code> variant বোঝায় future-এর
+এখনো কাজ বাকি, তাই caller-কে পরে আবার যাচাই করতে হবে। <code>Ready</code> variant বোঝায় <code>Future</code> তার কাজ শেষ করেছে এবং <code>T</code> মান পাওয়া যাচ্ছে।</p>
+<section class="note" aria-role="note">
+<p>Note: সরাসরি <code>poll</code> call করার দরকার খুব কমই হয়, তবে যদি করতে হয়, মনে রাখবেন যে বেশিরভাগ future-এর ক্ষেত্রে future <code>Ready</code> return করার পর caller-এর আবার <code>poll</code> call করা উচিত নয়।
+প্রস্তুত হওয়ার পর আবার poll করলে অনেক future panic করবে। যে future আবার poll করা নিরাপদ, সেগুলো তাদের documentation-এ তা স্পষ্টভাবে বলে দেবে। এটি <code>Iterator::next</code>-এর আচরণের মতো।</p>
+</section>
+<p><code>await</code> ব্যবহার করা কোড দেখলে জানবেন, Rust ভেতরে ভেতরে একে <code>poll</code> call করা কোডে compile করে। Listing 17-4-এর দিকে ফিরে তাকালে, যেখানে একটি URL-এর page title পাওয়া গেলে তা print
+করেছিলাম, Rust একে মোটামুটি (যদিও হুবহু নয়) এমন কিছুতে compile করে:</p>
+<pre><code class="language-rust ignore">match page_title(url).poll() {
+    Ready(page_title) =&gt; match page_title {
+        Some(title) =&gt; println!("The title for {url} was {title}"),
+        None =&gt; println!("{url} had no title"),
+    }
+    Pending =&gt; {
+        // But what goes here?
+    }
+}</code></pre>
+<p>future যখন এখনো <code>Pending</code>, তখন কী করা উচিত? আমাদের এমন কোনো উপায় দরকার, যাতে future শেষ পর্যন্ত প্রস্তুত না হওয়া পর্যন্ত বারবার চেষ্টা করা যায়। অন্যভাবে বললে, একটি loop দরকার:</p>
+<pre><code class="language-rust ignore">let mut page_title_fut = page_title(url);
+loop {
+    match page_title_fut.poll() {
+        Ready(value) =&gt; match page_title {
+            Some(title) =&gt; println!("The title for {url} was {title}"),
+            None =&gt; println!("{url} had no title"),
+        }
+        Pending =&gt; {
+            // continue
+        }
+    }
+}</code></pre>
+<p>তবে Rust যদি একে হুবহু ওই কোডে compile করত, তাহলে প্রতিটি <code>await</code> block করত—যা আমরা চাইছিলাম ঠিক তার উল্টো! বরং Rust নিশ্চিত করে যে loop এমন কিছুর হাতে নিয়ন্ত্রণ দিতে পারে, যা এই
+future-এর কাজ থামিয়ে অন্য future-এর কাজ করতে পারে এবং পরে আবার এটি যাচাই করতে পারে। যেমন দেখেছি, সেই কিছু হলো একটি async runtime, আর এই সময়সূচি ও সমন্বয়ের কাজ এর প্রধান কাজগুলোর একটি।</p>
+<p><a href="ch17-02-concurrency-with-async.html#sending-data-between-two-tasks-using-message-passing">“message passing দিয়ে দুটি task-এর মধ্যে ডেটা
+পাঠানো”</a><!-- ignore --> অংশে আমরা <code>rx.recv</code>-এর জন্য অপেক্ষা করার বর্ণনা দিয়েছিলাম। <code>recv</code> call একটি future return করে, আর future-এর জন্য await করলে একে poll করা হয়।
+আমরা বলেছিলাম যে runtime future-টিকে থামিয়ে রাখবে, যতক্ষণ না এটি <code>Some(message)</code> নিয়ে, বা channel বন্ধ হলে <code>None</code> নিয়ে প্রস্তুত হয়। <code>Future</code> trait, বিশেষ করে <code>Future::poll</code> সম্পর্কে আরও
+গভীর বোঝাপড়া নিয়ে এখন দেখতে পাই এটি কীভাবে কাজ করে। future <code>Poll::Pending</code> return করলে runtime জানে এটি প্রস্তুত নয়। উল্টোভাবে, <code>poll</code> যখন <code>Poll::Ready(Some(message))</code> বা
+<code>Poll::Ready(None)</code> return করে, তখন runtime জানে future প্রস্তুত <em>আছে</em> এবং একে এগিয়ে নেয়।</p>
+<p>একটি runtime ঠিক কীভাবে তা করে তার খুঁটিনাটি এই বইয়ের আওতার বাইরে, তবে মূল কথা হলো future-এর মৌলিক কার্যপ্রণালী দেখা: একটি runtime তার দায়িত্বে থাকা প্রতিটি future <em>poll</em> করে, এবং
+future এখনো প্রস্তুত না হলে একে আবার ঘুম পাড়িয়ে দেয়।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="pinning-and-the-pin-and-unpin-traits"></a>
+<a id="the-pin-and-unpin-traits"></a></p>
+<h3 id="the-pin-type-and-the-unpin-trait"><a class="header" href="#the-pin-type-and-the-unpin-trait"><code>Pin</code> type ও <code>Unpin</code> trait</a></h3>
+<p>Listing 17-13-এ আমরা তিনটি future-এর জন্য await করতে <code>trpl::join!</code> macro ব্যবহার করেছিলাম। তবে vector-এর মতো এমন একটি collection থাকা প্রচলিত, যাতে কতগুলো future থাকবে তা runtime-এর
+আগে জানা যাবে না। চলুন Listing 17-13 বদলে Listing 17-23-এর কোড করি, যা তিনটি future একটি vector-এ রেখে বরং <code>trpl::join_all</code> function call করে; এটি এখনো compile হবে না।</p>
+<figure class="listing" id="listing-17-23">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::block_on(async {
+</span><span class="boring">        let (tx, mut rx) = trpl::channel();
+</span><span class="boring">
+</span><span class="boring">        let tx1 = tx.clone();
+</span><span class="boring">        let tx1_fut = async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("hi"),
+</span><span class="boring">                String::from("from"),
+</span><span class="boring">                String::from("the"),
+</span><span class="boring">                String::from("future"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx1.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        let rx_fut = async {
+</span><span class="boring">            while let Some(value) = rx.recv().await {
+</span><span class="boring">                println!("received '{value}'");
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span>        let tx_fut = async move {
+            // --snip--
+<span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("more"),
+</span><span class="boring">                String::from("messages"),
+</span><span class="boring">                String::from("for"),
+</span><span class="boring">                String::from("you"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span>        };
+
+        let futures: Vec&lt;Box&lt;dyn Future&lt;Output = ()&gt;&gt;&gt; =
+            vec![Box::new(tx1_fut), Box::new(rx_fut), Box::new(tx_fut)];
+
+        trpl::join_all(futures).await;
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-17-23">Listing 17-23</a>: একটি collection-এর future-গুলোর জন্য await করা</figcaption>
+</figure>
+<p>প্রতিটি future-কে আমরা একটি <code>Box</code>-এর ভেতরে রাখি, যাতে এগুলো <em>trait object</em> হয়ে যায়, ঠিক যেমন অধ্যায় 12-এর “<code>run</code> থেকে error return করা” অংশে করেছিলাম। (trait object বিস্তারিত দেখব অধ্যায় 18-এ।)
+trait object ব্যবহার করলে এই type-গুলোর তৈরি প্রতিটি নামহীন future-কে একই type হিসেবে ব্যবহার করা যায়, কারণ সবগুলোই <code>Future</code> trait implement করে।</p>
+<p>এটি অবাক করার মতো লাগতে পারে। কারণ async block-গুলোর কোনোটিই কিছু return করে না, তাই প্রতিটি একটি <code>Future&lt;Output = ()&gt;</code> তৈরি করে। তবে মনে রাখবেন, <code>Future</code> একটি trait, আর compiler প্রতিটি
+async block-এর জন্য একটি অনন্য enum তৈরি করে, এমনকি তাদের output type একই হলেও। যেমন হাতে লেখা দুটি ভিন্ন struct একটি <code>Vec</code>-এ রাখা যায় না, তেমনি compiler-এর তৈরি enum-ও মেশানো যায় না।</p>
+<p>তারপর future-এর collection-টি <code>trpl::join_all</code> function-এ পাঠিয়ে ফলের জন্য await করি। কিন্তু এটি compile হয় না; error message-এর প্রাসঙ্গিক অংশ এই:</p>
+<!-- manual-regeneration
+cd listings/ch17-async-await/listing-17-23
+cargo build
+copy *only* the final `error` block from the errors
+-->
+<pre><code class="language-text">error[E0277]: `dyn Future&lt;Output = ()&gt;` cannot be unpinned
+  --&gt; src/main.rs:48:33
+   |
+48 |         trpl::join_all(futures).await;
+   |                                 ^^^^^ the trait `Unpin` is not implemented for `dyn Future&lt;Output = ()&gt;`
+   |
+   = note: consider using the `pin!` macro
+           consider using `Box::pin` if you need to access the pinned value outside of the current scope
+   = note: required for `Box&lt;dyn Future&lt;Output = ()&gt;&gt;` to implement `Future`
+note: required by a bound in `futures_util::future::join_all::JoinAll`
+  --&gt; file:///home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-util-0.3.30/src/future/join_all.rs:29:8
+   |
+27 | pub struct JoinAll&lt;F&gt;
+   |            ------- required by a bound in this struct
+28 | where
+29 |     F: Future,
+   |        ^^^^^^ required by this bound in `JoinAll`
+</code></pre>
+<p>এই error message-এর note আমাদের বলছে মানগুলোকে <em>pin</em> করতে <code>pin!</code> macro ব্যবহার করা উচিত, অর্থাৎ এগুলোকে <code>Pin</code> type-এর ভেতরে রাখা, যা নিশ্চয়তা দেয় যে মানগুলো মেমোরিতে সরবে না। error message
+বলছে pin করা দরকার, কারণ <code>dyn Future&lt;Output = ()&gt;</code>-কে <code>Unpin</code> trait implement করতে হবে, আর এটি এখন তা করে না।</p>
+<p><code>trpl::join_all</code> function <code>JoinAll</code> নামের একটি struct return করে। সেই struct একটি type <code>F</code>-এর ওপর generic, যাকে <code>Future</code> trait implement করতে হবে। <code>await</code> দিয়ে সরাসরি একটি future-এর জন্য
+await করলে future-টি অপ্রকাশ্যভাবে pin হয়ে যায়। এ কারণেই যেখানে যেখানে future-এর জন্য await করতে চাই, সব জায়গায় <code>pin!</code> ব্যবহার করতে হয় না।</p>
+<p>তবে এখানে আমরা সরাসরি কোনো future-এর জন্য await করছি না। বরং <code>join_all</code> function-এ future-এর একটি collection পাঠিয়ে একটি নতুন future, JoinAll, তৈরি করছি। <code>join_all</code>-এর signature চায়
+collection-এর item-গুলোর type সবই <code>Future</code> trait implement করুক, আর <code>Box&lt;T&gt;</code> <code>Future</code> implement করে কেবল তখনই, যদি এর মোড়ানো <code>T</code> এমন একটি future হয় যা <code>Unpin</code> trait implement করে।</p>
+<p>এক সঙ্গে অনেক কিছু! সত্যিই বুঝতে চলুন <code>Future</code> trait আসলে কীভাবে কাজ করে, বিশেষ করে pinning-এর ক্ষেত্রে, তা আরেকটু গভীরে দেখি। <code>Future</code> trait-এর সংজ্ঞাটি আবার দেখুন:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::pin::Pin;
+use std::task::{Context, Poll};
+
+pub trait Future {
+    type Output;
+
+    // Required method
+    fn poll(self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;'_&gt;) -&gt; Poll&lt;Self::Output&gt;;
+}
+<span class="boring">}</span></code></pre>
+<p><code>cx</code> parameter আর এর <code>Context</code> type-ই হলো সেই চাবি, যা দিয়ে একটি runtime lazy থেকেও আসলে জানে কখন কোনো নির্দিষ্ট future যাচাই করতে হবে। আবারও, এটি কীভাবে কাজ করে তার খুঁটিনাটি এই
+অধ্যায়ের আওতার বাইরে, আর সাধারণত শুধু নিজস্ব <code>Future</code> implementation লেখার সময়ই এ নিয়ে ভাবতে হয়। আমরা বরং <code>self</code>-এর type-এর দিকে মনোযোগ দেব, কারণ এই প্রথম এমন একটি method দেখছি
+যেখানে <code>self</code>-এর type annotation আছে। <code>self</code>-এর type annotation অন্য function parameter-এর type annotation-এর মতোই কাজ করে, তবে দুটি মূল পার্থক্যসহ:</p>
+<ul>
+<li>এটি Rust-কে বলে method-টি call করতে হলে <code>self</code>-কে কোন type-এর হতে হবে।</li>
+<li>এটি যেকোনো type হতে পারে না। এটি সীমাবদ্ধ সেই type-এ যার ওপর method-টি implement করা, সেই type-এর একটি reference বা smart pointer, অথবা সেই type-এর একটি reference মোড়ানো একটি <code>Pin</code>-এ।</li>
+</ul>
+<p>এই syntax নিয়ে আরও দেখব <a href="ch18-00-oop.html">অধ্যায় 18</a><!-- ignore -->-এ। আপাতত এটুকু জানলেই যথেষ্ট যে একটি future <code>Pending</code> নাকি <code>Ready(Output)</code> তা যাচাই করতে poll করতে চাইলে আমাদের type-টির
+একটি <code>Pin</code>-মোড়ানো mutable reference দরকার।</p>
+<p><code>Pin</code> হলো <code>&amp;</code>, <code>&amp;mut</code>, <code>Box</code> আর <code>Rc</code>-এর মতো pointer-সদৃশ type-এর একটি wrapper। (কারিগরি দিক থেকে <code>Pin</code> এমন type-এর সঙ্গে কাজ করে যা <code>Deref</code> বা <code>DerefMut</code> trait implement করে, তবে কার্যত
+এটি শুধু reference আর smart pointer-এর সঙ্গে কাজ করার সমতুল্য।) <code>Pin</code> নিজে কোনো pointer নয়, আর reference counting-এর ক্ষেত্রে <code>Rc</code> আর <code>Arc</code>-এর যেমন নিজস্ব আচরণ আছে, এর তেমন কোনো নিজস্ব
+আচরণ নেই; এটি পুরোপুরি একটি হাতিয়ার, যা দিয়ে compiler pointer ব্যবহারের ওপর বাধ্যবাধকতা প্রয়োগ করতে পারে।</p>
+<p><code>await</code> যে <code>poll</code> call দিয়ে implement করা, তা মনে করলে আগে দেখা error message-এর ব্যাখ্যা কিছুটা পাওয়া যায়, কিন্তু সেটি ছিল <code>Pin</code> নয়, <code>Unpin</code> নিয়ে। তাহলে <code>Pin</code> ঠিক কীভাবে <code>Unpin</code>-এর
+সঙ্গে সম্পর্কিত, আর <code>poll</code> call করতে <code>Future</code>-এর কেন <code>self</code>-কে একটি <code>Pin</code> type-এ থাকা দরকার?</p>
+<p>এই অধ্যায়ের আগের অংশ থেকে মনে করুন, একটি future-এর ধারাবাহিক await point-গুলো একটি state machine-এ compile হয়, আর compiler নিশ্চিত করে যে সেই state machine নিরাপত্তা নিয়ে Rust-এর সব
+সাধারণ নিয়ম মেনে চলে, borrowing আর ownership-সহ। এটি কাজ করাতে Rust দেখে একটি await point আর পরের await point বা async block-এর শেষের মাঝে কোন ডেটা দরকার। তারপর compile করা state
+machine-এ একটি সংশ্লিষ্ট variant তৈরি করে। source code-এর সেই অংশে যে ডেটা ব্যবহার হবে, প্রতিটি variant সেই ডেটায় তার দরকারি প্রবেশাধিকার পায়, হয় সেই ডেটার ownership নিয়ে, নয়তো এর একটি
+mutable বা immutable reference নিয়ে।</p>
+<p>এ পর্যন্ত সব ঠিক আছে: কোনো async block-এ ownership বা reference নিয়ে কিছু ভুল করলে borrow checker আমাদের জানাবে। কিন্তু যখন সেই block-এর সংশ্লিষ্ট future-কে এদিক-ওদিক সরাতে চাই—যেমন
+<code>join_all</code>-এ পাঠাতে একে একটি <code>Vec</code>-এ সরানো—তখন ব্যাপারটা জটিল হয়ে যায়।</p>
+<p>যখন একটি future সরাই—হোক <code>join_all</code>-এর সঙ্গে iterator হিসেবে ব্যবহারের জন্য একটি data structure-এ push করে, বা একটি function থেকে return করে—তখন আসলে Rust আমাদের জন্য যে state machine তৈরি
+করে সেটিই সরানো হয়। আর Rust-এর অন্য বেশিরভাগ type-এর মতো নয়, async block-এর জন্য Rust যে future তৈরি করে, তাদের কোনো variant-এর field-এ নিজেদেরই reference থেকে যেতে পারে, যেমনটি Figure 17-4-এর সরলীকৃত চিত্রে দেখানো হয়েছে।</p>
+<figure>
+<img alt="একটি future, fut1, বোঝানো এক কলাম আর তিন সারির একটি table, যার প্রথম দুই সারিতে ডেটা মান 0 আর 1, আর তৃতীয় সারি থেকে একটি তীরচিহ্ন আবার দ্বিতীয় সারির দিকে গেছে, যা future-এর ভেতরের একটি reference বোঝায়।" src="img/trpl17-04.svg" class="center" />
+<figcaption>Figure 17-4: নিজেকেই reference করে এমন একটি data type</figcaption>
+</figure>
+<p>তবে default-ভাবে নিজের reference আছে এমন যেকোনো object সরানো অনিরাপদ, কারণ reference সবসময় যেটিকে নির্দেশ করে তার আসল মেমোরি ঠিকানাকে নির্দেশ করে (Figure 17-5 দেখুন)। data structure-টি
+নিজে সরালে সেই ভেতরের reference-গুলো পুরোনো জায়গাকেই নির্দেশ করতে থাকবে। কিন্তু সেই মেমোরির জায়গা এখন অবৈধ। একটি কারণ, data structure-এ পরিবর্তন আনলে এর মান হালনাগাদ হবে না। আরেকটি—আরও
+গুরুত্বপূর্ণ—কারণ হলো, কম্পিউটার এখন সেই মেমোরি অন্য কাজে আবার ব্যবহার করতে স্বাধীন! পরে আপনি হয়তো একেবারে সম্পর্কহীন ডেটা পড়ে ফেলবেন।</p>
+<figure>
+<img alt="দুটি future, fut1 আর fut2, বোঝানো দুটি table, প্রতিটিতে এক কলাম আর তিন সারি, যা fut1 থেকে একটি future fut2-তে সরানোর ফল দেখায়। প্রথমটি, fut1, ধূসর করা, প্রতিটি ঘরে একটি প্রশ্নবোধক চিহ্ন, যা অজানা মেমোরি বোঝায়। দ্বিতীয়টি, fut2-এর প্রথম আর দ্বিতীয় সারিতে 0 আর 1, আর এর তৃতীয় সারি থেকে একটি তীরচিহ্ন আবার fut1-এর দ্বিতীয় সারির দিকে গেছে, যা এমন একটি pointer বোঝায় যা সরানোর আগের future-এর মেমোরির পুরোনো জায়গাকে নির্দেশ করছে।" src="img/trpl17-05.svg" class="center" />
+<figcaption>Figure 17-5: নিজেকেই reference করে এমন একটি data type সরানোর অনিরাপদ ফল</figcaption>
+</figure>
+<p>তাত্ত্বিকভাবে, Rust compiler কোনো object সরানোর সময় প্রতিবার এর প্রতিটি reference হালনাগাদ করার চেষ্টা করতে পারত, কিন্তু তাতে performance-এর অনেক বাড়তি খরচ হতে পারত, বিশেষ করে যদি
+reference-এর একটি পুরো জাল হালনাগাদ করতে হয়। এর বদলে যদি নিশ্চিত করা যেত যে সংশ্লিষ্ট data structure <em>মেমোরিতে সরে না</em>, তাহলে কোনো reference হালনাগাদ করতে হতো না। Rust-এর borrow
+checker ঠিক এই কাজটিই করে: নিরাপদ কোডে কোনো item-এর সক্রিয় reference থাকলে এটি item-টি সরাতে দেয় না।</p>
+<p><code>Pin</code> এর ওপর ভিত্তি করে আমাদের ঠিক দরকারি নিশ্চয়তাটি দেয়। একটি মানের দিকে একটি pointer-কে <code>Pin</code>-এ মুড়ে যখন মানটি <em>pin</em> করি, তখন এটি আর সরতে পারে না। তাই আপনার কাছে যদি
+<code>Pin&lt;Box&lt;SomeType&gt;&gt;</code> থাকে, তাহলে আসলে আপনি <code>SomeType</code> মানটি pin করছেন, <code>Box</code> pointer-টি <em>নয়</em>। Figure 17-6 এই প্রক্রিয়াটি দেখায়।</p>
+<figure>
+<img alt="পাশাপাশি সাজানো তিনটি বাক্স। প্রথমটিতে লেখা “Pin”, দ্বিতীয়টিতে “b1”, আর তৃতীয়টিতে “pinned”। “pinned”-এর ভেতরে “fut” লেখা এক কলামের একটি table আছে; এটি একটি future বোঝায়, যার data structure-এর প্রতিটি অংশের জন্য একটি করে ঘর। এর প্রথম ঘরে মান “0”, দ্বিতীয় ঘর থেকে একটি তীরচিহ্ন বেরিয়ে চতুর্থ ও শেষ ঘরের দিকে গেছে, যাতে মান “1”, আর তৃতীয় ঘরে ড্যাশ-দেওয়া রেখা আর তিন বিন্দু, যা বোঝায় data structure-এর আরও অংশ থাকতে পারে। সব মিলিয়ে “fut” table নিজেকেই reference করে এমন একটি future বোঝায়। একটি তীরচিহ্ন “Pin” লেখা বাক্স থেকে বেরিয়ে “b1” লেখা বাক্সের ভেতর দিয়ে গিয়ে “pinned” বাক্সের ভেতরে “fut” table-এ শেষ হয়।" src="img/trpl17-06.svg" class="center" />
+<figcaption>Figure 17-6: নিজেকেই reference করে এমন একটি future type-কে নির্দেশ করা একটি `Box` pin করা</figcaption>
+</figure>
+<p>আসলে <code>Box</code> pointer এখনো স্বাধীনভাবে এদিক-ওদিক সরতে পারে। মনে রাখবেন: আমাদের মাথাব্যথা শেষ পর্যন্ত যে ডেটাকে reference করা হচ্ছে তা জায়গায় থাকছে কি না। একটি pointer যদি এদিক-ওদিক সরে, <em>কিন্তু
+এটি যে ডেটাকে নির্দেশ করে</em> তা একই জায়গায় থাকে, যেমনটি Figure 17-7-এ, তাহলে কোনো সম্ভাব্য সমস্যা নেই। (একটি স্বাধীন অনুশীলন হিসেবে type-গুলোর আর <code>std::pin</code> module-এর docs দেখে বের করার
+চেষ্টা করুন একটি <code>Box</code> মোড়ানো <code>Pin</code> দিয়ে কীভাবে এটা করতেন।) মূল কথা হলো নিজেকেই reference করে এমন type-টি নিজে সরতে পারে না, কারণ এটি এখনো pin করা।</p>
+<figure>
+<img alt="মোটামুটি তিনটি কলামে সাজানো চারটি বাক্স, আগের diagram-এর মতোই, শুধু দ্বিতীয় কলামে একটি পরিবর্তন। এখন দ্বিতীয় কলামে দুটি বাক্স, যাতে লেখা “b1” আর “b2”; “b1” ধূসর করা, আর “Pin” থেকে তীরচিহ্নটি “b1”-এর বদলে “b2”-এর ভেতর দিয়ে যায়, যা বোঝায় pointer-টি “b1” থেকে “b2”-তে সরেছে, কিন্তু “pinned”-এর ডেটা সরেনি।" src="img/trpl17-07.svg" class="center" />
+<figcaption>Figure 17-7: নিজেকেই reference করে এমন একটি future type-কে নির্দেশ করা একটি `Box` সরানো</figcaption>
+</figure>
+<p>তবে বেশিরভাগ type এদিক-ওদিক সরানো পুরোপুরি নিরাপদ, এমনকি সেগুলো ঘটনাচক্রে একটি <code>Pin</code> pointer-এর পেছনে থাকলেও। item-এর ভেতরের reference থাকলে কেবল তখনই pinning নিয়ে ভাবতে হয়। সংখ্যা আর
+Boolean-এর মতো primitive মান নিরাপদ, কারণ স্পষ্টতই এদের কোনো ভেতরের reference নেই। Rust-এ সাধারণত যে type-গুলো নিয়ে কাজ করেন, তাদের বেশিরভাগেরও নেই। যেমন, কোনো চিন্তা না করেই একটি <code>Vec</code>
+এদিক-ওদিক সরাতে পারেন। এ পর্যন্ত যা দেখেছি তার ভিত্তিতে, আপনার কাছে একটি <code>Pin&lt;Vec&lt;String&gt;&gt;</code> থাকলে <code>Pin</code>-এর দেওয়া নিরাপদ কিন্তু সীমাবদ্ধ API দিয়ে সবকিছু করতে হতো, যদিও অন্য কোনো
+reference না থাকলে একটি <code>Vec&lt;String&gt;</code> সবসময় সরানো নিরাপদ। এমন ক্ষেত্রে item এদিক-ওদিক সরানো যে ঠিক আছে তা compiler-কে জানানোর একটি উপায় দরকার—আর এখানেই আসে <code>Unpin</code>।</p>
+<p><code>Unpin</code> একটি marker trait, অধ্যায় 16-এ দেখা <code>Send</code> আর <code>Sync</code> trait-এর মতো, তাই এর নিজস্ব কোনো কার্যক্ষমতা নেই। marker trait থাকে শুধু compiler-কে জানাতে যে একটি নির্দিষ্ট trait implement
+করা type নির্দিষ্ট একটি প্রেক্ষাপটে ব্যবহার করা নিরাপদ। <code>Unpin</code> compiler-কে জানায় যে সংশ্লিষ্ট মানটি নিরাপদে সরানো যায় কি না সে বিষয়ে একটি নির্দিষ্ট type-কে কোনো নিশ্চয়তা বজায় রাখতে
+<em>হয় না</em>।</p>
+<!--
+  The inline `<code>` in the next block is to allow the inline `<em>` inside it,
+  matching what NoStarch does style-wise, and emphasizing within the text here
+  that it is something distinct from a normal type.
+-->
+<p><code>Send</code> আর <code>Sync</code>-এর মতোই, যেসব type-এর ক্ষেত্রে compiler প্রমাণ করতে পারে যে এটি নিরাপদ, সেগুলোর জন্য এটি স্বয়ংক্রিয়ভাবে <code>Unpin</code> implement করে। একটি বিশেষ ক্ষেত্র, আবারও <code>Send</code> আর
+<code>Sync</code>-এর মতো, হলো যখন একটি type-এর জন্য <code>Unpin</code> implement করা <em>হয় না</em>। এর চিহ্ন হলো <code>impl !Unpin for <em>SomeType</em></code>, যেখানে
+<code><em>SomeType</em></code> হলো এমন একটি type-এর নাম, যার pointer যখনই একটি <code>Pin</code>-এ ব্যবহার হয়, নিরাপদ থাকতে তাকে সেই নিশ্চয়তাগুলো বজায় রাখতে <em>হয়</em>।</p>
+<p>অন্যভাবে বললে, <code>Pin</code> আর <code>Unpin</code>-এর সম্পর্ক নিয়ে দুটি বিষয় মনে রাখতে হবে। প্রথমত, <code>Unpin</code> হলো “সাধারণ” ক্ষেত্র, আর <code>!Unpin</code> বিশেষ ক্ষেত্র। দ্বিতীয়ত, একটি type <code>Unpin</code> নাকি <code>!Unpin</code>
+implement করে, তা <em>কেবল</em> তখনই গুরুত্বপূর্ণ, যখন আপনি সেই type-এর একটি pin করা pointer ব্যবহার করছেন, যেমন <code>Pin&lt;&amp;mut
+<em>SomeType</em>&gt;</code>।</p>
+<p>বিষয়টি স্পষ্ট করতে একটি <code>String</code>-এর কথা ভাবুন: এর একটি দৈর্ঘ্য আর এটি গঠনকারী Unicode অক্ষরগুলো আছে। একটি <code>String</code>-কে <code>Pin</code>-এ মোড়ানো যায়, যেমনটি Figure
+17-8-এ দেখা যাচ্ছে। তবে Rust-এর অন্য বেশিরভাগ type-এর মতোই <code>String</code> স্বয়ংক্রিয়ভাবে <code>Unpin</code> implement করে।</p>
+<figure>
+<img alt="বাম দিকে “Pin” লেখা একটি বাক্স, যা থেকে একটি তীরচিহ্ন ডান দিকের “String” লেখা একটি বাক্সে গেছে। “String” বাক্সে আছে ডেটা 5usize, যা string-এর দৈর্ঘ্য বোঝায়, আর “h”, “e”, “l”, “l” ও “o” অক্ষরগুলো, যা এই String instance-এ রাখা “hello” string-এর অক্ষর বোঝায়। একটি বিন্দু-রেখার আয়তক্ষেত্র “String” বাক্স আর এর লেবেল ঘিরে আছে, কিন্তু “Pin” বাক্সকে নয়।" src="img/trpl17-08.svg" class="center" />
+<figcaption>Figure 17-8: একটি `String` pin করা; বিন্দু-রেখা বোঝায় যে `String` `Unpin` trait implement করে এবং তাই pin হয় না</figcaption>
+</figure>
+<p>ফলে আমরা এমন কাজ করতে পারি, যা <code>String</code> বরং <code>!Unpin</code> implement করলে অবৈধ হতো, যেমন মেমোরির হুবহু একই জায়গায় একটি string-এর বদলে আরেকটি string বসানো, যেমনটি Figure 17-9-এ। এটি <code>Pin</code>-এর
+চুক্তি ভঙ্গ করে না, কারণ <code>String</code>-এর এমন কোনো ভেতরের reference নেই যা একে সরানো অনিরাপদ করে। ঠিক এ কারণেই এটি <code>!Unpin</code>-এর বদলে <code>Unpin</code> implement করে।</p>
+<figure>
+<img alt="আগের উদাহরণের সেই একই “hello” string ডেটা, এখন “s1” লেখা এবং ধূসর করা। আগের উদাহরণের “Pin” বাক্স এখন একটি ভিন্ন String instance-কে নির্দেশ করে, যাতে লেখা “s2”, যা বৈধ, যার দৈর্ঘ্য 7usize, এবং যাতে “goodbye” string-এর অক্ষরগুলো আছে। s2 একটি বিন্দু-রেখার আয়তক্ষেত্রে ঘেরা, কারণ এটিও Unpin trait implement করে।" src="img/trpl17-09.svg" class="center" />
+<figcaption>Figure 17-9: মেমোরিতে `String`-এর বদলে সম্পূর্ণ ভিন্ন একটি `String` বসানো</figcaption>
+</figure>
+<p>এখন Listing 17-23-এর সেই <code>join_all</code> call-এর জন্য দেখানো error বোঝার মতো যথেষ্ট জানি। আমরা শুরুতে async block-এর তৈরি future-গুলো একটি <code>Vec&lt;Box&lt;dyn Future&lt;Output = ()&gt;&gt;&gt;</code>-এ সরানোর চেষ্টা
+করেছিলাম, কিন্তু যেমন দেখেছি, সেই future-গুলোর ভেতরের reference থাকতে পারে, তাই এরা স্বয়ংক্রিয়ভাবে <code>Unpin</code> implement করে না। এগুলো pin করে ফেললে ফলাফলের <code>Pin</code> type <code>Vec</code>-এ পাঠাতে পারি,
+এই আস্থা নিয়ে যে future-গুলোর ভেতরের ডেটা সরবে <em>না</em>। Listing 17-24-এ দেখানো হয়েছে তিনটি future যেখানে সংজ্ঞায়িত সেখানে <code>pin!</code> macro call করে এবং trait object type ঠিক করে কীভাবে কোডটি
+সারানো যায়।</p>
+<figure class="listing" id="listing-17-24">
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span>use std::pin::{Pin, pin};
+
+// --snip--
+
+<span class="boring">use std::time::Duration;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::block_on(async {
+</span><span class="boring">        let (tx, mut rx) = trpl::channel();
+</span><span class="boring">
+</span><span class="boring">        let tx1 = tx.clone();
+</span>        let tx1_fut = pin!(async move {
+            // --snip--
+<span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("hi"),
+</span><span class="boring">                String::from("from"),
+</span><span class="boring">                String::from("the"),
+</span><span class="boring">                String::from("future"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx1.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span>        });
+
+        let rx_fut = pin!(async {
+            // --snip--
+<span class="boring">            while let Some(value) = rx.recv().await {
+</span><span class="boring">                println!("received '{value}'");
+</span><span class="boring">            }
+</span>        });
+
+        let tx_fut = pin!(async move {
+            // --snip--
+<span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("more"),
+</span><span class="boring">                String::from("messages"),
+</span><span class="boring">                String::from("for"),
+</span><span class="boring">                String::from("you"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span>        });
+
+        let futures: Vec&lt;Pin&lt;&amp;mut dyn Future&lt;Output = ()&gt;&gt;&gt; =
+            vec![tx1_fut, rx_fut, tx_fut];
+<span class="boring">
+</span><span class="boring">        trpl::join_all(futures).await;
+</span><span class="boring">    });
+</span><span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-17-24">Listing 17-24</a>: future-গুলো vector-এ সরাতে পারার জন্য সেগুলো pin করা</figcaption>
+</figure>
+<p>এই উদাহরণ এখন compile হয়ে চলে, আর আমরা runtime-এ vector-এ future যোগ বা বাদ দিয়ে সবগুলো একসঙ্গে join করতে পারতাম।</p>
+<p><code>Pin</code> আর <code>Unpin</code> মূলত গুরুত্বপূর্ণ নিম্ন-স্তরের library বানানোর সময়, বা যখন নিজেই একটি runtime বানাচ্ছেন, প্রতিদিনের Rust কোডের জন্য নয়। তবে error message-এ এই trait-গুলো দেখলে এখন
+আপনার কোড কীভাবে ঠিক করবেন সে সম্পর্কে আরও ভালো ধারণা থাকবে!</p>
+<section class="note" aria-role="note">
+<p>Note: <code>Pin</code> আর <code>Unpin</code>-এর এই সমন্বয় Rust-এ এমন এক পুরো শ্রেণির জটিল type নিরাপদে implement করা সম্ভব করে, যা নিজেকেই reference করে বলে অন্যথায় কঠিন হতো। <code>Pin</code> দরকার এমন type
+আজকাল সবচেয়ে বেশি দেখা যায় async Rust-এ, তবে মাঝে মাঝে অন্য প্রেক্ষাপটেও দেখতে পারেন।</p>
+<p><code>Pin</code> আর <code>Unpin</code> কীভাবে কাজ করে এবং এদের কোন নিয়ম বজায় রাখতে হয়, তার খুঁটিনাটি <code>std::pin</code>-এর API documentation-এ বিস্তারিত আলোচনা করা আছে, তাই আরও জানতে আগ্রহী হলে সেখান থেকে শুরু
+করা চমৎকার।</p>
+<p>ভেতরে ভেতরে জিনিসগুলো কীভাবে কাজ করে তা আরও বিস্তারিত বুঝতে চাইলে
+<a href="https://rust-lang.github.io/async-book/"><em>Asynchronous Programming in Rust</em></a>-এর অধ্যায় <a href="https://rust-lang.github.io/async-book/02_execution/01_chapter.html">2</a><!-- ignore --> আর
+<a href="https://rust-lang.github.io/async-book/04_pinning/01_chapter.html">4</a><!-- ignore --> দেখুন।</p>
+</section>
+<h3 id="the-stream-trait"><a class="header" href="#the-stream-trait"><code>Stream</code> trait</a></h3>
+<p><code>Future</code>, <code>Pin</code> আর <code>Unpin</code> trait সম্পর্কে আরও গভীর ধারণা পাওয়ার পর এবার <code>Stream</code> trait-এর দিকে নজর দিতে পারি। অধ্যায়ের আগের অংশে যেমন শিখেছেন, stream asynchronous iterator-এর মতো। তবে
+<code>Iterator</code> আর <code>Future</code>-এর মতো নয়, এই লেখার সময় পর্যন্ত standard library-তে <code>Stream</code>-এর কোনো সংজ্ঞা নেই, তবে <code>futures</code> crate-এর একটি খুবই প্রচলিত সংজ্ঞা <em>আছে</em>, যা পুরো ecosystem-এ ব্যবহৃত হয়।</p>
+<p>একটি <code>Stream</code> trait কীভাবে এদের মিলিয়ে দিতে পারে তা দেখার আগে চলুন <code>Iterator</code> আর <code>Future</code> trait-এর সংজ্ঞা আবার দেখি। <code>Iterator</code> থেকে আমরা পাই একটি ধারার ধারণা: এর <code>next</code> method একটি
+<code>Option&lt;Self::Item&gt;</code> দেয়। <code>Future</code> থেকে পাই সময়ের সঙ্গে প্রস্তুত হওয়ার ধারণা: এর <code>poll</code> method একটি <code>Poll&lt;Self::Output&gt;</code> দেয়। সময়ের সঙ্গে প্রস্তুত হওয়া item-এর একটি ধারা বোঝাতে আমরা
+এমন একটি <code>Stream</code> trait সংজ্ঞায়িত করি, যা এই বৈশিষ্ট্যগুলো একসঙ্গে জুড়ে দেয়:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::pin::Pin;
+use std::task::{Context, Poll};
+
+trait Stream {
+    type Item;
+
+    fn poll_next(
+        self: Pin&lt;&amp;mut Self&gt;,
+        cx: &amp;mut Context&lt;'_&gt;
+    ) -&gt; Poll&lt;Option&lt;Self::Item&gt;&gt;;
+}
+<span class="boring">}</span></code></pre>
+<p><code>Stream</code> trait stream-এর তৈরি item-এর type-এর জন্য <code>Item</code> নামের একটি associated type সংজ্ঞায়িত করে। এটি <code>Iterator</code>-এর মতো, যেখানে শূন্য থেকে অনেক item থাকতে পারে, আর <code>Future</code>-এর মতো
+নয়, যেখানে সবসময় একটিমাত্র <code>Output</code> থাকে, তা unit type <code>()</code> হলেও।</p>
+<p><code>Stream</code> সেই item-গুলো পাওয়ার জন্য একটি method-ও সংজ্ঞায়িত করে। আমরা একে বলি <code>poll_next</code>, যাতে স্পষ্ট হয় যে এটি <code>Future::poll</code>-এর মতোই poll করে এবং <code>Iterator::next</code>-এর মতোই item-এর একটি ধারা
+তৈরি করে। এর return type <code>Poll</code>-কে <code>Option</code>-এর সঙ্গে মেলায়। বাইরের type হলো <code>Poll</code>, কারণ একটি future-এর মতোই এটি প্রস্তুত কি না যাচাই করতে হয়। ভেতরের type হলো <code>Option</code>, কারণ একটি
+iterator-এর মতোই এটি জানাতে হয় আরও message আছে কি না।</p>
+<p>এই সংজ্ঞার খুব কাছাকাছি কিছু সম্ভবত শেষ পর্যন্ত Rust-এর standard library-র অংশ হবে। এর মধ্যে এটি বেশিরভাগ runtime-এর হাতিয়ারের অংশ, তাই এর ওপর নির্ভর করতে পারেন, আর এরপর যা আলোচনা
+করব তা সাধারণত প্রযোজ্য হওয়ার কথা!</p>
+<p>তবে <a href="ch17-04-streams.html">“stream: ক্রমানুসারে future”</a><!--
+ignore --> অংশে দেখা উদাহরণগুলোতে আমরা <code>poll_next</code> <em>বা</em> <code>Stream</code> ব্যবহার করিনি, বরং ব্যবহার করেছি <code>next</code> আর <code>StreamExt</code>। অবশ্যই আমরা নিজেদের <code>Stream</code> state machine হাতে লিখে সরাসরি
+<code>poll_next</code> API দিয়ে কাজ <em>করতে পারতাম</em>, ঠিক যেমন future-এর <code>poll</code> method দিয়ে সরাসরি তাদের সঙ্গে কাজ <em>করতে পারতাম</em>। তবে <code>await</code> ব্যবহার করা অনেক বেশি সুবিধাজনক, আর <code>StreamExt</code> trait
+<code>next</code> method দেয়, যাতে আমরা ঠিক সেটাই করতে পারি:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">use std::pin::Pin;
+</span><span class="boring">use std::task::{Context, Poll};
+</span><span class="boring">
+</span><span class="boring">trait Stream {
+</span><span class="boring">    type Item;
+</span><span class="boring">    fn poll_next(
+</span><span class="boring">        self: Pin&lt;&amp;mut Self&gt;,
+</span><span class="boring">        cx: &amp;mut Context&lt;'_&gt;,
+</span><span class="boring">    ) -&gt; Poll&lt;Option&lt;Self::Item&gt;&gt;;
+</span><span class="boring">}
+</span><span class="boring">
+</span>trait StreamExt: Stream {
+    async fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt;
+    where
+        Self: Unpin;
+
+    // অন্যান্য method...
+}
+<span class="boring">}</span></code></pre>
+<!--
+TODO: update this if/when tokio/etc. update their MSRV and switch to using async functions
+in traits, since the lack thereof is the reason they do not yet have this.
+-->
+<section class="note" aria-role="note">
+<p>Note: অধ্যায়ের আগের অংশে আমরা যে আসল সংজ্ঞা ব্যবহার করেছি তা দেখতে এর থেকে একটু আলাদা, কারণ এটি Rust-এর এমন সংস্করণও সমর্থন করে, যেগুলোতে trait-এর ভেতরে async function ব্যবহারের
+সুবিধা তখনো ছিল না। ফলে এটি দেখতে এমন:</p>
+<pre><code class="language-rust ignore">fn next(&amp;mut self) -&gt; Next&lt;'_, Self&gt; where Self: Unpin;</code></pre>
+<p>সেই <code>Next</code> type হলো একটি <code>struct</code>, যা <code>Future</code> implement করে এবং <code>Next&lt;'_, Self&gt;</code> দিয়ে <code>self</code>-এর reference-এর lifetime-এর নাম দিতে দেয়, যাতে <code>await</code> এই method-এর সঙ্গে কাজ
+করতে পারে।</p>
+</section>
+<p>stream-এর সঙ্গে ব্যবহারযোগ্য সব মজার method-এর আবাসও <code>StreamExt</code> trait। <code>Stream</code> implement করে এমন প্রতিটি type-এর জন্য <code>StreamExt</code> স্বয়ংক্রিয়ভাবে implement হয়, তবে এই trait-গুলো আলাদাভাবে
+সংজ্ঞায়িত, যাতে community মৌলিক trait-কে প্রভাবিত না করেই সুবিধাজনক API নিয়ে বারবার কাজ করতে পারে।</p>
+<p><code>trpl</code> crate-এ ব্যবহৃত <code>StreamExt</code> সংস্করণে trait-টি শুধু <code>next</code> method সংজ্ঞায়িতই করে না, বরং <code>next</code>-এর এমন একটি default implementation-ও দেয় যা <code>Stream::poll_next</code> call করার খুঁটিনাটি
+সঠিকভাবে সামলায়। এর মানে, নিজস্ব streaming data type লিখতে হলেও আপনাকে <em>শুধু</em> <code>Stream</code> implement করতে হবে, তারপর যে কেউ আপনার data type ব্যবহার করলে স্বয়ংক্রিয়ভাবে এর সঙ্গে <code>StreamExt</code>
+আর এর method-গুলো ব্যবহার করতে পারবে।</p>
+<p>এই trait-গুলোর নিম্ন-স্তরের খুঁটিনাটি নিয়ে আমরা এটুকুই দেখব। শেষ করতে চলুন ভেবে দেখি future (stream-সহ), task আর thread কীভাবে একসঙ্গে খাপ খায়!</p>
+<div class="quiz-placeholder" data-quiz-name="&quot;async-05-traits-for-async&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot;future চালাতে Rust poll-ভিত্তিক একটি model ব্যবহার করে। একটি await point এমন একটি loop-এ পরিণত হয়, যা বারবার `.poll()` call করে, &#92;nএবং প্রতিটি ব্যর্থ poll-এর পর অন্য async কোড চলতে দিতে async runtime-এর হাতে নিয়ন্ত্রণ ছেড়ে দেয়। runtime পরে&#92;n`f` আবার poll করতে `f.await` কোডকে &#92;&quot;জাগিয়ে তুলতে&#92;&quot; পারে।&#92;n&quot;,&quot;id&quot;:&quot;c4d90f3c-7286-4272-921c-241b266e9f91&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:&quot;এটি একটি loop-এ `f.poll()` call করে, `f` প্রস্তুত হলে বেরিয়ে যায়, আর `f` প্রস্তুত না হলে async runtime-এর হাতে নিয়ন্ত্রণ ফিরিয়ে দেয়&quot;},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;এটি একবার `f.poll()` call করে, যা `f` প্রস্তুত না হওয়া পর্যন্ত জায়গাতেই block করে&quot;,&quot;এটি একটি loop-এ `f.poll()` call করে, `f` প্রস্তুত হলে বেরিয়ে যায়, আর `f` প্রস্তুত না হলে সঙ্গে সঙ্গে আবার poll করে&quot;,&quot;এটি একবার `f.push(...)` call করে, যা `f` প্রস্তুত হলে `f.await`-এর পরের বাকি কোডযুক্ত একটি callback চালায়&quot;],&quot;prompt&quot;:&quot;একটি future `f` দেওয়া থাকলে, `f.await` কীভাবে কাজ করে তা নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?&quot;}},{&quot;context&quot;:&quot;pinning যে মূল সমস্যার সমাধান করে তা হলো নিজেকেই reference করা, অর্থাৎ এমন একটি future যাতে নিজেরই দিকে একটি pointer থাকে। &#92;nএটি ঘটে যখন একটি async block-এ এমন একটি local variable থাকে, যা future-এর আরেকটি local variable-কে নির্দেশ করে।&#92;nএখানে সেটি হলো `y = &amp;x`।&#92;n&quot;,&quot;id&quot;:&quot;bc8b4acb-d111-4fec-b89a-e5d1bc77c8f2&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:&quot;```rust&#92;nasync fn example(x: i32) -&gt; i32 {&#92;n    let y = &amp;x;&#92;n    sleep(Duration::from_secs(1)).await;&#92;n    *y&#92;n}&#92;n```&#92;n&quot;},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;```rust&#92;nasync fn example(x: &amp;i32) -&gt; i32 {&#92;n    sleep(Duration::from_secs(1)).await;&#92;n    *y&#92;n}&#92;n```&#92;n&quot;,&quot;```rust&#92;nasync fn example(x: Vec&lt;i32&gt;) -&gt; i32 {&#92;n    sleep(Duration::from_secs(1)).await;&#92;n    x[0]&#92;n}&#92;n```&#92;n&quot;,&quot;```rust&#92;nasync fn example() -&gt; i32 {&#92;n    let x = 0;&#92;n    sleep(Duration::from_secs(1)).await;&#92;n    x&#92;n}&#92;n```&#92;n&quot;],&quot;prompt&quot;:&quot;কল্পনা করুন, poll করার জন্য Rust future-কে pin করা বাধ্যতামূলক করত না। &#92;nনিচের কোন async function pin না করলে undefined behavior ঘটাতে পারে?&#92;n&quot;}}]}" data-quiz-fullscreen="true"></div>
+
+<script type="text/javascript" src="quiz/quiz-embed.iife.js"></script><link rel="stylesheet" type="text/css" href="quiz/style.css">
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch17-04-streams.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ch17-06-futures-tasks-threads.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch17-04-streams.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ch17-06-futures-tasks-threads.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris-2317480c.js"></script>
+        <script src="js-extensions/packages/feedback/dist/index-f1290d8b.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

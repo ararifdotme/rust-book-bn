@@ -1,0 +1,851 @@
+<!DOCTYPE HTML>
+<html lang="bn" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>lifetime দিয়ে reference যাচাই করা - Rust প্রোগ্রামিং ভাষা</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris-d33b75bf.css">
+        <link rel="stylesheet" href="theme/semantic-notes-9b5766c0.css">
+        <link rel="stylesheet" href="theme/listing-cab26221.css">
+        <link rel="stylesheet" href="theme/2018-edition-4e126c62.css">
+        <link rel="stylesheet" href="theme/bengali-4de2f0b6.css">
+        <link rel="stylesheet" href="js-extensions/packages/feedback/dist/index-c9d186bd.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-03403162.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-485378fe.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust প্রোগ্রামিং ভাষা</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/ararifdotme/rust-book-bn" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h2 id="validating-references-with-lifetimes"><a class="header" href="#validating-references-with-lifetimes">lifetime দিয়ে reference যাচাই করা</a></h2>
+<p>lifetime (reference কতক্ষণ বৈধ থাকে) হলো আরেক ধরনের generic, যা আমরা আগে থেকেই ব্যবহার করে আসছি। একটি type-এর
+কাঙ্ক্ষিত আচরণ আছে কি না তা নিশ্চিত করার বদলে lifetime নিশ্চিত করে যে reference-গুলো যতক্ষণ দরকার ততক্ষণ বৈধ থাকবে।</p>
+<p>অধ্যায় 4-এর <a href="ch04-02-references-and-borrowing.html#references-and-borrowing">“reference ও borrowing”</a><!-- ignore --> অংশে একটি বিষয় আমরা আলোচনা করিনি: Rust-এর
+প্রতিটি reference-এর একটি lifetime আছে, অর্থাৎ যে scope-এর জন্য reference-টি বৈধ। বেশিরভাগ সময় lifetime অপ্রকাশ্য
+থাকে এবং অনুমান করে নেওয়া হয়, ঠিক যেমন বেশিরভাগ সময় type অনুমান করে নেওয়া হয়। একাধিক type সম্ভব হলেই কেবল আমাদের
+type annotate করতে হয়। একইভাবে, যখন reference-গুলোর lifetime কয়েকটি ভিন্ন উপায়ে সম্পর্কিত হতে পারে, তখন lifetime
+annotate করতে হয়। runtime-এ ব্যবহৃত আসল reference-গুলো যে নিশ্চিতভাবে বৈধ থাকবে, তা নিশ্চিত করতে Rust চায় আমরা generic
+lifetime parameter (reference-এর lifetime বোঝানোর parameter) দিয়ে সম্পর্কগুলো annotate করি।</p>
+<p>lifetime annotate করার ধারণাটি অন্য বেশিরভাগ প্রোগ্রামিং ভাষায় নেই, তাই এটি অপরিচিত লাগবে। এই অধ্যায়ে lifetime-এর
+পুরোটা আলোচনা না করলেও lifetime syntax-এর সঙ্গে সাধারণত যেভাবে দেখা হতে পারে তা নিয়ে আলোচনা করব, যাতে ধারণাটির সঙ্গে
+আপনি স্বচ্ছন্দ হতে পারেন।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="preventing-dangling-references-with-lifetimes"></a></p>
+<h3 id="dangling-references"><a class="header" href="#dangling-references">dangling reference</a></h3>
+<p>lifetime-এর মূল লক্ষ্য হলো dangling reference (অবৈধ ডেটার দিকে নির্দেশ করা reference) ঠেকানো; এগুলো থাকতে দিলে একটি
+প্রোগ্রাম যে ডেটাকে নির্দেশ করার কথা তার বদলে অন্য ডেটাকে নির্দেশ করত। Listing 10-16-এর প্রোগ্রামটি দেখুন, যেখানে একটি
+বাইরের scope আর একটি ভেতরের scope আছে।</p>
+<!-- TODO(aquascope): support for nested scopes -->
+<figure class="listing" id="listing-10-16">
+<pre><code class="language-rust ignore does_not_compile">fn main() {
+    let r;
+
+    {
+        let x = 5;
+        r = &amp;x;
+    }
+
+    println!("r: {}", r);
+}</code></pre>
+<figcaption><a href="#listing-10-16">Listing 10-16</a>: এমন একটি reference ব্যবহারের চেষ্টা, যার মান scope-এর বাইরে চলে গেছে</figcaption>
+</figure>
+<section class="note" aria-role="note">
+<p>Note: Listing 10-16, 10-17 ও 10-23-এর উদাহরণে variable-কে কোনো প্রাথমিক মান না দিয়েই ঘোষণা করা হয়েছে, ফলে variable-এর
+নামটি বাইরের scope-এ থাকে। প্রথম দেখায় মনে হতে পারে এটি Rust-এ null মান না থাকার সঙ্গে সাংঘর্ষিক। কিন্তু মান দেওয়ার
+আগেই কোনো variable ব্যবহার করার চেষ্টা করলে আমরা compile-time error পাব, যা দেখায় যে Rust সত্যিই null মান অনুমোদন
+করে না।</p>
+</section>
+<p>বাইরের scope কোনো প্রাথমিক মান ছাড়া <code>r</code> নামের একটি variable ঘোষণা করে, আর ভেতরের scope <code>5</code> প্রাথমিক মানসহ <code>x</code> নামের
+একটি variable ঘোষণা করে। ভেতরের scope-এর মধ্যে আমরা <code>r</code>-এর মান হিসেবে <code>x</code>-এর একটি reference বসানোর চেষ্টা করি। তারপর
+ভেতরের scope শেষ হয়, আর আমরা <code>r</code>-এর মান print করার চেষ্টা করি। এই কোড compile হবে না, কারণ <code>r</code> যে মানকে নির্দেশ করছে
+তা আমরা ব্যবহার করার চেষ্টার আগেই scope-এর বাইরে চলে গেছে। error message-টি এই:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling chapter10 v0.1.0 (file:///projects/chapter10)
+error[E0597]: `x` does not live long enough
+ --&gt; src/main.rs:6:13
+  |
+5 |         let x = 5;
+  |             - binding `x` declared here
+6 |         r = &amp;x;
+  |             ^^ borrowed value does not live long enough
+7 |     }
+  |     - `x` dropped here while still borrowed
+8 |
+9 |     println!("r: {r}");
+  |                   - borrow later used here
+
+For more information about this error, try `rustc --explain E0597`.
+error: could not compile `chapter10` (bin "chapter10") due to 1 previous error
+</code></pre>
+<p>error message বলছে variable <code>x</code> “does not live long enough” (যথেষ্ট সময় বেঁচে থাকে না)। কারণ লাইন 7-এ ভেতরের scope শেষ
+হলে <code>x</code> scope-এর বাইরে চলে যাবে। কিন্তু <code>r</code> বাইরের scope-এর জন্য তখনো বৈধ; এর scope বড় বলে আমরা বলি এটি “বেশি সময় বেঁচে
+থাকে”। Rust এই কোডকে চলতে দিলে <code>r</code> এমন মেমোরিকে নির্দেশ করত যা <code>x</code> scope-এর বাইরে যাওয়ার সময় deallocate (মুক্ত) হয়ে
+গেছে, আর <code>r</code> দিয়ে যা-ই করার চেষ্টা করতাম তা ঠিকমতো কাজ করত না। তাহলে Rust কীভাবে নির্ধারণ করে যে এই কোড অবৈধ? এটি
+একটি borrow checker ব্যবহার করে।</p>
+<h3 id="the-borrow-checker-ensures-data-outlives-its-references"><a class="header" href="#the-borrow-checker-ensures-data-outlives-its-references">borrow checker নিশ্চিত করে যে ডেটা তার reference-এর চেয়ে বেশি সময় বাঁচে</a></h3>
+<p>Rust compiler-এর একটি <em>borrow checker</em> (borrow-এর নিয়ম যাচাই করা compiler-এর অংশ) আছে, যা scope তুলনা করে নির্ধারণ করে
+সব borrow বৈধ কি না। Listing 10-17-এ Listing 10-16-এর একই কোড দেখানো হয়েছে, তবে variable-গুলোর lifetime দেখানো annotation-সহ।</p>
+<figure class="listing" id="listing-10-17">
+<pre><code class="language-rust ignore does_not_compile">fn main() {
+    let r;                // ---------+-- 'a
+                          //          |
+    {                     //          |
+        let x = 5;        // -+-- 'b  |
+        r = &amp;x;           //  |       |
+    }                     // -+       |
+                          //          |
+    println!("r: {r}");   //          |
+}                         // ---------+</code></pre>
+<figcaption><a href="#listing-10-17">Listing 10-17</a>: <code>r</code> ও <code>x</code>-এর lifetime-এর annotation, যাদের নাম যথাক্রমে <code>'a</code> ও <code>'b</code></figcaption>
+</figure>
+<p>এখানে আমরা <code>r</code>-এর lifetime-কে <code>'a</code> আর <code>x</code>-এর lifetime-কে <code>'b</code> দিয়ে annotate করেছি। দেখতেই পাচ্ছেন, ভেতরের <code>'b</code> block বাইরের
+<code>'a</code> lifetime block-এর চেয়ে অনেক ছোট। compile time-এ Rust দুটি lifetime-এর আকার তুলনা করে দেখে যে <code>r</code>-এর lifetime <code>'a</code>, কিন্তু
+এটি <code>'b</code> lifetime-এর মেমোরিকে নির্দেশ করে। প্রোগ্রামটি বাতিল হয়, কারণ <code>'b</code> <code>'a</code>-এর চেয়ে ছোট: reference যাকে নির্দেশ করছে, সেটি
+reference-এর মতো বেশি সময় বাঁচে না।</p>
+<p>Listing 10-18-এ কোডটি এমনভাবে ঠিক করা হয়েছে যাতে কোনো dangling reference না থাকে এবং এটি কোনো error ছাড়া compile হয়।</p>
+<figure class="listing" id="listing-10-18">
+<pre class="playground"><code class="language-rust edition2024">fn main() {
+    let x = 5;            // ----------+-- 'b
+                          //           |
+    let r = &amp;x;           // --+-- 'a  |
+                          //   |       |
+    println!("r: {r}");   //   |       |
+                          // --+       |
+}                         // ----------+</code></pre>
+<figcaption><a href="#listing-10-18">Listing 10-18</a>: একটি বৈধ reference, কারণ ডেটার lifetime reference-এর চেয়ে দীর্ঘ</figcaption>
+</figure>
+<p>এখানে <code>x</code>-এর lifetime <code>'b</code>, যা এই ক্ষেত্রে <code>'a</code>-এর চেয়ে বড়। এর মানে <code>r</code> <code>x</code>-কে নির্দেশ করতে পারে, কারণ Rust জানে <code>x</code> যতক্ষণ বৈধ,
+<code>r</code>-এর reference-টিও ততক্ষণ সবসময় বৈধ থাকবে।</p>
+<p>reference-গুলোর lifetime কোথায় থাকে, আর reference সবসময় বৈধ থাকবে তা নিশ্চিত করতে Rust কীভাবে lifetime বিশ্লেষণ করে, তা
+জানলেন। এবার function-এর parameter ও return মানে generic lifetime নিয়ে দেখা যাক।</p>
+<h3 id="generic-lifetimes-in-functions"><a class="header" href="#generic-lifetimes-in-functions">function-এ generic lifetime</a></h3>
+<p>আমরা এমন একটি function লিখব যা দুটি string slice-এর মধ্যে লম্বাটি return করে। এই function দুটি string slice নেবে এবং
+একটি string slice return করবে। <code>longest</code> function implement করার পর Listing 10-19-এর কোড print করবে
+<code>The longest string is abcd</code>।</p>
+<figure class="listing" id="listing-10-19">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore">fn main() {
+    let string1 = String::from("abcd");
+    let string2 = "xyz";
+
+    let result = longest(string1.as_str(), string2);
+    println!("The longest string is {result}");
+}</code></pre>
+<figcaption><a href="#listing-10-19">Listing 10-19</a>: একটি <code>main</code> function, যা দুটি string slice-এর মধ্যে লম্বাটি খুঁজতে <code>longest</code> function call করে</figcaption>
+</figure>
+<p>খেয়াল করুন, আমরা চাই function-টি string-এর বদলে string slice নিক, যা reference, কারণ আমরা চাই না <code>longest</code> function তার
+parameter-গুলোর ownership নিয়ে নিক। Listing 10-19-এ আমরা কেন এই parameter-গুলোই চাই, তা নিয়ে আরও আলোচনার জন্য অধ্যায়
+4-এর <a href="ch04-04-slices.html#string-slices-as-parameters">“parameter হিসেবে string slice”</a><!-- ignore --> অংশটি দেখুন।</p>
+<p>Listing 10-20-এর মতো করে <code>longest</code> function implement করার চেষ্টা করলে এটি compile হবে না।</p>
+<figure class="listing" id="listing-10-20">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
+</span><span class="boring">    let string1 = String::from("abcd");
+</span><span class="boring">    let string2 = "xyz";
+</span><span class="boring">
+</span><span class="boring">    let result = longest(string1.as_str(), string2);
+</span><span class="boring">    println!("The longest string is {result}");
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn longest(x: &amp;str, y: &amp;str) -&gt; &amp;str {
+    if x.len() &gt; y.len() { x } else { y }
+}</code></pre>
+<figcaption><a href="#listing-10-20">Listing 10-20</a>: <code>longest</code> function-এর একটি implementation, যা দুটি string slice-এর মধ্যে লম্বাটি return করে কিন্তু এখনো compile হয় না</figcaption>
+</figure>
+<p>বরং lifetime নিয়ে কথা বলা এই error-টি পাই:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling chapter10 v0.1.0 (file:///projects/chapter10)
+error[E0106]: missing lifetime specifier
+ --&gt; src/main.rs:9:33
+  |
+9 | fn longest(x: &amp;str, y: &amp;str) -&gt; &amp;str {
+  |               ----     ----     ^ expected named lifetime parameter
+  |
+  = help: this function's return type contains a borrowed value, but the signature does not say whether it is borrowed from `x` or `y`
+help: consider introducing a named lifetime parameter
+  |
+9 | fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
+  |           ++++     ++          ++          ++
+
+For more information about this error, try `rustc --explain E0106`.
+error: could not compile `chapter10` (bin "chapter10") due to 1 previous error
+</code></pre>
+<p>help-এর লেখা থেকে বোঝা যায় যে return type-এ একটি generic lifetime parameter দরকার, কারণ return করা reference-টি <code>x</code>-কে নির্দেশ
+করে নাকি <code>y</code>-কে, Rust তা বলতে পারে না। আসলে আমরাও জানি না, কারণ এই function-এর body-তে <code>if</code> block <code>x</code>-এর একটি reference
+return করে আর <code>else</code> block <code>y</code>-এর একটি reference return করে!</p>
+<p>এই function সংজ্ঞায়িত করার সময় আমরা জানি না function-এ কোন concrete মান পাঠানো হবে, তাই <code>if</code> অংশ চলবে নাকি <code>else</code> অংশ,
+তা-ও জানি না। পাঠানো reference-গুলোর concrete lifetime-ও আমরা জানি না, তাই Listing 10-17 ও 10-18-এর মতো scope দেখে
+নির্ধারণ করতে পারি না যে আমাদের return করা reference সবসময় বৈধ থাকবে কি না। borrow checker-ও এটি নির্ধারণ করতে পারে না,
+কারণ এটি জানে না <code>x</code> ও <code>y</code>-এর lifetime return মানের lifetime-এর সঙ্গে কীভাবে সম্পর্কিত। এই error ঠিক করতে আমরা এমন generic
+lifetime parameter যোগ করব যা reference-গুলোর মধ্যে সম্পর্ক সংজ্ঞায়িত করে, যাতে borrow checker তার বিশ্লেষণ চালাতে পারে।</p>
+<h3 id="lifetime-annotation-syntax"><a class="header" href="#lifetime-annotation-syntax">lifetime annotation syntax</a></h3>
+<p>lifetime annotation কোনো reference কত সময় বাঁচবে তা বদলায় না। বরং এগুলো lifetime-কে প্রভাবিত না করেই একাধিক
+reference-এর lifetime একে অপরের সঙ্গে কীভাবে সম্পর্কিত তা বর্ণনা করে। signature-এ generic type parameter থাকলে function যেমন
+যেকোনো type গ্রহণ করতে পারে, তেমনি generic lifetime parameter উল্লেখ করলে function যেকোনো lifetime-এর reference গ্রহণ করতে
+পারে।</p>
+<p>lifetime annotation-এর syntax একটু অস্বাভাবিক: lifetime parameter-এর নাম একটি apostrophe (<code>'</code>) দিয়ে শুরু হতে হয়, আর generic
+type-এর মতোই সাধারণত পুরোটা ছোট হাতের অক্ষরে ও খুব ছোট হয়। বেশিরভাগ মানুষ প্রথম lifetime annotation-এর জন্য <code>'a</code> নামটি
+ব্যবহার করে। আমরা lifetime parameter-এর annotation বসাই reference-এর <code>&amp;</code>-এর পরে, annotation আর reference-এর type-এর মাঝে
+একটি space রেখে।</p>
+<p>কয়েকটি উদাহরণ: lifetime parameter ছাড়া একটি <code>i32</code>-এর reference, <code>'a</code> নামের lifetime parameter-সহ একটি <code>i32</code>-এর reference,
+আর একই <code>'a</code> lifetime-সহ একটি <code>i32</code>-এর mutable reference:</p>
+<pre><code class="language-rust ignore">&amp;i32        // a reference
+&amp;'a i32     // a reference with an explicit lifetime
+&amp;'a mut i32 // a mutable reference with an explicit lifetime</code></pre>
+<p>একটিমাত্র lifetime annotation নিজে থেকে খুব একটা অর্থ বহন করে না, কারণ annotation-এর কাজই হলো Rust-কে জানানো যে একাধিক
+reference-এর generic lifetime parameter একে অপরের সঙ্গে কীভাবে সম্পর্কিত। চলুন <code>longest</code> function-এর প্রেক্ষাপটে দেখি
+lifetime annotation-গুলো একে অপরের সঙ্গে কীভাবে সম্পর্কিত।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="lifetime-annotations-in-function-signatures"></a></p>
+<h3 id="in-function-signatures"><a class="header" href="#in-function-signatures">function signature-এ</a></h3>
+<p>function signature-এ lifetime annotation ব্যবহার করতে আমাদের function-এর নাম আর parameter তালিকার মাঝে angle bracket-এর
+ভেতরে generic lifetime parameter ঘোষণা করতে হয়, ঠিক যেমন generic type parameter-এর ক্ষেত্রে করেছিলাম।</p>
+<p>আমরা চাই signature-টি এই শর্ত প্রকাশ করুক: যতক্ষণ দুটি parameter-ই বৈধ, ততক্ষণ return করা reference-টিও বৈধ থাকবে। এটাই
+parameter-গুলোর lifetime আর return মানের মধ্যে সম্পর্ক। আমরা lifetime-টির নাম দেব <code>'a</code>, তারপর Listing 10-21-এর মতো প্রতিটি
+reference-এ এটি যোগ করব।</p>
+<figure class="listing" id="listing-10-21">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">fn main() {
+</span><span class="boring">    let string1 = String::from("abcd");
+</span><span class="boring">    let string2 = "xyz";
+</span><span class="boring">
+</span><span class="boring">    let result = longest(string1.as_str(), string2);
+</span><span class="boring">    println!("The longest string is {result}");
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
+    if x.len() &gt; y.len() { x } else { y }
+}</code></pre>
+<figcaption><a href="#listing-10-21">Listing 10-21</a>: <code>longest</code> function-এর সংজ্ঞা, যা বলে দেয় signature-এর সব reference-এর lifetime একই <code>'a</code> হতে হবে</figcaption>
+</figure>
+<p>Listing 10-19-এর <code>main</code> function-এর সঙ্গে ব্যবহার করলে এই কোড compile হবে এবং আমাদের কাঙ্ক্ষিত ফল দেবে।</p>
+<p>function signature এখন Rust-কে বলছে যে কোনো এক lifetime <code>'a</code>-এর জন্য function-টি দুটি parameter নেয়, যার দুটিই এমন string
+slice যা অন্তত <code>'a</code> lifetime-এর সমান সময় বাঁচে। function signature Rust-কে এটাও বলছে যে function থেকে return করা string
+slice অন্তত <code>'a</code> lifetime-এর সমান সময় বাঁচবে। বাস্তবে এর মানে হলো, <code>longest</code> function-এর return করা reference-এর lifetime
+function-এর argument-গুলো যে মানগুলোকে নির্দেশ করে তাদের lifetime-এর মধ্যে ছোটটির সমান। এই কোড বিশ্লেষণের সময় আমরা
+চাই Rust এই সম্পর্কগুলোই ব্যবহার করুক।</p>
+<p>মনে রাখবেন, এই function signature-এ lifetime parameter উল্লেখ করে আমরা পাঠানো বা return করা কোনো মানের lifetime বদলাচ্ছি
+না। বরং বলে দিচ্ছি যে এই শর্ত মানে না এমন যেকোনো মান borrow checker-কে বাতিল করতে হবে। খেয়াল করুন, <code>longest</code>
+function-এর জানার দরকার নেই <code>x</code> আর <code>y</code> ঠিক কত সময় বাঁচবে; শুধু এটুকু দরকার যে <code>'a</code>-এর জায়গায় এমন কোনো scope বসানো যায়
+যা এই signature পূরণ করে।</p>
+<p>function-এ lifetime annotate করার সময় annotation-গুলো যায় function signature-এ, function-এর body-তে নয়। lifetime
+annotation-গুলো function-এর চুক্তির অংশ হয়ে যায়, অনেকটা signature-এর type-গুলোর মতো। function signature-এ lifetime-এর চুক্তি
+থাকায় Rust compiler-এর বিশ্লেষণ সহজ হতে পারে। কোনো function যেভাবে annotate করা হয়েছে বা যেভাবে call করা হয়েছে তাতে
+সমস্যা থাকলে compiler error আমাদের কোডের অংশ আর শর্তগুলোকে আরও নিখুঁতভাবে দেখিয়ে দিতে পারে। অন্যদিকে, যদি Rust compiler
+lifetime-গুলোর সম্পর্ক নিয়ে আমাদের উদ্দেশ্য সম্পর্কে আরও বেশি অনুমান করত, তাহলে compiler হয়তো শুধু আমাদের কোডের এমন
+কোনো ব্যবহার দেখাতে পারত যা সমস্যার আসল কারণ থেকে অনেক ধাপ দূরে।</p>
+<p>যখন আমরা <code>longest</code>-এ concrete reference পাঠাই, তখন <code>'a</code>-এর জায়গায় যে concrete lifetime বসে, তা হলো <code>x</code>-এর scope-এর সেই অংশ
+যা <code>y</code>-এর scope-এর সঙ্গে মিলে যায়। অন্যভাবে বললে, generic lifetime <code>'a</code> পাবে এমন concrete lifetime, যা <code>x</code> ও <code>y</code>-এর lifetime-এর
+মধ্যে ছোটটির সমান। return করা reference-কে আমরা একই lifetime parameter <code>'a</code> দিয়ে annotate করেছি বলে return করা reference-ও
+<code>x</code> ও <code>y</code>-এর lifetime-এর মধ্যে ছোটটির সমান সময় পর্যন্ত বৈধ থাকবে।</p>
+<p>চলুন ভিন্ন ভিন্ন concrete lifetime-এর reference পাঠিয়ে দেখি lifetime annotation কীভাবে <code>longest</code> function-কে সীমাবদ্ধ করে।
+Listing 10-22 একটি সোজাসাপ্টা উদাহরণ।</p>
+<figure class="listing" id="listing-10-22">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">fn main() {
+    let string1 = String::from("long string is long");
+
+    {
+        let string2 = String::from("xyz");
+        let result = longest(string1.as_str(), string2.as_str());
+        println!("The longest string is {result}");
+    }
+}
+<span class="boring">
+</span><span class="boring">fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
+</span><span class="boring">    if x.len() &gt; y.len() { x } else { y }
+</span><span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-10-22">Listing 10-22</a>: ভিন্ন ভিন্ন concrete lifetime-এর <code>String</code> মানের reference দিয়ে <code>longest</code> function ব্যবহার করা</figcaption>
+</figure>
+<p>এই উদাহরণে <code>string1</code> বাইরের scope-এর শেষ পর্যন্ত বৈধ, <code>string2</code> ভেতরের scope-এর শেষ পর্যন্ত বৈধ, আর <code>result</code> এমন কিছুকে
+নির্দেশ করে যা ভেতরের scope-এর শেষ পর্যন্ত বৈধ। কোডটি চালালে দেখবেন borrow checker অনুমোদন দেয়; এটি compile হবে এবং
+print করবে <code>The longest string is long string is long</code>।</p>
+<p>এবার এমন একটি উদাহরণ দেখি যা দেখায় যে <code>result</code>-এর reference-এর lifetime-কে দুটি argument-এর মধ্যে ছোট lifetime-টি হতে হবে।
+আমরা <code>result</code> variable-এর ঘোষণা ভেতরের scope-এর বাইরে সরিয়ে নেব, কিন্তু <code>result</code> variable-এ মান বসানোটা <code>string2</code>-সহ
+scope-এর ভেতরেই রাখব। তারপর <code>result</code> ব্যবহার করা <code>println!</code>-কে ভেতরের scope-এর বাইরে, ভেতরের scope শেষ হওয়ার পরে সরিয়ে
+নেব। Listing 10-23-এর কোড compile হবে না।</p>
+<figure class="listing" id="listing-10-23">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile">fn main() {
+    let string1 = String::from("long string is long");
+    let result;
+    {
+        let string2 = String::from("xyz");
+        result = longest(string1.as_str(), string2.as_str());
+    }
+    println!("The longest string is {result}");
+}
+<span class="boring">
+</span><span class="boring">fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
+</span><span class="boring">    if x.len() &gt; y.len() { x } else { y }
+</span><span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-10-23">Listing 10-23</a>: <code>string2</code> scope-এর বাইরে যাওয়ার পর <code>result</code> ব্যবহারের চেষ্টা</figcaption>
+</figure>
+<p>এই কোড compile করার চেষ্টা করলে এই error পাই:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling chapter10 v0.1.0 (file:///projects/chapter10)
+error[E0597]: `string2` does not live long enough
+ --&gt; src/main.rs:6:44
+  |
+5 |         let string2 = String::from("xyz");
+  |             ------- binding `string2` declared here
+6 |         result = longest(string1.as_str(), string2.as_str());
+  |                                            ^^^^^^^ borrowed value does not live long enough
+7 |     }
+  |     - `string2` dropped here while still borrowed
+8 |     println!("The longest string is {result}");
+  |                                      ------ borrow later used here
+
+For more information about this error, try `rustc --explain E0597`.
+error: could not compile `chapter10` (bin "chapter10") due to 1 previous error
+</code></pre>
+<p>error-টি দেখায় যে <code>println!</code> statement-এর জন্য <code>result</code> বৈধ থাকতে হলে <code>string2</code>-কে বাইরের scope-এর শেষ পর্যন্ত বৈধ থাকতে
+হতো। Rust এটা জানে, কারণ আমরা function-এর parameter আর return মানের lifetime একই lifetime parameter <code>'a</code> দিয়ে annotate
+করেছি।</p>
+<p>মানুষ হিসেবে আমরা এই কোড দেখে বুঝতে পারি যে <code>string1</code> <code>string2</code>-এর চেয়ে লম্বা, তাই <code>result</code>-এ থাকবে <code>string1</code>-এর একটি
+reference। <code>string1</code> যেহেতু এখনো scope-এর বাইরে যায়নি, তাই <code>println!</code> statement-এর জন্য <code>string1</code>-এর reference তখনো বৈধ
+থাকবে। কিন্তু compiler এই ক্ষেত্রে দেখতে পায় না যে reference-টি বৈধ। আমরা Rust-কে বলেছি যে <code>longest</code> function-এর return
+করা reference-এর lifetime পাঠানো reference-গুলোর lifetime-এর মধ্যে ছোটটির সমান। তাই borrow checker Listing 10-23-এর
+কোডকে সম্ভাব্য অবৈধ reference থাকতে পারে বলে অনুমোদন দেয় না।</p>
+<p><code>longest</code> function-এ পাঠানো reference-গুলোর মান ও lifetime, আর return করা reference কীভাবে ব্যবহার হচ্ছে, তা বদলে আরও
+পরীক্ষা সাজিয়ে দেখুন। compile করার আগে অনুমান করুন আপনার পরীক্ষাগুলো borrow checker পার হবে কি না; তারপর মিলিয়ে দেখুন
+আপনার অনুমান ঠিক ছিল কি না!</p>
+<div class="quiz-placeholder" data-quiz-name="&quot;ch10-03-lifetimes-sec1&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot;lifetime বুঝতে সাহায্য করে একটি object কতক্ষণ &#92;&quot;জীবিত&#92;&quot; থাকে, আর সেই object-এর reference-গুলো object-টির চেয়ে বেশি সময় বাঁচে কি না। &#92;n&quot;,&quot;id&quot;:&quot;8b7f93c3-efb0-44e2-a0ca-b45e35620b30&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:&quot;কোনো object-এর মেমোরি মুক্ত হয়ে যাওয়ার পরও তার reference ব্যবহার করা&quot;},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;ব্যর্থ হতে পারে এমন কোনো হিসাবের ফল error-এর সম্ভাবনা যাচাই করার আগেই ব্যবহার করা&quot;,&quot;array-র সীমার বাইরে index করা (buffer overflow)&quot;,&quot;কোনো object-এর জন্য যথেষ্ট মেমোরি allocate না করা&quot;],&quot;prompt&quot;:&quot;lifetime কোন ধরনের প্রোগ্রামিং ভুল ঠেকানোর জন্য?&quot;}},{&quot;context&quot;:&quot;type signature যদি বলে function-টিকে `&#39;a` lifetime-এর একটি reference return করতে হবে, তাহলে ভিন্ন lifetime &#39;`b`-এর একটি&#92;nreference, অর্থাৎ এখানে `y`, return করা অবৈধ।&#92;n&quot;,&quot;id&quot;:&quot;77cf924a-ece1-4119-a762-f5f03536b4e1&quot;,&quot;type&quot;:&quot;Tracing&quot;,&quot;answer&quot;:{&quot;doesCompile&quot;:false,&quot;lineNumber&quot;:5},&quot;prompt&quot;:{&quot;program&quot;:&quot;fn shortest&lt;&#39;a, &#39;b&gt;(x: &amp;&#39;a str, y: &amp;&#39;b str) -&gt; &amp;&#39;a str {&#92;n  if x.len() &lt; y.len() {&#92;n    x&#92;n  } else {&#92;n    y&#92;n  }&#92;n}&#92;n&#92;nfn main() {&#92;n  println!(&#92;&quot;{}&#92;&quot;, shortest(&#92;&quot;hello&#92;&quot;, &#92;&quot;rust&#92;&quot;));&#92;n}&#92;n&quot;}}]}" data-quiz-fullscreen="true"></div>
+
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="thinking-in-terms-of-lifetimes"></a></p>
+<h3 id="relationships"><a class="header" href="#relationships">সম্পর্ক</a></h3>
+<p>lifetime parameter কীভাবে উল্লেখ করতে হবে, তা নির্ভর করে আপনার function কী করছে তার ওপর। যেমন, <code>longest</code> function-এর
+implementation বদলে যদি সবসময় সবচেয়ে লম্বা string slice-এর বদলে প্রথম parameter-টি return করতাম, তাহলে <code>y</code> parameter-এ
+lifetime উল্লেখ করার দরকার হতো না। নিচের কোড compile হবে:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">fn main() {
+</span><span class="boring">    let string1 = String::from("abcd");
+</span><span class="boring">    let string2 = "efghijklmnopqrstuvwxyz";
+</span><span class="boring">
+</span><span class="boring">    let result = longest(string1.as_str(), string2);
+</span><span class="boring">    println!("The longest string is {result}");
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;str) -&gt; &amp;'a str {
+    x
+}</code></pre>
+</figure>
+<p>আমরা <code>x</code> parameter আর return type-এর জন্য lifetime parameter <code>'a</code> উল্লেখ করেছি, কিন্তু <code>y</code> parameter-এর জন্য নয়, কারণ <code>y</code>-এর
+lifetime-এর সঙ্গে <code>x</code>-এর বা return মানের lifetime-এর কোনো সম্পর্ক নেই।</p>
+<p>function থেকে reference return করার সময় return type-এর lifetime parameter-কে parameter-গুলোর কোনো একটির lifetime
+parameter-এর সঙ্গে মিলতে হবে। return করা reference যদি parameter-গুলোর কোনোটিকে নির্দেশ <em>না</em> করে, তাহলে এটিকে এই function-এর
+ভেতরে তৈরি কোনো মানকে নির্দেশ করতে হবে। কিন্তু সেটি হবে একটি dangling reference, কারণ function-এর শেষে মানটি scope-এর বাইরে
+চলে যাবে। <code>longest</code> function-এর এই implementation-এর চেষ্টাটি দেখুন, যা compile হবে না:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
+</span><span class="boring">    let string1 = String::from("abcd");
+</span><span class="boring">    let string2 = "xyz";
+</span><span class="boring">
+</span><span class="boring">    let result = longest(string1.as_str(), string2);
+</span><span class="boring">    println!("The longest string is {result}");
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn longest&lt;'a&gt;(x: &amp;str, y: &amp;str) -&gt; &amp;'a str {
+    let result = String::from("really long string");
+    result.as_str()
+}</code></pre>
+</figure>
+<p>এখানে return type-এর জন্য lifetime parameter <code>'a</code> উল্লেখ করা সত্ত্বেও এই implementation compile হবে না, কারণ return মানের
+lifetime parameter-গুলোর lifetime-এর সঙ্গে মোটেই সম্পর্কিত নয়। আমরা যে error message পাই:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling chapter10 v0.1.0 (file:///projects/chapter10)
+error[E0515]: cannot return value referencing local variable `result`
+  --&gt; src/main.rs:11:5
+   |
+11 |     result.as_str()
+   |     ------^^^^^^^^^
+   |     |
+   |     returns a value referencing data owned by the current function
+   |     `result` is borrowed here
+
+For more information about this error, try `rustc --explain E0515`.
+error: could not compile `chapter10` (bin "chapter10") due to 1 previous error
+</code></pre>
+<p>সমস্যা হলো <code>longest</code> function-এর শেষে <code>result</code> scope-এর বাইরে চলে যায় এবং পরিষ্কার হয়ে যায়। অথচ আমরা function থেকে
+<code>result</code>-এর একটি reference return করার চেষ্টা করছি। এমন কোনো lifetime parameter উল্লেখ করার উপায় নেই যা dangling
+reference-টিকে বদলে দেবে, আর Rust আমাদের dangling reference তৈরি করতে দেবে না। এই ক্ষেত্রে সবচেয়ে ভালো সমাধান হবে
+reference-এর বদলে একটি owned data type (নিজের ডেটার মালিক এমন type) return করা, যাতে মানটি পরিষ্কার করার দায়িত্ব call
+করা function-এর ওপর পড়ে।</p>
+<p>শেষ পর্যন্ত lifetime syntax-এর কাজ হলো function-এর বিভিন্ন parameter আর return মানের lifetime-গুলোকে যুক্ত করা। একবার এগুলো
+যুক্ত হলে Rust-এর কাছে যথেষ্ট তথ্য থাকে, যাতে মেমোরি-নিরাপদ operation অনুমোদন করতে পারে এবং dangling pointer তৈরি করবে
+বা অন্য কোনোভাবে memory safety ভঙ্গ করবে এমন operation বাতিল করতে পারে।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="lifetime-annotations-in-struct-definitions"></a></p>
+<h3 id="in-struct-definitions"><a class="header" href="#in-struct-definitions">struct-এর সংজ্ঞায়</a></h3>
+<p>এ পর্যন্ত আমরা যত struct সংজ্ঞায়িত করেছি, সবগুলোই owned type রাখে। reference রাখার জন্যও struct সংজ্ঞায়িত করা যায়, তবে
+সেক্ষেত্রে struct-এর সংজ্ঞার প্রতিটি reference-এ একটি lifetime annotation যোগ করতে হবে। Listing 10-24-এ <code>ImportantExcerpt</code>
+নামের একটি struct আছে, যা একটি string slice রাখে।</p>
+<figure class="listing" id="listing-10-24">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">struct ImportantExcerpt&lt;'a&gt; {
+    part: &amp;'a str,
+}
+
+fn main() {
+    let novel = String::from("Call me Ishmael. Some years ago...");
+    let first_sentence = novel.split('.').next().unwrap();
+    let i = ImportantExcerpt {
+        part: first_sentence,
+    };
+}</code></pre>
+<figcaption><a href="#listing-10-24">Listing 10-24</a>: একটি reference রাখে এমন struct, যার জন্য lifetime annotation দরকার</figcaption>
+</figure>
+<p>এই struct-এর একটিমাত্র field <code>part</code>, যা একটি string slice রাখে, আর string slice হলো reference। generic data type-এর মতোই
+আমরা struct-এর নামের পরে angle bracket-এর ভেতরে generic lifetime parameter-এর নাম ঘোষণা করি, যাতে struct-এর সংজ্ঞার
+body-তে lifetime parameter-টি ব্যবহার করতে পারি। এই annotation-এর মানে হলো, <code>ImportantExcerpt</code>-এর একটি instance তার <code>part</code>
+field-এ রাখা reference-এর চেয়ে বেশি সময় বাঁচতে পারবে না।</p>
+<p>এখানে <code>main</code> function <code>ImportantExcerpt</code> struct-এর একটি instance তৈরি করে, যা <code>novel</code> variable-এর মালিকানাধীন <code>String</code>-এর
+প্রথম বাক্যের একটি reference রাখে। <code>ImportantExcerpt</code> instance তৈরি হওয়ার আগেই <code>novel</code>-এর ডেটা থাকে। তা ছাড়া
+<code>ImportantExcerpt</code> scope-এর বাইরে যাওয়ার পরেই কেবল <code>novel</code> scope-এর বাইরে যায়, তাই <code>ImportantExcerpt</code> instance-এর
+reference-টি বৈধ।</p>
+<h3 id="lifetime-elision"><a class="header" href="#lifetime-elision">lifetime elision</a></h3>
+<p>আপনি শিখেছেন যে প্রতিটি reference-এর একটি lifetime আছে, আর reference ব্যবহার করা function বা struct-এর জন্য lifetime
+parameter উল্লেখ করতে হয়। কিন্তু Listing 4-9-এ আমাদের একটি function ছিল, যা Listing 10-25-এ আবার দেখানো হয়েছে, যেটি
+lifetime annotation ছাড়াই compile হয়েছিল।</p>
+<figure class="listing" id="listing-10-25">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre class="playground"><code class="language-rust edition2024">fn first_word(s: &amp;str) -&gt; &amp;str {
+    let bytes = s.as_bytes();
+
+    for (i, &amp;item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &amp;s[0..i];
+        }
+    }
+
+    &amp;s[..]
+}
+<span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let my_string = String::from("hello world");
+</span><span class="boring">
+</span><span class="boring">    // first_word works on slices of `String`s
+</span><span class="boring">    let word = first_word(&amp;my_string[..]);
+</span><span class="boring">
+</span><span class="boring">    let my_string_literal = "hello world";
+</span><span class="boring">
+</span><span class="boring">    // first_word works on slices of string literals
+</span><span class="boring">    let word = first_word(&amp;my_string_literal[..]);
+</span><span class="boring">
+</span><span class="boring">    // Because string literals *are* string slices already,
+</span><span class="boring">    // this works too, without the slice syntax!
+</span><span class="boring">    let word = first_word(my_string_literal);
+</span><span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-10-25">Listing 10-25</a>: Listing 4-9-এ সংজ্ঞায়িত একটি function, যা parameter আর return type reference হওয়া সত্ত্বেও lifetime annotation ছাড়াই compile হয়েছিল</figcaption>
+</figure>
+<p>এই function lifetime annotation ছাড়া compile হওয়ার কারণ ঐতিহাসিক: Rust-এর প্রথম দিকের সংস্করণে (1.0-এর আগে) এই কোড
+compile হতো না, কারণ প্রতিটি reference-এর একটি স্পষ্ট lifetime দরকার হতো। সেই সময় function signature-টি এভাবে লেখা হতো:</p>
+<pre><code class="language-rust ignore">fn first_word&lt;'a&gt;(s: &amp;'a str) -&gt; &amp;'a str {</code></pre>
+<p>অনেক Rust কোড লেখার পর Rust দল দেখল যে নির্দিষ্ট কিছু পরিস্থিতিতে Rust প্রোগ্রামাররা বারবার একই lifetime annotation
+লিখছেন। এই পরিস্থিতিগুলো অনুমানযোগ্য ছিল এবং কয়েকটি সুনির্দিষ্ট pattern মেনে চলত। ডেভেলপাররা এই pattern-গুলো compiler-এর
+কোডে যুক্ত করে দিলেন, যাতে borrow checker এই পরিস্থিতিগুলোতে lifetime অনুমান করে নিতে পারে এবং স্পষ্ট annotation-এর
+দরকার না হয়।</p>
+<p>Rust-এর ইতিহাসের এই অংশটি প্রাসঙ্গিক, কারণ এমন হতে পারে যে আরও সুনির্দিষ্ট pattern সামনে আসবে এবং compiler-এ যুক্ত হবে।
+ভবিষ্যতে হয়তো আরও কম lifetime annotation লাগবে।</p>
+<p>reference সম্পর্কে Rust-এর বিশ্লেষণে যুক্ত করা pattern-গুলোকে বলা হয় <em>lifetime elision rules</em> (lifetime বাদ দিয়ে লেখার
+নিয়ম)। এগুলো প্রোগ্রামারদের মেনে চলার নিয়ম নয়; এগুলো কিছু নির্দিষ্ট ক্ষেত্রের একটি সেট, যা compiler বিবেচনা করবে, আর
+আপনার কোড এই ক্ষেত্রগুলোর সঙ্গে মিলে গেলে lifetime স্পষ্ট করে লেখার দরকার নেই।</p>
+<p>elision rule-গুলো পূর্ণ অনুমান দেয় না। Rust নিয়মগুলো প্রয়োগ করার পরও যদি reference-গুলোর lifetime নিয়ে অস্পষ্টতা থেকে
+যায়, তাহলে compiler বাকি reference-গুলোর lifetime কী হওয়া উচিত তা আন্দাজ করবে না। আন্দাজ না করে compiler আপনাকে একটি
+error দেবে, যা আপনি lifetime annotation যোগ করে সমাধান করতে পারেন।</p>
+<p>function বা method-এর parameter-এর lifetime-কে বলা হয় <em>input lifetimes</em>, আর return মানের lifetime-কে বলা হয় <em>output
+lifetimes</em>।</p>
+<p>স্পষ্ট annotation না থাকলে reference-গুলোর lifetime বের করতে compiler তিনটি নিয়ম ব্যবহার করে। প্রথম নিয়মটি input
+lifetime-এর ক্ষেত্রে প্রযোজ্য, আর দ্বিতীয় ও তৃতীয় নিয়ম output lifetime-এর ক্ষেত্রে। তিনটি নিয়মের শেষে পৌঁছেও যদি এমন
+reference থাকে যার lifetime compiler বের করতে পারেনি, তাহলে compiler একটি error দিয়ে থেমে যাবে। এই নিয়মগুলো <code>fn</code>-এর সংজ্ঞা
+এবং <code>impl</code> block, দুই ক্ষেত্রেই প্রযোজ্য।</p>
+<!-- BEGIN INTERVENTION: d03748df-8dcf-4ec8-bd30-341927544665 -->
+<p>প্রথম নিয়মটি হলো, compiler প্রতিটি input type-এর প্রতিটি lifetime-কে আলাদা একটি lifetime parameter দেয়। <code>&amp;'_ i32</code>-এর মতো reference-এর একটি lifetime parameter দরকার, আর <code>ImportantExcerpt&lt;'_&gt;</code>-এর মতো structure-এরও একটি lifetime parameter দরকার। যেমন:</p>
+<ul>
+<li><code>fn foo(x: &amp;i32)</code> function একটি lifetime parameter পাবে এবং হয়ে যাবে <code>fn foo&lt;'a&gt;(x: &amp;'a i32)</code>।</li>
+<li><code>fn foo(x: &amp;i32, y: &amp;i32)</code> function দুটি lifetime parameter পাবে এবং হয়ে যাবে <code>fn foo&lt;'a, 'b&gt;(x: &amp;'a i32, y: &amp;'b i32)</code>।</li>
+<li><code>fn foo(x: &amp;ImportantExcerpt)</code> function দুটি lifetime parameter পাবে এবং হয়ে যাবে <code>fn foo&lt;'a, 'b&gt;(x: &amp;'a ImportantExcerpt&lt;'b&gt;)</code>।</li>
+</ul>
+<!-- END INTERVENTION -->
+<p>দ্বিতীয় নিয়মটি হলো, যদি ঠিক একটি input lifetime parameter থাকে, তাহলে সেই lifetime সব output lifetime parameter-কে দেওয়া হয়:
+<code>fn foo&lt;'a&gt;(x: &amp;'a i32) -&gt; &amp;'a i32</code>।</p>
+<p>তৃতীয় নিয়মটি হলো, যদি একাধিক input lifetime parameter থাকে, কিন্তু method হওয়ার কারণে তাদের একটি <code>&amp;self</code> বা <code>&amp;mut self</code>
+হয়, তাহলে <code>self</code>-এর lifetime সব output lifetime parameter-কে দেওয়া হয়। এই তৃতীয় নিয়মের কারণে method পড়া ও লেখা অনেক
+সহজ হয়, কারণ কম চিহ্ন লাগে।</p>
+<p>চলুন নিজেদের compiler ভেবে নিই। Listing 10-25-এর <code>first_word</code> function-এর signature-এ reference-গুলোর lifetime বের করতে
+আমরা এই নিয়মগুলো প্রয়োগ করব। signature-টি শুরুতে reference-গুলোর সঙ্গে কোনো lifetime ছাড়া থাকে:</p>
+<pre><code class="language-rust ignore">fn first_word(s: &amp;str) -&gt; &amp;str {</code></pre>
+<p>তারপর compiler প্রথম নিয়মটি প্রয়োগ করে, যা বলে প্রতিটি parameter নিজস্ব lifetime পায়। বরাবরের মতো আমরা একে <code>'a</code> বলব,
+তাই signature-টি এখন এই:</p>
+<pre><code class="language-rust ignore">fn first_word&lt;'a&gt;(s: &amp;'a str) -&gt; &amp;str {</code></pre>
+<p>দ্বিতীয় নিয়মটি প্রযোজ্য, কারণ ঠিক একটি input lifetime আছে। দ্বিতীয় নিয়ম বলে, একমাত্র input parameter-এর lifetime
+output lifetime-কে দেওয়া হয়, তাই signature-টি এখন এই:</p>
+<pre><code class="language-rust ignore">fn first_word&lt;'a&gt;(s: &amp;'a str) -&gt; &amp;'a str {</code></pre>
+<p>এখন এই function signature-এর সব reference-এর lifetime আছে, আর প্রোগ্রামারকে এই function signature-এ lifetime annotate
+করতে না হয়েই compiler তার বিশ্লেষণ চালিয়ে যেতে পারে।</p>
+<p>আরেকটি উদাহরণ দেখা যাক, এবার <code>longest</code> function দিয়ে, যা Listing 10-20-এ কাজ শুরু করার সময় কোনো lifetime parameter ছাড়া
+ছিল:</p>
+<pre><code class="language-rust ignore">fn longest(x: &amp;str, y: &amp;str) -&gt; &amp;str {</code></pre>
+<p>প্রথম নিয়মটি প্রয়োগ করি: প্রতিটি parameter নিজস্ব lifetime পায়। এবার একটির বদলে দুটি parameter আছে, তাই দুটি lifetime:</p>
+<pre><code class="language-rust ignore">fn longest&lt;'a, 'b&gt;(x: &amp;'a str, y: &amp;'b str) -&gt; &amp;str {</code></pre>
+<p>দেখতে পাচ্ছেন দ্বিতীয় নিয়মটি প্রযোজ্য নয়, কারণ একাধিক input lifetime আছে। তৃতীয় নিয়মটিও প্রযোজ্য নয়, কারণ <code>longest</code>
+method নয়, একটি function, তাই কোনো parameter-ই <code>self</code> নয়। তিনটি নিয়ম পার হয়েও আমরা return type-এর lifetime কী তা বের
+করতে পারিনি। এ কারণেই Listing 10-20-এর কোড compile করতে গিয়ে আমরা error পেয়েছিলাম: compiler lifetime elision rule-গুলো পার
+হয়েও signature-এর সব reference-এর lifetime বের করতে পারেনি।</p>
+<p>তৃতীয় নিয়মটি যেহেতু আসলে শুধু method signature-এ প্রযোজ্য, তাই এবার সেই প্রেক্ষাপটে lifetime দেখব, যাতে বোঝা যায় কেন
+তৃতীয় নিয়মের কারণে method signature-এ খুব বেশি lifetime annotate করতে হয় না।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="lifetime-annotations-in-method-definitions"></a></p>
+<h3 id="in-method-definitions"><a class="header" href="#in-method-definitions">method-এর সংজ্ঞায়</a></h3>
+<p>lifetime-যুক্ত struct-এর ওপর method implement করার সময় আমরা generic type parameter-এর মতোই syntax ব্যবহার করি, যেমন
+Listing 10-11-এ দেখানো হয়েছে। lifetime parameter কোথায় ঘোষণা ও ব্যবহার করব, তা নির্ভর করে সেগুলো struct-এর field-এর সঙ্গে
+সম্পর্কিত নাকি method-এর parameter ও return মানের সঙ্গে।</p>
+<p>struct-এর field-এর lifetime-এর নাম সবসময় <code>impl</code> keyword-এর পরে ঘোষণা করতে হয় এবং তারপর struct-এর নামের পরে ব্যবহার করতে
+হয়, কারণ ওই lifetime-গুলো struct-এর type-এর অংশ।</p>
+<p><code>impl</code> block-এর ভেতরে method signature-এ reference-গুলো struct-এর field-এ থাকা reference-এর lifetime-এর সঙ্গে বাঁধা থাকতে
+পারে, আবার স্বাধীনও হতে পারে। তা ছাড়া lifetime elision rule-এর কারণে প্রায়ই method signature-এ lifetime annotation লাগে না।
+Listing 10-24-এ সংজ্ঞায়িত <code>ImportantExcerpt</code> নামের struct ব্যবহার করে কয়েকটি উদাহরণ দেখা যাক।</p>
+<p>প্রথমে আমরা <code>level</code> নামের একটি method ব্যবহার করব, যার একমাত্র parameter হলো <code>self</code>-এর একটি reference এবং যার return মান একটি
+<code>i32</code>, যা কোনো কিছুর reference নয়:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">struct ImportantExcerpt&lt;'a&gt; {
+</span><span class="boring">    part: &amp;'a str,
+</span><span class="boring">}
+</span><span class="boring">
+</span>impl&lt;'a&gt; ImportantExcerpt&lt;'a&gt; {
+    fn level(&amp;self) -&gt; i32 {
+        3
+    }
+}
+<span class="boring">
+</span><span class="boring">impl&lt;'a&gt; ImportantExcerpt&lt;'a&gt; {
+</span><span class="boring">    fn announce_and_return_part(&amp;self, announcement: &amp;str) -&gt; &amp;str {
+</span><span class="boring">        println!("Attention please: {announcement}");
+</span><span class="boring">        self.part
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let novel = String::from("Call me Ishmael. Some years ago...");
+</span><span class="boring">    let first_sentence = novel.split('.').next().unwrap();
+</span><span class="boring">    let i = ImportantExcerpt {
+</span><span class="boring">        part: first_sentence,
+</span><span class="boring">    };
+</span><span class="boring">}</span></code></pre>
+<p><code>impl</code>-এর পরে lifetime parameter-এর ঘোষণা এবং type-এর নামের পরে এর ব্যবহার বাধ্যতামূলক, কিন্তু প্রথম elision rule-এর কারণে
+<code>self</code>-এর reference-এর lifetime annotate করার দরকার নেই।</p>
+<p>এখানে একটি উদাহরণ, যেখানে তৃতীয় lifetime elision rule প্রযোজ্য:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">struct ImportantExcerpt&lt;'a&gt; {
+</span><span class="boring">    part: &amp;'a str,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl&lt;'a&gt; ImportantExcerpt&lt;'a&gt; {
+</span><span class="boring">    fn level(&amp;self) -&gt; i32 {
+</span><span class="boring">        3
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span>impl&lt;'a&gt; ImportantExcerpt&lt;'a&gt; {
+    fn announce_and_return_part(&amp;self, announcement: &amp;str) -&gt; &amp;str {
+        println!("Attention please: {announcement}");
+        self.part
+    }
+}
+<span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let novel = String::from("Call me Ishmael. Some years ago...");
+</span><span class="boring">    let first_sentence = novel.split('.').next().unwrap();
+</span><span class="boring">    let i = ImportantExcerpt {
+</span><span class="boring">        part: first_sentence,
+</span><span class="boring">    };
+</span><span class="boring">}</span></code></pre>
+<p>দুটি input lifetime আছে, তাই Rust প্রথম lifetime elision rule প্রয়োগ করে <code>&amp;self</code> আর <code>announcement</code> দুটিকেই নিজস্ব lifetime
+দেয়। তারপর parameter-গুলোর একটি <code>&amp;self</code> হওয়ায় return type পায় <code>&amp;self</code>-এর lifetime, আর সব lifetime-এর হিসাব মিলে যায়।</p>
+<h3 id="the-static-lifetime"><a class="header" href="#the-static-lifetime">static lifetime</a></h3>
+<p>একটি বিশেষ lifetime নিয়ে আলোচনা করা দরকার, তা হলো <code>'static</code>, যা বোঝায় সংশ্লিষ্ট reference প্রোগ্রামের পুরো সময় জুড়ে বেঁচে
+থাকতে <em>পারে</em>। সব string literal-এর lifetime <code>'static</code>, যা আমরা এভাবে annotate করতে পারি:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let s: &amp;'static str = "I have a static lifetime.";
+<span class="boring">}</span></code></pre>
+<p>এই string-এর লেখাটি সরাসরি প্রোগ্রামের binary-তে রাখা থাকে, যা সবসময় পাওয়া যায়। তাই সব string literal-এর lifetime হলো
+<code>'static</code>।</p>
+<p>error message-এ হয়তো <code>'static</code> lifetime ব্যবহারের পরামর্শ দেখতে পাবেন। কিন্তু কোনো reference-এর lifetime হিসেবে <code>'static</code>
+উল্লেখ করার আগে ভেবে দেখুন, আপনার reference-টি আসলেই প্রোগ্রামের পুরো lifetime জুড়ে বাঁচে কি না, আর আপনি তা চান কি না।
+বেশিরভাগ সময় <code>'static</code> lifetime-এর পরামর্শ দেওয়া error message আসে একটি dangling reference তৈরির চেষ্টা থেকে, অথবা
+পাওয়া lifetime-গুলোর মধ্যে অমিল থেকে। এমন ক্ষেত্রে সমাধান হলো সেই সমস্যাগুলো ঠিক করা, <code>'static</code> lifetime উল্লেখ করা নয়।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="generic-type-parameters-trait-bounds-and-lifetimes-together"></a></p>
+<h2 id="generic-type-parameters-trait-bounds-and-lifetimes"><a class="header" href="#generic-type-parameters-trait-bounds-and-lifetimes">generic type parameter, trait bound ও lifetime</a></h2>
+<p>চলুন সংক্ষেপে দেখি একটি function-এ একসঙ্গে generic type parameter, trait bound আর lifetime উল্লেখ করার syntax কেমন!</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">fn main() {
+</span><span class="boring">    let string1 = String::from("abcd");
+</span><span class="boring">    let string2 = "xyz";
+</span><span class="boring">
+</span><span class="boring">    let result = longest_with_an_announcement(
+</span><span class="boring">        string1.as_str(),
+</span><span class="boring">        string2,
+</span><span class="boring">        "Today is someone's birthday!",
+</span><span class="boring">    );
+</span><span class="boring">    println!("The longest string is {result}");
+</span><span class="boring">}
+</span><span class="boring">
+</span>use std::fmt::Display;
+
+fn longest_with_an_announcement&lt;'a, T&gt;(
+    x: &amp;'a str,
+    y: &amp;'a str,
+    ann: T,
+) -&gt; &amp;'a str
+where
+    T: Display,
+{
+    println!("Announcement! {ann}");
+    if x.len() &gt; y.len() { x } else { y }
+}</code></pre>
+<p>এটি Listing 10-21-এর <code>longest</code> function, যা দুটি string slice-এর মধ্যে লম্বাটি return করে। কিন্তু এখন এতে generic type <code>T</code>-এর
+<code>ann</code> নামে একটি বাড়তি parameter আছে, যার জায়গায় <code>where</code> clause-এ উল্লেখ করা অনুযায়ী <code>Display</code> trait implement করে এমন
+যেকোনো type বসানো যায়। এই বাড়তি parameter-টি <code>{}</code> দিয়ে print করা হবে, তাই <code>Display</code> trait bound দরকার। lifetime যেহেতু এক
+ধরনের generic, তাই lifetime parameter <code>'a</code> আর generic type parameter <code>T</code>-এর ঘোষণা function-এর নামের পরে angle bracket-এর
+ভেতরে একই তালিকায় যায়।</p>
+<div class="quiz-placeholder" data-quiz-name="&quot;ch10-03-lifetimes-sec2&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot;`&#39;static` মানে &#92;&quot;পুরো প্রোগ্রাম জুড়ে জীবিত থাকা&#92;&quot;, তাই একটি static reference-এর নিচের ডেটা কখনো deallocate হওয়া চলবে না। বাস্তবে `&#39;static` reference&#92;nসাধারণত mutable হয় না, তবে `&#39;static` lifetime-এর অর্থের সঙ্গে mutability-র কোনো মৌলিক সম্পর্ক নেই।&#92;n&quot;,&quot;id&quot;:&quot;a91417cd-cd6d-416b-b72d-4af6b3fb2fd6&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:&quot;reference-এর নিচের ডেটা কখনো deallocate (মুক্ত) হয় না&quot;},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;reference-এর নিচের ডেটা পরিবর্তন করা যায় না&quot;,&quot;reference-এর নিচের ডেটা মেমোরির static অঞ্চলে থাকে&quot;,&quot;reference-এর নিচের ডেটা dynamic নয়&quot;],&quot;prompt&quot;:&quot;একটি reference-এর lifetime `&#39;static` হলে এর মানে:&#92;n&quot;}},{&quot;context&quot;:&quot;struct-টি একটিমাত্র lifetime parameter নেয়, আর output-এরও একটিমাত্র lifetime, তাই Rust ধরে নেয় এরা একই।&#92;n&quot;,&quot;id&quot;:&quot;e521409a-6cbd-48f5-bee0-7fa7f17cc562&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:&quot;```&#92;nfn baz&lt;&#39;a&gt;(f: Foo&lt;&#39;a&gt;) -&gt; &amp;&#39;a i32&#92;n```&#92;n  &quot;},&quot;prompt&quot;:{&quot;answerIndex&quot;:4,&quot;distractors&quot;:[&quot;Rust এই function signature বাতিল করবে&quot;,&quot;```&#92;nfn baz(f: Foo) -&gt; &amp;i32&#92;n```&#92;n  &quot;,&quot;```&#92;nfn baz&lt;&#39;a&gt;(f: Foo&lt;&#39;a&gt;) -&gt; &amp;i32&#92;n```&#92;n  &quot;,&quot;```&#92;nfn baz&lt;&#39;a&gt;(f: Foo) -&gt; &amp;&#39;a i32&#92;n```&#92;n  &quot;],&quot;prompt&quot;:&quot;annotation ছাড়া নিচের function signature-টি বিবেচনা করুন।&#92;n&#92;n```&#92;nstruct Foo&lt;&#39;a&gt; {&#92;n  bar: &amp;&#39;a i32&#92;n}&#92;n&#92;nfn baz(f: Foo) -&gt; &amp;i32 { /* ... */ }&#92;n```&#92;n&#92;nRust কি এই function signature গ্রহণ করবে? করলে কোন lifetime অনুমান করবে?&#92;n&quot;}},{&quot;context&quot;:&quot;Rust এই প্রোগ্রাম compile করবে না, কারণ output-এর lifetime `&amp;Foo`-এর lifetime-এর সঙ্গে বাঁধা নাকি `Foo.bar` reference-এর&#92;nlifetime-এর সঙ্গে, তা অস্পষ্ট।&#92;n&quot;,&quot;id&quot;:&quot;d03748df-8dcf-4ec8-bd30-341927544665&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:&quot;Rust এই function signature বাতিল করবে&quot;},&quot;prompt&quot;:{&quot;answerIndex&quot;:0,&quot;distractors&quot;:[&quot;```&#92;nfn baz(f: &amp;Foo) -&gt; &amp;i32&#92;n```&#92;n  &quot;,&quot;```&#92;nfn baz&lt;&#39;a&gt;(f: &amp;Foo&lt;&#39;a&gt;) -&gt; &amp;&#39;a i32&#92;n```&#92;n  &quot;,&quot;```&#92;nfn baz&lt;&#39;a&gt;(f: &amp;&#39;a Foo) -&gt; &amp;&#39;a i32&#92;n```&#92;n  &quot;,&quot;```&#92;nfn baz&lt;&#39;a, &#39;b&gt;(f: &amp;&#39;a Foo&lt;&#39;b&gt;) -&gt; &amp;&#39;a i32&#92;n```&#92;n  &quot;,&quot;```&#92;nfn baz&lt;&#39;a, &#39;b&gt;(f: &amp;&#39;a Foo&lt;&#39;b&gt;) -&gt; &amp;&#39;b i32&#92;n```&#92;n  &quot;],&quot;prompt&quot;:&quot;annotation ছাড়া নিচের function signature-টি বিবেচনা করুন।&#92;n&#92;n```&#92;nstruct Foo&lt;&#39;a&gt; {&#92;n  bar: &amp;&#39;a i32&#92;n}&#92;n&#92;n// Foo changed to &amp;Foo&#92;nfn baz(f: &amp;Foo) -&gt; &amp;i32 { /* ... */ }&#92;n```&#92;n&#92;nRust কি এই function signature গ্রহণ করবে? করলে কোন lifetime অনুমান করবে?&#92;n&quot;}}]}" data-quiz-fullscreen="true"></div>
+
+<h3 id="summary"><a class="header" href="#summary">সারসংক্ষেপ</a></h3>
+<p>এই অধ্যায়ে আমরা অনেক কিছু শিখলাম! generic type parameter, trait ও trait bound, আর generic lifetime parameter সম্পর্কে
+জানার পর আপনি এমন কোড লিখতে প্রস্তুত, যাতে পুনরাবৃত্তি নেই এবং যা অনেক ভিন্ন পরিস্থিতিতে কাজ করে। generic type parameter
+দিয়ে কোডকে ভিন্ন ভিন্ন type-এ প্রয়োগ করা যায়। trait ও trait bound নিশ্চিত করে যে type-গুলো generic হলেও কোডের প্রয়োজনীয়
+আচরণ তাদের থাকবে। আপনি শিখেছেন কীভাবে lifetime annotation ব্যবহার করে নিশ্চিত করতে হয় যে এই নমনীয় কোডে কোনো dangling
+reference থাকবে না। আর এই সব বিশ্লেষণ হয় compile time-এ, যা runtime-এর performance-এ কোনো প্রভাব ফেলে না!</p>
+<p>বিশ্বাস করুন বা না করুন, এই অধ্যায়ে আলোচিত বিষয়গুলোতে শেখার আরও অনেক কিছু আছে: অধ্যায় 18-এ trait object (trait-এর মাধ্যমে
+বিভিন্ন type ব্যবহার করার মান) নিয়ে আলোচনা করা হয়েছে, যা trait ব্যবহারের আরেকটি উপায়। lifetime annotation নিয়ে আরও জটিল
+কিছু পরিস্থিতিও আছে, যা শুধু খুব উন্নত পর্যায়ের ক্ষেত্রে দরকার হবে; সেগুলোর জন্য <a href="https://doc.rust-lang.org/reference/trait-bounds.html">Rust Reference</a> পড়া উচিত। তবে
+এরপর আপনি শিখবেন কীভাবে Rust-এ test লিখতে হয়, যাতে নিশ্চিত হতে পারেন যে আপনার কোড ঠিকঠাক কাজ করছে।</p>
+<script type="text/javascript" src="quiz/quiz-embed.iife.js"></script><link rel="stylesheet" type="text/css" href="quiz/style.css">
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch10-02-traits.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ch10-04-inventory.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch10-02-traits.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ch10-04-inventory.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris-2317480c.js"></script>
+        <script src="js-extensions/packages/feedback/dist/index-f1290d8b.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

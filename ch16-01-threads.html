@@ -1,0 +1,532 @@
+<!DOCTYPE HTML>
+<html lang="bn" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>একসঙ্গে কোড চালাতে thread ব্যবহার - Rust প্রোগ্রামিং ভাষা</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris-d33b75bf.css">
+        <link rel="stylesheet" href="theme/semantic-notes-9b5766c0.css">
+        <link rel="stylesheet" href="theme/listing-cab26221.css">
+        <link rel="stylesheet" href="theme/2018-edition-4e126c62.css">
+        <link rel="stylesheet" href="theme/bengali-4de2f0b6.css">
+        <link rel="stylesheet" href="js-extensions/packages/feedback/dist/index-c9d186bd.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-03403162.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-485378fe.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust প্রোগ্রামিং ভাষা</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/ararifdotme/rust-book-bn" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h2 id="using-threads-to-run-code-simultaneously"><a class="header" href="#using-threads-to-run-code-simultaneously">একসঙ্গে কোড চালাতে thread ব্যবহার</a></h2>
+<p>বর্তমানের বেশিরভাগ operating system-এ চালানো একটি প্রোগ্রামের কোড একটি <em>process</em> (চলমান প্রোগ্রাম)-এর ভেতরে চলে, আর operating system একসঙ্গে একাধিক process
+সামলায়। একটি প্রোগ্রামের ভেতরেও এমন স্বাধীন অংশ থাকতে পারে যা একসঙ্গে চলে। এই স্বাধীন অংশগুলো চালানোর বৈশিষ্ট্যকে বলা হয় <em>threads</em> (thread)। যেমন, একটি web
+server-এর একাধিক thread থাকতে পারে, যাতে এটি একই সময়ে একাধিক request-এর উত্তর দিতে পারে।</p>
+<p>একই সময়ে একাধিক কাজ চালাতে আপনার প্রোগ্রামের হিসাবকে একাধিক thread-এ ভাগ করলে performance বাড়তে পারে, তবে জটিলতাও বাড়ে। thread-গুলো একসঙ্গে চলতে পারে বলে
+বিভিন্ন thread-এ থাকা আপনার কোডের অংশগুলো কোন ক্রমে চলবে তার কোনো স্বাভাবিক নিশ্চয়তা নেই। এতে নানা সমস্যা হতে পারে, যেমন:</p>
+<ul>
+<li>race condition, যেখানে thread-গুলো অসংগত ক্রমে ডেটা বা resource-এ প্রবেশ করে</li>
+<li>deadlock (অচলাবস্থা), যেখানে দুটি thread একে অপরের জন্য অপেক্ষা করে, ফলে দুটির কোনোটিই এগোতে পারে না</li>
+<li>এমন বাগ, যা শুধু নির্দিষ্ট পরিস্থিতিতে ঘটে এবং নির্ভরযোগ্যভাবে আবার ঘটানো ও ঠিক করা কঠিন</li>
+</ul>
+<p>Rust thread ব্যবহারের নেতিবাচক প্রভাব কমানোর চেষ্টা করে, তবে multithreaded প্রেক্ষাপটে প্রোগ্রামিং করতে এখনো সতর্ক চিন্তা লাগে এবং একটি thread-এ চলা প্রোগ্রামের চেয়ে ভিন্ন
+কোড-গঠন দরকার হয়।</p>
+<p>প্রোগ্রামিং ভাষাগুলো কয়েকটি ভিন্ন উপায়ে thread implement করে, আর অনেক operating system এমন একটি API দেয় যা নতুন thread তৈরির জন্য প্রোগ্রামিং ভাষা call করতে পারে।
+Rust standard library thread implementation-এর <em>1:1</em> model ব্যবহার করে, যেখানে ভাষার প্রতিটি thread-এর জন্য প্রোগ্রাম operating system-এর একটি করে thread ব্যবহার করে।
+এমন crate-ও আছে যা threading-এর অন্য model implement করে, যেগুলো 1:1 model-এর তুলনায় ভিন্ন আপস করে। (Rust-এর async system, যা পরের অধ্যায়ে দেখব, concurrency-র
+আরেকটি পদ্ধতিও দেয়।)</p>
+<h3 id="creating-a-new-thread-with-spawn"><a class="header" href="#creating-a-new-thread-with-spawn"><code>spawn</code> দিয়ে নতুন thread তৈরি করা</a></h3>
+<p>নতুন thread তৈরি করতে আমরা <code>thread::spawn</code> function call করি এবং তাকে এমন একটি closure পাঠাই (closure নিয়ে অধ্যায় 13-এ কথা বলেছি), যাতে নতুন thread-এ চালাতে চাওয়া
+কোড থাকে। Listing 16-1-এর উদাহরণ একটি main thread থেকে কিছু লেখা আর একটি নতুন thread থেকে অন্য লেখা print করে।</p>
+<figure class="listing" id="listing-16-1">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">use std::thread;
+use std::time::Duration;
+
+fn main() {
+    thread::spawn(|| {
+        for i in 1..10 {
+            println!("hi number {i} from the spawned thread!");
+            thread::sleep(Duration::from_millis(1));
+        }
+    });
+
+    for i in 1..5 {
+        println!("hi number {i} from the main thread!");
+        thread::sleep(Duration::from_millis(1));
+    }
+}</code></pre>
+<figcaption><a href="#listing-16-1">Listing 16-1</a>: main thread যখন অন্য কিছু print করছে, তখন একটি জিনিস print করতে নতুন thread তৈরি করা</figcaption>
+</figure>
+<p>খেয়াল করুন, একটি Rust প্রোগ্রামের main thread শেষ হলে চালু করা সব thread বন্ধ হয়ে যায়, সেগুলোর চলা শেষ হোক বা না হোক। এই প্রোগ্রামের output প্রতিবার একটু ভিন্ন হতে পারে,
+তবে দেখতে নিচের মতো হবে:</p>
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
+<pre><code class="language-text">hi number 1 from the main thread!
+hi number 1 from the spawned thread!
+hi number 2 from the main thread!
+hi number 2 from the spawned thread!
+hi number 3 from the main thread!
+hi number 3 from the spawned thread!
+hi number 4 from the main thread!
+hi number 4 from the spawned thread!
+hi number 5 from the spawned thread!
+</code></pre>
+<p><code>thread::sleep</code>-এর call একটি thread-কে অল্প সময়ের জন্য চলা থামাতে বাধ্য করে, ফলে অন্য একটি thread চলতে পারে। thread-গুলো সম্ভবত পালা করে চলবে, তবে তার নিশ্চয়তা নেই:
+এটি নির্ভর করে আপনার operating system thread-গুলোকে কীভাবে সময় বণ্টন করে তার ওপর। এই বার চালানোয় main thread আগে print করেছে, যদিও কোডে চালু করা thread-এর print
+statement আগে আছে। আর চালু করা thread-কে <code>i</code> <code>9</code> না হওয়া পর্যন্ত print করতে বললেও main thread বন্ধ হওয়ার আগে এটি শুধু <code>5</code> পর্যন্ত পৌঁছেছে।</p>
+<p>এই কোড চালিয়ে যদি শুধু main thread-এর output দেখেন, বা কোনো মিশ্রণ না দেখেন, তাহলে range-গুলোর সংখ্যা বাড়িয়ে দেখুন, যাতে operating system-এর thread বদলানোর আরও
+সুযোগ তৈরি হয়।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="waiting-for-all-threads-to-finish-using-join-handles"></a></p>
+<h3 id="waiting-for-all-threads-to-finish"><a class="header" href="#waiting-for-all-threads-to-finish">সব thread শেষ হওয়ার জন্য অপেক্ষা করা</a></h3>
+<p>Listing 16-1-এর কোড main thread শেষ হওয়ার কারণে বেশিরভাগ সময় চালু করা thread-কে শুধু অসময়ে থামিয়েই দেয় না, বরং thread-গুলো কোন ক্রমে চলবে তার কোনো নিশ্চয়তা না
+থাকায় আমরা এটাও নিশ্চিত করতে পারি না যে চালু করা thread আদৌ চলবে!</p>
+<p><code>thread::spawn</code>-এর return মান একটি variable-এ রেখে চালু করা thread না চলা বা অসময়ে শেষ হওয়ার সমস্যা ঠিক করা যায়। <code>thread::spawn</code>-এর return type হলো <code>JoinHandle&lt;T&gt;</code>।
+<code>JoinHandle&lt;T&gt;</code> একটি owned মান, যার ওপর <code>join</code> method call করলে এটি তার thread শেষ হওয়ার জন্য অপেক্ষা করবে। Listing 16-2-এ দেখানো হয়েছে Listing 16-1-এ তৈরি
+thread-এর <code>JoinHandle&lt;T&gt;</code> কীভাবে ব্যবহার করতে হয়, আর <code>main</code> বেরিয়ে যাওয়ার আগে চালু করা thread যাতে শেষ হয় তা নিশ্চিত করতে কীভাবে <code>join</code> call করতে হয়।</p>
+<figure class="listing" id="listing-16-2">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">use std::thread;
+use std::time::Duration;
+
+fn main() {
+    let handle = thread::spawn(|| {
+        for i in 1..10 {
+            println!("hi number {i} from the spawned thread!");
+            thread::sleep(Duration::from_millis(1));
+        }
+    });
+
+    for i in 1..5 {
+        println!("hi number {i} from the main thread!");
+        thread::sleep(Duration::from_millis(1));
+    }
+
+    handle.join().unwrap();
+}</code></pre>
+<figcaption><a href="#listing-16-2">Listing 16-2</a>: thread যে শেষ পর্যন্ত চলবে তা নিশ্চিত করতে <code>thread::spawn</code> থেকে একটি <code>JoinHandle&lt;T&gt;</code> রেখে দেওয়া</figcaption>
+</figure>
+<p>handle-এর ওপর <code>join</code> call করলে বর্তমানে চলা thread block হয়ে থাকে, যতক্ষণ না handle যে thread বোঝায় সেটি শেষ হয়। একটি thread-কে <em>Blocking</em> (block করা) মানে হলো
+thread-টিকে কাজ করা বা বেরিয়ে যাওয়া থেকে আটকে রাখা। <code>join</code> call-টি main thread-এর <code>for</code> loop-এর পরে রেখেছি বলে Listing 16-2 চালালে এমন output আসার কথা:</p>
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
+<pre><code class="language-text">hi number 1 from the main thread!
+hi number 2 from the main thread!
+hi number 1 from the spawned thread!
+hi number 3 from the main thread!
+hi number 2 from the spawned thread!
+hi number 4 from the main thread!
+hi number 3 from the spawned thread!
+hi number 4 from the spawned thread!
+hi number 5 from the spawned thread!
+hi number 6 from the spawned thread!
+hi number 7 from the spawned thread!
+hi number 8 from the spawned thread!
+hi number 9 from the spawned thread!
+</code></pre>
+<p>দুটি thread পালা করে চলতে থাকে, কিন্তু <code>handle.join()</code> call-এর কারণে main thread অপেক্ষা করে এবং চালু করা thread শেষ না হওয়া পর্যন্ত শেষ হয় না।</p>
+<p>কিন্তু চলুন দেখি <code>handle.join()</code>-কে <code>main</code>-এর <code>for</code> loop-এর আগে সরিয়ে নিলে কী ঘটে, এভাবে:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">use std::thread;
+use std::time::Duration;
+
+fn main() {
+    let handle = thread::spawn(|| {
+        for i in 1..10 {
+            println!("hi number {i} from the spawned thread!");
+            thread::sleep(Duration::from_millis(1));
+        }
+    });
+
+    handle.join().unwrap();
+
+    for i in 1..5 {
+        println!("hi number {i} from the main thread!");
+        thread::sleep(Duration::from_millis(1));
+    }
+}</code></pre>
+</figure>
+<p>main thread চালু করা thread শেষ হওয়ার জন্য অপেক্ষা করবে, তারপর নিজের <code>for</code> loop চালাবে, তাই output আর মিশ্রিত থাকবে না, যেমনটি এখানে দেখানো হয়েছে:</p>
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
+<pre><code class="language-text">hi number 1 from the spawned thread!
+hi number 2 from the spawned thread!
+hi number 3 from the spawned thread!
+hi number 4 from the spawned thread!
+hi number 5 from the spawned thread!
+hi number 6 from the spawned thread!
+hi number 7 from the spawned thread!
+hi number 8 from the spawned thread!
+hi number 9 from the spawned thread!
+hi number 1 from the main thread!
+hi number 2 from the main thread!
+hi number 3 from the main thread!
+hi number 4 from the main thread!
+</code></pre>
+<p><code>join</code> কোথায় call করা হচ্ছে, এমন ছোট খুঁটিনাটিও ঠিক করতে পারে আপনার thread-গুলো একই সময়ে চলবে কি না।</p>
+<h3 id="using-move-closures-with-threads"><a class="header" href="#using-move-closures-with-threads">thread-এর সঙ্গে <code>move</code> closure ব্যবহার</a></h3>
+<p><code>thread::spawn</code>-এ পাঠানো closure-এর সঙ্গে আমরা প্রায়ই <code>move</code> keyword ব্যবহার করব, কারণ তখন closure environment থেকে যে মানগুলো ব্যবহার করে সেগুলোর ownership নিয়ে নেবে,
+ফলে সেই মানগুলোর ownership এক thread থেকে আরেক thread-এ হস্তান্তর হবে। অধ্যায় 13-এর <a href="ch13-01-closures.html#capturing-references-or-moving-ownership">“reference capture করা বা ownership সরিয়ে নেওয়া”</a><!-- ignore
+-->-এ আমরা closure-এর প্রেক্ষাপটে <code>move</code> নিয়ে আলোচনা করেছি। এখন <code>move</code> আর <code>thread::spawn</code>-এর পারস্পরিক ক্রিয়ার দিকে বেশি মনোযোগ দেব।</p>
+<p>Listing 16-1-এ খেয়াল করুন, <code>thread::spawn</code>-এ পাঠানো closure কোনো argument নেয় না: চালু করা thread-এর কোডে আমরা main thread-এর কোনো ডেটা ব্যবহার করছি না। চালু করা
+thread-এ main thread-এর ডেটা ব্যবহার করতে চালু করা thread-এর closure-কে তার দরকারি মানগুলো capture করতে হবে। Listing 16-3-এ main thread-এ একটি vector তৈরি করে চালু করা
+thread-এ সেটি ব্যবহারের একটি চেষ্টা দেখানো হয়েছে। তবে একটু পরেই দেখবেন, এটি এখনো কাজ করবে না।</p>
+<figure class="listing" id="listing-16-3">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile">use std::thread;
+
+fn main() {
+    let v = vec![1, 2, 3];
+
+    let handle = thread::spawn(|| {
+        println!("Here's a vector: {v:?}");
+    });
+
+    handle.join().unwrap();
+}</code></pre>
+<figcaption><a href="#listing-16-3">Listing 16-3</a>: main thread-এর তৈরি একটি vector অন্য thread-এ ব্যবহারের চেষ্টা</figcaption>
+</figure>
+<p>closure-টি <code>v</code> ব্যবহার করে, তাই এটি <code>v</code> capture করবে এবং একে closure-এর environment-এর অংশ বানাবে। <code>thread::spawn</code> যেহেতু এই closure একটি নতুন thread-এ চালায়, তাই
+সেই নতুন thread-এর ভেতরে <code>v</code> পাওয়ার কথা। কিন্তু এই উদাহরণ compile করলে এই error পাই:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling threads v0.1.0 (file:///projects/threads)
+error[E0373]: closure may outlive the current function, but it borrows `v`, which is owned by the current function
+ --&gt; src/main.rs:6:32
+  |
+6 |     let handle = thread::spawn(|| {
+  |                                ^^ may outlive borrowed value `v`
+7 |         println!("Here's a vector: {v:?}");
+  |                                     - `v` is borrowed here
+  |
+note: function requires argument type to outlive `'static`
+ --&gt; src/main.rs:6:18
+  |
+6 |       let handle = thread::spawn(|| {
+  |  __________________^
+7 | |         println!("Here's a vector: {v:?}");
+8 | |     });
+  | |______^
+help: to force the closure to take ownership of `v` (and any other referenced variables), use the `move` keyword
+  |
+6 |     let handle = thread::spawn(move || {
+  |                                ++++
+
+For more information about this error, try `rustc --explain E0373`.
+error: could not compile `threads` (bin "threads") due to 1 previous error
+</code></pre>
+<p>Rust <code>v</code> কীভাবে capture করবে তা <em>অনুমান করে</em>, আর <code>println!</code>-এর যেহেতু শুধু <code>v</code>-এর একটি reference দরকার, তাই closure <code>v</code> borrow করার চেষ্টা করে। কিন্তু একটি সমস্যা আছে:
+চালু করা thread কতক্ষণ চলবে তা Rust বলতে পারে না, তাই এটি জানে না <code>v</code>-এর reference সবসময় বৈধ থাকবে কি না।</p>
+<p>Listing 16-4-এ এমন একটি পরিস্থিতি দেওয়া হয়েছে, যেখানে <code>v</code>-এর reference অবৈধ হওয়ার সম্ভাবনা বেশি।</p>
+<figure class="listing" id="listing-16-4">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile">use std::thread;
+
+fn main() {
+    let v = vec![1, 2, 3];
+
+    let handle = thread::spawn(|| {
+        println!("Here's a vector: {v:?}");
+    });
+
+    drop(v); // oh no!
+
+    handle.join().unwrap();
+}</code></pre>
+<figcaption><a href="#listing-16-4">Listing 16-4</a>: একটি thread, যার closure এমন main thread থেকে <code>v</code>-এর reference capture করার চেষ্টা করে, যে main thread <code>v</code> drop করে দেয়</figcaption>
+</figure>
+<p>Rust যদি আমাদের এই কোড চালাতে দিত, তাহলে এমন সম্ভাবনা আছে যে চালু করা thread একটুও না চলে সঙ্গে সঙ্গে পটভূমিতে চলে যেত। চালু করা thread-এর ভেতরে <code>v</code>-এর একটি
+reference আছে, কিন্তু main thread অধ্যায় 15-এ আলোচিত <code>drop</code> function ব্যবহার করে সঙ্গে সঙ্গে <code>v</code> drop করে দেয়। তারপর চালু করা thread চলতে শুরু করলে <code>v</code> আর বৈধ থাকে
+না, তাই এর reference-ও অবৈধ। হায় হায়!</p>
+<p>Listing 16-3-এর compiler error ঠিক করতে আমরা error message-এর পরামর্শ ব্যবহার করতে পারি:</p>
+<!-- manual-regeneration
+after automatic regeneration, look at listings/ch16-fearless-concurrency/listing-16-03/output.txt and copy the relevant part
+-->
+<pre><code class="language-text">help: to force the closure to take ownership of `v` (and any other referenced variables), use the `move` keyword
+  |
+6 |     let handle = thread::spawn(move || {
+  |                                ++++
+</code></pre>
+<p>closure-এর আগে <code>move</code> keyword যোগ করে আমরা closure-কে তার ব্যবহৃত মানগুলোর ownership নিতে বাধ্য করি, Rust-কে মানগুলো borrow করা উচিত বলে অনুমান করতে না দিয়ে। Listing
+16-5-এ দেখানো Listing 16-3-এর পরিবর্তিত রূপ compile হবে এবং আমাদের উদ্দেশ্য অনুযায়ী চলবে।</p>
+<figure class="listing" id="listing-16-5">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">use std::thread;
+
+fn main() {
+    let v = vec![1, 2, 3];
+
+    let handle = thread::spawn(move || {
+        println!("Here's a vector: {v:?}");
+    });
+
+    handle.join().unwrap();
+}</code></pre>
+<figcaption><a href="#listing-16-5">Listing 16-5</a>: closure-কে তার ব্যবহৃত মানগুলোর ownership নিতে বাধ্য করতে <code>move</code> keyword ব্যবহার করা</figcaption>
+</figure>
+<p>Listing 16-4-এর যে কোডে main thread <code>drop</code> call করেছিল, সেটি ঠিক করতে আমরা হয়তো একই কাজ, অর্থাৎ একটি <code>move</code> closure ব্যবহার করতে চাইব। কিন্তু এই সমাধান কাজ করবে না,
+কারণ Listing 16-4 যা করার চেষ্টা করছে তা ভিন্ন একটি কারণে অনুমোদিত নয়। closure-এ <code>move</code> যোগ করলে আমরা <code>v</code>-কে closure-এর environment-এ সরিয়ে নিতাম, আর তখন main
+thread-এ এর ওপর আর <code>drop</code> call করতে পারতাম না। এর বদলে এই compiler error পেতাম:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling threads v0.1.0 (file:///projects/threads)
+error[E0382]: use of moved value: `v`
+  --&gt; src/main.rs:10:10
+   |
+ 4 |     let v = vec![1, 2, 3];
+   |         - move occurs because `v` has type `Vec&lt;i32&gt;`, which does not implement the `Copy` trait
+ 5 |
+ 6 |     let handle = thread::spawn(move || {
+   |                                ------- value moved into closure here
+ 7 |         println!("Here's a vector: {v:?}");
+   |                                     - variable moved due to use in closure
+...
+10 |     drop(v); // oh no!
+   |          ^ value used here after move
+   |
+help: consider cloning the value before moving it into the closure
+   |
+ 6 ~     let value = v.clone();
+ 7 ~     let handle = thread::spawn(move || {
+ 8 ~         println!("Here's a vector: {value:?}");
+   |
+
+For more information about this error, try `rustc --explain E0382`.
+error: could not compile `threads` (bin "threads") due to 1 previous error
+</code></pre>
+<p>Rust-এর ownership-এর নিয়ম আবারও আমাদের বাঁচিয়ে দিল! Listing 16-3-এর কোড থেকে error পেয়েছিলাম, কারণ Rust রক্ষণশীল ছিল এবং thread-এর জন্য শুধু <code>v</code> borrow করছিল,
+অর্থাৎ তাত্ত্বিকভাবে main thread চালু করা thread-এর reference অবৈধ করে দিতে পারত। Rust-কে <code>v</code>-এর ownership চালু করা thread-এ সরাতে বলে আমরা Rust-কে নিশ্চয়তা দিচ্ছি
+যে main thread আর <code>v</code> ব্যবহার করবে না। Listing 16-4 একইভাবে বদলালে main thread-এ <code>v</code> ব্যবহারের চেষ্টা করার সময় আমরা ownership-এর নিয়ম ভঙ্গ করছি। <code>move</code> keyword Rust-এর
+রক্ষণশীল default, অর্থাৎ borrow করাকে override করে; এটি আমাদের ownership-এর নিয়ম ভঙ্গ করতে দেয় না।</p>
+<p>thread কী এবং thread API কোন method দেয় তা দেখা হলো, এবার এমন কিছু পরিস্থিতি দেখা যাক যেখানে thread ব্যবহার করা যায়।</p>
+<div class="quiz-placeholder" data-quiz-name="&quot;ch16-01-threads&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot;`move` keyword-এর কারণে `n` closure-এর ভেতরে copy হয়, তাই `thread::spawn`-এর ভেতরের&#92;n`n = n + 1` assignment-গুলো বাইরের `n`-এর ওপর কোনো প্রভাব ফেলে না।&#92;n&quot;,&quot;id&quot;:&quot;53cb3740-2962-4379-a25f-a65e72812a95&quot;,&quot;type&quot;:&quot;Tracing&quot;,&quot;answer&quot;:{&quot;doesCompile&quot;:true,&quot;stdout&quot;:&quot;2&quot;},&quot;prompt&quot;:{&quot;program&quot;:&quot;use std::thread;&#92;nfn main() {&#92;n    let mut n = 1;&#92;n    let t = thread::spawn(move || {&#92;n        n = n + 1;&#92;n        thread::spawn(move || {&#92;n            n = n + 1;&#92;n        })&#92;n    });&#92;n    n = n + 1;&#92;n    t.join().unwrap().join().unwrap();&#92;n    println!(&#92;&quot;{n}&#92;&quot;);&#92;n}&#92;n&quot;}},{&quot;context&quot;:&quot;একটি closure যদি এমন একটি মানের reference capture করে যা `&#39;static`-এর চেয়ে কম সময় বাঁচে, তাহলে thread-টি মানটির চেয়ে বেশি সময় &#92;nবেঁচে থেকে memory safety ভঙ্গ করতে পারে। খেয়াল করুন, [`thread::scope`](https://doc.rust-lang.org/std/thread/fn.scope.html) &#92;nব্যবহার করে thread-এর lifetime স্থিরভাবে সীমিত করে thread-কে non-static reference capture করতে দেওয়া যায়।&#92;n&quot;,&quot;id&quot;:&quot;c2a84e6d-8143-4944-bf20-b00e49144ac9&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:&quot;একটি thread কতক্ষণ চলবে Rust তা জানে না, তাই thread-এর capture করা মানগুলোকে চিরকাল বাঁচতে হবে&quot;},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;`thread::spawn`-এ পাঠানো closure-এর কোনো argument নেওয়ার অনুমতি নেই&quot;,&quot;`v` vector-এ এমন মান আছে যা `&#39;static`-এর চেয়ে বেশি সময় বাঁচে না&quot;,&quot;একটি closure শুধু `&amp;&#39;static str` type-এর string constant capture করতে পারে&quot;],&quot;prompt&quot;:&quot;পাঠ্যের এই উদাহরণটি বিবেচনা করুন, যেখানে একটি thread একটি vector অনুচিতভাবে capture করে:&#92;n&#92;n```&#92;nuse std::thread;&#92;n&#92;nfn main() {&#92;n    let v = vec![1, 2, 3];&#92;n&#92;n    let handle = thread::spawn(|| {&#92;n        println!(&#92;&quot;Here&#39;s a vector: {:?}&#92;&quot;, v);&#92;n    });&#92;n&#92;n    handle.join().unwrap();&#92;n}&#92;n```&#92;n&#92;nRust compiler এই diagnostic (সমস্যার বিবরণ) দেয়:&#92;n&#92;n```text&#92;nnote: function requires argument type to outlive `&#39;static`&#92;n --&gt; src/main.rs:6:18&#92;n  |&#92;n6 |       let handle = thread::spawn(|| {&#92;n  |  __________________^&#92;n7 | |         println!(&#92;&quot;Here&#39;s a vector: {:?}&#92;&quot;, v);&#92;n8 | |     });&#92;n  | |______^&#92;n```&#92;n&#92;nমনে করুন, `&#39;static` হলো সেই reference-এর lifetime, যা পুরো প্রোগ্রামের সময় জুড়ে বৈধ থাকে।&#92;n&#92;n&#92;&quot;function requires argument type to outlive `&#39;static`&#92;&quot; note-টি নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?&#92;n&quot;}}]}" data-quiz-fullscreen="true"></div>
+
+<script type="text/javascript" src="quiz/quiz-embed.iife.js"></script><link rel="stylesheet" type="text/css" href="quiz/style.css">
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch16-00-concurrency.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ch16-02-message-passing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch16-00-concurrency.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ch16-02-message-passing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris-2317480c.js"></script>
+        <script src="js-extensions/packages/feedback/dist/index-f1290d8b.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

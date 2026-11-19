@@ -1,0 +1,310 @@
+<!DOCTYPE HTML>
+<html lang="bn" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>নকশার সুবিধা-অসুবিধা - Rust প্রোগ্রামিং ভাষা</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris-d33b75bf.css">
+        <link rel="stylesheet" href="theme/semantic-notes-9b5766c0.css">
+        <link rel="stylesheet" href="theme/listing-cab26221.css">
+        <link rel="stylesheet" href="theme/2018-edition-4e126c62.css">
+        <link rel="stylesheet" href="theme/bengali-4de2f0b6.css">
+        <link rel="stylesheet" href="js-extensions/packages/feedback/dist/index-c9d186bd.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-03403162.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-485378fe.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust প্রোগ্রামিং ভাষা</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/ararifdotme/rust-book-bn" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="design-trade-offs"><a class="header" href="#design-trade-offs">নকশার সুবিধা-অসুবিধা</a></h1>
+<p>এই অংশটি Rust-এ <strong>নকশার সুবিধা-অসুবিধা (design trade-offs)</strong> নিয়ে। একজন দক্ষ Rust প্রকৌশলী হতে শুধু Rust কীভাবে কাজ করে তা জানাই যথেষ্ট নয়। একটি নির্দিষ্ট কাজের জন্য Rust-এর অনেক হাতিয়ারের মধ্যে কোনগুলো উপযুক্ত তা আপনাকে ঠিক করতে হবে। এই অংশে Rust-এ নকশার সুবিধা-অসুবিধা সম্পর্কে আপনার বোঝাপড়া নিয়ে আমরা একের পর এক কুইজ দেব।  প্রতিটি কুইজের পরে প্রতিটি প্রশ্নের পেছনে আমাদের যুক্তি বিস্তারিত ব্যাখ্যা করব।</p>
+<p>একটি প্রশ্ন দেখতে কেমন হবে তার একটি উদাহরণ এখানে দেওয়া হলো। এটি শুরু হবে একাধিক সম্ভাব্য নকশাসহ একটি software case study-র বর্ণনা দিয়ে:</p>
+<blockquote>
+<p><strong>প্রেক্ষাপট:</strong> আপনি একটি global configuration-যুক্ত application নকশা করছেন, যেমন যাতে command-line flag থাকে।</p>
+<p><strong>কার্যক্ষমতা:</strong> application-টিকে পুরো application জুড়ে এই configuration-এর immutable reference পাঠাতে হবে।</p>
+<p><strong>নকশা:</strong> কার্যক্ষমতাটি implement করার জন্য নিচে কয়েকটি প্রস্তাবিত নকশা দেওয়া হলো।</p>
+<pre><code class="language-rust ignore">use std::rc::Rc;
+use std::sync::Arc;
+
+struct Config { 
+    flags: Flags,
+    // .. more fields ..
+}
+
+// Option 1: use a reference
+struct ConfigRef&lt;'a&gt;(&amp;'a Config);
+
+// Option 2: use a reference-counted pointer
+struct ConfigRef(Rc&lt;Config&gt;);
+
+// Option 3: use an atomic reference-counted pointer
+struct ConfigRef(Arc&lt;Config&gt;);</code></pre>
+</blockquote>
+<p>শুধু প্রেক্ষাপট আর মূল কার্যক্ষমতা দেওয়া থাকলে তিনটি নকশাই সম্ভাব্য প্রার্থী।
+কোনগুলো সবচেয়ে অর্থবহ তা ঠিক করতে system-এর লক্ষ্য সম্পর্কে আরও তথ্য দরকার।
+তাই আমরা একটি নতুন চাহিদা দিই:</p>
+<blockquote>
+<p>নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:</p>
+<p><strong>চাহিদা:</strong> configuration-এর reference একাধিক thread-এর মধ্যে ভাগ করা যেতে হবে।</p>
+<p><strong>উত্তর:</strong></p>
+<p><input type="checkbox" checked="" disabled=""> Option 1 <br>
+<input type="checkbox" disabled=""> Option 2 <br>
+<input type="checkbox" checked="" disabled=""> Option 3 <br></p>
+</blockquote>
+<p>আনুষ্ঠানিক ভাষায় এর মানে <code>ConfigRef</code> <a href="https://doc.rust-lang.org/std/marker/trait.Send.html"><code>Send</code></a> আর <a href="https://doc.rust-lang.org/std/marker/trait.Sync.html"><code>Sync</code></a> implement করে।
+<code>Config: Send + Sync</code> ধরে নিলে <code>&amp;Config</code> আর <code>Arc&lt;Config&gt;</code> দুটিই এই চাহিদা পূরণ করে,
+কিন্তু <a href="https://doc.rust-lang.org/std/rc/struct.Rc.html"><code>Rc</code></a> করে না (কারণ non-atomic reference-counted pointer thread-safe নয়)। তাই Option 2 চাহিদা পূরণ করে না, আর Option 3 করে।</p>
+<p>আমরা হয়তো এই সিদ্ধান্তেও পৌঁছাতে চাইব যে Option 1 চাহিদা পূরণ করে না, কারণ <a href="https://doc.rust-lang.org/std/thread/fn.spawn.html"><code>thread::spawn</code></a>-এর মতো function চায় একটি thread-এ সরানো সব ডেটায় শুধু <code>'static</code> lifetime-এর reference থাকুক। তবে দুটি কারণে এটি Option 1-কে বাদ দেয় না:</p>
+<ol>
+<li><code>Config</code> একটি global static variable হিসেবে রাখা যেতে পারে (যেমন <a href="https://doc.rust-lang.org/std/sync/struct.OnceLock.html"><code>OnceLock</code></a> ব্যবহার করে), ফলে <code>&amp;'static Config</code> reference তৈরি করা যায়।</li>
+<li>সব concurrency ব্যবস্থায় <code>'static</code> lifetime লাগে না, যেমন <a href="https://doc.rust-lang.org/std/thread/fn.scope.html"><code>thread::scope</code></a>।</li>
+</ol>
+<p>তাই বর্ণিত চাহিদা শুধু non-<a href="https://doc.rust-lang.org/std/marker/trait.Send.html"><code>Send</code></a> type-গুলোকে বাদ দেয়, আর আমরা Option 1 ও 3-কে সঠিক উত্তর হিসেবে গণ্য করি।</p>
+<hr>
+<p>এবার নিচের প্রশ্নগুলো দিয়ে আপনি চেষ্টা করুন! প্রতিটি অংশে একটিমাত্র পরিস্থিতির ওপর কেন্দ্রীভূত একটি কুইজ আছে। কুইজটি শেষ করুন, এবং প্রতিটি কুইজের পরে উত্তরের ব্যাখ্যা অবশ্যই পড়ুন।</p>
+ <!-- These questions are both experimental and opinionated &mdash; please leave us feedback via the bug button 🐞 if you disagree with our answers. -->
+<p>প্রতিটি কুইজের সঙ্গে আমরা সেই জনপ্রিয় Rust crate-গুলোর link-ও দিয়েছি, যেগুলো কুইজটির অনুপ্রেরণা ছিল।</p>
+<h2 id="references"><a class="header" href="#references">reference</a></h2>
+<p><em>অনুপ্রেরণা:</em> <a href="https://docs.rs/bevy/0.11.2/bevy/asset/struct.Assets.html">Bevy assets</a>, <a href="https://docs.rs/petgraph/0.6.4/petgraph/graph/struct.NodeIndex.html">Petgraph node indices</a>, <a href="https://docs.rs/cargo/0.73.1/cargo/core/compiler/struct.Unit.html">Cargo units</a></p>
+<div class="quiz-placeholder" data-quiz-name="&quot;ch17-05-design-challenge-references&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot;asset-এর immutability প্রয়োগ করে এমন type, যা পরিবর্তনের operation অনুমোদন করে না। একটি immutable borrow `&amp;Asset`&#92;nআর `Rc`-এর মতো একটি immutable smart-pointer, কোনোটিই পরিবর্তনের operation অনুমোদন করে না। তাই Option 1, 3 আর 4 এই চাহিদা পূরণ **করে**।&#92;nOption 2 একটি mutable borrow return করে, যা চাহিদা পূরণ **করে না**।&#92;n&quot;,&quot;id&quot;:&quot;10ae140e-72a6-4594-802a-d656f33cd836&quot;,&quot;multipart&quot;:&quot;q&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:[&quot;1&quot;,&quot;3&quot;,&quot;4&quot;]},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;2&quot;],&quot;prompt&quot;:&quot;নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:&#92;n&#92;n**চাহিদা:** একবার load হলে একটি asset স্থায়ীভাবে immutable থাকা উচিত।&#92;n&quot;,&quot;sortAnswers&quot;:true}},{&quot;context&quot;:&quot;&#92;&quot;borrow জুড়ে প্রবেশাধিকার ধরে রাখা&#92;&quot; মানে ব্যবহারকারী এমন একটি প্রোগ্রাম লিখতে চায়:&#92;n&#92;n```&#92;nlet asset = {&#92;n    let manager = get_manager();&#92;n    manager.load(&#92;&quot;some/path&#92;&quot;)&#92;n};&#92;nprocess_asset(asset);&#92;nlet another_asset = {&#92;n    let manager = get_manager();&#92;n    manager.load(&#92;&quot;another/path&#92;&quot;)&#92;n};&#92;n```&#92;n&#92;nএই ক্ষেত্রে `load`-এর return করা মানের lifetime `AssetManager`-এর lifetime-এর সঙ্গে বাঁধা থাকা চলবে না। Option 1 আর 2&#92;nচায় `&amp;Asset` আর `&amp;mut Asset` শুধু `&amp;mut self`-এর সমান সময় বাঁচুক। তাই borrow checker&#92;nওপরের মতো প্রোগ্রাম বাতিল করবে, যেখানে একটি asset manager-এর reference-এর চেয়ে বেশি সময় বাঁচে। Option 1 আর 2 চাহিদা পূরণ **করে না**।&#92;n&#92;nOption 3 আর 4 চাহিদা পূরণ **করে**। `Rc&lt;Asset&gt;`-এর lifetime `&amp;mut self`-এর lifetime-এর সঙ্গে বাঁধা নয়। একইভাবে&#92;n`AssetHandle`-এর lifetime-ও `&amp;mut self`-এর lifetime-এর সঙ্গে বাঁধা নয়।&#92;n&quot;,&quot;id&quot;:&quot;b69cde98-8ccd-4a89-aeeb-80a3338f9e68&quot;,&quot;multipart&quot;:&quot;q&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:[&quot;3&quot;,&quot;4&quot;]},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;1&quot;,&quot;2&quot;],&quot;prompt&quot;:&quot;নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:&#92;n&#92;n**চাহিদা:**  asset manager-এর ব্যবহারকারীদের asset manager-এর কয়েকটি স্বল্পমেয়াদি borrow জুড়ে asset-এ প্রবেশাধিকার ধরে রাখতে হবে।&#92;n&quot;,&quot;sortAnswers&quot;:true}},{&quot;context&quot;:&quot;সব asset একসঙ্গে deallocate করতে `AssetManager`-কে এগুলোর ওপর একচেটিয়া ownership ধরে রাখতে হবে।&#92;nতাহলে `AssetManager` drop হলে (বা অন্যভাবে asset deallocate করতে বলা হলে) &#92;nনিশ্চিত থাকা যায় যে সব asset নিরাপদে drop করা যাবে।&#92;nOption 1, 2 আর 4 এই চাহিদা পূরণ **করে**। Option 4-এর ক্ষেত্রে, একটি asset deallocate হওয়ার পর ব্যবহারকারী `manager.get(handle)` call করলে&#92;n`AssetManager::get`-কে panic করতে হবে। ব্যবহারকারীর এমন করার বাস্তব সম্ভাবনা থাকলে&#92;nআরেকটি বিকল্প হলো `get`-কে দিয়ে `Option&lt;&amp;Asset&gt;` return করানো।&#92;n&#92;nOption 3 এই চাহিদা পূরণ **করে না**। reference-counted pointer-এর মালিকানা একটি `Rc&lt;Asset&gt;`-এর সব owner যৌথভাবে ভাগ করে।&#92;ndeallocation-এর সময় সব asset-এর আর কোনো owner নেই, তা নিশ্চিত করার কোনো ভালো উপায় `AssetManager`-এর নেই।&#92;n&quot;,&quot;id&quot;:&quot;48527488-ecfc-4f16-9824-76a3ac7183f4&quot;,&quot;multipart&quot;:&quot;q&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:[&quot;1&quot;,&quot;2&quot;,&quot;4&quot;]},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;3&quot;],&quot;prompt&quot;:&quot;নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:&#92;n&#92;n**চাহিদা:** সব asset একটিমাত্র, আগে থেকে অনুমেয় সময়ে deallocate হওয়া গুরুত্বপূর্ণ।&#92;n&quot;,&quot;sortAnswers&quot;:true}}],&quot;multipart&quot;:{&quot;q&quot;:&quot;**প্রেক্ষাপট:** আপনি একটি game engine-এর জন্য একটি সরল asset manager (ছবি, শব্দ ইত্যাদি সম্পদ সামলানোর ব্যবস্থা) নকশা করছেন।&#92;n&#92;n**কার্যক্ষমতা:** API-র একজন ব্যবহারকারী load করার জন্য asset-এর path দেবে, আর load হওয়া asset-এ প্রবেশাধিকার ফেরত পাবে।&#92;n&#92;n**ধরে নেওয়া বিষয়:** ধরে নিতে পারেন যে load synchronous-ভাবে এবং তাৎক্ষণিকভাবে ঘটে।&#92;n&#92;n**নকশা:** কার্যক্ষমতাটি implement করার জন্য নিচে কয়েকটি প্রস্তাবিত নকশা দেওয়া হলো।&#92;n&#92;n```&#92;npub struct AssetManager {&#92;n    // ...&#92;n}&#92;n&#92;n// Option 1: return a reference&#92;nimpl AssetManager {&#92;n    pub fn load(&amp;mut self, path: PathBuf) -&gt; &amp;Asset;&#92;n}&#92;n&#92;n// Option 2: return a mutable reference&#92;nimpl AssetManager {&#92;n    pub fn load(&amp;mut self, path: PathBuf) -&gt; &amp;mut Asset;&#92;n}&#92;n&#92;n// Option 3: return a reference-counted pointer&#92;nimpl AssetManager {&#92;n    pub fn load(&amp;mut self, path: PathBuf) -&gt; Rc&lt;Asset&gt;;&#92;n}&#92;n&#92;n// Option 4: return a copyable handle that can be turned into a reference&#92;n#[derive(Copy, Clone)]&#92;npub struct AssetHandle(usize);&#92;n&#92;nimpl AssetManager {&#92;n    pub fn load(&amp;mut self, path: PathBuf) -&gt; AssetHandle;&#92;n    pub fn get(&amp;self, handle: AssetHandle) -&gt; &amp;Asset;&#92;n}&#92;n```&#92;n&quot;}}" data-quiz-fullscreen="true"></div>
+
+<h2 id="trait-trees"><a class="header" href="#trait-trees">trait tree</a></h2>
+<p><em>অনুপ্রেরণা:</em> <a href="https://docs.rs/yew/0.20.0/yew/html/trait.Component.html">Yew components</a>, <a href="https://docs.rs/druid/0.8.3/druid/trait.Widget.html">Druid widgets</a></p>
+<div class="quiz-placeholder" data-quiz-name="&quot;ch17-05-design-challenge-trait-trees&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot;সব সম্ভাব্য widget-কে যদি একটিমাত্র enum হিসেবে প্রকাশ করি, এভাবে:&#92;n&#92;n```&#92;nenum WidgetImpl {&#92;n  Button { /* .. */ },&#92;n  Text { /* .. */ },&#92;n  // ..&#92;n}&#92;n&#92;nimpl Widget for WidgetImpl { /* .. */ }&#92;n```&#92;n&#92;nতাহলে আমাদের একটি &#92;&quot;বদ্ধ জগৎ&#92;&quot; system, যেখানে সম্ভাব্য widget-এর সেট বাড়ানো যায় না। `Widget`-এর মাত্র একটি implementation আছে, আর dynamic dispatch-এর দরকার নেই। &#92;nতাই শুধু Option 1 অর্থবহ, কারণ `render` সবসময় শুধু অন্য `WidgetImpl` type-ই return করবে। এই চাহিদায় বাকি সব নকশায় অপ্রয়োজনীয় জটিলতা আছে।&#92;n&quot;,&quot;id&quot;:&quot;e529cabf-a14c-4f1b-865f-1f376b704df8&quot;,&quot;multipart&quot;:&quot;q&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:[&quot;1&quot;]},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,&quot;5&quot;],&quot;prompt&quot;:&quot;নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:&#92;n&#92;n**চাহিদা:** API-র ব্যবহারকারী সব সম্ভাব্য widget বোঝানো একটিমাত্র `WidgetImpl` enum দেবে এবং `WidgetImpl`-এর জন্য `Widget` trait implement করবে বলে আশা করা হয়।&#92;n&quot;,&quot;sortAnswers&quot;:true}},{&quot;context&quot;:&quot;আগের প্রশ্নের মতো নয়, এখন আমরা প্রতিটি widget-এর জন্য একটি আলাদা type আশা করি, যেমন:&#92;n&#92;n```&#92;nstruct Button { /* .. */ }&#92;nimpl Widget for Button { /* .. */ }&#92;n&#92;nstruct Text { /* .. */ }&#92;nimpl Widget for Text { /* .. */ }&#92;n```&#92;n&#92;nতাই widget-এর একটি vector-কে বিভিন্ন জাতের হতে হবে, অর্থাৎ এতে ভিন্ন ভিন্ন type-এর widget থাকতে পারে।&#92;nOption 1, 2 আর 3 সবগুলোই প্রতিটি `Widget::render` implementation-কে একটিমাত্র widget type-এর vector return করতে বাধ্য করে।&#92;nOption 4 আর 5 বিভিন্ন জাতের widget-এর vector সম্ভব করতে trait object-এর মাধ্যমে dynamic dispatch ব্যবহার করে।&#92;n&quot;,&quot;id&quot;:&quot;0fdd5ca0-835f-4999-8d24-37841cb0a1a7&quot;,&quot;multipart&quot;:&quot;q&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:[&quot;4&quot;,&quot;5&quot;]},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;1&quot;,&quot;2&quot;,&quot;3&quot;],&quot;prompt&quot;:&quot;নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:&#92;n&#92;n**চাহিদা:** API-র ব্যবহারকারী প্রতিটি সম্ভাব্য widget-এর জন্য একটি অনন্য struct দেবে এবং প্রতিটি struct-এর জন্য `Widget` trait implement করবে বলে আশা করা হয়। &#92;nপ্রতিটি widget যেকোনো সম্ভাব্য type-এর widget-যুক্ত একটি vector return করতে পারে।&#92;n&quot;,&quot;sortAnswers&quot;:true}},{&quot;context&quot;:&quot;Option 2-এর `Widget` trait `Children: Widget` হওয়ার বাধ্যবাধকতা দেয় না। &#92;nবাকি সব বিকল্প নিশ্চিত করে যে কোনো এক `W`-এর জন্য একটি `Vec&lt;W&gt;` return হবে, যেখানে `W: Widget`।&#92;n&quot;,&quot;id&quot;:&quot;fbed1c75-737c-49f5-8f11-66d25391079b&quot;,&quot;multipart&quot;:&quot;q&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:[&quot;1&quot;,&quot;3&quot;,&quot;4&quot;,&quot;5&quot;]},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;2&quot;],&quot;prompt&quot;:&quot;নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:&#92;n&#92;n**চাহিদা:** `render` থেকে শুধু `Widget` trait implement করা type-ই return হওয়া উচিত।&#92;n&quot;,&quot;sortAnswers&quot;:true}}],&quot;multipart&quot;:{&quot;q&quot;:&quot;**প্রেক্ষাপট:** আপনি একটি সরল user interface framework নকশা করছেন, যা লেখা আর button-এর মতো widget-এর একটি tree দিয়ে গঠিত।&#92;n&#92;n**কার্যক্ষমতা:** API একটি `Widget` trait দেয়, যা সংজ্ঞায়িত করে একটি widget কীভাবে কাজ করে। API-র ব্যবহারকারী `Widget` trait implement করে, এবং একটি UI আঁকতে (render করতে) এটি call করে।&#92;n&#92;n**নকশা:** কার্যক্ষমতাটি implement করার জন্য নিচে কয়েকটি প্রস্তাবিত নকশা দেওয়া হলো।&#92;n&#92;n```&#92;n// Option 1: children must be Self&#92;npub trait Widget: Sized {&#92;n&#92;tfn render(&amp;self) -&gt; Vec&lt;Self&gt;;&#92;n}&#92;n&#92;n// Option 2: children are a trait parameter&#92;npub trait Widget&lt;Children&gt; {&#92;n&#92;tfn render(&amp;self) -&gt; Vec&lt;Children&gt;;&#92;n}&#92;n&#92;n// Option 3: children are an associated type&#92;npub trait Widget {&#92;n&#92;ttype Children: Widget;&#92;n&#92;tfn render(&amp;self) -&gt; Vec&lt;Self::Children&gt;;&#92;n}&#92;n&#92;n// Option 4: children are a reference trait object&#92;npub trait Widget {&#92;n&#92;tfn render(&amp;self) -&gt; Vec&lt;&amp;dyn Widget&gt;;&#92;n}&#92;n&#92;n// Option 5: children are a boxed trait object&#92;npub trait Widget {&#92;n&#92;tfn render(&amp;self) -&gt; Vec&lt;Box&lt;dyn Widget&gt;&gt;;&#92;n}&#92;n```&#92;n&quot;}}" data-quiz-fullscreen="true"></div>
+
+<h2 id="dispatch"><a class="header" href="#dispatch">dispatch</a></h2>
+<p><em>অনুপ্রেরণা:</em> <a href="https://docs.rs/bevy_ecs/0.11.2/bevy_ecs/system/trait.IntoSystem.html">Bevy systems</a>, <a href="https://docs.diesel.rs/2.1.x/diesel/query_dsl/trait.BelongingToDsl.html">Diesel queries</a>, <a href="https://docs.rs/axum/0.6.20/axum/handler/trait.Handler.html">Axum handlers</a></p>
+<div class="quiz-placeholder" data-quiz-name="&quot;ch17-05-design-challenge-dispatch&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot;প্রথমে কল্পনা করি প্রতিটি নকশায় একটি callback register করা দেখতে কেমন হতো।&#92;n&#92;n```rust&#92;n// Option 1&#92;nevents.register(|e: OnClick| { /* .. */ });&#92;nevents.register_sequential(|e: OnClick| { /* .. */ })&#92;n&#92;n// Option 2&#92;nevents.register(Callback::Parallel(|e: OnClick| { /* .. */ }));&#92;nevents.register(Callback::Sequential(|e: OnClick| { /* .. */ }));&#92;n&#92;n// Option 3&#92;nevents.register(|e: OnClick| { /* .. */ });&#92;nevents.register(|_: Sequential, e: OnClick| { /* .. */ });&#92;n```&#92;n&#92;nএই বিকল্পগুলোর মধ্যে Option 1 আর 3 বোঝায় যে parallel-ই default mode, কারণ এটি সবচেয়ে সরল বিকল্পের সঙ্গে মেলে।&#92;nক্রমানুসারী হতে হলে হয় একটি লম্বা method নাম (`_sequential`), নয়তো একটি marker type (`_: Sequential)` ব্যবহার করতে হয়।&#92;n&#92;nOption 2 পরিষ্কারভাবে চিহ্নিত করে না যে parallel default হওয়া উচিত, কারণ `register`-এ `Parallel` আর `Sequential` দুটিই&#92;nপাঠাতে হয়।&#92;n&quot;,&quot;id&quot;:&quot;4a32bad8-fee7-45b5-80ef-775d059aab48&quot;,&quot;multipart&quot;:&quot;q&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:[&quot;1&quot;,&quot;3&quot;]},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;2&quot;],&quot;prompt&quot;:&quot;নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:&#92;n&#92;n**চাহিদা:** default-ভাবে একটি callback-কে parallel-যোগ্য গণ্য করা উচিত, আর API-তে সেই default আচরণ প্রতিফলিত হওয়া উচিত।&#92;n&quot;,&quot;sortAnswers&quot;:true}},{&quot;context&quot;:&quot;Option 2 আর 3 শুধু একটি `register` method export করে। Option 1-এ ভিন্ন নামের দুটি register method export করতে হয়।&#92;n&quot;,&quot;id&quot;:&quot;eaeafdad-ac3a-4d92-85eb-995991a81c2d&quot;,&quot;multipart&quot;:&quot;q&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:[&quot;2&quot;,&quot;3&quot;]},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;1&quot;],&quot;prompt&quot;:&quot;নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:&#92;n&#92;n**চাহিদা:** API-র যত কম সম্ভব method export করা উচিত।&#92;n&quot;,&quot;sortAnswers&quot;:true}},{&quot;context&quot;:&quot;function `F`-এর type নির্ধারণের বাইরে Option 1 আর 2-এ খুব বেশি type অনুমান লাগে না।&#92;n&#92;nOption 3 একটি &#92;&quot;marker&#92;&quot; type-এর ওপর parameter-যুক্ত একটি `Register` trait তৈরি করে overloading-এর একটি কৌশল ব্যবহার করে।&#92;nএর দুটি register call মনে করুন:&#92;n```&#92;nevents.register(|e: OnClick| { /* .. */ })&#92;nevents.register(|_: Sequential, e: OnClick| { /* .. */ })&#92;n```&#92;n&#92;nদেখে মনে হয় এরা একই implementation ব্যবহার করে, কিন্তু আসলে এরা একই method-এর ভিন্ন ভিন্ন implementation নির্দেশ করে।&#92;nপ্রতিটি `.register(..)` call `Register`-এর কোন implementation-এর সঙ্গে মেলে তা নির্ধারণের সময় এই implementation&#92;n`Marker`-এর type অনুমানের জন্য compiler-এর ওপর নির্ভর করে। তাই আমাদের লক্ষ্য যদি type অনুমানের ওপর নির্ভর *না* করা হয়, তাহলে Option 3 অনুপযুক্ত।&#92;n&quot;,&quot;id&quot;:&quot;e0c4f766-b82a-496a-b669-ea9e0a367af7&quot;,&quot;multipart&quot;:&quot;q&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:[&quot;1&quot;,&quot;2&quot;]},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;3&quot;],&quot;prompt&quot;:&quot;নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:&#92;n&#92;n**চাহিদা:** API-র compiler-এর type অনুমান ব্যবস্থার ওপর যত কম সম্ভব নির্ভর করা উচিত।&#92;n&quot;,&quot;sortAnswers&quot;:true}}],&quot;multipart&quot;:{&quot;q&quot;:&quot;**প্রেক্ষাপট:** আপনি একটি সরল event system নকশা করছেন, যা event-এর সাড়া হিসেবে callback function call করে। &#92;n&#92;n**কার্যক্ষমতা:** একটি `Events` struct callback নিবন্ধনের (register করার) function দেয়।&#92;nএকটি callback হয় parallel-যোগ্য (একাধিক thread জুড়ে চালানো যায়), নয়তো ক্রমানুসারী (শুধু main thread-এ চালাতে হবে)।&#92;n&#92;n**নকশা:** কার্যক্ষমতাটি implement করার জন্য নিচে কয়েকটি প্রস্তাবিত নকশা দেওয়া হলো।&#92;n&#92;n```&#92;npub struct Events {&#92;n&#92;t// ...&#92;n}&#92;n&#92;n// Option 1: parallel and sequential are two separate methods&#92;nimpl Events {&#92;n&#92;tpub fn register&lt;E, F: Fn(E)&gt;(&amp;mut self, f: F) { /* .. */ }&#92;n&#92;tpub fn register_sequential&lt;E, F: Fn(E)&gt;(&amp;mut self, f: F) { /* .. */ }&#92;n}&#92;n&#92;n// Option 2: parallel and sequential are two members of an enum&#92;npub enum Callback&lt;F&gt; {&#92;n&#92;tParallel(F),&#92;n&#92;tSequential(F)&#92;n}&#92;nimpl Events {&#92;n&#92;tpub fn register&lt;E, F: Fn(E)&gt;(&amp;mut self, f: Callback&lt;F&gt;) { /* .. */ }&#92;n}&#92;n&#92;n// Option 3: parallel and sequential are markers in a trait method&#92;npub trait Register&lt;Marker, F, E&gt; {&#92;n&#92;tfn register(&amp;mut self, f: F);&#92;n}&#92;npub struct Parallel;&#92;npub struct Sequential;&#92;nimpl&lt;F, E&gt; Register&lt;Parallel, F, E&gt; for Events &#92;nwhere F: Fn(E) {&#92;n&#92;tfn register(&amp;mut self, f: F) { /* .. */ }&#92;n}&#92;nimpl&lt;F, E&gt; Register&lt;Sequential, F, E&gt; for Events &#92;nwhere F: Fn(Sequential, E) {&#92;n&#92;tfn register(&amp;mut self, f: F) { /* .. */ }&#92;n}&#92;n```&#92;n&quot;}}" data-quiz-fullscreen="true"></div>
+
+<h2 id="intermediates"><a class="header" href="#intermediates">মধ্যবর্তী রূপ</a></h2>
+<p><em>অনুপ্রেরণা:</em> <a href="https://docs.rs/serde/1.0.188/serde/trait.Serialize.html">Serde</a> আর <a href="https://docs.rs/miniserde/0.1.34/miniserde/trait.Serialize.html">miniserde</a></p>
+<div class="quiz-placeholder" data-quiz-name="&quot;ch17-05-design-challenge-intermediates&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot;দুটি নকশাই যথেষ্ট বিচ্ছিন্ন, ফলে প্রতিটি নতুন data format যেকোনো `Serialize` implementation থেকে স্বাধীন। Option 1-এ&#92;nপ্রতিটি data format একটি `Value`-কে সেই format-এর রূপে রূপান্তর করে। `Value` একটি module-এর সীমানা হিসেবে কাজ করে।&#92;n&#92;nOption 2-এ serialize করা মানের কোনো স্পষ্ট মধ্যবর্তী রূপ নেই, বরং প্রতিটি `Serialize` implementation `Serializer` implement করা যেকোনো&#92;n`S`-এর ওপর স্পষ্টভাবে generic।&#92;n&quot;,&quot;id&quot;:&quot;66e036c9-91a0-4611-8110-967b5ed1a514&quot;,&quot;multipart&quot;:&quot;q&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:[&quot;1&quot;,&quot;2&quot;]},&quot;prompt&quot;:{&quot;distractors&quot;:[],&quot;prompt&quot;:&quot;নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:&#92;n&#92;n**চাহিদা:** `Serialize` trait-এর বিদ্যমান implementation-এর কোড না বদলেই একটি নতুন data format যোগ করা সম্ভব হওয়া উচিত।&#92;n&quot;,&quot;sortAnswers&quot;:true}},{&quot;context&quot;:&quot;Option 1 প্রথমে একটি data structure-কে একটি মধ্যবর্তী রূপ, `Value`-এ রূপান্তর করে, তারপর `Value`-কে চূড়ান্ত format-এ রূপান্তর করে ডেটা serialize করে।&#92;nএই মধ্যবর্তী data structure মেমোরি খরচ করে, যা Option 2-এ লাগে না, যেখানে ডেটা সরাসরি চূড়ান্ত format-এ রূপান্তরিত হয়।&#92;n&quot;,&quot;id&quot;:&quot;eaa95520-1b72-4f7d-a600-5444b6368785&quot;,&quot;multipart&quot;:&quot;q&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:[&quot;2&quot;]},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;1&quot;],&quot;prompt&quot;:&quot;নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:&#92;n&#92;n**চাহিদা:** serialization প্রক্রিয়ায় যত কম সম্ভব মেমোরি খরচ হওয়া উচিত।&#92;n&quot;,&quot;sortAnswers&quot;:true}},{&quot;context&quot;:&quot;Option 1-এ `Serialize`-এর মাত্র একটি instantiation থাকে, যা একটি type `T`-কে একটি `Value`-এ রূপান্তর করে। Option 2 যেহেতু serializer `S`-এর ওপর generic,&#92;nতাই প্রতিবার নতুন একটি `S` দিয়ে `T::serialize` call করলে Rust compiler `T::serialize`-এর একটি নতুন instance monomorphize করবে, যা Option 1-এর তুলনায়&#92;nbinary-র আকার বাড়াবে।&#92;n&quot;,&quot;id&quot;:&quot;2751731e-7d18-46a1-aaea-b5734bf51c80&quot;,&quot;multipart&quot;:&quot;q&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:[&quot;1&quot;]},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;2&quot;],&quot;prompt&quot;:&quot;নিচের চাহিদা পূরণ করে এমন প্রতিটি নকশার বিকল্প বেছে নিন:&#92;n&#92;n**চাহিদা:** একই data type একাধিক format-এ serialize করা হলে তাতে compile করা binary-র আকার যত কম সম্ভব বাড়া উচিত।&#92;n&quot;,&quot;sortAnswers&quot;:true}}],&quot;multipart&quot;:{&quot;q&quot;:&quot;**প্রেক্ষাপট:** আপনি একটি serialization library নকশা করছেন, যা Rust data type-কে JSON-এর মতো format-এ রূপান্তর করে।&#92;n&#92;n**কার্যক্ষমতা:** একটি `Serialize` trait, যা serialize করা যায় এমন type implement করতে পারে, আর একটি `to_json` function, যা serialize করা যায় এমন type-কে JSON-এ রূপান্তর করে।&#92;n&#92;n**নকশা:** কার্যক্ষমতাটি implement করার জন্য নিচে কয়েকটি প্রস্তাবিত নকশা দেওয়া হলো।&#92;n&#92;n```&#92;n// Option 1: types serialize to a `Value` enum&#92;npub enum Value {&#92;n&#92;tString(String),&#92;n&#92;tNumber(isize)&#92;n}&#92;n&#92;npub trait Serialize {&#92;n&#92;tfn serialize(&amp;self) -&gt; Value;&#92;n}&#92;n&#92;nfn value_to_json(value: Value) -&gt; String {&#92;n&#92;t/* .. */&#92;n}&#92;n&#92;npub fn to_json(data: impl Serialize) -&gt; String {&#92;n    let value = data.serialize();&#92;n    value_to_json(value)&#92;n}&#92;n&#92;n&#92;n// Option 2: types serialize via calls to a `Serializer` interface&#92;npub trait Serialize {&#92;n&#92;tfn serialize&lt;S: Serializer&gt;(&amp;self, serializer: &amp;mut S);&#92;n}&#92;n&#92;npub trait Serializer {&#92;n&#92;tfn serialize_string(&amp;mut self, s: &amp;str);&#92;n&#92;tfn serialize_number(&amp;mut self, n: isize);&#92;n}&#92;n&#92;nstruct JsonSerializer { buffer: String };&#92;nimpl Serializer for JsonSerializer {&#92;n&#92;t/* .. */&#92;n}&#92;n&#92;npub fn to_json(data: impl Serialize) -&gt; String {&#92;n&#92;tlet mut serializer = JsonSerializer { buffer: String::new() };&#92;n&#92;tdata.serialize(&amp;mut serializer);&#92;n&#92;tserializer.buffer&#92;n}&#92;n```&#92;n&quot;}}" data-quiz-fullscreen="true"></div>
+
+<script type="text/javascript" src="quiz/quiz-embed.iife.js"></script><link rel="stylesheet" type="text/css" href="quiz/style.css">
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch18-04-inventory.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ch19-00-patterns.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch18-04-inventory.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ch19-00-patterns.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris-2317480c.js"></script>
+        <script src="js-extensions/packages/feedback/dist/index-f1290d8b.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

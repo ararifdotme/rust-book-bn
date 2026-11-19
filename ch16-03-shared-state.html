@@ -1,0 +1,496 @@
+<!DOCTYPE HTML>
+<html lang="bn" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>shared-state concurrency - Rust প্রোগ্রামিং ভাষা</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris-d33b75bf.css">
+        <link rel="stylesheet" href="theme/semantic-notes-9b5766c0.css">
+        <link rel="stylesheet" href="theme/listing-cab26221.css">
+        <link rel="stylesheet" href="theme/2018-edition-4e126c62.css">
+        <link rel="stylesheet" href="theme/bengali-4de2f0b6.css">
+        <link rel="stylesheet" href="js-extensions/packages/feedback/dist/index-c9d186bd.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-03403162.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-485378fe.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust প্রোগ্রামিং ভাষা</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/ararifdotme/rust-book-bn" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h2 id="shared-state-concurrency"><a class="header" href="#shared-state-concurrency">shared-state concurrency</a></h2>
+<p>message passing concurrency সামলানোর একটি ভালো উপায়, তবে একমাত্র উপায় নয়। আরেকটি পদ্ধতি হলো একাধিক thread একই ভাগ করা ডেটায় প্রবেশ করা। Go ভাষার documentation-এর
+স্লোগানের এই অংশটি আবার ভাবুন: “মেমোরি ভাগ করে যোগাযোগ করো না।”</p>
+<p>মেমোরি ভাগ করে যোগাযোগ দেখতে কেমন হতো? তা ছাড়া message passing-এর অনুরাগীরা কেন মেমোরি ভাগ না করার ব্যাপারে সতর্ক করেন?</p>
+<p>এক অর্থে যেকোনো প্রোগ্রামিং ভাষার channel একক ownership-এর মতো, কারণ একবার channel দিয়ে একটি মান পাঠিয়ে দিলে সেই মান আর ব্যবহার করা উচিত নয়। shared-memory concurrency
+একাধিক ownership-এর মতো: একাধিক thread একই সময়ে একই মেমোরির জায়গায় প্রবেশ করতে পারে। অধ্যায় 15-এ যেমন দেখেছেন, যেখানে smart pointer একাধিক ownership সম্ভব করেছিল,
+একাধিক ownership জটিলতা বাড়াতে পারে, কারণ এই ভিন্ন ভিন্ন owner-দের সামলাতে হয়। এই ব্যবস্থাপনা সঠিকভাবে করতে Rust-এর type system আর ownership-এর নিয়ম অনেক সাহায্য করে।
+উদাহরণ হিসেবে চলুন mutex দেখি, যা ভাগ করা মেমোরির জন্য সবচেয়ে প্রচলিত concurrency primitive (concurrency-র মৌলিক গঠন)-গুলোর একটি।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="using-mutexes-to-allow-access-to-data-from-one-thread-at-a-time"></a></p>
+<h3 id="controlling-access-with-mutexes"><a class="header" href="#controlling-access-with-mutexes">mutex দিয়ে প্রবেশাধিকার নিয়ন্ত্রণ</a></h3>
+<p><em>Mutex</em> হলো <em>mutual exclusion</em> (পারস্পরিক বর্জন)-এর সংক্ষেপ, অর্থাৎ একটি mutex যেকোনো সময়ে শুধু একটি thread-কে কিছু ডেটায় প্রবেশ করতে দেয়। একটি mutex-এর ডেটায় প্রবেশ করতে
+একটি thread-কে প্রথমে mutex-এর lock নিতে চেয়ে জানাতে হয় যে এটি প্রবেশ করতে চায়। <em>lock</em> হলো mutex-এর অংশ এমন একটি data structure, যা হিসাব রাখে এই মুহূর্তে ডেটায়
+একচেটিয়া প্রবেশাধিকার কার কাছে আছে। তাই বলা হয় mutex locking system-এর মাধ্যমে তার রাখা ডেটা <em>পাহারা দেয়</em>।</p>
+<p>mutex ব্যবহার করা কঠিন বলে এর দুর্নাম আছে, কারণ আপনাকে দুটি নিয়ম মনে রাখতে হয়:</p>
+<ol>
+<li>ডেটা ব্যবহারের আগে lock নেওয়ার চেষ্টা করতেই হবে।</li>
+<li>mutex যে ডেটা পাহারা দেয় তা দিয়ে কাজ শেষ হলে ডেটা unlock করতেই হবে, যাতে অন্য thread-গুলো lock নিতে পারে।</li>
+</ol>
+<p>mutex-এর একটি বাস্তব উপমা হিসেবে একটি সম্মেলনের প্যানেল আলোচনা কল্পনা করুন, যেখানে মাইক্রোফোন মাত্র একটি। একজন প্যানেলিস্ট কথা বলার আগে তাকে মাইক্রোফোন ব্যবহার করতে
+চেয়ে অনুরোধ করতে বা ইঙ্গিত দিতে হয়। মাইক্রোফোন পেলে তিনি যতক্ষণ খুশি কথা বলতে পারেন, তারপর কথা বলতে চাওয়া পরের প্যানেলিস্টের হাতে মাইক্রোফোন তুলে দেন। কোনো প্যানেলিস্ট
+কথা শেষ করে মাইক্রোফোন হস্তান্তর করতে ভুলে গেলে আর কেউ কথা বলতে পারে না। ভাগ করা মাইক্রোফোনের ব্যবস্থাপনায় গোলমাল হলে প্যানেল পরিকল্পনামতো চলবে না!</p>
+<p>mutex-এর ব্যবস্থাপনা ঠিকঠাক করা অবিশ্বাস্য রকম কঠিন হতে পারে, এ কারণেই এত মানুষ channel নিয়ে উৎসাহী। তবে Rust-এর type system আর ownership-এর নিয়মের কল্যাণে আপনি
+lock আর unlock করতে ভুল করতে পারবেন না।</p>
+<h4 id="the-api-of-mutext"><a class="header" href="#the-api-of-mutext"><code>Mutex&lt;T&gt;</code>-এর API</a></h4>
+<p>mutex কীভাবে ব্যবহার করতে হয় তার উদাহরণ হিসেবে চলুন একটি single-threaded প্রেক্ষাপটে mutex ব্যবহার দিয়ে শুরু করি, যেমনটি Listing 16-12-এ দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-16-12">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">use std::sync::Mutex;
+
+fn main() {
+    let m = Mutex::new(5);
+
+    {
+        let mut num = m.lock().unwrap();
+        *num = 6;
+    }
+
+    println!("m = {m:?}");
+}</code></pre>
+<figcaption><a href="#listing-16-12">Listing 16-12</a>: সরলতার জন্য একটি single-threaded প্রেক্ষাপটে <code>Mutex&lt;T&gt;</code>-এর API দেখা</figcaption>
+</figure>
+<p>অনেক type-এর মতোই আমরা associated function <code>new</code> দিয়ে একটি <code>Mutex&lt;T&gt;</code> তৈরি করি। mutex-এর ভেতরের ডেটায় প্রবেশ করতে <code>lock</code> method দিয়ে lock নিই। এই call বর্তমান thread
+block করবে, ফলে lock পাওয়ার পালা না আসা পর্যন্ত এটি কোনো কাজ করতে পারবে না।</p>
+<p>lock ধরে রাখা অন্য কোনো thread panic করলে <code>lock</code> call ব্যর্থ হতো। সেই ক্ষেত্রে কেউই আর কখনো lock পেত না, তাই আমরা <code>unwrap</code> করার পথ বেছে নিয়েছি, যাতে সেই পরিস্থিতিতে এই
+thread panic করে।</p>
+<p>lock নেওয়ার পর return মানটিকে, এই ক্ষেত্রে যার নাম <code>num</code>, ভেতরের ডেটার একটি mutable reference হিসেবে ব্যবহার করতে পারি। type system নিশ্চিত করে যে <code>m</code>-এর মান ব্যবহারের
+আগে আমরা lock নিই। <code>m</code>-এর type হলো <code>Mutex&lt;i32&gt;</code>, <code>i32</code> নয়, তাই <code>i32</code> মান ব্যবহার করতে আমাদের <code>lock</code> call করতেই <em>হবে</em>। ভুলে যাওয়ার উপায় নেই; নইলে type system আমাদের
+ভেতরের <code>i32</code>-এ প্রবেশ করতে দেবে না।</p>
+<p><code>lock</code> call <code>MutexGuard</code> নামের একটি type return করে, যা একটি <code>LockResult</code>-এ মোড়ানো, যেটি আমরা <code>unwrap</code> call দিয়ে সামলেছি। <code>MutexGuard</code> type আমাদের ভেতরের ডেটাকে নির্দেশ
+করতে <code>Deref</code> implement করে; এই type-এর একটি <code>Drop</code> implementation-ও আছে, যা একটি <code>MutexGuard</code> scope-এর বাইরে গেলে স্বয়ংক্রিয়ভাবে lock ছেড়ে দেয়, যা ঘটে ভেতরের
+scope-এর শেষে। ফলে lock ছাড়তে ভুলে গিয়ে অন্য thread-কে mutex ব্যবহারে বাধা দেওয়ার ঝুঁকি থাকে না, কারণ lock ছাড়া স্বয়ংক্রিয়ভাবে ঘটে।</p>
+<p>lock drop করার পর আমরা mutex-এর মান print করে দেখতে পারি যে ভেতরের <code>i32</code>-কে <code>6</code>-এ বদলাতে পেরেছি।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="sharing-a-mutext-between-multiple-threads"></a></p>
+<h4 id="shared-access-to-mutext"><a class="header" href="#shared-access-to-mutext"><code>Mutex&lt;T&gt;</code>-এ ভাগ করা প্রবেশাধিকার</a></h4>
+<p>এবার <code>Mutex&lt;T&gt;</code> ব্যবহার করে একাধিক thread-এর মধ্যে একটি মান ভাগ করার চেষ্টা করি। আমরা 10টি thread চালু করব এবং প্রত্যেককে দিয়ে একটি counter-এর মান 1 করে বাড়াব, ফলে
+counter 0 থেকে 10 হবে। Listing 16-13-এর উদাহরণে একটি compiler error থাকবে, আর সেই error ব্যবহার করে আমরা <code>Mutex&lt;T&gt;</code> ব্যবহার সম্পর্কে এবং Rust কীভাবে একে সঠিকভাবে
+ব্যবহারে সাহায্য করে সে সম্পর্কে আরও শিখব।</p>
+<figure class="listing" id="listing-16-13">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile">use std::sync::Mutex;
+use std::thread;
+
+fn main() {
+    let counter = Mutex::new(0);
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Result: {}", *counter.lock().unwrap());
+}</code></pre>
+<figcaption><a href="#listing-16-13">Listing 16-13</a>: দশটি thread, যার প্রত্যেকটি একটি <code>Mutex&lt;T&gt;</code>-এর পাহারায় থাকা counter বাড়ায়</figcaption>
+</figure>
+<p>Listing 16-12-এর মতোই আমরা একটি <code>Mutex&lt;T&gt;</code>-এর ভেতরে একটি <code>i32</code> রাখতে <code>counter</code> variable তৈরি করি। এরপর সংখ্যার একটি range-এর ওপর দিয়ে iterate করে 10টি thread তৈরি করি।
+আমরা <code>thread::spawn</code> ব্যবহার করে সব thread-কে একই closure দিই: যা counter-কে thread-এ সরিয়ে নেয়, <code>lock</code> method call করে <code>Mutex&lt;T&gt;</code>-এর lock নেয়, তারপর mutex-এর মানের
+সঙ্গে 1 যোগ করে। একটি thread তার closure চালানো শেষ করলে <code>num</code> scope-এর বাইরে যাবে এবং lock ছেড়ে দেবে, যাতে অন্য thread সেটি নিতে পারে।</p>
+<p>main thread-এ আমরা সব join handle জড়ো করি। তারপর Listing
+16-2-এর মতো প্রতিটি handle-এর ওপর <code>join</code> call করে নিশ্চিত হই যে সব thread শেষ হয়েছে। সেই মুহূর্তে main thread lock নেবে এবং এই প্রোগ্রামের ফল print করবে।</p>
+<p>আমরা ইঙ্গিত দিয়েছিলাম যে এই উদাহরণ compile হবে না। চলুন দেখি কেন!</p>
+<pre><code class="language-console">$ cargo run
+   Compiling shared-state v0.1.0 (file:///projects/shared-state)
+error[E0382]: borrow of moved value: `counter`
+  --&gt; src/main.rs:21:29
+   |
+ 5 |     let counter = Mutex::new(0);
+   |         ------- move occurs because `counter` has type `std::sync::Mutex&lt;i32&gt;`, which does not implement the `Copy` trait
+...
+ 8 |     for _ in 0..10 {
+   |     -------------- inside of this loop
+ 9 |         let handle = thread::spawn(move || {
+   |                                    ------- value moved into closure here, in previous iteration of loop
+...
+21 |     println!("Result: {}", *counter.lock().unwrap());
+   |                             ^^^^^^^ value borrowed here after move
+   |
+help: consider moving the expression out of the loop so it is only moved once
+   |
+ 8 ~     let mut value = counter.lock();
+ 9 ~     for _ in 0..10 {
+10 |         let handle = thread::spawn(move || {
+11 ~             let mut num = value.unwrap();
+   |
+
+For more information about this error, try `rustc --explain E0382`.
+error: could not compile `shared-state` (bin "shared-state") due to 1 previous error
+</code></pre>
+<p>error message বলছে যে loop-এর আগের পুনরাবৃত্তিতে <code>counter</code> মানটি সরে গেছে। Rust আমাদের বলছে যে lock <code>counter</code>-এর ownership একাধিক thread-এ সরানো যায় না। অধ্যায় 15-এ
+আলোচিত একাধিক ownership-এর পদ্ধতি দিয়ে compiler error-টি ঠিক করি।</p>
+<h4 id="multiple-ownership-with-multiple-threads"><a class="header" href="#multiple-ownership-with-multiple-threads">একাধিক thread-এ একাধিক ownership</a></h4>
+<p>অধ্যায় 15-এ আমরা smart pointer <code>Rc&lt;T&gt;</code> দিয়ে একটি reference-counted মান তৈরি করে একটি মানকে একাধিক owner দিয়েছিলাম। এখানেও তা-ই করে দেখি কী ঘটে। Listing 16-14-এ আমরা
+<code>Mutex&lt;T&gt;</code>-কে <code>Rc&lt;T&gt;</code>-এ মুড়ে দেব এবং thread-এ ownership সরানোর আগে <code>Rc&lt;T&gt;</code> clone করব।</p>
+<figure class="listing" id="listing-16-14">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile">use std::rc::Rc;
+use std::sync::Mutex;
+use std::thread;
+
+fn main() {
+    let counter = Rc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = Rc::clone(&amp;counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Result: {}", *counter.lock().unwrap());
+}</code></pre>
+<figcaption><a href="#listing-16-14">Listing 16-14</a>: একাধিক thread-কে <code>Mutex&lt;T&gt;</code>-এর মালিক হতে দিতে <code>Rc&lt;T&gt;</code> ব্যবহারের চেষ্টা</figcaption>
+</figure>
+<p>আবারও compile করে পাই… ভিন্ন error! compiler আমাদের অনেক কিছু শেখাচ্ছে:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling shared-state v0.1.0 (file:///projects/shared-state)
+error[E0277]: `Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;` cannot be sent between threads safely
+  --&gt; src/main.rs:11:36
+   |
+11 |           let handle = thread::spawn(move || {
+   |                        ------------- ^------
+   |                        |             |
+   |  ______________________|_____________within this `{closure@src/main.rs:11:36: 11:43}`
+   | |                      |
+   | |                      required by a bound introduced by this call
+12 | |             let mut num = counter.lock().unwrap();
+13 | |
+14 | |             *num += 1;
+15 | |         });
+   | |_________^ `Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;` cannot be sent between threads safely
+   |
+   = help: within `{closure@src/main.rs:11:36: 11:43}`, the trait `Send` is not implemented for `Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;`
+note: required because it's used within this closure
+  --&gt; src/main.rs:11:36
+   |
+11 |         let handle = thread::spawn(move || {
+   |                                    ^^^^^^^
+note: required by a bound in `spawn`
+  --&gt; /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/thread/mod.rs:723:1
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `shared-state` (bin "shared-state") due to 1 previous error
+</code></pre>
+<p>বাপরে, error message-টি খুবই শব্দবহুল! মনোযোগ দেওয়ার মতো গুরুত্বপূর্ণ অংশ এটি:
+<code>`Rc&lt;Mutex&lt;i32&gt;&gt;` cannot be sent between threads safely</code>। compiler কারণটিও বলছে: <code>the trait `Send` is not implemented for `Rc&lt;Mutex&lt;i32&gt;&gt;`</code>। <code>Send</code> নিয়ে পরের অংশে কথা বলব: এটি সেই trait-গুলোর একটি, যা নিশ্চিত করে যে thread-এর সঙ্গে আমরা যে type ব্যবহার করি তা concurrent পরিস্থিতিতে
+ব্যবহারের উপযোগী।</p>
+<p>দুর্ভাগ্যবশত, <code>Rc&lt;T&gt;</code> thread-এর মধ্যে ভাগ করা নিরাপদ নয়। <code>Rc&lt;T&gt;</code> যখন reference count সামলায়, তখন <code>clone</code>-এর প্রতিটি call-এ count বাড়ায় এবং প্রতিটি clone drop হলে count
+কমায়। কিন্তু count-এর পরিবর্তন যাতে অন্য thread বাধাগ্রস্ত করতে না পারে, তা নিশ্চিত করতে এটি কোনো concurrency primitive ব্যবহার করে না। এতে count ভুল হতে পারে—এমন সূক্ষ্ম
+বাগ, যা থেকে memory leak হতে পারে বা কাজ শেষ হওয়ার আগেই একটি মান drop হয়ে যেতে পারে। আমাদের দরকার এমন একটি type, যা হুবহু <code>Rc&lt;T&gt;</code>-এর মতো, কিন্তু reference count-এর
+পরিবর্তন thread-safe উপায়ে করে।</p>
+<h4 id="atomic-reference-counting-with-arct"><a class="header" href="#atomic-reference-counting-with-arct"><code>Arc&lt;T&gt;</code> দিয়ে atomic reference counting</a></h4>
+<p>সৌভাগ্যক্রমে <code>Arc&lt;T&gt;</code> <em>সত্যিই</em> <code>Rc&lt;T&gt;</code>-এর মতো এমন একটি type, যা concurrent পরিস্থিতিতে ব্যবহার করা নিরাপদ। <em>a</em> মানে <em>atomic</em> (অবিভাজ্যভাবে সম্পন্ন), অর্থাৎ এটি একটি
+<em>atomically reference-counted</em> type। atomic হলো আরেক ধরনের concurrency primitive, যা এখানে বিস্তারিত আলোচনা করব না: আরও বিস্তারিত জানতে standard library-র
+<a href="https://doc.rust-lang.org/std/sync/atomic/index.html"><code>std::sync::atomic</code></a><!-- ignore --> documentation দেখুন। এই মুহূর্তে শুধু জানলেই চলবে যে atomic primitive type-এর মতো কাজ করে, কিন্তু thread-এর মধ্যে ভাগ করা নিরাপদ।</p>
+<p>তাহলে হয়তো ভাবছেন, সব primitive type কেন atomic নয়, আর standard library-র type-গুলো কেন default-ভাবে <code>Arc&lt;T&gt;</code> ব্যবহার করার মতো করে implement করা নয়। কারণ thread
+safety-র জন্য performance-এর মাশুল দিতে হয়, যা আপনি শুধু সত্যিই দরকার হলে দিতে চাইবেন। আপনি যদি শুধু একটি thread-এর ভেতরে মানের ওপর operation চালান, তাহলে atomic-এর দেওয়া
+নিশ্চয়তা প্রয়োগ করতে না হলে আপনার কোড আরও দ্রুত চলতে পারে।</p>
+<p>চলুন আমাদের উদাহরণে ফিরি: <code>Arc&lt;T&gt;</code> আর <code>Rc&lt;T&gt;</code>-এর API একই, তাই <code>use</code> লাইন, <code>new</code> call আর <code>clone</code> call বদলে আমরা প্রোগ্রামটি ঠিক করি। Listing 16-15-এর কোড অবশেষে compile
+হয়ে চলবে।</p>
+<figure class="listing" id="listing-16-15">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">use std::sync::{Arc, Mutex};
+use std::thread;
+
+fn main() {
+    let counter = Arc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = Arc::clone(&amp;counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Result: {}", *counter.lock().unwrap());
+}</code></pre>
+<figcaption><a href="#listing-16-15">Listing 16-15</a>: একাধিক thread-এর মধ্যে ownership ভাগ করতে পারার জন্য <code>Mutex&lt;T&gt;</code>-কে একটি <code>Arc&lt;T&gt;</code>-এ মোড়ানো</figcaption>
+</figure>
+<p>এই কোড এই output print করবে:</p>
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
+<pre><code class="language-text">Result: 10
+</code></pre>
+<p>পেরেছি! আমরা 0 থেকে 10 পর্যন্ত গুনেছি, যা হয়তো খুব একটা চমকপ্রদ মনে হবে না, তবে এটি আমাদের <code>Mutex&lt;T&gt;</code> আর thread safety সম্পর্কে অনেক কিছু শিখিয়েছে। শুধু একটি counter
+বাড়ানোর চেয়ে আরও জটিল operation করতেও এই প্রোগ্রামের গঠন ব্যবহার করতে পারেন। এই কৌশল ব্যবহার করে একটি হিসাবকে স্বাধীন অংশে ভাগ করে, সেই অংশগুলো বিভিন্ন thread-এ বণ্টন
+করে, তারপর একটি <code>Mutex&lt;T&gt;</code> ব্যবহার করে প্রতিটি thread-কে দিয়ে চূড়ান্ত ফলে নিজের অংশটি হালনাগাদ করাতে পারেন।</p>
+<p>খেয়াল করুন, সাধারণ সংখ্যাগত operation করলে <a href="https://doc.rust-lang.org/std/sync/atomic/index.html">standard library-র <code>std::sync::atomic</code>
+module</a><!-- ignore -->-এ <code>Mutex&lt;T&gt;</code> type-এর চেয়ে সরল type আছে। এই type-গুলো primitive type-এ নিরাপদ, concurrent, atomic প্রবেশাধিকার দেয়। এই উদাহরণে আমরা একটি
+primitive type-সহ <code>Mutex&lt;T&gt;</code> ব্যবহার করেছি, যাতে <code>Mutex&lt;T&gt;</code> কীভাবে কাজ করে তার দিকে মনোযোগ দিতে পারি।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="similarities-between-refcelltrct-and-mutextarct"></a></p>
+<h3 id="comparing-refcelltrct-and-mutextarct"><a class="header" href="#comparing-refcelltrct-and-mutextarct"><code>RefCell&lt;T&gt;</code>/<code>Rc&lt;T&gt;</code> আর <code>Mutex&lt;T&gt;</code>/<code>Arc&lt;T&gt;</code>-এর তুলনা</a></h3>
+<p>হয়তো খেয়াল করেছেন যে <code>counter</code> immutable, কিন্তু আমরা এর ভেতরের মানের একটি mutable reference পেতে পেরেছি; এর মানে <code>Cell</code> পরিবারের মতোই <code>Mutex&lt;T&gt;</code> interior mutability দেয়।
+অধ্যায় 15-এ যেভাবে একটি <code>Rc&lt;T&gt;</code>-এর ভেতরের বিষয়বস্তু পরিবর্তন করতে <code>RefCell&lt;T&gt;</code> ব্যবহার করেছিলাম, সেভাবেই একটি <code>Arc&lt;T&gt;</code>-এর ভেতরের বিষয়বস্তু পরিবর্তন করতে <code>Mutex&lt;T&gt;</code> ব্যবহার
+করি।</p>
+<p>আরেকটি খেয়াল করার মতো বিষয় হলো, <code>Mutex&lt;T&gt;</code> ব্যবহারের সময় Rust আপনাকে সব ধরনের logic error থেকে রক্ষা করতে পারে না। অধ্যায় 15 থেকে মনে করুন, <code>Rc&lt;T&gt;</code> ব্যবহারে reference
+cycle তৈরির ঝুঁকি ছিল, যেখানে দুটি <code>Rc&lt;T&gt;</code> মান একে অপরকে নির্দেশ করে memory leak ঘটায়। একইভাবে <code>Mutex&lt;T&gt;</code>-এ <em>deadlocks</em> (deadlock) তৈরির ঝুঁকি আছে। এগুলো ঘটে যখন একটি
+operation-এর দুটি resource lock করা দরকার এবং দুটি thread প্রত্যেকে একটি করে lock নিয়ে ফেলেছে, ফলে তারা চিরকাল একে অপরের জন্য অপেক্ষা করে। deadlock নিয়ে আগ্রহী হলে
+deadlock আছে এমন একটি Rust প্রোগ্রাম তৈরি করে দেখুন; তারপর যেকোনো ভাষায় mutex-এর deadlock এড়ানোর কৌশল খুঁজে পড়ে Rust-এ সেগুলো implement করার চেষ্টা করুন। <code>Mutex&lt;T&gt;</code> আর
+<code>MutexGuard</code>-এর standard library API documentation-এ কাজের তথ্য আছে।</p>
+<p><code>Send</code> আর <code>Sync</code> trait নিয়ে এবং নিজস্ব type-এর সঙ্গে এগুলো কীভাবে ব্যবহার করা যায় তা নিয়ে কথা বলে আমরা এই অধ্যায় শেষ করব।</p>
+<div class="quiz-placeholder" data-quiz-name="&quot;ch16-03-shared-state&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot;`Mutex&lt;T&gt;`-এর নকশা নিশ্চিত করে যে mutex lock থাকা অবস্থাতেই কেবল এর ডেটায় প্রবেশ করা যায়, আর উল্টোভাবে,&#92;nডেটায় আর প্রবেশ করা না গেলেই mutex unlock হয়ে যায়।&#92;n&quot;,&quot;id&quot;:&quot;ceb96826-6c98-40e1-bff4-0bb61f35679d&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:&quot;mutex lock না করে mutex-এর ডেটায় প্রবেশ ঠেকাতে&quot;},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;mutex-এর method কম call করতে হয় তার জন্য&quot;,&quot;mutex-যুক্ত concurrent প্রোগ্রামের দক্ষতা বাড়াতে&quot;,&quot;mutex-এর ডেটা thread-এর মধ্যে সরানো ঠেকাতে&quot;],&quot;prompt&quot;:&quot;কিছু concurrency API-তে mutex তার পাহারা দেওয়া ডেটা থেকে আলাদা থাকে। যেমন, এমন একটি কাল্পনিক Mutex API কল্পনা করুন:&#92;n&#92;n```&#92;nlet mut data = Vec::new();&#92;nlet mx: Mutex = Mutex::new();&#92;n{&#92;n    let _guard = mx.lock();&#92;n    data.push(0);&#92;n}&#92;n```&#92;n&#92;nRust কেন শুধু `Mutex`-এর বদলে `Mutex&lt;T&gt;` ব্যবহার করে, তা নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?&#92;n&quot;}},{&quot;context&quot;:&quot;একটি `Arc`-এর ডেটায় reference থাকলে এটি ব্যবহার করা তবুও নিরাপদ নয়, কারণ (তাত্ত্বিকভাবে) `Arc` ধারণ করা সব thread চলা শেষ&#92;nকরার আগেই reference-টি অবৈধ হয়ে যেতে পারে।&#92;n&quot;,&quot;id&quot;:&quot;e5ac0c92-4694-4647-bd20-67825fe038b7&quot;,&quot;type&quot;:&quot;Tracing&quot;,&quot;answer&quot;:{&quot;doesCompile&quot;:false,&quot;lineNumber&quot;:7},&quot;prompt&quot;:{&quot;program&quot;:&quot;use std::{sync::Arc, thread};&#92;n&#92;nfn main() {&#92;n    let s = String::from(&#92;&quot;Hello world&#92;&quot;);&#92;n    let a = Arc::new(&amp;s);&#92;n    let a2 = Arc::clone(&amp;a);&#92;n    let t = thread::spawn(move || a2.len());&#92;n    let len = t.join().unwrap();&#92;n    println!(&#92;&quot;{} {}&#92;&quot;, a, len);&#92;n}&#92;n&quot;}}]}" data-quiz-fullscreen="true"></div>
+
+<script type="text/javascript" src="quiz/quiz-embed.iife.js"></script><link rel="stylesheet" type="text/css" href="quiz/style.css">
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch16-02-message-passing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ch16-04-extensible-concurrency-sync-and-send.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch16-02-message-passing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ch16-04-extensible-concurrency-sync-and-send.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris-2317480c.js"></script>
+        <script src="js-extensions/packages/feedback/dist/index-f1290d8b.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,40 @@
+/* Bengali web font for the bn translation.
+ *
+ * Noto Sans Bengali (SIL OFL 1.1, see src/fonts-bn/NotoSansBengali-OFL.txt) is
+ * self-hosted so readers' browsers make no request to a third-party font
+ * service. `unicode-range` limits it to the Bengali block, so Latin text keeps
+ * Open Sans and the font is only downloaded on pages that contain Bengali.
+ * Code keeps mdBook's `--mono-font` (general.css sets it with !important on
+ * code, pre and kbd), so nothing here touches code blocks.
+ */
+
+@font-face {
+  font-family: "Noto Sans Bengali";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts-bn/NotoSansBengali-Regular.ttf") format("truetype");
+  unicode-range: U+0951-0952, U+0964-0965, U+0980-09FE, U+1CD0-1CF9, U+200C-200D, U+20B9, U+25CC, U+A8F1;
+}
+
+@font-face {
+  font-family: "Noto Sans Bengali";
+  font-style: normal;
+  font-weight: 600 800;
+  font-display: swap;
+  src: url("../fonts-bn/NotoSansBengali-Bold.ttf") format("truetype");
+  unicode-range: U+0951-0952, U+0964-0965, U+0980-09FE, U+1CD0-1CF9, U+200C-200D, U+20B9, U+25CC, U+A8F1;
+}
+
+html,
+body,
+.sidebar,
+.menu-title,
+#searchbar {
+  font-family: "Open Sans", "Noto Sans Bengali", sans-serif;
+}
+
+/* Bengali conjuncts and vowel signs need a little more line height. */
+.content main {
+  line-height: 1.75;
+}

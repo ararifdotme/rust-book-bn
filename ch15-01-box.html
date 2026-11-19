@@ -1,0 +1,442 @@
+<!DOCTYPE HTML>
+<html lang="bn" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>heap-এর ডেটা নির্দেশ করতে Box&lt;T&gt; ব্যবহার - Rust প্রোগ্রামিং ভাষা</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris-d33b75bf.css">
+        <link rel="stylesheet" href="theme/semantic-notes-9b5766c0.css">
+        <link rel="stylesheet" href="theme/listing-cab26221.css">
+        <link rel="stylesheet" href="theme/2018-edition-4e126c62.css">
+        <link rel="stylesheet" href="theme/bengali-4de2f0b6.css">
+        <link rel="stylesheet" href="js-extensions/packages/feedback/dist/index-c9d186bd.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-03403162.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-485378fe.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust প্রোগ্রামিং ভাষা</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/ararifdotme/rust-book-bn" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h2 id="using-boxt-to-point-to-data-on-the-heap"><a class="header" href="#using-boxt-to-point-to-data-on-the-heap">heap-এর ডেটা নির্দেশ করতে <code>Box&lt;T&gt;</code> ব্যবহার</a></h2>
+<p>সবচেয়ে সোজাসাপ্টা smart pointer হলো box, যার type লেখা হয়
+<code>Box&lt;T&gt;</code>। <em>Boxes</em> (box) দিয়ে ডেটা stack-এর বদলে heap-এ রাখা যায়। stack-এ থেকে যায় heap-এর ডেটার দিকে pointer-টি। stack আর heap-এর পার্থক্য আবার দেখে
+নিতে অধ্যায় 4 দেখুন।</p>
+<p>ডেটা stack-এর বদলে heap-এ রাখা ছাড়া box-এর performance-এ কোনো বাড়তি খরচ নেই। তবে এদের খুব বেশি বাড়তি ক্ষমতাও নেই। এই পরিস্থিতিগুলোতে এগুলো সবচেয়ে
+বেশি ব্যবহার করবেন:</p>
+<ul>
+<li>যখন আপনার এমন একটি type আছে যার আকার compile time-এ জানা যায় না, আর আপনি সেই type-এর একটি মান এমন প্রেক্ষাপটে ব্যবহার করতে চান যেখানে নির্দিষ্ট আকার
+দরকার</li>
+<li>যখন আপনার কাছে অনেক ডেটা আছে, আর আপনি ownership হস্তান্তর করতে চান কিন্তু নিশ্চিত হতে চান যে তা করার সময় ডেটা কপি হবে না</li>
+<li>যখন আপনি একটি মানের মালিক হতে চান, এবং এটি নির্দিষ্ট কোনো type কি না তা নয়, বরং শুধু এটুকু নিয়ে মাথা ঘামান যে এটি একটি নির্দিষ্ট trait implement করে</li>
+</ul>
+<p>প্রথম পরিস্থিতিটি আমরা <a href="#enabling-recursive-types-with-boxes">“box দিয়ে recursive type সম্ভব
+করা”</a><!-- ignore -->-এ দেখাব। দ্বিতীয় ক্ষেত্রে, অনেক ডেটার ownership হস্তান্তর করতে অনেক সময় লাগতে পারে, কারণ ডেটা
+stack-এ এদিক-ওদিক কপি হয়। এই পরিস্থিতিতে performance উন্নত করতে অনেক ডেটা একটি box-এ করে heap-এ রাখতে পারি। তখন শুধু অল্প pointer ডেটা stack-এ এদিক-ওদিক
+কপি হয়, আর এটি যে ডেটাকে নির্দেশ করে তা heap-এ এক জায়গায় থাকে। তৃতীয় ক্ষেত্রটি <em>trait object</em> নামে পরিচিত, আর অধ্যায় 18-এর <a href="ch18-02-trait-objects.html#using-trait-objects-to-abstract-over-shared-behavior">“Using Trait Objects to Abstract over Shared
+Behavior”</a><!-- ignore --> অংশটি পুরোপুরি এই বিষয় নিয়ে। তাই এখানে যা শিখবেন, সেই অংশে আবার তা কাজে লাগাবেন!</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="using-boxt-to-store-data-on-the-heap"></a></p>
+<h3 id="storing-data-on-the-heap"><a class="header" href="#storing-data-on-the-heap">heap-এ ডেটা রাখা</a></h3>
+<p><code>Box&lt;T&gt;</code>-এর heap-এ রাখার ব্যবহার নিয়ে আলোচনার আগে syntax আর <code>Box&lt;T&gt;</code>-এর ভেতরে রাখা মানের সঙ্গে কীভাবে কাজ করতে হয় তা দেখব।</p>
+<p>Listing 15-1-এ দেখানো হয়েছে কীভাবে একটি box ব্যবহার করে heap-এ একটি <code>i32</code> মান রাখা যায়।</p>
+<figure class="listing" id="listing-15-1">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">fn main() {
+    let b = Box::new(5);
+    println!("b = {b}");
+}</code></pre>
+<figcaption><a href="#listing-15-1">Listing 15-1</a>: box ব্যবহার করে heap-এ একটি <code>i32</code> মান রাখা</figcaption>
+</figure>
+<p>আমরা <code>b</code> variable-কে এমন একটি <code>Box</code>-এর মান দিয়ে সংজ্ঞায়িত করি, যা heap-এ allocate করা <code>5</code> মানকে নির্দেশ করে। এই প্রোগ্রাম print করবে <code>b = 5</code>; এই ক্ষেত্রে
+box-এর ভেতরের ডেটা আমরা প্রায় সেভাবেই পেতে পারি, যেভাবে ডেটাটি stack-এ থাকলে পেতাম। যেকোনো owned মানের মতোই, একটি box scope-এর বাইরে গেলে, যেমন <code>main</code>-এর
+শেষে <code>b</code> যায়, এটি deallocate হবে। deallocation ঘটে box (stack-এ রাখা) আর এটি যে ডেটাকে নির্দেশ করে (heap-এ রাখা), দুটিরই।</p>
+<p>heap-এ একটিমাত্র মান রাখা খুব একটা কাজের নয়, তাই এভাবে আলাদাভাবে box খুব একটা ব্যবহার করবেন না। বেশিরভাগ পরিস্থিতিতে একটি <code>i32</code>-এর মতো মানগুলো stack-এ
+রাখাই বেশি উপযুক্ত, যেখানে এগুলো default-ভাবে রাখা হয়। চলুন এমন একটি ক্ষেত্র দেখি যেখানে box আমাদের এমন type সংজ্ঞায়িত করতে দেয়, যা box না থাকলে সংজ্ঞায়িত
+করতে পারতাম না।</p>
+<h3 id="enabling-recursive-types-with-boxes"><a class="header" href="#enabling-recursive-types-with-boxes">box দিয়ে recursive type সম্ভব করা</a></h3>
+<p>একটি <em>recursive type</em> (নিজের ভেতরে নিজেকেই ধারণ করে এমন type)-এর মানের নিজের অংশ হিসেবে একই type-এর আরেকটি মান থাকতে পারে। recursive type একটি সমস্যা
+তৈরি করে, কারণ compile time-এ Rust-এর জানা দরকার একটি type কতটা জায়গা নেয়। কিন্তু তাত্ত্বিকভাবে recursive type-এর মানগুলোর একটির ভেতরে আরেকটি অসীম পর্যন্ত
+চলতে পারে, তাই মানটির কতটা জায়গা লাগবে তা Rust জানতে পারে না। box-এর আকার যেহেতু জানা, তাই recursive type-এর সংজ্ঞায় একটি box বসিয়ে recursive type সম্ভব
+করা যায়।</p>
+<p>recursive type-এর উদাহরণ হিসেবে চলুন cons list দেখি। এটি functional programming ভাষায় সচরাচর পাওয়া একটি data type। আমরা যে cons list type সংজ্ঞায়িত করব,
+recursion ছাড়া তা সোজাসাপ্টা; তাই যে উদাহরণ নিয়ে কাজ করব তার ধারণাগুলো recursive type সংক্রান্ত আরও জটিল পরিস্থিতিতে যখনই পড়বেন তখনই কাজে লাগবে।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="more-information-about-the-cons-list"></a></p>
+<h4 id="understanding-the-cons-list"><a class="header" href="#understanding-the-cons-list">cons list বোঝা</a></h4>
+<p><em>cons list</em> হলো Lisp প্রোগ্রামিং ভাষা ও এর উপভাষাগুলো থেকে আসা একটি data structure, যা একটির ভেতরে আরেকটি জোড়া দিয়ে তৈরি, এবং এটি linked list-এর Lisp
+সংস্করণ। এর নাম এসেছে Lisp-এর <code>cons</code> function (<em>construct
+function</em>-এর সংক্ষেপ) থেকে, যা তার দুটি argument থেকে একটি নতুন জোড়া তৈরি করে। একটি মান আর আরেকটি জোড়া নিয়ে গঠিত জোড়ার ওপর <code>cons</code> call করে আমরা recursive
+জোড়া দিয়ে তৈরি cons list গড়তে পারি।</p>
+<p>যেমন, <code>1, 2, 3</code> তালিকাযুক্ত একটি cons list-এর pseudocode (কাল্পনিক কোডে লেখা) রূপ এখানে দেওয়া হলো, প্রতিটি জোড়া বন্ধনীর ভেতরে:</p>
+<pre><code class="language-text">(1, (2, (3, Nil)))
+</code></pre>
+<p>cons list-এর প্রতিটি item-এ দুটি উপাদান থাকে: বর্তমান item-এর মান আর পরের item। তালিকার শেষ item-এ পরের item ছাড়া শুধু <code>Nil</code> নামের একটি মান থাকে। <code>cons</code>
+function recursive-ভাবে call করে একটি cons list তৈরি হয়। recursion-এর base case (যেখানে recursion থামে) বোঝানোর প্রচলিত নাম হলো <code>Nil</code>। খেয়াল করুন, এটি অধ্যায়
+6-এ আলোচিত “null” বা “nil” ধারণার মতো নয়, যা একটি অবৈধ বা অনুপস্থিত মান।</p>
+<p>cons list Rust-এ সচরাচর ব্যবহৃত data structure নয়। Rust-এ item-এর তালিকা থাকলে বেশিরভাগ সময় <code>Vec&lt;T&gt;</code> ব্যবহার করাই ভালো। অন্যান্য, আরও জটিল recursive data
+type বিভিন্ন পরিস্থিতিতে <em>সত্যিই</em> কাজে লাগে, কিন্তু এই অধ্যায়ে cons list দিয়ে শুরু করলে খুব বেশি মনোযোগ না সরিয়েই দেখা যায় box কীভাবে আমাদের একটি recursive
+data type সংজ্ঞায়িত করতে দেয়।</p>
+<p>Listing 15-2-এ একটি cons list-এর জন্য একটি enum-এর সংজ্ঞা আছে। খেয়াল করুন, এই কোড এখনো compile হবে না, কারণ <code>List</code> type-এর আকার জানা নেই, যা আমরা দেখাব।</p>
+<figure class="listing" id="listing-15-2">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile">enum List {
+    Cons(i32, List),
+    Nil,
+}
+<span class="boring">
+</span><span class="boring">fn main() {}</span></code></pre>
+<figcaption><a href="#listing-15-2">Listing 15-2</a>: <code>i32</code> মানের একটি cons list data structure বোঝাতে enum সংজ্ঞায়িত করার প্রথম চেষ্টা</figcaption>
+</figure>
+<section class="note" aria-role="note">
+<p>Note: এই উদাহরণের উদ্দেশ্যে আমরা এমন একটি cons list implement করছি যা শুধু <code>i32</code> মান রাখে। অধ্যায় 10-এ যেমন আলোচনা করেছি, generics ব্যবহার করে আমরা এটি
+এমনভাবে implement করতে পারতাম যাতে cons list type যেকোনো type-এর মান রাখতে পারে।</p>
+</section>
+<p><code>List</code> type ব্যবহার করে <code>1, 2, 3</code> তালিকাটি রাখলে কোড দেখতে Listing 15-3-এর মতো হবে।</p>
+<figure class="listing" id="listing-15-3">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">enum List {
+</span><span class="boring">    Cons(i32, List),
+</span><span class="boring">    Nil,
+</span><span class="boring">}
+</span><span class="boring">
+</span>// --snip--
+
+use crate::List::{Cons, Nil};
+
+fn main() {
+    let list = Cons(1, Cons(2, Cons(3, Nil)));
+}</code></pre>
+<figcaption><a href="#listing-15-3">Listing 15-3</a>: <code>1, 2, 3</code> তালিকাটি রাখতে <code>List</code> enum ব্যবহার করা</figcaption>
+</figure>
+<p>প্রথম <code>Cons</code> মান রাখে <code>1</code> আর আরেকটি <code>List</code> মান। এই <code>List</code> মানটি আরেকটি <code>Cons</code> মান, যা রাখে <code>2</code> আর আরেকটি <code>List</code> মান। এই <code>List</code> মানটি আরও একটি <code>Cons</code> মান,
+যা রাখে <code>3</code> আর একটি <code>List</code> মান, যা শেষ পর্যন্ত <code>Nil</code>, অর্থাৎ recursive নয় এমন variant, যা তালিকার শেষ বোঝায়।</p>
+<p>Listing 15-3-এর কোড compile করার চেষ্টা করলে Listing 15-4-এ দেখানো error পাই।</p>
+<figure class="listing" id="listing-15-4">
+<pre><code class="language-console">$ cargo run
+   Compiling cons-list v0.1.0 (file:///projects/cons-list)
+error[E0072]: recursive type `List` has infinite size
+ --&gt; src/main.rs:1:1
+  |
+1 | enum List {
+  | ^^^^^^^^^
+2 |     Cons(i32, List),
+  |               ---- recursive without indirection
+  |
+help: insert some indirection (e.g., a `Box`, `Rc`, or `&amp;`) to break the cycle
+  |
+2 |     Cons(i32, Box&lt;List&gt;),
+  |               ++++    +
+
+error[E0391]: cycle detected when computing when `List` needs drop
+ --&gt; src/main.rs:1:1
+  |
+1 | enum List {
+  | ^^^^^^^^^
+  |
+  = note: ...which immediately requires computing when `List` needs drop again
+  = note: cycle used when computing whether `List` needs drop
+  = note: see https://rustc-dev-guide.rust-lang.org/overview.html#queries and https://rustc-dev-guide.rust-lang.org/query.html for more information
+
+Some errors have detailed explanations: E0072, E0391.
+For more information about an error, try `rustc --explain E0072`.
+error: could not compile `cons-list` (bin "cons-list") due to 2 previous errors
+</code></pre>
+<figcaption><a href="#listing-15-4">Listing 15-4</a>: একটি recursive enum সংজ্ঞায়িত করার চেষ্টায় পাওয়া error</figcaption>
+</figure>
+<p>error দেখায় এই type-এর “has infinite size” (আকার অসীম)। কারণ আমরা <code>List</code>-কে এমন একটি variant দিয়ে সংজ্ঞায়িত করেছি যা recursive: এটি সরাসরি নিজেরই আরেকটি মান
+রাখে। ফলে একটি <code>List</code> মান রাখতে কতটা জায়গা লাগবে তা Rust বের করতে পারে না। চলুন বিশ্লেষণ করি কেন এই error পাই। প্রথমে দেখব recursive নয় এমন type-এর একটি মান
+রাখতে কতটা জায়গা লাগবে তা Rust কীভাবে ঠিক করে।</p>
+<h4 id="computing-the-size-of-a-non-recursive-type"><a class="header" href="#computing-the-size-of-a-non-recursive-type">recursive নয় এমন type-এর আকার হিসাব করা</a></h4>
+<p>মনে করুন, অধ্যায় 6-এ enum-এর সংজ্ঞা নিয়ে আলোচনার সময় Listing 6-2-এ সংজ্ঞায়িত <code>Message</code> enum-টি:</p>
+<pre class="playground"><code class="language-rust edition2024">enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+<span class="boring">
+</span><span class="boring">fn main() {}</span></code></pre>
+<p>একটি <code>Message</code> মানের জন্য কতটা জায়গা allocate করতে হবে তা ঠিক করতে Rust প্রতিটি variant দেখে কোন variant-এর সবচেয়ে বেশি জায়গা লাগে। Rust দেখে যে
+<code>Message::Quit</code>-এর কোনো জায়গা লাগে না, <code>Message::Move</code>-এর দুটি <code>i32</code> মান রাখার মতো জায়গা লাগে, ইত্যাদি। যেহেতু মাত্র একটি variant ব্যবহৃত হবে, তাই একটি
+<code>Message</code> মানের সর্বোচ্চ যতটা জায়গা লাগবে, তা হলো এর সবচেয়ে বড় variant রাখতে যতটা জায়গা লাগে।</p>
+<p>এবার এর সঙ্গে তুলনা করুন, Listing 15-2-এর <code>List</code> enum-এর মতো একটি recursive type-এর কতটা জায়গা লাগবে তা নির্ধারণ করতে গেলে Rust-এর কী হয়। compiler শুরু করে
+<code>Cons</code> variant দেখে, যা <code>i32</code> type-এর একটি মান আর <code>List</code> type-এর একটি মান রাখে। তাই <code>Cons</code>-এর একটি <code>i32</code>-এর আকার আর একটি <code>List</code>-এর আকারের যোগফলের সমান জায়গা
+লাগে। <code>List</code> type-এর কতটা মেমোরি লাগবে তা বের করতে compiler variant-গুলো দেখে, শুরু করে <code>Cons</code> variant থেকে। <code>Cons</code> variant <code>i32</code> type-এর একটি মান আর <code>List</code>
+type-এর একটি মান রাখে, আর এই প্রক্রিয়া অসীম পর্যন্ত চলতে থাকে, যেমনটি Figure 15-1-এ দেখানো হয়েছে।</p>
+<img alt="একটি অসীম Cons list: &#39;Cons&#39; লেখা একটি আয়তক্ষেত্র, যা দুটি ছোট আয়তক্ষেত্রে ভাগ করা। প্রথম ছোট আয়তক্ষেত্রে লেখা &#39;i32&#39;, আর দ্বিতীয় ছোট আয়তক্ষেত্রে লেখা &#39;Cons&#39; এবং বাইরের &#39;Cons&#39; আয়তক্ষেত্রের একটি ছোট সংস্করণ। &#39;Cons&#39; আয়তক্ষেত্রগুলো নিজেদের আরও ছোট ছোট সংস্করণ ধারণ করতে থাকে, যতক্ষণ না সবচেয়ে ছোট আয়তক্ষেত্রে একটি অসীম-চিহ্ন থাকে, যা বোঝায় এই পুনরাবৃত্তি চিরকাল চলতে থাকে।" src="img/trpl15-01.svg" class="center" style="width: 50%;" />
+<p><span class="caption">Figure 15-1: অসীম সংখ্যক <code>Cons</code> variant দিয়ে গঠিত
+একটি অসীম <code>List</code></span></p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="using-boxt-to-get-a-recursive-type-with-a-known-size"></a></p>
+<h4 id="getting-a-recursive-type-with-a-known-size"><a class="header" href="#getting-a-recursive-type-with-a-known-size">জানা আকারের একটি recursive type পাওয়া</a></h4>
+<p>recursive-ভাবে সংজ্ঞায়িত type-এর জন্য কতটা জায়গা allocate করতে হবে তা Rust বের করতে পারে না বলে compiler এই কাজের পরামর্শসহ একটি error দেয়:</p>
+<!-- manual-regeneration
+after doing automatic regeneration, look at listings/ch15-smart-pointers/listing-15-03/output.txt and copy the relevant line
+-->
+<pre><code class="language-text">help: insert some indirection (e.g., a `Box`, `Rc`, or `&amp;`) to break the cycle
+  |
+2 |     Cons(i32, Box&lt;List&gt;),
+  |               ++++    +
+</code></pre>
+<p>এই পরামর্শে <em>indirection</em> (পরোক্ষভাবে নির্দেশ) মানে হলো, একটি মান সরাসরি না রেখে data structure বদলে মানটির দিকে একটি pointer রেখে পরোক্ষভাবে মানটি রাখা
+উচিত।</p>
+<p><code>Box&lt;T&gt;</code> যেহেতু একটি pointer, তাই একটি <code>Box&lt;T&gt;</code>-এর কতটা জায়গা লাগে তা Rust সবসময় জানে: একটি pointer-এর আকার এটি কতটা ডেটাকে নির্দেশ করছে তার ওপর নির্ভর
+করে বদলায় না। এর মানে আমরা <code>Cons</code> variant-এর ভেতরে সরাসরি আরেকটি <code>List</code> মানের বদলে একটি <code>Box&lt;T&gt;</code> রাখতে পারি। <code>Box&lt;T&gt;</code> পরের <code>List</code> মানটিকে নির্দেশ করবে, যা
+<code>Cons</code> variant-এর ভেতরে নয়, heap-এ থাকবে। ধারণাগতভাবে আমাদের এখনো একটি তালিকা আছে, যা অন্য তালিকা ধারণ করা তালিকা দিয়ে তৈরি, কিন্তু এই implementation এখন
+item-গুলোকে একটির ভেতরে আরেকটি না রেখে একটির পাশে আরেকটি রাখার মতো।</p>
+<p>Listing 15-2-এর <code>List</code> enum-এর সংজ্ঞা আর Listing 15-3-এর <code>List</code>-এর ব্যবহার বদলে Listing 15-5-এর কোড করতে পারি, যা compile হবে।</p>
+<figure class="listing" id="listing-15-5">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">enum List {
+    Cons(i32, Box&lt;List&gt;),
+    Nil,
+}
+
+use crate::List::{Cons, Nil};
+
+fn main() {
+    let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
+}</code></pre>
+<figcaption><a href="#listing-15-5">Listing 15-5</a>: জানা আকার পেতে <code>Box&lt;T&gt;</code> ব্যবহার করা <code>List</code>-এর সংজ্ঞা</figcaption>
+</figure>
+<p><code>Cons</code> variant-এর লাগে একটি <code>i32</code>-এর আকার আর box-এর pointer ডেটা রাখার জায়গা। <code>Nil</code> variant কোনো মান রাখে না, তাই stack-এ এর <code>Cons</code> variant-এর চেয়ে কম জায়গা
+লাগে। এখন আমরা জানি যেকোনো <code>List</code> মান একটি <code>i32</code>-এর আকার আর একটি box-এর pointer ডেটার আকারের সমান জায়গা নেবে। box ব্যবহার করে আমরা অসীম, recursive শিকলটি
+ভেঙে দিয়েছি, তাই একটি <code>List</code> মান রাখতে কত আকার লাগবে তা compiler বের করতে পারে। Figure 15-2-এ দেখানো হয়েছে <code>Cons</code> variant এখন দেখতে কেমন।</p>
+<img alt="&#39;Cons&#39; লেখা একটি আয়তক্ষেত্র, যা দুটি ছোট আয়তক্ষেত্রে ভাগ করা। প্রথম ছোট আয়তক্ষেত্রে লেখা &#39;i32&#39;, আর দ্বিতীয় ছোট আয়তক্ষেত্রে লেখা &#39;Box&#39;, যার ভেতরে &#39;usize&#39; লেখা একটি আয়তক্ষেত্র আছে, যা box-এর pointer-এর সসীম আকার বোঝায়।" src="img/trpl15-02.svg" class="center" />
+<p><span class="caption">Figure 15-2: এমন একটি <code>List</code>, যার আকার অসীম নয়,
+কারণ <code>Cons</code> একটি <code>Box</code> রাখে</span></p>
+<p>box শুধু indirection আর heap allocation দেয়; অন্য smart pointer type-এ যেসব বিশেষ ক্ষমতা দেখব, এদের তেমন কোনো ক্ষমতা নেই। সেই বিশেষ ক্ষমতাগুলোর জন্য যে
+performance খরচ হয়, তা-ও এদের নেই, তাই cons list-এর মতো ক্ষেত্রে এরা কাজে লাগতে পারে, যেখানে indirection-ই আমাদের একমাত্র দরকারি বৈশিষ্ট্য। box-এর আরও
+ব্যবহার দেখব অধ্যায় 18-এ।</p>
+<p><code>Box&lt;T&gt;</code> type একটি smart pointer, কারণ এটি <code>Deref</code> trait implement করে, যার ফলে <code>Box&lt;T&gt;</code> মানকে reference-এর মতো ব্যবহার করা যায়। একটি <code>Box&lt;T&gt;</code> মান scope-এর
+বাইরে গেলে box যে heap ডেটাকে নির্দেশ করছে সেটিও পরিষ্কার হয়ে যায়, <code>Drop</code> trait-এর implementation-এর কারণে। এই অধ্যায়ের বাকি অংশে যে অন্য smart pointer
+type-গুলো নিয়ে আলোচনা করব, তাদের কার্যক্ষমতার জন্য এই দুটি trait আরও বেশি গুরুত্বপূর্ণ হবে। চলুন এই দুটি trait আরও বিস্তারিত দেখি।</p>
+<div class="quiz-placeholder" data-quiz-name="&quot;ch15-01-box&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot;একটি box একটি mutable reference রাখতে পারে, তাই `b`-কে দুবার dereference করলে আবার `n`-এ পৌঁছানো যায়।&#92;n&quot;,&quot;id&quot;:&quot;6f3c2a68-24f7-439b-9fe0-426abd27e487&quot;,&quot;type&quot;:&quot;Tracing&quot;,&quot;answer&quot;:{&quot;doesCompile&quot;:true,&quot;stdout&quot;:&quot;2&quot;},&quot;prompt&quot;:{&quot;program&quot;:&quot;fn main() {&#92;n    let mut n = 1;&#92;n    let b = Box::new(&amp;mut n);&#92;n    **b += 1;&#92;n    println!(&#92;&quot;{}&#92;&quot;, n);&#92;n}&#92;n&quot;}},{&quot;context&quot;:&quot;একটি box-এ একটি pointer থাকে, যা 64-bit architecture-এ 8 byte। তাই 4টি pointer-এর একটি array অন্তত 4 * 8 = 32 byte।&#92;n&quot;,&quot;id&quot;:&quot;57595a80-c79f-4aae-a1d4-cdaf212d7c21&quot;,&quot;type&quot;:&quot;ShortAnswer&quot;,&quot;answer&quot;:{&quot;answer&quot;:&quot;32&quot;},&quot;prompt&quot;:{&quot;prompt&quot;:&quot;ধরুন আমাদের একটি প্রোগ্রামে এই variable আছে:&#92;n&#92;n```&#92;nlet x: [Box&lt;(usize, usize)&gt;; 4] = /* ... */&#92;n```&#92;n&#92;n64-bit architecture-এর একটি compile target-এর জন্য stack-এ `x`-এর মেমোরিতে সর্বনিম্ন সম্ভাব্য আকার (byte-এ) কত? &#92;nউত্তর অঙ্কে লিখুন, যেমন 0, 1, ইত্যাদি।&#92;n&quot;}}]}" data-quiz-fullscreen="true"></div>
+
+<script type="text/javascript" src="quiz/quiz-embed.iife.js"></script><link rel="stylesheet" type="text/css" href="quiz/style.css">
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch15-00-smart-pointers.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ch15-02-deref.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch15-00-smart-pointers.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ch15-02-deref.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris-2317480c.js"></script>
+        <script src="js-extensions/packages/feedback/dist/index-f1290d8b.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

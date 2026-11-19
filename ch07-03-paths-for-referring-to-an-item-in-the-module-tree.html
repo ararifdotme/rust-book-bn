@@ -1,0 +1,582 @@
+<!DOCTYPE HTML>
+<html lang="bn" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>module tree-র কোনো item উল্লেখ করার path - Rust প্রোগ্রামিং ভাষা</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris-d33b75bf.css">
+        <link rel="stylesheet" href="theme/semantic-notes-9b5766c0.css">
+        <link rel="stylesheet" href="theme/listing-cab26221.css">
+        <link rel="stylesheet" href="theme/2018-edition-4e126c62.css">
+        <link rel="stylesheet" href="theme/bengali-4de2f0b6.css">
+        <link rel="stylesheet" href="js-extensions/packages/feedback/dist/index-c9d186bd.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-03403162.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-485378fe.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust প্রোগ্রামিং ভাষা</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/ararifdotme/rust-book-bn" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h2 id="paths-for-referring-to-an-item-in-the-module-tree"><a class="header" href="#paths-for-referring-to-an-item-in-the-module-tree">module tree-র কোনো item উল্লেখ করার path</a></h2>
+<p>module tree-তে একটি item কোথায় পাওয়া যাবে তা Rust-কে দেখাতে আমরা একটি path ব্যবহার করি, ঠিক যেমন
+ফাইল সিস্টেমে ঘোরাফেরার সময় path ব্যবহার করি। একটি function call করতে হলে তার path জানতে হবে।</p>
+<p>একটি path দুটি রূপ নিতে পারে:</p>
+<ul>
+<li>একটি <em>absolute path</em> (crate root থেকে শুরু হওয়া পূর্ণ পথ) হলো crate root থেকে শুরু হওয়া পুরো
+path; বাইরের কোনো crate-এর কোডের জন্য absolute path শুরু হয় crate-এর নাম দিয়ে, আর বর্তমান
+crate-এর কোডের জন্য এটি শুরু হয় literal <code>crate</code> দিয়ে।</li>
+<li>একটি <em>relative path</em> (বর্তমান module থেকে শুরু হওয়া পথ) শুরু হয় বর্তমান module থেকে, আর
+<code>self</code>, <code>super</code> বা বর্তমান module-এর কোনো identifier ব্যবহার করে।</li>
+</ul>
+<p>absolute আর relative দুই ধরনের path-এর পরেই থাকে দুটি কোলন (<code>::</code>) দিয়ে আলাদা করা এক বা একাধিক
+identifier।</p>
+<p>Listing 7-1-এ ফিরে গিয়ে, ধরুন আমরা <code>add_to_waitlist</code> function call করতে চাই। এটি এই প্রশ্ন করার
+সমান: <code>add_to_waitlist</code> function-এর path কী? Listing 7-3-এ Listing 7-1-ই আছে, তবে কিছু module আর
+function সরিয়ে দেওয়া হয়েছে।</p>
+<p>crate root-এ সংজ্ঞায়িত একটি নতুন function <code>eat_at_restaurant</code> থেকে <code>add_to_waitlist</code> function call করার
+দুটি উপায় আমরা দেখাব। এই path-গুলো সঠিক, কিন্তু আরেকটি সমস্যা থেকে যায়, যার কারণে এই উদাহরণটি
+এভাবে compile হবে না। একটু পরেই আমরা এর কারণ ব্যাখ্যা করব।</p>
+<p><code>eat_at_restaurant</code> function আমাদের library crate-এর public API-র অংশ, তাই আমরা এটিকে <code>pub</code> keyword
+দিয়ে চিহ্নিত করি। <a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#exposing-paths-with-the-pub-keyword">“<code>pub</code> keyword দিয়ে path
+প্রকাশ করা”</a><!-- ignore --> অংশে আমরা <code>pub</code> নিয়ে আরও বিস্তারিত আলোচনা করব।</p>
+<figure class="listing" id="listing-7-3">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust ignore does_not_compile">mod front_of_house {
+    mod hosting {
+        fn add_to_waitlist() {}
+    }
+}
+
+pub fn eat_at_restaurant() {
+    // Absolute path
+    crate::front_of_house::hosting::add_to_waitlist();
+
+    // Relative path
+    front_of_house::hosting::add_to_waitlist();
+}</code></pre>
+<figcaption><a href="#listing-7-3">Listing 7-3</a>: absolute আর relative path ব্যবহার করে <code>add_to_waitlist</code> function call করা</figcaption>
+</figure>
+<p><code>eat_at_restaurant</code>-এ প্রথমবার <code>add_to_waitlist</code> function call করার সময় আমরা একটি absolute path
+ব্যবহার করি। <code>add_to_waitlist</code> function <code>eat_at_restaurant</code>-এর একই crate-এ সংজ্ঞায়িত, অর্থাৎ absolute
+path শুরু করতে আমরা <code>crate</code> keyword ব্যবহার করতে পারি। তারপর <code>add_to_waitlist</code>-এ পৌঁছানো পর্যন্ত
+পরপর প্রতিটি module লিখি। একই কাঠামোর একটি ফাইল সিস্টেম কল্পনা করতে পারেন: <code>add_to_waitlist</code> প্রোগ্রাম
+চালাতে আমরা <code>/front_of_house/hosting/add_to_waitlist</code> path লিখতাম; crate root থেকে শুরু করতে <code>crate</code>
+নাম ব্যবহার করা মানে শেলে ফাইল সিস্টেমের root থেকে শুরু করতে <code>/</code> ব্যবহার করার মতো।</p>
+<p><code>eat_at_restaurant</code>-এ দ্বিতীয়বার <code>add_to_waitlist</code> call করার সময় আমরা একটি relative path ব্যবহার
+করি। path-টি শুরু হয় <code>front_of_house</code> দিয়ে, যা module tree-তে <code>eat_at_restaurant</code>-এর একই স্তরে
+সংজ্ঞায়িত module-এর নাম। এখানে ফাইল সিস্টেমের সমতুল্য হতো
+<code>front_of_house/hosting/add_to_waitlist</code> path ব্যবহার করা। একটি module-এর নাম দিয়ে শুরু করা মানে
+path-টি relative।</p>
+<p>relative নাকি absolute path ব্যবহার করবেন, সেই সিদ্ধান্ত আপনি নেবেন আপনার প্রজেক্টের ভিত্তিতে, আর তা
+নির্ভর করে item-এর সংজ্ঞার কোড আর item ব্যবহারকারী কোডকে আপনি আলাদাভাবে নাকি একসঙ্গে সরানোর
+সম্ভাবনা বেশি, তার ওপর। যেমন, আমরা যদি <code>front_of_house</code> module আর <code>eat_at_restaurant</code> function-কে
+<code>customer_experience</code> নামের একটি module-এ সরিয়ে নিতাম, তাহলে <code>add_to_waitlist</code>-এর absolute path
+আপডেট করতে হতো, কিন্তু relative path তবু বৈধ থাকত। আবার, আমরা যদি শুধু <code>eat_at_restaurant</code> function-কে
+আলাদাভাবে <code>dining</code> নামের একটি module-এ সরাতাম, তাহলে <code>add_to_waitlist</code> call-এর absolute path একই
+থাকত, কিন্তু relative path আপডেট করতে হতো। সাধারণভাবে আমাদের পছন্দ হলো absolute path ব্যবহার করা,
+কারণ কোডের সংজ্ঞা আর item call-গুলো পরস্পর থেকে স্বাধীনভাবে সরানোর সম্ভাবনাই বেশি।</p>
+<p>চলুন Listing 7-3 compile করার চেষ্টা করে দেখি এটি এখনো কেন compile হবে না! আমরা যে error পাই, তা
+Listing 7-4-এ দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-7-4">
+<pre><code class="language-console">$ cargo build
+   Compiling restaurant v0.1.0 (file:///projects/restaurant)
+error[E0603]: module `hosting` is private
+ --&gt; src/lib.rs:9:28
+  |
+9 |     crate::front_of_house::hosting::add_to_waitlist();
+  |                            ^^^^^^^  --------------- function `add_to_waitlist` is not publicly re-exported
+  |                            |
+  |                            private module
+  |
+note: the module `hosting` is defined here
+ --&gt; src/lib.rs:2:5
+  |
+2 |     mod hosting {
+  |     ^^^^^^^^^^^
+
+error[E0603]: module `hosting` is private
+  --&gt; src/lib.rs:12:21
+   |
+12 |     front_of_house::hosting::add_to_waitlist();
+   |                     ^^^^^^^  --------------- function `add_to_waitlist` is not publicly re-exported
+   |                     |
+   |                     private module
+   |
+note: the module `hosting` is defined here
+  --&gt; src/lib.rs:2:5
+   |
+ 2 |     mod hosting {
+   |     ^^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0603`.
+error: could not compile `restaurant` (lib) due to 2 previous errors
+</code></pre>
+<figcaption><a href="#listing-7-4">Listing 7-4</a>: Listing 7-3-এর কোড build করার সময় পাওয়া compiler error</figcaption>
+</figure>
+<p>error message বলছে যে module <code>hosting</code> private। অন্যভাবে বললে, <code>hosting</code> module আর <code>add_to_waitlist</code>
+function-এর সঠিক path আমাদের কাছে আছে, কিন্তু Rust আমাদের সেগুলো ব্যবহার করতে দেবে না, কারণ private
+অংশগুলোতে এর প্রবেশাধিকার নেই। Rust-এ সব item (function, method, struct, enum, module আর constant)
+ডিফল্টভাবে parent module-গুলোর কাছে private। একটি function বা struct-এর মতো item-কে private করতে চাইলে
+সেটিকে একটি module-এ রাখুন।</p>
+<p>parent module-এর item-গুলো child module-এর ভেতরের private item ব্যবহার করতে পারে না, কিন্তু child
+module-এর item-গুলো তাদের ancestor (ওপরের যেকোনো স্তরের) module-এর item ব্যবহার করতে পারে। এর কারণ হলো,
+child module তাদের implementation-এর খুঁটিনাটি মুড়ে লুকিয়ে রাখে, কিন্তু child module যে প্রেক্ষাপটে
+সংজ্ঞায়িত, তা দেখতে পায়। আমাদের রূপক চালিয়ে গেলে, privacy-র নিয়মগুলোকে একটি রেস্তোরাঁর পেছনের
+অফিসের মতো ভাবুন: সেখানে যা ঘটে, তা রেস্তোরাঁর খদ্দেরদের কাছে private, কিন্তু অফিসের ম্যানেজাররা
+তাদের চালানো রেস্তোরাঁর সবকিছু দেখতে আর করতে পারেন।</p>
+<p>Rust module system এভাবে কাজ করার পথ বেছে নিয়েছে, যাতে ভেতরের implementation-এর খুঁটিনাটি লুকিয়ে
+রাখাই হয় ডিফল্ট। এভাবে আপনি জানেন ভেতরের কোডের কোন অংশ বাইরের কোড না ভেঙে বদলাতে পারবেন। তবে
+Rust আপনাকে <code>pub</code> keyword ব্যবহার করে একটি item public করে child module-এর কোডের ভেতরের অংশ বাইরের
+ancestor module-এর কাছে প্রকাশ করার সুযোগও দেয়।</p>
+<h3 id="exposing-paths-with-the-pub-keyword"><a class="header" href="#exposing-paths-with-the-pub-keyword"><code>pub</code> keyword দিয়ে path প্রকাশ করা</a></h3>
+<p>Listing 7-4-এর সেই error-এ ফিরে যাই, যা আমাদের বলেছিল <code>hosting</code> module private। আমরা চাই parent
+module-এর <code>eat_at_restaurant</code> function child module-এর <code>add_to_waitlist</code> function-এ প্রবেশাধিকার পাক,
+তাই আমরা <code>hosting</code> module-কে <code>pub</code> keyword দিয়ে চিহ্নিত করি, Listing 7-5-এ যেমন দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-7-5">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust ignore does_not_compile">mod front_of_house {
+    pub mod hosting {
+        fn add_to_waitlist() {}
+    }
+}
+
+// -- snip --
+<span class="boring">pub fn eat_at_restaurant() {
+</span><span class="boring">    // Absolute path
+</span><span class="boring">    crate::front_of_house::hosting::add_to_waitlist();
+</span><span class="boring">
+</span><span class="boring">    // Relative path
+</span><span class="boring">    front_of_house::hosting::add_to_waitlist();
+</span><span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-7-5">Listing 7-5</a>: <code>eat_at_restaurant</code> থেকে ব্যবহার করতে <code>hosting</code> module-কে <code>pub</code> হিসেবে ঘোষণা করা</figcaption>
+</figure>
+<p>দুর্ভাগ্যবশত, Listing 7-5-এর কোডেও এখনো compiler error আসে, Listing 7-6-এ যেমন
+দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-7-6">
+<pre><code class="language-console">$ cargo build
+   Compiling restaurant v0.1.0 (file:///projects/restaurant)
+error[E0603]: function `add_to_waitlist` is private
+  --&gt; src/lib.rs:10:37
+   |
+10 |     crate::front_of_house::hosting::add_to_waitlist();
+   |                                     ^^^^^^^^^^^^^^^ private function
+   |
+note: the function `add_to_waitlist` is defined here
+  --&gt; src/lib.rs:3:9
+   |
+ 3 |         fn add_to_waitlist() {}
+   |         ^^^^^^^^^^^^^^^^^^^^
+
+error[E0603]: function `add_to_waitlist` is private
+  --&gt; src/lib.rs:13:30
+   |
+13 |     front_of_house::hosting::add_to_waitlist();
+   |                              ^^^^^^^^^^^^^^^ private function
+   |
+note: the function `add_to_waitlist` is defined here
+  --&gt; src/lib.rs:3:9
+   |
+ 3 |         fn add_to_waitlist() {}
+   |         ^^^^^^^^^^^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0603`.
+error: could not compile `restaurant` (lib) due to 2 previous errors
+</code></pre>
+<figcaption><a href="#listing-7-6">Listing 7-6</a>: Listing 7-5-এর কোড build করার সময় পাওয়া compiler error</figcaption>
+</figure>
+<p>কী হলো? <code>mod hosting</code>-এর সামনে <code>pub</code> keyword যোগ করায় module-টি public হয়েছে। এই পরিবর্তনের ফলে
+আমরা <code>front_of_house</code>-এ পৌঁছাতে পারলে <code>hosting</code>-এও পৌঁছাতে পারি। কিন্তু <code>hosting</code>-এর <em>বিষয়বস্তু</em>
+এখনো private; module public করলেই তার বিষয়বস্তু public হয় না। একটি module-এর ওপর <code>pub</code> keyword শুধু
+তার ancestor module-এর কোডকে module-টি উল্লেখ করতে দেয়, তার ভেতরের কোডে পৌঁছাতে দেয় না। module
+যেহেতু ধারক, তাই শুধু module public করে খুব বেশি কিছু করা যায় না; আমাদের আরও এগিয়ে module-এর ভেতরের
+এক বা একাধিক item-কেও public করতে হবে।</p>
+<p>Listing 7-6-এর error-গুলো বলছে যে <code>add_to_waitlist</code> function private। privacy-র নিয়ম module-এর পাশাপাশি
+struct, enum, function আর method-এর ক্ষেত্রেও প্রযোজ্য।</p>
+<p>চলুন <code>add_to_waitlist</code> function-এর সংজ্ঞার আগে <code>pub</code> keyword যোগ করে এটিকেও public করি, Listing
+7-7-এর মতো।</p>
+<figure class="listing" id="listing-7-7">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust noplayground test_harness">mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
+    }
+}
+
+// -- snip --
+<span class="boring">pub fn eat_at_restaurant() {
+</span><span class="boring">    // Absolute path
+</span><span class="boring">    crate::front_of_house::hosting::add_to_waitlist();
+</span><span class="boring">
+</span><span class="boring">    // Relative path
+</span><span class="boring">    front_of_house::hosting::add_to_waitlist();
+</span><span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-7-7">Listing 7-7</a>: <code>mod hosting</code> আর <code>fn add_to_waitlist</code>-এ <code>pub</code> keyword যোগ করলে আমরা <code>eat_at_restaurant</code> থেকে function-টি call করতে পারি।</figcaption>
+</figure>
+<p>এবার কোডটি compile হবে! privacy-র নিয়মের আলোকে <code>pub</code> keyword যোগ করায় কেন <code>eat_at_restaurant</code>-এ এই
+path-গুলো ব্যবহার করা যায়, তা দেখতে চলুন absolute আর relative path দুটো দেখি।</p>
+<p>absolute path-এ আমরা শুরু করি <code>crate</code> দিয়ে, যা আমাদের crate-এর module tree-র মূল। <code>front_of_house</code>
+module crate root-এ সংজ্ঞায়িত। <code>front_of_house</code> public না হলেও, যেহেতু <code>eat_at_restaurant</code> function
+<code>front_of_house</code>-এর একই module-এ সংজ্ঞায়িত (অর্থাৎ <code>eat_at_restaurant</code> আর <code>front_of_house</code> sibling),
+তাই <code>eat_at_restaurant</code> থেকে আমরা <code>front_of_house</code> উল্লেখ করতে পারি। এরপর আসে <code>pub</code> দিয়ে চিহ্নিত
+<code>hosting</code> module। <code>hosting</code>-এর parent module-এ আমরা পৌঁছাতে পারি, তাই <code>hosting</code>-এও পৌঁছাতে পারি।
+সবশেষে, <code>add_to_waitlist</code> function <code>pub</code> দিয়ে চিহ্নিত, আর এর parent module-এ আমরা পৌঁছাতে পারি, তাই এই
+function call কাজ করে!</p>
+<p>relative path-এ প্রথম ধাপ ছাড়া বাকি যুক্তি absolute path-এর মতোই: crate root থেকে শুরু করার বদলে
+path-টি শুরু হয় <code>front_of_house</code> থেকে। <code>front_of_house</code> module <code>eat_at_restaurant</code>-এর একই module-এ
+সংজ্ঞায়িত, তাই যে module-এ <code>eat_at_restaurant</code> সংজ্ঞায়িত, সেখান থেকে শুরু হওয়া relative path কাজ করে।
+তারপর <code>hosting</code> আর <code>add_to_waitlist</code> যেহেতু <code>pub</code> দিয়ে চিহ্নিত, তাই path-এর বাকিটাও কাজ করে, এবং এই
+function call বৈধ!</p>
+<p>আপনি যদি আপনার library crate শেয়ার করার পরিকল্পনা করেন, যাতে অন্য প্রজেক্ট আপনার কোড ব্যবহার করতে
+পারে, তাহলে আপনার public API হলো আপনার crate-এর ব্যবহারকারীদের সঙ্গে আপনার চুক্তি, যা নির্ধারণ করে
+তারা আপনার কোডের সঙ্গে কীভাবে কাজ করতে পারবে। আপনার crate-এর ওপর মানুষের নির্ভর করা সহজ করতে public
+API-র পরিবর্তন সামলানো নিয়ে অনেক বিবেচনার বিষয় আছে। এই বিবেচনাগুলো এই বইয়ের পরিধির বাইরে; এই বিষয়ে
+আগ্রহী হলে দেখুন <a href="https://rust-lang.github.io/api-guidelines/">Rust API Guidelines</a>।</p>
+<section class="note" aria-role="note">
+<h4 id="best-practices-for-packages-with-a-binary-and-a-library"><a class="header" href="#best-practices-for-packages-with-a-binary-and-a-library">binary আর library দুটোই আছে এমন package-এর জন্য ভালো চর্চা</a></h4>
+<p>আমরা বলেছিলাম, একটি package-এ একটি <em>src/main.rs</em> binary crate root আর একটি <em>src/lib.rs</em> library
+crate root দুটোই থাকতে পারে, আর ডিফল্টভাবে দুটি crate-এরই নাম হবে package-এর নাম। সাধারণত library
+আর binary crate দুটোই থাকে এমন package-এর binary crate-এ শুধু ততটুকু কোড থাকে, যতটুকু একটি
+executable শুরু করে library crate-এ সংজ্ঞায়িত কোড call করতে দরকার। এতে অন্য প্রজেক্টগুলো package-এর
+দেওয়া কার্যকারিতার সর্বোচ্চ সুবিধা পায়, কারণ library crate-এর কোড শেয়ার করা যায়।</p>
+<p>module tree সংজ্ঞায়িত করা উচিত <em>src/lib.rs</em>-এ। তাহলে package-এর নাম দিয়ে path শুরু করে binary crate-এ
+যেকোনো public item ব্যবহার করা যায়। binary crate তখন library crate-এর একজন ব্যবহারকারী হয়ে যায়,
+ঠিক যেভাবে একটি সম্পূর্ণ বাইরের crate library crate ব্যবহার করত: এটি শুধু public API ব্যবহার করতে
+পারে। এতে একটি ভালো API নকশা করতে সুবিধা হয়; আপনি শুধু লেখক নন, একজন ব্যবহারকারীও!</p>
+<p><a href="ch12-00-an-io-project.html">অধ্যায় 12</a><!-- ignore -->-এ আমরা একটি কমান্ড লাইন প্রোগ্রাম দিয়ে এই সাংগঠনিক চর্চা দেখাব,
+যাতে একটি binary crate আর একটি library crate দুটোই থাকবে।</p>
+</section>
+<div class="quiz-placeholder" data-quiz-name="&quot;ch07-03-paths-sec1&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot;যেমন, module `a`-এর item `b`-এর absolute path হবে `crate::a::b`।&#92;n&quot;,&quot;id&quot;:&quot;4e18f340-e336-43c5-9a95-79dec1f49945&quot;,&quot;type&quot;:&quot;ShortAnswer&quot;,&quot;answer&quot;:{&quot;answer&quot;:&quot;crate&quot;},&quot;prompt&quot;:{&quot;prompt&quot;:&quot;বর্তমান crate-এর কোনো item-এর absolute path-এর শুরুতে আপনি কোন keyword ব্যবহার করেন?&quot;}},{&quot;context&quot;:&quot;`main`-এর পক্ষে `b`-তে পৌঁছানো সম্ভব নয়, কারণ module `bar` `pub` হিসেবে চিহ্নিত নয়।&#92;n&quot;,&quot;id&quot;:&quot;256d0ce2-da89-4b44-94da-177634fc633a&quot;,&quot;type&quot;:&quot;Tracing&quot;,&quot;answer&quot;:{&quot;doesCompile&quot;:false,&quot;lineNumber&quot;:9},&quot;prompt&quot;:{&quot;program&quot;:&quot;pub mod foo {&#92;n  fn a() { println!(&#92;&quot;a&#92;&quot;); }&#92;n  mod bar {&#92;n    pub fn b() { println!(&#92;&quot;b&#92;&quot;); }&#92;n  }&#92;n}&#92;n&#92;nfn main() {&#92;n  foo::bar::b();&#92;n}&#92;n&quot;}},{&quot;context&quot;:&quot;`foo`-এর ভেতরে `bar`-এর item উল্লেখ করতে relative path ব্যবহার করা বৈধ।&#92;n&quot;,&quot;id&quot;:&quot;5e78e2e4-81dc-42b2-8527-f08b5117982f&quot;,&quot;type&quot;:&quot;Tracing&quot;,&quot;answer&quot;:{&quot;doesCompile&quot;:true,&quot;stdout&quot;:&quot;b&quot;},&quot;prompt&quot;:{&quot;program&quot;:&quot;pub mod foo {&#92;n  pub mod bar {&#92;n    pub fn b() { println!(&#92;&quot;b&#92;&quot;);  }&#92;n  }&#92;n  pub fn a() { bar::b(); }&#92;n}&#92;n&#92;nfn main() {&#92;n  foo::a();&#92;n}&#92;n&quot;}}]}" data-quiz-fullscreen="true"></div>
+
+<h3 id="starting-relative-paths-with-super"><a class="header" href="#starting-relative-paths-with-super"><code>super</code> দিয়ে relative path শুরু করা</a></h3>
+<p>path-এর শুরুতে <code>super</code> ব্যবহার করে আমরা এমন relative path তৈরি করতে পারি, যা বর্তমান module বা crate
+root-এর বদলে parent module থেকে শুরু হয়। এটি ফাইল সিস্টেমের path <code>..</code> syntax দিয়ে শুরু করার মতো,
+যার মানে parent ডিরেক্টরিতে যাওয়া। <code>super</code> ব্যবহার করে আমরা এমন একটি item উল্লেখ করতে পারি, যা আমরা
+জানি parent module-এ আছে; module-টি parent-এর সঙ্গে ঘনিষ্ঠভাবে সম্পর্কিত হলে, কিন্তু parent হয়তো কোনো
+একদিন module tree-র অন্য কোথাও সরানো হতে পারে এমন হলে, এতে module tree নতুন করে সাজানো সহজ হয়।</p>
+<p>Listing 7-8-এর কোডটি দেখুন, যা এমন একটি পরিস্থিতির মডেল, যেখানে একজন শেফ একটি ভুল অর্ডার ঠিক করে
+নিজেই সেটি খদ্দেরের কাছে নিয়ে আসেন। <code>back_of_house</code> module-এ সংজ্ঞায়িত <code>fix_incorrect_order</code> function
+<code>super</code> দিয়ে শুরু করে <code>deliver_order</code>-এর path লিখে parent module-এ সংজ্ঞায়িত <code>deliver_order</code> function
+call করে।</p>
+<figure class="listing" id="listing-7-8">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust noplayground test_harness">fn deliver_order() {}
+
+mod back_of_house {
+    fn fix_incorrect_order() {
+        cook_order();
+        super::deliver_order();
+    }
+
+    fn cook_order() {}
+}</code></pre>
+<figcaption><a href="#listing-7-8">Listing 7-8</a>: <code>super</code> দিয়ে শুরু হওয়া একটি relative path ব্যবহার করে একটি function call করা</figcaption>
+</figure>
+<p><code>fix_incorrect_order</code> function আছে <code>back_of_house</code> module-এ, তাই <code>back_of_house</code>-এর parent module-এ
+যেতে আমরা <code>super</code> ব্যবহার করতে পারি, যা এই ক্ষেত্রে <code>crate</code>, অর্থাৎ root। সেখান থেকে আমরা
+<code>deliver_order</code> খুঁজি এবং পেয়ে যাই। সফল! আমাদের মনে হয়, <code>back_of_house</code> module আর <code>deliver_order</code>
+function সম্ভবত পরস্পরের সঙ্গে একই সম্পর্কে থাকবে, আর crate-এর module tree নতুন করে সাজানোর সিদ্ধান্ত
+নিলে একসঙ্গেই সরানো হবে। তাই আমরা <code>super</code> ব্যবহার করেছি, যাতে ভবিষ্যতে এই কোড অন্য module-এ সরানো
+হলে কোড আপডেট করার জায়গা কম থাকে।</p>
+<h3 id="making-structs-and-enums-public"><a class="header" href="#making-structs-and-enums-public">struct আর enum public করা</a></h3>
+<p>struct আর enum-কে public হিসেবে চিহ্নিত করতেও আমরা <code>pub</code> ব্যবহার করতে পারি, তবে struct আর enum-এর
+সঙ্গে <code>pub</code> ব্যবহারে কয়েকটি বাড়তি খুঁটিনাটি আছে। একটি struct-এর সংজ্ঞার আগে <code>pub</code> ব্যবহার করলে
+struct-টি public হয়, কিন্তু struct-এর field-গুলো তবু private থাকে। প্রতিটি field আলাদাভাবে, প্রয়োজন
+অনুযায়ী, public করা বা না করা যায়। Listing 7-9-এ আমরা একটি public <code>back_of_house::Breakfast</code> struct
+সংজ্ঞায়িত করেছি, যার <code>toast</code> field public কিন্তু <code>seasonal_fruit</code> field private। এটি রেস্তোরাঁর এমন
+একটি পরিস্থিতির মডেল, যেখানে খদ্দের খাবারের সঙ্গে আসা রুটির ধরন বেছে নিতে পারেন, কিন্তু কোন মৌসুমে
+কী পাওয়া যায় আর মজুত কী আছে, তার ভিত্তিতে খাবারের সঙ্গে কোন ফল যাবে তা শেফ ঠিক করেন। পাওয়া যায় এমন
+ফল দ্রুত বদলায়, তাই খদ্দেররা ফল বেছে নিতে পারেন না, এমনকি কোন ফল পাবেন তা-ও দেখতে পারেন না।</p>
+<figure class="listing" id="listing-7-9">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust noplayground">mod back_of_house {
+    pub struct Breakfast {
+        pub toast: String,
+        seasonal_fruit: String,
+    }
+
+    impl Breakfast {
+        pub fn summer(toast: &amp;str) -&gt; Breakfast {
+            Breakfast {
+                toast: String::from(toast),
+                seasonal_fruit: String::from("peaches"),
+            }
+        }
+    }
+}
+
+pub fn eat_at_restaurant() {
+    // গ্রীষ্মে Rye toast-সহ একটি নাস্তার অর্ডার দিন।
+    let mut meal = back_of_house::Breakfast::summer("Rye");
+    // কোন রুটি চাই, সে বিষয়ে মত বদলান।
+    meal.toast = String::from("Wheat");
+    println!("I'd like {} toast please", meal.toast);
+
+    // পরের লাইনটির কমেন্ট তুলে দিলে এটি compile হবে না; খাবারের সঙ্গে আসা
+    // মৌসুমি ফল দেখার বা বদলানোর অনুমতি আমাদের নেই।
+    // meal.seasonal_fruit = String::from("blueberries");
+}</code></pre>
+<figcaption><a href="#listing-7-9">Listing 7-9</a>: একটি struct, যার কিছু field public আর কিছু field private</figcaption>
+</figure>
+<p><code>back_of_house::Breakfast</code> struct-এর <code>toast</code> field যেহেতু public, তাই <code>eat_at_restaurant</code>-এ dot notation
+ব্যবহার করে আমরা <code>toast</code> field-এ লিখতে আর পড়তে পারি। লক্ষ করুন, <code>eat_at_restaurant</code>-এ আমরা
+<code>seasonal_fruit</code> field ব্যবহার করতে পারি না, কারণ <code>seasonal_fruit</code> private। <code>seasonal_fruit</code> field-এর
+মান বদলানোর লাইনটির কমেন্ট তুলে দিয়ে দেখুন কী error পান!</p>
+<p>আরও লক্ষ করুন, <code>back_of_house::Breakfast</code>-এর একটি private field থাকায় struct-টিকে একটি public associated
+function দিতে হবে, যা <code>Breakfast</code>-এর একটি instance তৈরি করে (এখানে আমরা এর নাম দিয়েছি <code>summer</code>)।
+<code>Breakfast</code>-এর এমন কোনো function না থাকলে আমরা <code>eat_at_restaurant</code>-এ <code>Breakfast</code>-এর instance তৈরি
+করতে পারতাম না, কারণ <code>eat_at_restaurant</code>-এ private <code>seasonal_fruit</code> field-এর মান সেট করতে পারতাম না।</p>
+<p>অন্যদিকে, একটি enum public করলে তার সব variant-ই public হয়ে যায়। Listing 7-10-এ যেমন দেখানো হয়েছে,
+শুধু <code>enum</code> keyword-এর আগে <code>pub</code> দিলেই চলে।</p>
+<figure class="listing" id="listing-7-10">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust noplayground">mod back_of_house {
+    pub enum Appetizer {
+        Soup,
+        Salad,
+    }
+}
+
+pub fn eat_at_restaurant() {
+    let order1 = back_of_house::Appetizer::Soup;
+    let order2 = back_of_house::Appetizer::Salad;
+}</code></pre>
+<figcaption><a href="#listing-7-10">Listing 7-10</a>: একটি enum-কে public হিসেবে চিহ্নিত করলে তার সব variant public হয়ে যায়।</figcaption>
+</figure>
+<p><code>Appetizer</code> enum-টিকে public করায় <code>eat_at_restaurant</code>-এ আমরা <code>Soup</code> আর <code>Salad</code> variant ব্যবহার
+করতে পারি।</p>
+<p>variant-গুলো public না হলে enum খুব একটা কাজের নয়; প্রতিটি ক্ষেত্রে সব enum variant-কে <code>pub</code> দিয়ে
+annotate করতে হলে বিরক্তিকর হতো, তাই enum variant-এর ডিফল্ট হলো public হওয়া। struct প্রায়ই field
+public না করেও কাজের, তাই struct-এর field সাধারণ নিয়ম মেনে চলে: <code>pub</code> দিয়ে annotate না করা পর্যন্ত
+সবকিছু ডিফল্টভাবে private।</p>
+<p><code>pub</code> জড়িত আরও একটি পরিস্থিতি আছে, যা আমরা এখনো আলোচনা করিনি, আর সেটি আমাদের module system-এর শেষ
+বৈশিষ্ট্য: <code>use</code> keyword। আমরা প্রথমে আলাদাভাবে <code>use</code> নিয়ে আলোচনা করব, তারপর দেখাব কীভাবে <code>pub</code> আর
+<code>use</code> একসঙ্গে ব্যবহার করা যায়।</p>
+<div class="quiz-placeholder" data-quiz-name="&quot;ch07-03-paths-sec2&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot;`entry` path `super::b::c::f` ব্যবহার করে। `entry` আছে module `a`-এর ভেতরে, তাই `super` বোঝায় `a`-এর parent module, অর্থাৎ root crate। &#92;nতারপর root-এর child `b` হলো সবচেয়ে বাইরের module `b`, যার child `c`-তে একটি function `f` আছে, যা `&#92;&quot;c2&#92;&quot;` প্রিন্ট করে।&#92;n&quot;,&quot;id&quot;:&quot;8ef2f170-71d9-4f17-a688-b99d8c8072a8&quot;,&quot;type&quot;:&quot;Tracing&quot;,&quot;answer&quot;:{&quot;doesCompile&quot;:true,&quot;stdout&quot;:&quot;c2&quot;},&quot;prompt&quot;:{&quot;program&quot;:&quot;pub mod a {&#92;n  pub mod b {&#92;n    pub fn f() { println!(&#92;&quot;b1&#92;&quot;); }&#92;n    pub mod c {&#92;n      pub fn f() { println!(&#92;&quot;c1&#92;&quot;); }&#92;n    }&#92;n  }&#92;n  pub fn entry() { super::b::c::f(); }&#92;n}&#92;n&#92;npub mod b {&#92;n  pub fn f() { println!(&#92;&quot;b2&#92;&quot;); }&#92;n  pub mod c {&#92;n    pub fn f() { println!(&#92;&quot;c2&#92;&quot;); }&#92;n  }&#92;n}&#92;n&#92;nfn main() {&#92;n  crate::a::entry();&#92;n}&#92;n&quot;}},{&quot;context&quot;:&quot;`Point` structure আর `origin` static method দুটোই public হলেও `i32` field-টি pub হিসেবে চিহ্নিত নয়। তাই `point` module-এর বাইরে সরাসরি `p.0`-তে&#92;nপৌঁছানোর অনুমতি নেই। লাইন 3 বদলে `pub struct Point(pub i32, pub i32)` করলে এই প্রোগ্রাম compile হতো।&#92;n&quot;,&quot;id&quot;:&quot;153b12b3-4fbc-449c-99a6-7a2cd469df0f&quot;,&quot;type&quot;:&quot;Tracing&quot;,&quot;answer&quot;:{&quot;doesCompile&quot;:false,&quot;lineNumber&quot;:12},&quot;prompt&quot;:{&quot;program&quot;:&quot;pub mod point {&#92;n  #[derive(Debug)]&#92;n  pub struct Point(i32, i32);&#92;n&#92;n  impl Point {&#92;n    pub fn origin() -&gt; Self { Point(0, 0) }&#92;n  }&#92;n}&#92;n&#92;nfn main() {&#92;n  let mut p = point::Point::origin();&#92;n  p.0 += 1;&#92;n  println!(&#92;&quot;{p:?}&#92;&quot;);&#92;n}&#92;n&quot;}}]}" data-quiz-fullscreen="true"></div>
+
+<script type="text/javascript" src="quiz/quiz-embed.iife.js"></script><link rel="stylesheet" type="text/css" href="quiz/style.css">
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch07-02-defining-modules-to-control-scope-and-privacy.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch07-02-defining-modules-to-control-scope-and-privacy.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris-2317480c.js"></script>
+        <script src="js-extensions/packages/feedback/dist/index-f1290d8b.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

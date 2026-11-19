@@ -1,0 +1,788 @@
+<!DOCTYPE HTML>
+<html lang="bn" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>pattern syntax - Rust প্রোগ্রামিং ভাষা</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris-d33b75bf.css">
+        <link rel="stylesheet" href="theme/semantic-notes-9b5766c0.css">
+        <link rel="stylesheet" href="theme/listing-cab26221.css">
+        <link rel="stylesheet" href="theme/2018-edition-4e126c62.css">
+        <link rel="stylesheet" href="theme/bengali-4de2f0b6.css">
+        <link rel="stylesheet" href="js-extensions/packages/feedback/dist/index-c9d186bd.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-03403162.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-485378fe.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust প্রোগ্রামিং ভাষা</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/ararifdotme/rust-book-bn" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h2 id="pattern-syntax"><a class="header" href="#pattern-syntax">pattern syntax</a></h2>
+<p>এই অংশে pattern-এ বৈধ সব syntax আমরা এক জায়গায় জড়ো করেছি, আর আলোচনা করেছি কেন ও কখন এগুলোর প্রতিটি ব্যবহার করতে চাইতে পারেন।</p>
+<h3 id="matching-literals"><a class="header" href="#matching-literals">literal-এর সঙ্গে মেলানো</a></h3>
+<p>অধ্যায় 6-এ যেমন দেখেছেন, pattern-কে সরাসরি literal-এর সঙ্গে মেলানো যায়। নিচের কোডে কয়েকটি উদাহরণ আছে:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">fn main() {
+</span>    let x = 1;
+
+    match x {
+        1 =&gt; println!("one"),
+        2 =&gt; println!("two"),
+        3 =&gt; println!("three"),
+        _ =&gt; println!("anything"),
+    }
+<span class="boring">}</span></code></pre>
+<p>এই কোড print করে <code>one</code>, কারণ <code>x</code>-এর মান <code>1</code>। কোনো নির্দিষ্ট concrete মান পেলে আপনার কোড দিয়ে কোনো কাজ করাতে চাইলে এই syntax কাজে লাগে।</p>
+<h3 id="matching-named-variables"><a class="header" href="#matching-named-variables">নাম দেওয়া variable-এর সঙ্গে মেলানো</a></h3>
+<p>নাম দেওয়া variable হলো এমন irrefutable pattern, যা যেকোনো মানের সঙ্গে মেলে, আর এই বইয়ে আমরা এগুলো বহুবার ব্যবহার করেছি। তবে <code>match</code>, <code>if let</code> বা <code>while let</code> expression-এ নাম দেওয়া variable
+ব্যবহার করলে একটি জটিলতা আছে। এই ধরনের প্রতিটি expression একটি নতুন scope শুরু করে বলে এই expression-গুলোর ভেতরে pattern-এর অংশ হিসেবে ঘোষিত variable গঠনের বাইরের একই নামের variable-কে shadow করবে,
+সব variable-এর ক্ষেত্রে যেমন হয়। Listing 19-11-এ আমরা <code>Some(5)</code> মানসহ <code>x</code> নামের একটি variable আর <code>10</code> মানসহ <code>y</code> নামের একটি variable ঘোষণা করি। তারপর <code>x</code> মানের ওপর একটি <code>match</code> expression তৈরি
+করি। match arm-গুলোর pattern আর শেষের <code>println!</code> দেখুন, এবং কোডটি চালানোর বা আরও পড়ার আগে বের করার চেষ্টা করুন কোডটি কী print করবে।</p>
+<figure class="listing" id="listing-19-11">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">fn main() {
+</span>    let x = Some(5);
+    let y = 10;
+
+    match x {
+        Some(50) =&gt; println!("Got 50"),
+        Some(y) =&gt; println!("Matched, y = {y}"),
+        _ =&gt; println!("Default case, x = {x:?}"),
+    }
+
+    println!("at the end: x = {x:?}, y = {y}");
+<span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-19-11">Listing 19-11</a>: এমন একটি arm-যুক্ত <code>match</code> expression, যা একটি নতুন variable আনে যা বিদ্যমান variable <code>y</code>-কে shadow করে</figcaption>
+</figure>
+<p><code>match</code> expression চলার সময় কী ঘটে তা একে একে দেখা যাক। প্রথম match arm-এর pattern <code>x</code>-এর সংজ্ঞায়িত মানের সঙ্গে মেলে না, তাই কোড এগিয়ে যায়।</p>
+<p>দ্বিতীয় match arm-এর pattern <code>y</code> নামের একটি নতুন variable আনে, যা একটি <code>Some</code> মানের ভেতরের যেকোনো মানের সঙ্গে মিলবে। আমরা <code>match</code> expression-এর ভেতরে একটি নতুন scope-এ আছি বলে এটি একটি নতুন
+<code>y</code> variable, শুরুতে <code>10</code> মানসহ ঘোষণা করা <code>y</code> নয়। এই নতুন <code>y</code> binding একটি <code>Some</code>-এর ভেতরের যেকোনো মানের সঙ্গে মিলবে, আর <code>x</code>-এ আমাদের ঠিক তা-ই আছে। তাই এই নতুন <code>y</code> <code>x</code>-এর <code>Some</code>-এর ভেতরের
+মানের সঙ্গে bind হয়। সেই মান <code>5</code>, তাই সেই arm-এর expression চলে এবং print করে <code>Matched, y = 5</code>।</p>
+<p><code>x</code> যদি <code>Some(5)</code>-এর বদলে একটি <code>None</code> মান হতো, তাহলে প্রথম দুটি arm-এর pattern মিলত না, তাই মানটি underscore-এর সঙ্গে মিলত। underscore arm-এর pattern-এ আমরা <code>x</code> variable আনিনি, তাই expression-এর <code>x</code>
+এখনো বাইরের সেই <code>x</code>, যা shadow হয়নি। এই কাল্পনিক ক্ষেত্রে <code>match</code> print করত <code>Default case, x = None</code>।</p>
+<p><code>match</code> expression শেষ হলে এর scope শেষ হয়, সঙ্গে ভেতরের <code>y</code>-এর scope-ও। শেষ <code>println!</code> তৈরি করে <code>at the end: x = Some(5), y = 10</code>।</p>
+<p>বিদ্যমান <code>y</code> variable-কে shadow করে এমন নতুন variable না এনে বাইরের <code>x</code> আর <code>y</code>-এর মান তুলনা করে এমন একটি <code>match</code> expression তৈরি করতে আমাদের বরং একটি match guard শর্ত ব্যবহার করতে হতো। match guard
+নিয়ে পরে <a href="#adding-conditionals-with-match-guards">“match guard দিয়ে শর্ত যোগ
+করা”</a><!-- ignore --> অংশে কথা বলব।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="multiple-patterns"></a></p>
+<h3 id="matching-multiple-patterns"><a class="header" href="#matching-multiple-patterns">একাধিক pattern-এর সঙ্গে মেলানো</a></h3>
+<p><code>match</code> expression-এ <code>|</code> syntax ব্যবহার করে একাধিক pattern-এর সঙ্গে মেলানো যায়, যা pattern-এর <em>or</em> (অথবা) operator। যেমন, নিচের কোডে আমরা <code>x</code>-এর মান match arm-গুলোর সঙ্গে মেলাই, যার প্রথমটিতে একটি
+<em>or</em> বিকল্প আছে, অর্থাৎ <code>x</code>-এর মান সেই arm-এর যেকোনো একটি মানের সঙ্গে মিললে সেই arm-এর কোড চলবে:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">fn main() {
+</span>    let x = 1;
+
+    match x {
+        1 | 2 =&gt; println!("one or two"),
+        3 =&gt; println!("three"),
+        _ =&gt; println!("anything"),
+    }
+<span class="boring">}</span></code></pre>
+<p>এই কোড print করে <code>one or two</code>।</p>
+<h3 id="matching-ranges-of-values-with-"><a class="header" href="#matching-ranges-of-values-with-"><code>..=</code> দিয়ে মানের range-এর সঙ্গে মেলানো</a></h3>
+<p><code>..=</code> syntax দিয়ে মানের একটি অন্তর্ভুক্তিমূলক (দুই প্রান্তসহ) range-এর সঙ্গে মেলানো যায়। নিচের কোডে একটি pattern প্রদত্ত range-এর যেকোনো মানের সঙ্গে মিললে সেই arm চলবে:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">fn main() {
+</span>    let x = 5;
+
+    match x {
+        1..=5 =&gt; println!("one through five"),
+        _ =&gt; println!("something else"),
+    }
+<span class="boring">}</span></code></pre>
+<p><code>x</code> যদি <code>1</code>, <code>2</code>, <code>3</code>, <code>4</code> বা <code>5</code> হয়, তাহলে প্রথম arm মিলবে। একই ধারণা প্রকাশে <code>|</code> operator ব্যবহারের চেয়ে একাধিক মানের জন্য এই syntax বেশি সুবিধাজনক; <code>|</code> ব্যবহার করলে আমাদের লিখতে হতো <code>1 | 2 | 3 | 4 | 5</code>। একটি range উল্লেখ করা অনেক সংক্ষিপ্ত, বিশেষ করে যদি, ধরুন, 1 থেকে 1,000-এর মধ্যের যেকোনো সংখ্যার সঙ্গে মেলাতে চাই!</p>
+<p>compiler compile time-এ যাচাই করে যে range খালি নয়, আর একটি range খালি কি না তা Rust শুধু <code>char</code> আর সংখ্যার মানের ক্ষেত্রেই বলতে পারে বলে range শুধু সংখ্যা বা <code>char</code> মানের সঙ্গেই অনুমোদিত।</p>
+<p>এখানে <code>char</code> মানের range ব্যবহারের একটি উদাহরণ:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">fn main() {
+</span>    let x = 'c';
+
+    match x {
+        'a'..='j' =&gt; println!("early ASCII letter"),
+        'k'..='z' =&gt; println!("late ASCII letter"),
+        _ =&gt; println!("something else"),
+    }
+<span class="boring">}</span></code></pre>
+<p>Rust বলতে পারে যে <code>'c'</code> প্রথম pattern-এর range-এর ভেতরে, এবং print করে <code>early ASCII letter</code>।</p>
+<h3 id="destructuring-to-break-apart-values"><a class="header" href="#destructuring-to-break-apart-values">মান ভেঙে নিতে destructuring</a></h3>
+<p>struct, enum আর tuple-এর বিভিন্ন অংশ ব্যবহার করতে pattern দিয়ে এগুলো destructure করাও যায়। চলুন প্রতিটি একে একে দেখি।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="destructuring-structs"></a></p>
+<h4 id="structs"><a class="header" href="#structs">struct</a></h4>
+<p>Listing 19-12-এ <code>x</code> আর <code>y</code> দুটি field-যুক্ত একটি <code>Point</code> struct দেখানো হয়েছে, যা একটি <code>let</code> statement-এর সঙ্গে pattern ব্যবহার করে ভেঙে নেওয়া যায়।</p>
+<figure class="listing" id="listing-19-12">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">struct Point {
+    x: i32,
+    y: i32,
+}
+
+fn main() {
+    let p = Point { x: 0, y: 7 };
+
+    let Point { x: a, y: b } = p;
+    assert_eq!(0, a);
+    assert_eq!(7, b);
+}</code></pre>
+<figcaption><a href="#listing-19-12">Listing 19-12</a>: একটি struct-এর field-গুলোকে আলাদা variable-এ destructure করা</figcaption>
+</figure>
+<p>এই কোড <code>a</code> আর <code>b</code> variable তৈরি করে, যা <code>p</code> struct-এর <code>x</code> আর <code>y</code> field-এর মানের সঙ্গে মেলে। এই উদাহরণ দেখায় যে pattern-এর variable-গুলোর নাম struct-এর field-এর নামের সঙ্গে মিলতে হবে এমন
+নয়। তবে কোন variable কোন field থেকে এসেছে তা মনে রাখা সহজ করতে variable-এর নাম field-এর নামের সঙ্গে মেলানোই প্রচলিত। এই প্রচলিত ব্যবহারের কারণে, আর <code>let Point { x: x, y: y } = p;</code> লেখায় অনেক
+পুনরাবৃত্তি থাকে বলে, struct-এর field-এর সঙ্গে মেলা pattern-এর জন্য Rust-এ একটি সংক্ষিপ্ত রূপ আছে: শুধু struct field-এর নাম লিখলেই চলে, আর pattern থেকে তৈরি variable-গুলোর নামও একই হবে। Listing
+19-13 Listing 19-12-এর কোডের মতোই আচরণ করে, তবে <code>let</code> pattern-এ তৈরি variable-গুলো <code>a</code> আর <code>b</code>-এর বদলে <code>x</code> আর <code>y</code>।</p>
+<figure class="listing" id="listing-19-13">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">struct Point {
+    x: i32,
+    y: i32,
+}
+
+fn main() {
+    let p = Point { x: 0, y: 7 };
+
+    let Point { x, y } = p;
+    assert_eq!(0, x);
+    assert_eq!(7, y);
+}</code></pre>
+<figcaption><a href="#listing-19-13">Listing 19-13</a>: struct field-এর সংক্ষিপ্ত রূপ ব্যবহার করে struct-এর field destructure করা</figcaption>
+</figure>
+<p>এই কোড <code>x</code> আর <code>y</code> variable তৈরি করে, যা <code>p</code> variable-এর <code>x</code> আর <code>y</code> field-এর সঙ্গে মেলে। ফলে <code>x</code> আর <code>y</code> variable-এ <code>p</code> struct-এর মানগুলো থাকে।</p>
+<p>সব field-এর জন্য variable তৈরি না করে struct pattern-এর অংশ হিসেবে literal মান দিয়েও destructure করা যায়। এতে কিছু field নির্দিষ্ট মানের জন্য যাচাই করার পাশাপাশি অন্য field-গুলো destructure
+করতে variable তৈরি করা যায়।</p>
+<p>Listing 19-14-এ আমাদের একটি <code>match</code> expression আছে, যা <code>Point</code> মানগুলোকে তিনটি ক্ষেত্রে ভাগ করে: যে বিন্দু সরাসরি <code>x</code> অক্ষের ওপর আছে (<code>y = 0</code> হলে যা সত্য), <code>y</code> অক্ষের ওপর (<code>x = 0</code>), বা কোনো অক্ষের
+ওপরই নয়।</p>
+<figure class="listing" id="listing-19-14">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">struct Point {
+</span><span class="boring">    x: i32,
+</span><span class="boring">    y: i32,
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn main() {
+    let p = Point { x: 0, y: 7 };
+
+    match p {
+        Point { x, y: 0 } =&gt; println!("On the x axis at {x}"),
+        Point { x: 0, y } =&gt; println!("On the y axis at {y}"),
+        Point { x, y } =&gt; {
+            println!("On neither axis: ({x}, {y})");
+        }
+    }
+}</code></pre>
+<figcaption><a href="#listing-19-14">Listing 19-14</a>: একটি pattern-এ destructure করা এবং literal মানের সঙ্গে মেলানো</figcaption>
+</figure>
+<p>প্রথম arm <code>x</code> অক্ষের ওপর থাকা যেকোনো বিন্দুর সঙ্গে মিলবে, কারণ এটি বলে দেয় যে <code>y</code> field মিলবে যদি এর মান literal <code>0</code>-এর সঙ্গে মেলে। pattern-টি তবুও একটি <code>x</code> variable তৈরি করে, যা এই arm-এর কোডে
+ব্যবহার করা যায়।</p>
+<p>একইভাবে দ্বিতীয় arm <code>y</code> অক্ষের ওপর থাকা যেকোনো বিন্দুর সঙ্গে মেলে, কারণ এটি বলে দেয় যে <code>x</code> field মিলবে যদি এর মান <code>0</code> হয়, এবং <code>y</code> field-এর মানের জন্য একটি <code>y</code> variable তৈরি করে। তৃতীয় arm কোনো
+literal উল্লেখ করে না, তাই এটি অন্য যেকোনো <code>Point</code>-এর সঙ্গে মেলে এবং <code>x</code> আর <code>y</code> দুটি field-এর জন্যই variable তৈরি করে।</p>
+<p>এই উদাহরণে <code>x</code>-এ একটি <code>0</code> থাকায় <code>p</code> মান দ্বিতীয় arm-এর সঙ্গে মেলে, তাই এই কোড print করবে <code>On the y axis at 7</code>।</p>
+<p>মনে রাখবেন, প্রথম মিলে যাওয়া pattern পেলেই একটি <code>match</code> expression arm যাচাই করা বন্ধ করে, তাই <code>Point { x: 0, y: 0 }</code> <code>x</code> অক্ষ আর <code>y</code> অক্ষ দুটির ওপর থাকলেও এই কোড শুধু print করত <code>On the x axis at 0</code>।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="destructuring-enums"></a></p>
+<h4 id="enums"><a class="header" href="#enums">enum</a></h4>
+<p>এই বইয়ে আমরা enum destructure করেছি (যেমন অধ্যায় 6-এর Listing 6-5), কিন্তু এখনো স্পষ্টভাবে আলোচনা করিনি যে একটি enum destructure করার pattern enum-এর ভেতরে রাখা ডেটা যেভাবে সংজ্ঞায়িত, তার সঙ্গে মেলে।
+উদাহরণ হিসেবে Listing 19-15-এ আমরা Listing 6-2-এর <code>Message</code> enum ব্যবহার করি এবং এমন pattern-সহ একটি <code>match</code> লিখি, যা প্রতিটি ভেতরের মান destructure করবে।</p>
+<figure class="listing" id="listing-19-15">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+
+fn main() {
+    let msg = Message::ChangeColor(0, 160, 255);
+
+    match msg {
+        Message::Quit =&gt; {
+            println!("The Quit variant has no data to destructure.");
+        }
+        Message::Move { x, y } =&gt; {
+            println!("Move in the x direction {x} and in the y direction {y}");
+        }
+        Message::Write(text) =&gt; {
+            println!("Text message: {text}");
+        }
+        Message::ChangeColor(r, g, b) =&gt; {
+            println!("Change color to red {r}, green {g}, and blue {b}");
+        }
+    }
+}</code></pre>
+<figcaption><a href="#listing-19-15">Listing 19-15</a>: ভিন্ন ভিন্ন ধরনের মান রাখা enum variant destructure করা</figcaption>
+</figure>
+<p>এই কোড print করবে <code>Change color to red 0, green 160, and blue 255</code>। অন্য arm-গুলোর কোড চলতে দেখতে <code>msg</code>-এর মান বদলে দেখুন।</p>
+<p><code>Message::Quit</code>-এর মতো কোনো ডেটা ছাড়া enum variant-এর ক্ষেত্রে মানটি আর destructure করা যায় না। শুধু literal <code>Message::Quit</code> মানের সঙ্গে match করা যায়, আর সেই pattern-এ কোনো variable নেই।</p>
+<p><code>Message::Move</code>-এর মতো struct-সদৃশ enum variant-এর ক্ষেত্রে struct মেলাতে যে pattern দিই তার মতো pattern ব্যবহার করা যায়। variant-এর নামের পরে curly bracket দিয়ে variable-সহ field-গুলো লিখি, যাতে
+এই arm-এর কোডে ব্যবহারের জন্য অংশগুলো ভেঙে নেওয়া যায়। এখানে আমরা Listing 19-13-এর মতো সংক্ষিপ্ত রূপ ব্যবহার করি।</p>
+<p>tuple-সদৃশ enum variant-এর ক্ষেত্রে, যেমন এক উপাদানের tuple রাখা <code>Message::Write</code> আর তিন উপাদানের tuple রাখা <code>Message::ChangeColor</code>, pattern-টি tuple মেলাতে যে pattern দিই তার মতো। pattern-এর variable-এর
+সংখ্যা যে variant-এর সঙ্গে মেলাচ্ছি তার উপাদানের সংখ্যার সমান হতে হবে।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="destructuring-nested-structs-and-enums"></a></p>
+<h4 id="nested-structs-and-enums"><a class="header" href="#nested-structs-and-enums">nested struct ও enum</a></h4>
+<p>এ পর্যন্ত আমাদের সব উদাহরণ এক স্তর গভীরের struct বা enum মেলাচ্ছিল, তবে nested (একটির ভেতরে আরেকটি) item-এও matching কাজ করে! যেমন, Listing 19-15-এর কোড refactor করে <code>ChangeColor</code> message-এ
+RGB আর HSV রং সমর্থন করানো যায়, যেমনটি Listing 19-16-এ দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-19-16">
+<pre class="playground"><code class="language-rust edition2024">enum Color {
+    Rgb(i32, i32, i32),
+    Hsv(i32, i32, i32),
+}
+
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(Color),
+}
+
+fn main() {
+    let msg = Message::ChangeColor(Color::Hsv(0, 160, 255));
+
+    match msg {
+        Message::ChangeColor(Color::Rgb(r, g, b)) =&gt; {
+            println!("Change color to red {r}, green {g}, and blue {b}");
+        }
+        Message::ChangeColor(Color::Hsv(h, s, v)) =&gt; {
+            println!("Change color to hue {h}, saturation {s}, value {v}");
+        }
+        _ =&gt; (),
+    }
+}</code></pre>
+<figcaption><a href="#listing-19-16">Listing 19-16</a>: nested enum-এর ওপর match করা</figcaption>
+</figure>
+<p><code>match</code> expression-এর প্রথম arm-এর pattern এমন একটি <code>Message::ChangeColor</code> enum variant-এর সঙ্গে মেলে, যাতে একটি <code>Color::Rgb</code> variant আছে; তারপর pattern-টি ভেতরের তিনটি <code>i32</code> মানের সঙ্গে bind হয়।
+দ্বিতীয় arm-এর pattern-ও একটি <code>Message::ChangeColor</code> enum variant-এর সঙ্গে মেলে, তবে ভেতরের enum বরং <code>Color::Hsv</code>-এর সঙ্গে মেলে। দুটি enum জড়িত থাকলেও এই জটিল শর্তগুলো একটি <code>match</code> expression-এ উল্লেখ
+করা যায়।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="destructuring-structs-and-tuples"></a></p>
+<h4 id="structs-and-tuples"><a class="header" href="#structs-and-tuples">struct ও tuple</a></h4>
+<p>destructuring pattern-গুলো আরও জটিলভাবে মেশানো, মেলানো আর একটির ভেতরে আরেকটি রাখা যায়। নিচের উদাহরণে একটি জটিল destructure দেখানো হয়েছে, যেখানে একটি tuple-এর ভেতরে struct আর tuple রেখে সব
+primitive মান বের করে আনা হয়েছে:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">fn main() {
+</span><span class="boring">    struct Point {
+</span><span class="boring">        x: i32,
+</span><span class="boring">        y: i32,
+</span><span class="boring">    }
+</span><span class="boring">
+</span>    let ((feet, inches), Point { x, y }) = ((3, 10), Point { x: 3, y: -10 });
+<span class="boring">}</span></code></pre>
+<p>এই কোড জটিল type-কে তাদের উপাদান অংশে ভেঙে নিতে দেয়, যাতে আমাদের আগ্রহের মানগুলো আলাদাভাবে ব্যবহার করা যায়।</p>
+<p>pattern দিয়ে destructure করা মানের অংশগুলো, যেমন একটি struct-এর প্রতিটি field-এর মান, একে অপর থেকে আলাদাভাবে ব্যবহারের একটি সুবিধাজনক উপায়।</p>
+<h3 id="ignoring-values-in-a-pattern"><a class="header" href="#ignoring-values-in-a-pattern">pattern-এ মান উপেক্ষা করা</a></h3>
+<p>আপনি দেখেছেন যে কখনো কখনো pattern-এ মান উপেক্ষা করা কাজে লাগে, যেমন একটি <code>match</code>-এর শেষ arm-এ, এমন একটি সব-ধরা arm পেতে যা আসলে কিছু করে না, কিন্তু বাকি সব সম্ভাব্য মান বিবেচনায় আনে। pattern-এ
+পুরো মান বা মানের অংশ উপেক্ষা করার কয়েকটি উপায় আছে: <code>_</code> pattern ব্যবহার (যা আপনি দেখেছেন), আরেকটি pattern-এর ভেতরে <code>_</code> pattern ব্যবহার, underscore দিয়ে শুরু হওয়া একটি নাম ব্যবহার, অথবা মানের
+বাকি অংশ উপেক্ষা করতে <code>..</code> ব্যবহার। চলুন দেখি এই pattern-গুলোর প্রতিটি কীভাবে ও কেন ব্যবহার করতে হয়।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="ignoring-an-entire-value-with-_"></a></p>
+<h4 id="an-entire-value-with-_"><a class="header" href="#an-entire-value-with-_"><code>_</code> দিয়ে পুরো মান</a></h4>
+<p>underscore-কে আমরা একটি wildcard pattern হিসেবে ব্যবহার করেছি, যা যেকোনো মানের সঙ্গে মেলে কিন্তু মানের সঙ্গে bind হয় না। এটি বিশেষ করে একটি <code>match</code> expression-এর শেষ arm হিসেবে কাজে লাগে, তবে
+function parameter-সহ যেকোনো pattern-এও ব্যবহার করা যায়, যেমনটি Listing 19-17-এ দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-19-17">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">fn foo(_: i32, y: i32) {
+    println!("This code only uses the y parameter: {y}");
+}
+
+fn main() {
+    foo(3, 4);
+}</code></pre>
+<figcaption><a href="#listing-19-17">Listing 19-17</a>: একটি function signature-এ <code>_</code> ব্যবহার করা</figcaption>
+</figure>
+<p>এই কোড প্রথম argument হিসেবে পাঠানো <code>3</code> মানটি পুরোপুরি উপেক্ষা করবে, এবং print করবে <code>This code only uses the y parameter: 4</code>।</p>
+<p>বেশিরভাগ ক্ষেত্রে কোনো নির্দিষ্ট function parameter আর দরকার না হলে আপনি signature বদলে অব্যবহৃত parameter-টি সরিয়ে দেবেন। function parameter উপেক্ষা করা বিশেষ করে কাজে লাগে যখন, যেমন,
+আপনি একটি trait implement করছেন, যেখানে একটি নির্দিষ্ট type signature দরকার, কিন্তু আপনার implementation-এর function body-র একটি parameter দরকার নেই। তখন অব্যবহৃত function parameter নিয়ে compiler
+warning পাওয়া এড়াতে পারেন, যা নাম ব্যবহার করলে পেতেন।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="ignoring-parts-of-a-value-with-a-nested-_"></a></p>
+<h4 id="parts-of-a-value-with-a-nested-_"><a class="header" href="#parts-of-a-value-with-a-nested-_">nested <code>_</code> দিয়ে মানের অংশ</a></h4>
+<p>মানের শুধু একটি অংশ উপেক্ষা করতে আরেকটি pattern-এর ভেতরেও <code>_</code> ব্যবহার করা যায়, যেমন যখন মানের শুধু একটি অংশ যাচাই করতে চাই, কিন্তু চালাতে চাওয়া সংশ্লিষ্ট কোডে অন্য অংশগুলোর কোনো দরকার নেই।
+Listing 19-18-এ একটি setting-এর মান সামলানোর দায়িত্বে থাকা কোড দেখানো হয়েছে। ব্যবসায়িক চাহিদা হলো, ব্যবহারকারীকে একটি setting-এর বিদ্যমান নিজস্ব মান overwrite করতে দেওয়া উচিত নয়, তবে
+setting-টি এখন সেট করা না থাকলে তা সেট করতে ও মান দিতে পারবে।</p>
+<figure class="listing" id="listing-19-18">
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">fn main() {
+</span>    let mut setting_value = Some(5);
+    let new_setting_value = Some(10);
+
+    match (setting_value, new_setting_value) {
+        (Some(_), Some(_)) =&gt; {
+            println!("Can't overwrite an existing customized value");
+        }
+        _ =&gt; {
+            setting_value = new_setting_value;
+        }
+    }
+
+    println!("setting is {setting_value:?}");
+<span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-19-18">Listing 19-18</a>: <code>Some</code>-এর ভেতরের মান ব্যবহারের দরকার না থাকলে <code>Some</code> variant-এর সঙ্গে মেলা pattern-এর ভেতরে একটি underscore ব্যবহার করা</figcaption>
+</figure>
+<p>এই কোড print করবে <code>Can't overwrite an existing customized value</code> আর তারপর
+<code>setting is Some(5)</code>। প্রথম match arm-এ কোনো <code>Some</code> variant-এর ভেতরের মানের সঙ্গে match করার বা সেগুলো ব্যবহারের দরকার নেই, তবে <code>setting_value</code> আর <code>new_setting_value</code> যখন <code>Some</code> variant, সেই
+ক্ষেত্রটি যাচাই করতে হবে। সেই ক্ষেত্রে আমরা <code>setting_value</code> না বদলানোর কারণ print করি, আর এটি বদলায় না।</p>
+<p>দ্বিতীয় arm-এর <code>_</code> pattern দিয়ে প্রকাশ করা বাকি সব ক্ষেত্রে (যদি <code>setting_value</code> বা <code>new_setting_value</code>, যেকোনোটি <code>None</code> হয়) আমরা
+<code>setting_value</code>-কে <code>new_setting_value</code>-তে সেট হতে দিতে চাই।</p>
+<p>নির্দিষ্ট কিছু মান উপেক্ষা করতে একটি pattern-এর ভেতরে একাধিক জায়গায় underscore ব্যবহার করা যায়। Listing 19-19-এ পাঁচটি item-এর একটি tuple-এর দ্বিতীয় আর চতুর্থ মান উপেক্ষা করার একটি উদাহরণ
+দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-19-19">
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">fn main() {
+</span>    let numbers = (2, 4, 8, 16, 32);
+
+    match numbers {
+        (first, _, third, _, fifth) =&gt; {
+            println!("Some numbers: {first}, {third}, {fifth}");
+        }
+    }
+<span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-19-19">Listing 19-19</a>: একটি tuple-এর একাধিক অংশ উপেক্ষা করা</figcaption>
+</figure>
+<p>এই কোড print করবে <code>Some numbers: 2, 8, 32</code>, আর <code>4</code> ও <code>16</code> মান উপেক্ষিত হবে।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="ignoring-an-unused-variable-by-starting-its-name-with-_"></a></p>
+<h4 id="an-unused-variable-by-starting-its-name-with-_"><a class="header" href="#an-unused-variable-by-starting-its-name-with-_">নাম <code>_</code> দিয়ে শুরু করে একটি অব্যবহৃত variable</a></h4>
+<p>একটি variable তৈরি করে কোথাও ব্যবহার না করলে Rust সাধারণত একটি warning দেয়, কারণ অব্যবহৃত variable একটি বাগ হতে পারে। তবে কখনো কখনো এমন একটি variable তৈরি করতে পারা কাজে লাগে যা এখনো ব্যবহার
+করবেন না, যেমন যখন prototype বানাচ্ছেন বা সবে একটি project শুরু করছেন। এই পরিস্থিতিতে variable-এর নাম একটি underscore দিয়ে শুরু করে Rust-কে বলতে পারেন অব্যবহৃত variable নিয়ে warning না দিতে।
+Listing 19-20-এ আমরা দুটি অব্যবহৃত variable তৈরি করি, কিন্তু এই কোড compile করলে শুধু একটি নিয়ে warning পাওয়ার কথা।</p>
+<figure class="listing" id="listing-19-20">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">fn main() {
+    let _x = 5;
+    let y = 10;
+}</code></pre>
+<figcaption><a href="#listing-19-20">Listing 19-20</a>: অব্যবহৃত variable-এর warning এড়াতে variable-এর নাম একটি underscore দিয়ে শুরু করা</figcaption>
+</figure>
+<p>এখানে <code>y</code> variable ব্যবহার না করা নিয়ে একটি warning পাই, কিন্তু <code>_x</code> ব্যবহার না করা নিয়ে কোনো warning পাই না।</p>
+<p>খেয়াল করুন, শুধু <code>_</code> ব্যবহার আর underscore দিয়ে শুরু হওয়া একটি নাম ব্যবহারের মধ্যে একটি সূক্ষ্ম পার্থক্য আছে। <code>_x</code> syntax তবুও মানটিকে variable-এর সঙ্গে bind করে, যেখানে <code>_</code> মোটেই bind করে না। এই
+পার্থক্য যেখানে গুরুত্বপূর্ণ তা দেখাতে Listing 19-21 আমাদের একটি error দেবে।</p>
+<figure class="listing" id="listing-19-21">
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
+</span>    let s = Some(String::from("Hello!"));
+
+    if let Some(_s) = s {
+        println!("found a string");
+    }
+
+    println!("{s:?}");
+<span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-19-21">Listing 19-21</a>: underscore দিয়ে শুরু হওয়া একটি অব্যবহৃত variable তবুও মানটি bind করে, যা মানটির ownership নিয়ে নিতে পারে।</figcaption>
+</figure>
+<p>আমরা একটি error পাব, কারণ <code>s</code> মান তবুও <code>_s</code>-এ সরে যাবে, যা আমাদের আবার <code>s</code> ব্যবহার করতে দেয় না। তবে শুধু underscore ব্যবহার করলে তা কখনো মানের সঙ্গে bind হয় না। Listing 19-22 কোনো error ছাড়াই
+compile হবে, কারণ <code>s</code> <code>_</code>-এ সরে যায় না।</p>
+<figure class="listing" id="listing-19-22">
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">fn main() {
+</span>    let s = Some(String::from("Hello!"));
+
+    if let Some(_) = s {
+        println!("found a string");
+    }
+
+    println!("{s:?}");
+<span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-19-22">Listing 19-22</a>: underscore ব্যবহার করলে মান bind হয় না।</figcaption>
+</figure>
+<p>এই কোড ঠিকঠাক কাজ করে, কারণ আমরা কখনো <code>s</code>-কে কোনো কিছুর সঙ্গে bind করি না; এটি সরে যায় না।</p>
+<p><a id="ignoring-remaining-parts-of-a-value-with-"></a></p>
+<h4 id="remaining-parts-of-a-value-with-"><a class="header" href="#remaining-parts-of-a-value-with-"><code>..</code> দিয়ে মানের বাকি অংশ</a></h4>
+<p>অনেক অংশযুক্ত মানের ক্ষেত্রে <code>..</code> syntax ব্যবহার করে নির্দিষ্ট অংশগুলো ব্যবহার করে বাকিগুলো উপেক্ষা করা যায়, ফলে প্রতিটি উপেক্ষিত মানের জন্য underscore লিখতে হয় না। <code>..</code> pattern মানের সেই সব অংশ
+উপেক্ষা করে, যা pattern-এর বাকি অংশে আমরা স্পষ্টভাবে মেলাইনি। Listing 19-23-এ আমাদের একটি <code>Point</code> struct আছে, যা ত্রিমাত্রিক স্থানে একটি স্থানাঙ্ক রাখে। <code>match</code> expression-এ আমরা শুধু <code>x</code> স্থানাঙ্কের
+ওপর কাজ করতে চাই এবং <code>y</code> আর <code>z</code> field-এর মান উপেক্ষা করতে চাই।</p>
+<figure class="listing" id="listing-19-23">
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">fn main() {
+</span>    struct Point {
+        x: i32,
+        y: i32,
+        z: i32,
+    }
+
+    let origin = Point { x: 0, y: 0, z: 0 };
+
+    match origin {
+        Point { x, .. } =&gt; println!("x is {x}"),
+    }
+<span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-19-23">Listing 19-23</a>: <code>..</code> ব্যবহার করে <code>x</code> ছাড়া একটি <code>Point</code>-এর সব field উপেক্ষা করা</figcaption>
+</figure>
+<p>আমরা <code>x</code> মান লিখি, তারপর শুধু <code>..</code> pattern যোগ করি। এটি <code>y: _</code> আর <code>z: _</code> লেখার চেয়ে দ্রুত, বিশেষ করে যখন অনেক field-যুক্ত struct নিয়ে এমন পরিস্থিতিতে কাজ করছি যেখানে মাত্র এক-দুটি field
+প্রাসঙ্গিক।</p>
+<p><code>..</code> syntax যতগুলো মান দরকার ততগুলোতে বিস্তৃত হবে। Listing 19-24 দেখায় একটি tuple-এর সঙ্গে কীভাবে <code>..</code> ব্যবহার করতে হয়।</p>
+<figure class="listing" id="listing-19-24">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">fn main() {
+    let numbers = (2, 4, 8, 16, 32);
+
+    match numbers {
+        (first, .., last) =&gt; {
+            println!("Some numbers: {first}, {last}");
+        }
+    }
+}</code></pre>
+<figcaption><a href="#listing-19-24">Listing 19-24</a>: একটি tuple-এর শুধু প্রথম আর শেষ মানের সঙ্গে মেলানো এবং বাকি সব মান উপেক্ষা করা</figcaption>
+</figure>
+<p>এই কোডে প্রথম আর শেষ মান <code>first</code> আর <code>last</code>-এর সঙ্গে মেলানো হয়। <code>..</code> মাঝখানের সবকিছুর সঙ্গে মিলবে এবং উপেক্ষা করবে।</p>
+<p>তবে <code>..</code>-এর ব্যবহার দ্ব্যর্থহীন হতে হবে। কোন মানগুলো মেলানোর জন্য আর কোনগুলো উপেক্ষা করার জন্য তা অস্পষ্ট হলে Rust আমাদের একটি error দেবে। Listing 19-25-এ দ্ব্যর্থকভাবে <code>..</code> ব্যবহারের একটি উদাহরণ
+দেখানো হয়েছে, তাই এটি compile হবে না।</p>
+<figure class="listing" id="listing-19-25">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile">fn main() {
+    let numbers = (2, 4, 8, 16, 32);
+
+    match numbers {
+        (.., second, ..) =&gt; {
+            println!("Some numbers: {second}")
+        },
+    }
+}</code></pre>
+<figcaption><a href="#listing-19-25">Listing 19-25</a>: দ্ব্যর্থকভাবে <code>..</code> ব্যবহারের একটি চেষ্টা</figcaption>
+</figure>
+<p>এই উদাহরণ compile করলে এই error পাই:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling patterns v0.1.0 (file:///projects/patterns)
+error: `..` can only be used once per tuple pattern
+ --&gt; src/main.rs:5:22
+  |
+5 |         (.., second, ..) =&gt; {
+  |          --          ^^ can only be used once per tuple pattern
+  |          |
+  |          previously used here
+
+error: could not compile `patterns` (bin "patterns") due to 1 previous error
+</code></pre>
+<p><code>second</code>-এর সঙ্গে একটি মান মেলানোর আগে tuple-এর কতগুলো মান উপেক্ষা করতে হবে, আর তারপর আরও কতগুলো মান উপেক্ষা করতে হবে, তা নির্ধারণ করা Rust-এর পক্ষে অসম্ভব। এই কোডের মানে হতে পারে আমরা <code>2</code>
+উপেক্ষা করে <code>second</code>-কে <code>4</code>-এর সঙ্গে bind করতে, তারপর <code>8</code>, <code>16</code> আর <code>32</code> উপেক্ষা করতে চাই; অথবা <code>2</code> আর <code>4</code> উপেক্ষা করে <code>second</code>-কে <code>8</code>-এর সঙ্গে bind করতে, তারপর <code>16</code> আর <code>32</code> উপেক্ষা করতে চাই;
+ইত্যাদি। <code>second</code> variable নামটি Rust-এর কাছে বিশেষ কিছু বোঝায় না, তাই আমরা compiler error পাই, কারণ এভাবে দুই জায়গায় <code>..</code> ব্যবহার দ্ব্যর্থক।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="extra-conditionals-with-match-guards"></a></p>
+<h3 id="adding-conditionals-with-match-guards"><a class="header" href="#adding-conditionals-with-match-guards">match guard দিয়ে শর্ত যোগ করা</a></h3>
+<p>একটি <em>match guard</em> হলো একটি <code>match</code> arm-এর pattern-এর পরে উল্লেখ করা একটি বাড়তি <code>if</code> শর্ত, যা সেই arm বাছাই হতে হলে মিলতেই হবে। শুধু একটি pattern যতটা প্রকাশ করতে দেয় তার চেয়ে জটিল ধারণা প্রকাশে match guard
+কাজে লাগে। তবে খেয়াল করুন, এগুলো শুধু <code>match</code> expression-এ পাওয়া যায়, <code>if let</code> বা
+<code>while let</code> expression-এ নয়।</p>
+<p>শর্তটি pattern-এ তৈরি variable ব্যবহার করতে পারে। Listing 19-26-এ একটি <code>match</code> দেখানো হয়েছে, যার প্রথম arm-এর pattern <code>Some(x)</code> এবং এতে <code>if x % 2 == 0</code>-এর একটি match guard-ও আছে (সংখ্যাটি জোড়
+হলে যা <code>true</code> হবে)।</p>
+<figure class="listing" id="listing-19-26">
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">fn main() {
+</span>    let num = Some(4);
+
+    match num {
+        Some(x) if x % 2 == 0 =&gt; println!("The number {x} is even"),
+        Some(x) =&gt; println!("The number {x} is odd"),
+        None =&gt; (),
+    }
+<span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-19-26">Listing 19-26</a>: একটি pattern-এ match guard যোগ করা</figcaption>
+</figure>
+<p>এই উদাহরণ print করবে <code>The number 4 is even</code>। <code>num</code>-কে প্রথম arm-এর pattern-এর সঙ্গে তুলনা করলে এটি মেলে, কারণ <code>Some(4)</code> <code>Some(x)</code>-এর সঙ্গে মেলে। তারপর match guard যাচাই করে <code>x</code>-কে 2 দিয়ে ভাগ
+করলে ভাগশেষ 0-এর সমান কি না, আর যেহেতু তা-ই, তাই প্রথম arm বাছাই হয়।</p>
+<p><code>num</code> যদি বরং <code>Some(5)</code> হতো, তাহলে প্রথম arm-এর match guard <code>false</code> হতো, কারণ 5-কে 2 দিয়ে ভাগ করলে ভাগশেষ 1, যা 0-এর সমান নয়। তখন Rust দ্বিতীয় arm-এ যেত, যা মিলত, কারণ দ্বিতীয় arm-এর কোনো match guard নেই
+এবং তাই এটি যেকোনো <code>Some</code> variant-এর সঙ্গে মেলে।</p>
+<p><code>if x % 2 == 0</code> শর্তটি একটি pattern-এর ভেতরে প্রকাশ করার কোনো উপায় নেই, তাই match guard আমাদের এই logic প্রকাশের ক্ষমতা দেয়। এই বাড়তি প্রকাশক্ষমতার অসুবিধা হলো, match guard expression জড়িত থাকলে compiler
+exhaustiveness যাচাই করার চেষ্টা করে না।</p>
+<p>Listing 19-11 নিয়ে আলোচনার সময় আমরা বলেছিলাম যে pattern-এর shadowing সমস্যা সমাধানে match guard ব্যবহার করা যায়। মনে করুন, <code>match</code>-এর বাইরের variable ব্যবহার না করে আমরা <code>match</code> expression-এর
+pattern-এর ভেতরে একটি নতুন variable তৈরি করেছিলাম। সেই নতুন variable-এর কারণে বাইরের variable-এর মানের সঙ্গে যাচাই করতে পারছিলাম না। Listing 19-27 দেখায় এই সমস্যা ঠিক করতে কীভাবে একটি match guard
+ব্যবহার করা যায়।</p>
+<figure class="listing" id="listing-19-27">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024">fn main() {
+    let x = Some(5);
+    let y = 10;
+
+    match x {
+        Some(50) =&gt; println!("Got 50"),
+        Some(n) if n == y =&gt; println!("Matched, n = {n}"),
+        _ =&gt; println!("Default case, x = {x:?}"),
+    }
+
+    println!("at the end: x = {x:?}, y = {y}");
+}</code></pre>
+<figcaption><a href="#listing-19-27">Listing 19-27</a>: বাইরের একটি variable-এর সঙ্গে সমতা যাচাই করতে একটি match guard ব্যবহার করা</figcaption>
+</figure>
+<p>এই কোড এখন print করবে <code>Default case, x = Some(5)</code>। দ্বিতীয় match arm-এর pattern এমন কোনো নতুন variable <code>y</code> আনে না যা বাইরের <code>y</code>-কে shadow করত, অর্থাৎ match guard-এ বাইরের <code>y</code> ব্যবহার করা যায়।
+pattern হিসেবে <code>Some(y)</code> উল্লেখ না করে, যা বাইরের <code>y</code>-কে shadow করত, আমরা উল্লেখ করি <code>Some(n)</code>। এটি একটি নতুন variable <code>n</code> তৈরি করে, যা কিছুই shadow করে না, কারণ <code>match</code>-এর বাইরে কোনো <code>n</code> variable
+নেই।</p>
+<p>match guard <code>if n == y</code> কোনো pattern নয় এবং তাই নতুন variable আনে না। এই <code>y</code> <em>সত্যিই</em> বাইরের <code>y</code>, একে shadow করা নতুন কোনো <code>y</code> নয়, আর <code>n</code>-কে <code>y</code>-এর সঙ্গে তুলনা করে আমরা বাইরের <code>y</code>-এর সমান মান খুঁজতে
+পারি।</p>
+<p>একাধিক pattern উল্লেখ করতে একটি match guard-এ <em>or</em> operator <code>|</code>-ও ব্যবহার করা যায়; match guard-এর শর্তটি সব pattern-এ প্রযোজ্য হবে। Listing
+19-28 দেখায় <code>|</code> ব্যবহার করা একটি pattern-কে একটি match guard-এর সঙ্গে মেলালে অগ্রাধিকার কেমন হয়। এই উদাহরণের গুরুত্বপূর্ণ অংশ হলো, <code>if y</code> match guard <code>4</code>, <code>5</code> <em>এবং</em> <code>6</code>-এ প্রযোজ্য, যদিও দেখে মনে
+হতে পারে <code>if y</code> শুধু <code>6</code>-এ প্রযোজ্য।</p>
+<figure class="listing" id="listing-19-28">
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">fn main() {
+</span>    let x = 4;
+    let y = false;
+
+    match x {
+        4 | 5 | 6 if y =&gt; println!("yes"),
+        _ =&gt; println!("no"),
+    }
+<span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-19-28">Listing 19-28</a>: একটি match guard-এর সঙ্গে একাধিক pattern মেলানো</figcaption>
+</figure>
+<p>match-এর শর্ত বলে যে arm-টি কেবল তখনই মিলবে, যখন <code>x</code>-এর মান <code>4</code>, <code>5</code> বা <code>6</code>-এর সমান <em>এবং</em> <code>y</code> হলো <code>true</code>। এই কোড চলার সময় প্রথম arm-এর pattern মেলে, কারণ <code>x</code> হলো <code>4</code>, কিন্তু match guard <code>if y</code>
+হলো <code>false</code>, তাই প্রথম arm বাছাই হয় না। কোড দ্বিতীয় arm-এ যায়, যা মেলে, এবং এই প্রোগ্রাম print করে <code>no</code>। কারণ <code>if</code> শর্তটি শুধু শেষ মান <code>6</code>-এ নয়, পুরো pattern <code>4 | 5 | 6</code>-এ প্রযোজ্য। অন্যভাবে বললে,
+একটি pattern-এর তুলনায় match guard-এর অগ্রাধিকার এমন আচরণ করে:</p>
+<pre><code class="language-text">(4 | 5 | 6) if y =&gt; ...
+</code></pre>
+<p>এমন নয়:</p>
+<pre><code class="language-text">4 | 5 | (6 if y) =&gt; ...
+</code></pre>
+<p>কোড চালানোর পর অগ্রাধিকারের আচরণ স্পষ্ট: match guard যদি শুধু <code>|</code> operator দিয়ে উল্লেখ করা মানের তালিকার শেষ মানে প্রযোজ্য হতো, তাহলে arm-টি মিলত, আর প্রোগ্রাম print করত
+<code>yes</code>।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="-bindings"></a></p>
+<h3 id="using--bindings"><a class="header" href="#using--bindings"><code>@</code> binding ব্যবহার করা</a></h3>
+<p><em>at</em> operator <code>@</code> দিয়ে এমন একটি variable তৈরি করা যায়, যা একটি মান রাখে, আর একই সময়ে আমরা সেই মান একটি pattern-এর সঙ্গে মেলে কি না যাচাই করি। Listing 19-29-এ আমরা যাচাই করতে চাই যে একটি
+<code>Message::Hello</code>-এর <code>id</code> field <code>3..=7</code> range-এর ভেতরে আছে কি না। সঙ্গে মানটিকে <code>id</code> variable-এর সঙ্গে bind করতেও চাই, যাতে arm-এর সঙ্গে যুক্ত কোডে এটি ব্যবহার করতে পারি।</p>
+<figure class="listing" id="listing-19-29">
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">fn main() {
+</span>    enum Message {
+        Hello { id: i32 },
+    }
+
+    let msg = Message::Hello { id: 5 };
+
+    match msg {
+        Message::Hello { id: id @ 3..=7 } =&gt; {
+            println!("Found an id in range: {id}")
+        }
+        Message::Hello { id: 10..=12 } =&gt; {
+            println!("Found an id in another range")
+        }
+        Message::Hello { id } =&gt; println!("Found some other id: {id}"),
+    }
+<span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-19-29">Listing 19-29</a>: একটি pattern-এ একটি মান যাচাই করার পাশাপাশি তার সঙ্গে bind করতে <code>@</code> ব্যবহার করা</figcaption>
+</figure>
+<p>এই উদাহরণ print করবে <code>Found an id in range: 5</code>। <code>3..=7</code> range-এর আগে <code>id @</code> উল্লেখ করে আমরা range-এর সঙ্গে মিলে যাওয়া মানটি <code>id</code> নামের একটি variable-এ capture করছি, পাশাপাশি যাচাই করছি যে মানটি
+range pattern-এর সঙ্গে মিলেছে।</p>
+<p>দ্বিতীয় arm-এ, যেখানে pattern-এ শুধু একটি range উল্লেখ করা আছে, arm-এর সঙ্গে যুক্ত কোডে এমন কোনো variable নেই, যাতে <code>id</code> field-এর আসল মান আছে। <code>id</code> field-এর মান 10, 11 বা 12 হতে পারত, কিন্তু
+সেই pattern-এর সঙ্গে যাওয়া কোড জানে না কোনটি। pattern-এর কোড <code>id</code> field-এর মান ব্যবহার করতে পারে না, কারণ আমরা <code>id</code> মান একটি variable-এ রাখিনি।</p>
+<p>শেষ arm-এ, যেখানে range ছাড়া একটি variable উল্লেখ করেছি, সেখানে arm-এর কোডে ব্যবহারের জন্য <code>id</code> নামের একটি variable-এ মানটি পাওয়া যায়। কারণ আমরা struct field-এর সংক্ষিপ্ত syntax ব্যবহার করেছি।
+কিন্তু প্রথম দুটি arm-এর মতো এই arm-এ <code>id</code> field-এর মানের ওপর কোনো যাচাই প্রয়োগ করিনি: যেকোনো মান এই pattern-এর সঙ্গে মিলবে।</p>
+<p><code>@</code> ব্যবহার করে একটি pattern-এর ভেতরেই একটি মান যাচাই করে একটি variable-এ রেখে দেওয়া যায়।</p>
+<div class="quiz-placeholder" data-quiz-name="&quot;ch18-03-pattern-syntax&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot;প্রথম শাখা `y = 1`-এর সঙ্গে মেলায়, অর্থাৎ `y != 0`, তাই pattern ব্যর্থ হয়।&#92;nদ্বিতীয় শাখার শর্ত `x == 0`, যা সত্য, তাই pattern সফল হয়।&#92;n&quot;,&quot;id&quot;:&quot;5dcd923f-13a4-4181-b252-4b580547249f&quot;,&quot;type&quot;:&quot;Tracing&quot;,&quot;answer&quot;:{&quot;doesCompile&quot;:true,&quot;stdout&quot;:&quot;B&quot;},&quot;prompt&quot;:{&quot;program&quot;:&quot;fn main() {&#92;n    let x = (0, 1);&#92;n    match x {&#92;n        (_, y) if y == 0 =&gt; println!(&#92;&quot;A&#92;&quot;),&#92;n        (0, _) =&gt; println!(&#92;&quot;B&#92;&quot;),&#92;n        _ =&gt; println!(&#92;&quot;C&#92;&quot;)&#92;n    }&#92;n}&#92;n&quot;}},{&quot;context&quot;:&quot; &#92;n`(_, n)` pattern বৈধ নয়, কারণ `a` হলো tuple-এর একটি array, নিজে কোনো tuple নয়।&#92;n&quot;,&quot;id&quot;:&quot;ac0045c7-981a-46cb-baeb-adaa533804ad&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:[&quot;`_`&quot;,&quot;`[(n, ..)]`&quot;,&quot;`[..]`&quot;]},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;`(_, n)`&quot;],&quot;prompt&quot;:&quot;নিচের প্রোগ্রামটি বিবেচনা করুন:&#92;n&#92;n```&#92;nlet a = [(0, 1)];&#92;nlet ?? = a;&#92;n```&#92;n&#92;n`??` placeholder-এর জায়গায় বসানো যায় এমন বৈধ pattern নিচের কোনগুলো?&#92;n&quot;}},{&quot;context&quot;:&quot;একটি মানের দুই পাশেই `..` ব্যবহার বৈধ নয়, কারণ কোন&#92;narray উপাদানের কথা বলা হচ্ছে তা অস্পষ্ট।&#92;n&quot;,&quot;id&quot;:&quot;0b0d90c3-c81b-4b81-9e1b-f8bd58a22c6c&quot;,&quot;type&quot;:&quot;Tracing&quot;,&quot;answer&quot;:{&quot;doesCompile&quot;:false,&quot;lineNumber&quot;:4},&quot;prompt&quot;:{&quot;program&quot;:&quot;fn main() {&#92;n    let x = Some(&amp;[0, 1]);&#92;n    match x {&#92;n        Some(&amp;[.., 1, ..]) =&gt; println!(&#92;&quot;A&#92;&quot;),&#92;n        Some(&amp;[0, 1]) | None =&gt; println!(&#92;&quot;B&#92;&quot;),&#92;n        _ =&gt; println!(&#92;&quot;C&#92;&quot;)&#92;n    }&#92;n}&#92;n&quot;}},{&quot;context&quot;:&quot;এই pattern বলে দেয় যে `x`-কে 0 থেকে 5-এর মধ্যে (দুই প্রান্তসহ) হতে হবে, এবং `x + y != 0`।&#92;nতাই `(5, -4)` আর `(0, 1)` বৈধ, কিন্তু `(-1, 2)` আর `(3, -3)` নয়।&#92;n&quot;,&quot;id&quot;:&quot;a7d38ffa-66b2-472a-90a5-b026b28ad3df&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:[&quot;`Point { x: 5, y: -4 }`&quot;,&quot;`Point { x: 0, y: 1 }`&quot;]},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;`Point { x: -1, y: 2 }`&quot;,&quot;`Point { x: 3, y: -3 }`&quot;],&quot;prompt&quot;:&quot;ধরুন আমাদের এই সংজ্ঞার একটি `Point` type আছে:&#92;n&#92;n```&#92;nstruct Point {&#92;n    x: i32,&#92;n    y: i32&#92;n}&#92;n```&#92;n&#92;nনিচের pattern-টি দেওয়া থাকলে:&#92;n&#92;n```&#92;nPoint { x: x @ 0 ..= 5, y } if x + y != 0&#92;n```&#92;n&#92;nনিচের কোন মানগুলো এই pattern-এর সঙ্গে মিলবে?&#92;n&quot;}}]}" data-quiz-fullscreen="true"></div>
+
+<h2 id="summary"><a class="header" href="#summary">সারসংক্ষেপ</a></h2>
+<p>বিভিন্ন ধরনের ডেটার মধ্যে পার্থক্য করতে Rust-এর pattern খুবই কাজের। <code>match</code> expression-এ ব্যবহার করলে Rust নিশ্চিত করে যে আপনার pattern প্রতিটি সম্ভাব্য মান ঢেকে দেয়, নইলে প্রোগ্রাম compile হবে না।
+<code>let</code> statement আর function parameter-এর pattern এই গঠনগুলোকে আরও কাজের করে, মানকে ছোট ছোট অংশে destructure করে সেই অংশগুলো variable-এ বসাতে দেয়। প্রয়োজন অনুযায়ী আমরা সরল বা জটিল pattern
+তৈরি করতে পারি।</p>
+<p>এরপর, বইয়ের শেষের আগের অধ্যায়ে আমরা Rust-এর নানা বৈশিষ্ট্যের কিছু উন্নত দিক দেখব।</p>
+<script type="text/javascript" src="quiz/quiz-embed.iife.js"></script><link rel="stylesheet" type="text/css" href="quiz/style.css">
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch19-02-refutability.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ch20-00-advanced-features.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch19-02-refutability.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ch20-00-advanced-features.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris-2317480c.js"></script>
+        <script src="js-extensions/packages/feedback/dist/index-f1290d8b.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

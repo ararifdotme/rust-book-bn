@@ -1,0 +1,953 @@
+<!DOCTYPE HTML>
+<html lang="bn" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>modularity ও error handling উন্নত করতে refactoring - Rust প্রোগ্রামিং ভাষা</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris-d33b75bf.css">
+        <link rel="stylesheet" href="theme/semantic-notes-9b5766c0.css">
+        <link rel="stylesheet" href="theme/listing-cab26221.css">
+        <link rel="stylesheet" href="theme/2018-edition-4e126c62.css">
+        <link rel="stylesheet" href="theme/bengali-4de2f0b6.css">
+        <link rel="stylesheet" href="js-extensions/packages/feedback/dist/index-c9d186bd.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-03403162.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-485378fe.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust প্রোগ্রামিং ভাষা</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/ararifdotme/rust-book-bn" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h2 id="refactoring-to-improve-modularity-and-error-handling"><a class="header" href="#refactoring-to-improve-modularity-and-error-handling">modularity ও error handling উন্নত করতে refactoring</a></h2>
+<p>আমাদের প্রোগ্রাম উন্নত করতে আমরা চারটি সমস্যা ঠিক করব, যেগুলো প্রোগ্রামের গঠন আর সম্ভাব্য error সামলানোর ধরনের সঙ্গে জড়িত।
+প্রথমত, আমাদের <code>main</code> function এখন দুটি কাজ করে: argument parse করে (বিশ্লেষণ করে) এবং ফাইল পড়ে। প্রোগ্রাম বড় হতে থাকলে
+<code>main</code> function-এর সামলানো আলাদা আলাদা কাজের সংখ্যা বাড়বে। একটি function-এর দায়িত্ব যত বাড়ে, তা নিয়ে যুক্তি দিয়ে ভাবা তত
+কঠিন হয়, test করা কঠিন হয়, আর এর কোনো অংশ না ভেঙে বদলানোও কঠিন হয়। কার্যক্ষমতা এমনভাবে আলাদা করা সবচেয়ে ভালো, যাতে প্রতিটি
+function একটি কাজের দায়িত্বে থাকে।</p>
+<p>এই সমস্যাটি দ্বিতীয় সমস্যার সঙ্গেও জড়িত: <code>query</code> আর <code>file_path</code> আমাদের প্রোগ্রামের configuration variable হলেও <code>contents</code>-এর
+মতো variable ব্যবহার হয় প্রোগ্রামের logic চালাতে। <code>main</code> যত লম্বা হবে, তত বেশি variable scope-এ আনতে হবে; scope-এ যত বেশি
+variable থাকবে, প্রতিটির উদ্দেশ্য মনে রাখা তত কঠিন হবে। configuration variable-গুলোকে একটি কাঠামোয় জড়ো করে তাদের উদ্দেশ্য
+স্পষ্ট করাই সবচেয়ে ভালো।</p>
+<p>তৃতীয় সমস্যা হলো, ফাইল পড়া ব্যর্থ হলে error message print করতে আমরা <code>expect</code> ব্যবহার করেছি, কিন্তু error message শুধু print
+করে <code>Should have been able to read the file</code>। ফাইল পড়া নানা কারণে ব্যর্থ হতে পারে: যেমন, ফাইলটি না-ও থাকতে পারে, বা সেটি খোলার অনুমতি আমাদের না-ও
+থাকতে পারে। এই মুহূর্তে পরিস্থিতি যা-ই হোক, আমরা সবকিছুর জন্য একই error message print করতাম, যা ব্যবহারকারীকে কোনো তথ্যই দিত
+না!</p>
+<p>চতুর্থত, আমরা error সামলাতে <code>expect</code> ব্যবহার করি, আর ব্যবহারকারী যথেষ্ট argument না দিয়ে আমাদের প্রোগ্রাম চালালে Rust থেকে একটি
+<code>index out of bounds</code> error পাবে, যা সমস্যাটি পরিষ্কারভাবে ব্যাখ্যা করে না। সব error-handling কোড এক জায়গায় থাকলে সবচেয়ে ভালো
+হতো, যাতে ভবিষ্যতে যারা কোড রক্ষণাবেক্ষণ করবে, error-handling logic বদলানোর দরকার হলে তাদের শুধু এক জায়গায় কোড দেখতে হয়। সব
+error-handling কোড এক জায়গায় থাকলে এটাও নিশ্চিত হবে যে আমরা এমন message print করছি যা শেষ ব্যবহারকারীদের কাছে অর্থবহ।</p>
+<p>চলুন আমাদের project refactor করে এই চারটি সমস্যার সমাধান করি।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="separation-of-concerns-for-binary-projects"></a></p>
+<h3 id="separating-concerns-in-binary-projects"><a class="header" href="#separating-concerns-in-binary-projects">binary project-এ দায়িত্ব আলাদা করা</a></h3>
+<p><code>main</code> function-কে একাধিক কাজের দায়িত্ব দেওয়ার এই সাংগঠনিক সমস্যা অনেক binary project-এই দেখা যায়। ফলে অনেক Rust প্রোগ্রামার
+<code>main</code> function বড় হতে শুরু করলে একটি binary প্রোগ্রামের আলাদা আলাদা দায়িত্ব ভাগ করে ফেলা কাজের মনে করেন। এই প্রক্রিয়ার ধাপগুলো:</p>
+<ul>
+<li>আপনার প্রোগ্রামকে একটি <em>main.rs</em> ফাইল আর একটি <em>lib.rs</em> ফাইলে ভাগ করুন, এবং প্রোগ্রামের logic <em>lib.rs</em>-এ সরিয়ে নিন।</li>
+<li>যতক্ষণ command line parse করার logic ছোট, ততক্ষণ এটি <code>main</code> function-এই থাকতে পারে।</li>
+<li>command line parse করার logic জটিল হতে শুরু করলে একে <code>main</code> function থেকে বের করে অন্য function বা type-এ নিয়ে যান।</li>
+</ul>
+<p>এই প্রক্রিয়ার পর <code>main</code> function-এ যে দায়িত্বগুলো থাকে, তা এগুলোর মধ্যে সীমিত হওয়া উচিত:</p>
+<ul>
+<li>argument-এর মান দিয়ে command line parse করার logic call করা</li>
+<li>অন্য যেকোনো configuration প্রস্তুত করা</li>
+<li><em>lib.rs</em>-এর একটি <code>run</code> function call করা</li>
+<li><code>run</code> error return করলে সেই error সামলানো</li>
+</ul>
+<p>এই pattern-এর মূল কথা দায়িত্ব আলাদা করা: <em>main.rs</em> প্রোগ্রাম চালানোর দায়িত্ব নেয়, আর <em>lib.rs</em> হাতের কাজটির সব logic সামলায়।
+<code>main</code> function সরাসরি test করা যায় না বলে এই গঠন আপনার প্রোগ্রামের সব logic <code>main</code> function-এর বাইরে সরিয়ে সেগুলো test করার
+সুযোগ দেয়। <code>main</code> function-এ যে কোড থেকে যায় তা এত ছোট হবে যে পড়েই এর সঠিকতা যাচাই করা যাবে। চলুন এই প্রক্রিয়া মেনে আমাদের
+প্রোগ্রাম নতুন করে সাজাই।</p>
+<h4 id="extracting-the-argument-parser"><a class="header" href="#extracting-the-argument-parser">argument parser বের করে আনা</a></h4>
+<p>argument parse করার কার্যক্ষমতা আমরা একটি function-এ বের করে আনব, যা <code>main</code> call করবে। Listing 12-5-এ <code>main</code> function-এর নতুন
+শুরুটা দেখানো হয়েছে, যা <code>parse_config</code> নামের একটি নতুন function call করে; এটি আমরা <em>src/main.rs</em>-এ সংজ্ঞায়িত করব।</p>
+<figure class="listing" id="listing-12-5">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore"><span class="boring">use std::env;
+</span><span class="boring">use std::fs;
+</span><span class="boring">
+</span>fn main() {
+    let args: Vec&lt;String&gt; = env::args().collect();
+
+    let (query, file_path) = parse_config(&amp;args);
+
+    // --snip--
+<span class="boring">
+</span><span class="boring">    println!("Searching for {query}");
+</span><span class="boring">    println!("In file {file_path}");
+</span><span class="boring">
+</span><span class="boring">    let contents = fs::read_to_string(file_path)
+</span><span class="boring">        .expect("Should have been able to read the file");
+</span><span class="boring">
+</span><span class="boring">    println!("With text:\n{contents}");
+</span>}
+
+fn parse_config(args: &amp;[String]) -&gt; (&amp;str, &amp;str) {
+    let query = &amp;args[1];
+    let file_path = &amp;args[2];
+
+    (query, file_path)
+}</code></pre>
+<figcaption><a href="#listing-12-5">Listing 12-5</a>: <code>main</code> থেকে একটি <code>parse_config</code> function বের করে আনা</figcaption>
+</figure>
+<p>আমরা এখনো command line argument-গুলো একটি vector-এ জড়ো করছি, কিন্তু <code>main</code> function-এর ভেতরে index 1-এর argument-এর মান <code>query</code>
+variable-এ আর index 2-এর argument-এর মান <code>file_path</code> variable-এ বসানোর বদলে পুরো vector-টি <code>parse_config</code> function-এ পাঠাই। তখন
+<code>parse_config</code> function-এ থাকে সেই logic, যা ঠিক করে কোন argument কোন variable-এ যাবে, এবং মানগুলো <code>main</code>-এ ফেরত পাঠায়। আমরা
+এখনো <code>main</code>-এ <code>query</code> আর <code>file_path</code> variable তৈরি করি, কিন্তু command line argument আর variable-গুলো কীভাবে মিলবে তা ঠিক করার
+দায়িত্ব আর <code>main</code>-এর নেই।</p>
+<p>আমাদের ছোট প্রোগ্রামের জন্য এই পুনর্বিন্যাস বাড়াবাড়ি মনে হতে পারে, কিন্তু আমরা ছোট ছোট ধাপে ধীরে ধীরে refactor করছি। এই
+পরিবর্তনের পর আবার প্রোগ্রাম চালিয়ে যাচাই করুন যে argument parsing এখনো কাজ করছে। ঘন ঘন অগ্রগতি যাচাই করা ভালো, এতে সমস্যা
+দেখা দিলে তার কারণ চিহ্নিত করা সহজ হয়।</p>
+<h4 id="grouping-configuration-values"><a class="header" href="#grouping-configuration-values">configuration-এর মানগুলো একসঙ্গে রাখা</a></h4>
+<p><code>parse_config</code> function আরও উন্নত করতে আমরা আরেকটি ছোট পদক্ষেপ নিতে পারি। এই মুহূর্তে আমরা একটি tuple return করছি, কিন্তু
+তারপরই সঙ্গে সঙ্গে সেই tuple আবার আলাদা অংশে ভেঙে ফেলছি। এটি একটি লক্ষণ যে হয়তো আমাদের কাছে এখনো সঠিক abstraction নেই।</p>
+<p>উন্নতির সুযোগ আছে এমন আরেকটি ইঙ্গিত হলো <code>parse_config</code>-এর <code>config</code> অংশটি, যা বোঝায় যে আমাদের return করা দুটি মান পরস্পর
+সম্পর্কিত এবং দুটিই একটি configuration মানের অংশ। দুটি মানকে একটি tuple-এ রাখা ছাড়া ডেটার গঠনে আমরা এখন এই অর্থ প্রকাশ করছি
+না; এর বদলে আমরা দুটি মানকে একটি struct-এ রাখব এবং struct-এর প্রতিটি field-কে একটি অর্থবহ নাম দেব। এতে ভবিষ্যতে এই কোড যারা
+রক্ষণাবেক্ষণ করবে তাদের পক্ষে বোঝা সহজ হবে যে ভিন্ন ভিন্ন মানগুলো একে অপরের সঙ্গে কীভাবে সম্পর্কিত এবং তাদের উদ্দেশ্য কী।</p>
+<p>Listing 12-6-এ <code>parse_config</code> function-এর উন্নতিগুলো দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-12-6">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust should_panic noplayground"><span class="boring">use std::env;
+</span><span class="boring">use std::fs;
+</span><span class="boring">
+</span>fn main() {
+    let args: Vec&lt;String&gt; = env::args().collect();
+
+    let config = parse_config(&amp;args);
+
+    println!("Searching for {}", config.query);
+    println!("In file {}", config.file_path);
+
+    let contents = fs::read_to_string(config.file_path)
+        .expect("Should have been able to read the file");
+
+    // --snip--
+<span class="boring">
+</span><span class="boring">    println!("With text:\n{contents}");
+</span>}
+
+struct Config {
+    query: String,
+    file_path: String,
+}
+
+fn parse_config(args: &amp;[String]) -&gt; Config {
+    let query = args[1].clone();
+    let file_path = args[2].clone();
+
+    Config { query, file_path }
+}</code></pre>
+<figcaption><a href="#listing-12-6">Listing 12-6</a>: <code>parse_config</code>-কে refactor করে একটি <code>Config</code> struct-এর instance return করানো</figcaption>
+</figure>
+<p>আমরা <code>Config</code> নামের একটি struct যোগ করেছি, যার <code>query</code> আর <code>file_path</code> নামের field আছে। <code>parse_config</code>-এর signature এখন বোঝায় যে এটি
+একটি <code>Config</code> মান return করে। <code>parse_config</code>-এর body-তে আগে আমরা এমন string slice return করতাম যা <code>args</code>-এর <code>String</code> মানকে
+নির্দেশ করত, এখন <code>Config</code>-কে এমনভাবে সংজ্ঞায়িত করেছি যাতে এতে owned <code>String</code> মান থাকে। <code>main</code>-এর <code>args</code> variable argument-এর
+মানগুলোর owner, এবং এটি শুধু <code>parse_config</code> function-কে সেগুলো borrow করতে দিচ্ছে, অর্থাৎ <code>Config</code> যদি <code>args</code>-এর মানগুলোর ownership
+নিতে চাইত, তাহলে আমরা Rust-এর borrowing-এর নিয়ম ভঙ্গ করতাম।</p>
+<p><code>String</code> ডেটা সামলানোর কয়েকটি উপায় আছে; সবচেয়ে সহজ, যদিও কিছুটা অদক্ষ, পথ হলো মানগুলোর ওপর <code>clone</code> method call করা। এতে
+<code>Config</code> instance-এর মালিকানার জন্য ডেটার একটি পূর্ণ কপি তৈরি হবে, যাতে string ডেটার একটি reference রাখার চেয়ে বেশি সময় ও মেমোরি
+লাগে। তবে ডেটা clone করলে আমাদের কোডও খুব সোজাসাপ্টা হয়, কারণ reference-গুলোর lifetime সামলাতে হয় না; এই পরিস্থিতিতে সরলতার
+বিনিময়ে সামান্য performance ছেড়ে দেওয়া লাভজনক আপস।</p>
+<section class="note" aria-role="note">
+<h3 id="the-trade-offs-of-using-clone"><a class="header" href="#the-trade-offs-of-using-clone"><code>clone</code> ব্যবহারের সুবিধা-অসুবিধা</a></h3>
+<p>runtime-এর খরচের কারণে অনেক Rustacean (Rust প্রোগ্রামার)-এর মধ্যে ownership-এর সমস্যা ঠিক করতে <code>clone</code> ব্যবহার এড়িয়ে চলার
+প্রবণতা আছে।
+<a href="ch13-00-functional-features.html">অধ্যায় 13</a><!-- ignore -->-এ আপনি শিখবেন এই ধরনের পরিস্থিতিতে কীভাবে আরও দক্ষ method ব্যবহার করতে হয়। তবে আপাতত
+এগিয়ে যাওয়ার জন্য কয়েকটি string কপি করা ঠিক আছে, কারণ এই কপিগুলো আপনি মাত্র একবার করবেন এবং আপনার file path ও query string
+খুবই ছোট। প্রথম চেষ্টাতেই কোডকে অতিমাত্রায় optimize করার চেষ্টার চেয়ে একটু অদক্ষ কিন্তু কাজ করে এমন প্রোগ্রাম থাকা ভালো।
+Rust-এ অভিজ্ঞতা বাড়লে সবচেয়ে দক্ষ সমাধান দিয়ে শুরু করা সহজ হবে, কিন্তু আপাতত <code>clone</code> call করা পুরোপুরি গ্রহণযোগ্য।</p>
+</section>
+<p>আমরা <code>main</code> হালনাগাদ করেছি, যাতে এটি <code>parse_config</code>-এর return করা <code>Config</code> instance-কে <code>config</code> নামের একটি variable-এ রাখে, আর
+আগে আলাদা <code>query</code> ও <code>file_path</code> variable ব্যবহার করা কোডটিও হালনাগাদ করেছি, যাতে এখন এর বদলে <code>Config</code> struct-এর field ব্যবহার
+করে।</p>
+<p>এখন আমাদের কোড আরও পরিষ্কারভাবে প্রকাশ করে যে <code>query</code> আর <code>file_path</code> সম্পর্কিত এবং তাদের উদ্দেশ্য প্রোগ্রাম কীভাবে কাজ করবে তা
+নির্ধারণ করা। এই মানগুলো ব্যবহার করা যেকোনো কোড জানে যে এগুলো <code>config</code> instance-এ, তাদের উদ্দেশ্য অনুযায়ী নাম দেওয়া field-এ
+খুঁজতে হবে।</p>
+<h4 id="creating-a-constructor-for-config"><a class="header" href="#creating-a-constructor-for-config"><code>Config</code>-এর জন্য একটি constructor তৈরি করা</a></h4>
+<p>এ পর্যন্ত আমরা command line argument parse করার দায়িত্বে থাকা logic <code>main</code> থেকে বের করে <code>parse_config</code> function-এ রেখেছি। এতে
+আমরা দেখতে পেয়েছি যে <code>query</code> আর <code>file_path</code> মান দুটি সম্পর্কিত, এবং সেই সম্পর্ক আমাদের কোডে প্রকাশ পাওয়া উচিত। তারপর <code>query</code>
+আর <code>file_path</code>-এর সম্পর্কিত উদ্দেশ্যের একটি নাম দিতে এবং <code>parse_config</code> function থেকে মানগুলোর নাম struct-এর field-এর নাম হিসেবে
+return করতে আমরা একটি <code>Config</code> struct যোগ করেছি।</p>
+<p>তাহলে, <code>parse_config</code> function-এর উদ্দেশ্য যেহেতু এখন একটি <code>Config</code> instance তৈরি করা, তাই আমরা <code>parse_config</code>-কে একটি সাধারণ
+function থেকে বদলে <code>Config</code> struct-এর সঙ্গে যুক্ত <code>new</code> নামের একটি function বানাতে পারি। এই পরিবর্তনে কোড আরও idiomatic (Rust-এর
+প্রচলিত লেখার ধরন অনুযায়ী) হবে। standard library-র type, যেমন <code>String</code>-এর instance আমরা <code>String::new</code> call করে তৈরি করতে পারি।
+একইভাবে, <code>parse_config</code>-কে <code>Config</code>-এর সঙ্গে যুক্ত একটি <code>new</code> function-এ বদলে দিলে <code>Config::new</code> call করে <code>Config</code>-এর instance তৈরি
+করতে পারব। Listing 12-7-এ প্রয়োজনীয় পরিবর্তনগুলো দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-12-7">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust should_panic noplayground"><span class="boring">use std::env;
+</span><span class="boring">use std::fs;
+</span><span class="boring">
+</span>fn main() {
+    let args: Vec&lt;String&gt; = env::args().collect();
+
+    let config = Config::new(&amp;args);
+<span class="boring">
+</span><span class="boring">    println!("Searching for {}", config.query);
+</span><span class="boring">    println!("In file {}", config.file_path);
+</span><span class="boring">
+</span><span class="boring">    let contents = fs::read_to_string(config.file_path)
+</span><span class="boring">        .expect("Should have been able to read the file");
+</span><span class="boring">
+</span><span class="boring">    println!("With text:\n{contents}");
+</span>
+    // --snip--
+}
+
+// --snip--
+
+<span class="boring">struct Config {
+</span><span class="boring">    query: String,
+</span><span class="boring">    file_path: String,
+</span><span class="boring">}
+</span><span class="boring">
+</span>impl Config {
+    fn new(args: &amp;[String]) -&gt; Config {
+        let query = args[1].clone();
+        let file_path = args[2].clone();
+
+        Config { query, file_path }
+    }
+}</code></pre>
+<figcaption><a href="#listing-12-7">Listing 12-7</a>: <code>parse_config</code>-কে <code>Config::new</code>-এ বদলানো</figcaption>
+</figure>
+<p><code>main</code>-এ যেখানে <code>parse_config</code> call করছিলাম, সেখানে হালনাগাদ করে এর বদলে <code>Config::new</code> call করেছি। <code>parse_config</code>-এর নাম বদলে
+<code>new</code> করেছি এবং একে একটি <code>impl</code> block-এর ভেতরে সরিয়ে নিয়েছি, যা <code>new</code> function-কে <code>Config</code>-এর সঙ্গে যুক্ত করে। কোডটি কাজ করছে
+কি না নিশ্চিত হতে আবার compile করে দেখুন।</p>
+<h3 id="fixing-the-error-handling"><a class="header" href="#fixing-the-error-handling">error handling ঠিক করা</a></h3>
+<p>এবার আমরা error handling ঠিক করার কাজ করব। মনে করুন, <code>args</code> vector-এ তিনটির কম item থাকলে index 1 বা index 2-এর মান পাওয়ার চেষ্টা
+করলে প্রোগ্রাম panic করবে। কোনো argument ছাড়া প্রোগ্রামটি চালিয়ে দেখুন; দেখতে এমন হবে:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.0s
+     Running `target/debug/minigrep`
+
+thread 'main' panicked at src/main.rs:27:21:
+index out of bounds: the len is 1 but the index is 1
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+</code></pre>
+<p><code>index out of bounds: the len is 1 but the index is 1</code> লাইনটি প্রোগ্রামারদের জন্য একটি error message। এটি আমাদের শেষ ব্যবহারকারীদের
+বুঝতে সাহায্য করবে না যে তাদের এর বদলে কী করা উচিত। চলুন এখনই এটি ঠিক করি।</p>
+<h4 id="improving-the-error-message"><a class="header" href="#improving-the-error-message">error message উন্নত করা</a></h4>
+<p>Listing 12-8-এ আমরা <code>new</code> function-এ একটি যাচাই যোগ করি, যা index 1 ও index 2-এর মান নেওয়ার আগে নিশ্চিত করবে যে slice-টি যথেষ্ট
+লম্বা। slice যথেষ্ট লম্বা না হলে প্রোগ্রাম panic করে এবং আরও ভালো একটি error message দেখায়।</p>
+<figure class="listing" id="listing-12-8">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore"><span class="boring">use std::env;
+</span><span class="boring">use std::fs;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let args: Vec&lt;String&gt; = env::args().collect();
+</span><span class="boring">
+</span><span class="boring">    let config = Config::new(&amp;args);
+</span><span class="boring">
+</span><span class="boring">    println!("Searching for {}", config.query);
+</span><span class="boring">    println!("In file {}", config.file_path);
+</span><span class="boring">
+</span><span class="boring">    let contents = fs::read_to_string(config.file_path)
+</span><span class="boring">        .expect("Should have been able to read the file");
+</span><span class="boring">
+</span><span class="boring">    println!("With text:\n{contents}");
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">struct Config {
+</span><span class="boring">    query: String,
+</span><span class="boring">    file_path: String,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Config {
+</span>    // --snip--
+    fn new(args: &amp;[String]) -&gt; Config {
+        if args.len() &lt; 3 {
+            panic!("not enough arguments");
+        }
+        // --snip--
+<span class="boring">
+</span><span class="boring">        let query = args[1].clone();
+</span><span class="boring">        let file_path = args[2].clone();
+</span><span class="boring">
+</span><span class="boring">        Config { query, file_path }
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-12-8">Listing 12-8</a>: argument-এর সংখ্যা যাচাই যোগ করা</figcaption>
+</figure>
+<p>এই কোড <a href="ch09-03-to-panic-or-not-to-panic.html#creating-custom-types-for-validation">Listing
+9-13-এ লেখা <code>Guess::new</code> function-এর</a><!-- ignore --> মতো, যেখানে <code>value</code> argument বৈধ মানের সীমার বাইরে থাকলে আমরা
+<code>panic!</code> call করেছিলাম। এখানে মানের সীমা যাচাই না করে আমরা যাচাই করছি যে <code>args</code>-এর দৈর্ঘ্য অন্তত <code>3</code>, আর function-এর বাকি অংশ এই
+ধারণার ওপর কাজ করতে পারে যে শর্তটি পূরণ হয়েছে। <code>args</code>-এ তিনটির কম item থাকলে এই শর্ত <code>true</code> হবে, আর আমরা প্রোগ্রাম সঙ্গে সঙ্গে
+শেষ করতে <code>panic!</code> macro call করি।</p>
+<p><code>new</code>-এ এই কয়েক লাইন বাড়তি কোড যোগ করে চলুন আবার কোনো argument ছাড়া প্রোগ্রামটি চালিয়ে দেখি error এখন দেখতে কেমন:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.0s
+     Running `target/debug/minigrep`
+
+thread 'main' panicked at src/main.rs:26:13:
+not enough arguments
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+</code></pre>
+<p>এই output আগের চেয়ে ভালো: এখন আমাদের একটি যুক্তিসঙ্গত error message আছে। তবে এতে এমন বাড়তি তথ্যও আছে যা আমরা ব্যবহারকারীদের
+দিতে চাই না। হয়তো Listing 9-13-এ ব্যবহার করা কৌশলটি এখানে ব্যবহারের জন্য সেরা নয়: <a href="ch09-03-to-panic-or-not-to-panic.html#guidelines-for-error-handling">অধ্যায় 9-এ যেমন আলোচনা
+করা হয়েছে</a><!-- ignore -->, <code>panic!</code> call করা ব্যবহারজনিত সমস্যার চেয়ে প্রোগ্রামিংয়ের সমস্যার জন্য বেশি উপযুক্ত।
+এর বদলে আমরা অধ্যায় 9-এ শেখা অন্য কৌশলটি ব্যবহার করব—<a href="ch09-02-recoverable-errors-with-result.html">একটি
+<code>Result</code> return করা</a><!-- ignore -->, যা সাফল্য অথবা error বোঝায়।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="returning-a-result-from-new-instead-of-calling-panic"></a></p>
+<h4 id="returning-a-result-instead-of-calling-panic"><a class="header" href="#returning-a-result-instead-of-calling-panic"><code>panic!</code> call না করে একটি <code>Result</code> return করা</a></h4>
+<p>এর বদলে আমরা একটি <code>Result</code> মান return করতে পারি, যাতে সফল হলে একটি <code>Config</code> instance থাকবে আর error-এর ক্ষেত্রে সমস্যার বর্ণনা
+থাকবে। function-এর নামও <code>new</code> থেকে বদলে <code>build</code> করব, কারণ অনেক প্রোগ্রামার আশা করেন যে <code>new</code> function কখনো ব্যর্থ হবে না।
+<code>Config::build</code> যখন <code>main</code>-এর সঙ্গে যোগাযোগ করছে, তখন কোনো সমস্যা হয়েছে তা জানাতে আমরা <code>Result</code> type ব্যবহার করতে পারি। তারপর
+<code>main</code> বদলে একটি <code>Err</code> variant-কে ব্যবহারকারীদের জন্য আরও কাজের একটি error-এ রূপান্তর করতে পারি, <code>panic!</code> call করলে যে <code>thread 'main'</code> আর <code>RUST_BACKTRACE</code> সংক্রান্ত আশপাশের লেখা আসে তা ছাড়াই।</p>
+<p>Listing 12-9-এ দেখানো হয়েছে, যে function-কে আমরা এখন <code>Config::build</code> বলছি তার return মানে, এবং <code>Result</code> return করতে function-এর
+body-তে কী কী পরিবর্তন দরকার। খেয়াল করুন, <code>main</code>-ও হালনাগাদ না করা পর্যন্ত এটি compile হবে না; সেটি আমরা পরের listing-এ করব।</p>
+<figure class="listing" id="listing-12-9">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">use std::env;
+</span><span class="boring">use std::fs;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let args: Vec&lt;String&gt; = env::args().collect();
+</span><span class="boring">
+</span><span class="boring">    let config = Config::new(&amp;args);
+</span><span class="boring">
+</span><span class="boring">    println!("Searching for {}", config.query);
+</span><span class="boring">    println!("In file {}", config.file_path);
+</span><span class="boring">
+</span><span class="boring">    let contents = fs::read_to_string(config.file_path)
+</span><span class="boring">        .expect("Should have been able to read the file");
+</span><span class="boring">
+</span><span class="boring">    println!("With text:\n{contents}");
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">struct Config {
+</span><span class="boring">    query: String,
+</span><span class="boring">    file_path: String,
+</span><span class="boring">}
+</span><span class="boring">
+</span>impl Config {
+    fn build(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+        if args.len() &lt; 3 {
+            return Err("not enough arguments");
+        }
+
+        let query = args[1].clone();
+        let file_path = args[2].clone();
+
+        Ok(Config { query, file_path })
+    }
+}</code></pre>
+<figcaption><a href="#listing-12-9">Listing 12-9</a>: <code>Config::build</code> থেকে একটি <code>Result</code> return করা</figcaption>
+</figure>
+<p>আমাদের <code>build</code> function একটি <code>Result</code> return করে, যাতে সফল হলে একটি <code>Config</code> instance আর error হলে একটি string literal থাকে। আমাদের
+error-এর মানগুলো সবসময় <code>'static</code> lifetime-এর string literal হবে।</p>
+<p>function-এর body-তে আমরা দুটি পরিবর্তন করেছি: ব্যবহারকারী যথেষ্ট argument না দিলে <code>panic!</code> call না করে এখন একটি <code>Err</code> মান return
+করি, আর <code>Config</code> return মানটিকে একটি <code>Ok</code>-এর ভেতরে মুড়ে দিয়েছি। এই পরিবর্তনগুলোর ফলে function-টি তার নতুন type signature-এর
+সঙ্গে মিলে যায়।</p>
+<p><code>Config::build</code> থেকে একটি <code>Err</code> মান return করলে <code>main</code> function <code>build</code> function-এর return করা <code>Result</code> মান সামলাতে পারে এবং error-এর
+ক্ষেত্রে process আরও পরিচ্ছন্নভাবে বন্ধ করতে পারে।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="calling-confignew-and-handling-errors"></a></p>
+<h4 id="calling-configbuild-and-handling-errors"><a class="header" href="#calling-configbuild-and-handling-errors"><code>Config::build</code> call করা এবং error সামলানো</a></h4>
+<p>error-এর ক্ষেত্রটি সামলাতে এবং ব্যবহারকারী-বান্ধব একটি message print করতে আমাদের <code>main</code> হালনাগাদ করতে হবে, যাতে এটি
+<code>Config::build</code>-এর return করা <code>Result</code> সামলায়, যেমনটি Listing 12-10-এ দেখানো হয়েছে। শূন্য নয় এমন error code দিয়ে command line
+tool থেকে বেরিয়ে যাওয়ার দায়িত্বও আমরা <code>panic!</code>-এর কাছ থেকে সরিয়ে নিজেরাই implement করব। শূন্য নয় এমন exit status হলো একটি
+প্রচলিত রীতি, যা আমাদের প্রোগ্রাম call করা process-কে জানায় যে প্রোগ্রামটি error অবস্থায় বন্ধ হয়েছে।</p>
+<figure class="listing" id="listing-12-10">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore"><span class="boring">use std::env;
+</span><span class="boring">use std::fs;
+</span>use std::process;
+
+fn main() {
+    let args: Vec&lt;String&gt; = env::args().collect();
+
+    let config = Config::build(&amp;args).unwrap_or_else(|err| {
+        println!("Problem parsing arguments: {err}");
+        process::exit(1);
+    });
+
+    // --snip--
+<span class="boring">
+</span><span class="boring">    println!("Searching for {}", config.query);
+</span><span class="boring">    println!("In file {}", config.file_path);
+</span><span class="boring">
+</span><span class="boring">    let contents = fs::read_to_string(config.file_path)
+</span><span class="boring">        .expect("Should have been able to read the file");
+</span><span class="boring">
+</span><span class="boring">    println!("With text:\n{contents}");
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">struct Config {
+</span><span class="boring">    query: String,
+</span><span class="boring">    file_path: String,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Config {
+</span><span class="boring">    fn build(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+</span><span class="boring">        if args.len() &lt; 3 {
+</span><span class="boring">            return Err("not enough arguments");
+</span><span class="boring">        }
+</span><span class="boring">
+</span><span class="boring">        let query = args[1].clone();
+</span><span class="boring">        let file_path = args[2].clone();
+</span><span class="boring">
+</span><span class="boring">        Ok(Config { query, file_path })
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-12-10">Listing 12-10</a>: <code>Config</code> তৈরি ব্যর্থ হলে একটি error code দিয়ে বেরিয়ে যাওয়া</figcaption>
+</figure>
+<p>এই listing-এ আমরা এমন একটি method ব্যবহার করেছি যা এখনো বিস্তারিত আলোচনা করিনি: <code>unwrap_or_else</code>, যা standard library
+<code>Result&lt;T, E&gt;</code>-এর ওপর সংজ্ঞায়িত করেছে। <code>unwrap_or_else</code> ব্যবহার করে আমরা <code>panic!</code> ছাড়া নিজস্ব কিছু error handling সংজ্ঞায়িত করতে
+পারি। <code>Result</code> যদি একটি <code>Ok</code> মান হয়, তাহলে এই method-এর আচরণ <code>unwrap</code>-এর মতো: <code>Ok</code> যে মানটিকে মুড়ে রেখেছে, তা return করে। কিন্তু
+মানটি যদি একটি <code>Err</code> মান হয়, তাহলে এই method closure (পারিপার্শ্বিক মান ধরে রাখতে পারে এমন নামহীন function)-এর কোড call করে,
+যা আমাদের সংজ্ঞায়িত একটি নামহীন function এবং যা আমরা <code>unwrap_or_else</code>-এ argument হিসেবে পাঠাই। closure নিয়ে আরও বিস্তারিত
+আলোচনা করব <a href="ch13-00-functional-features.html">অধ্যায় 13</a><!-- ignore -->-এ। আপাতত শুধু জানলেই চলবে যে <code>unwrap_or_else</code> <code>Err</code>-এর ভেতরের মানটি, যা এই ক্ষেত্রে
+Listing 12-9-এ যোগ করা static string <code>"not enough arguments"</code>, আমাদের closure-এ খাড়া দাগ দুটির মাঝে থাকা <code>err</code> argument-এ পাঠাবে।
+closure-এর কোড চলার সময় তখন <code>err</code> মানটি ব্যবহার করতে পারে।</p>
+<p>standard library থেকে <code>process</code>-কে scope-এ আনতে আমরা একটি নতুন <code>use</code> লাইন যোগ করেছি। error-এর ক্ষেত্রে যে closure-এর কোড চলবে তা
+মাত্র দুই লাইনের: আমরা <code>err</code> মানটি print করি, তারপর <code>process::exit</code> call করি। <code>process::exit</code> function সঙ্গে সঙ্গে প্রোগ্রাম থামিয়ে
+দেবে এবং যে সংখ্যা পাঠানো হয়েছে তা exit status code হিসেবে return করবে। এটি Listing 12-8-এ ব্যবহার করা <code>panic!</code>-ভিত্তিক handling-এর
+মতো, তবে এখন আর সব বাড়তি output পাই না। চলুন চালিয়ে দেখি:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.48s
+     Running `target/debug/minigrep`
+Problem parsing arguments: not enough arguments
+</code></pre>
+<p>চমৎকার! এই output আমাদের ব্যবহারকারীদের জন্য অনেক বেশি বন্ধুত্বপূর্ণ।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="extracting-logic-from-the-main-function"></a></p>
+<h3 id="extracting-logic-from-main"><a class="header" href="#extracting-logic-from-main"><code>main</code> থেকে logic বের করে আনা</a></h3>
+<p>configuration parse করার refactoring শেষ, এবার প্রোগ্রামের logic-এর দিকে নজর দিই। <a href="#separation-of-concerns-for-binary-projects">“binary project-এ দায়িত্ব
+আলাদা করা”</a><!-- ignore --> অংশে যেমন বলেছি, আমরা <code>run</code> নামের একটি function বের করে আনব,
+যাতে <code>main</code> function-এর সেই সব logic থাকবে যা configuration প্রস্তুত করা বা error সামলানোর সঙ্গে জড়িত নয়। কাজ শেষ হলে <code>main</code>
+function সংক্ষিপ্ত হবে এবং দেখেই যাচাই করা সহজ হবে, আর বাকি সব logic-এর জন্য আমরা test লিখতে পারব।</p>
+<p>Listing 12-11-এ একটি <code>run</code> function বের করে আনার ছোট, ধাপে ধাপে উন্নতিটি দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-12-11">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore"><span class="boring">use std::env;
+</span><span class="boring">use std::fs;
+</span><span class="boring">use std::process;
+</span><span class="boring">
+</span>fn main() {
+    // --snip--
+
+<span class="boring">    let args: Vec&lt;String&gt; = env::args().collect();
+</span><span class="boring">
+</span><span class="boring">    let config = Config::build(&amp;args).unwrap_or_else(|err| {
+</span><span class="boring">        println!("Problem parsing arguments: {err}");
+</span><span class="boring">        process::exit(1);
+</span><span class="boring">    });
+</span><span class="boring">
+</span>    println!("Searching for {}", config.query);
+    println!("In file {}", config.file_path);
+
+    run(config);
+}
+
+fn run(config: Config) {
+    let contents = fs::read_to_string(config.file_path)
+        .expect("Should have been able to read the file");
+
+    println!("With text:\n{contents}");
+}
+
+// --snip--
+<span class="boring">
+</span><span class="boring">struct Config {
+</span><span class="boring">    query: String,
+</span><span class="boring">    file_path: String,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Config {
+</span><span class="boring">    fn build(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+</span><span class="boring">        if args.len() &lt; 3 {
+</span><span class="boring">            return Err("not enough arguments");
+</span><span class="boring">        }
+</span><span class="boring">
+</span><span class="boring">        let query = args[1].clone();
+</span><span class="boring">        let file_path = args[2].clone();
+</span><span class="boring">
+</span><span class="boring">        Ok(Config { query, file_path })
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-12-11">Listing 12-11</a>: প্রোগ্রামের বাকি logic-যুক্ত একটি <code>run</code> function বের করে আনা</figcaption>
+</figure>
+<p><code>run</code> function-এ এখন ফাইল পড়া থেকে শুরু করে <code>main</code>-এর বাকি সব logic আছে। <code>run</code> function argument হিসেবে <code>Config</code> instance নেয়।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="returning-errors-from-the-run-function"></a></p>
+<h4 id="returning-errors-from-run"><a class="header" href="#returning-errors-from-run"><code>run</code> থেকে error return করা</a></h4>
+<p>প্রোগ্রামের বাকি logic <code>run</code> function-এ আলাদা হয়ে যাওয়ায় আমরা error handling উন্নত করতে পারি, যেমনটি Listing 12-9-এ
+<code>Config::build</code>-এর ক্ষেত্রে করেছিলাম। <code>expect</code> call করে প্রোগ্রামকে panic করতে না দিয়ে কোনো সমস্যা হলে <code>run</code> function একটি
+<code>Result&lt;T, E&gt;</code> return করবে। এতে error সামলানোর logic আরও একত্র করে ব্যবহারকারী-বান্ধব উপায়ে <code>main</code>-এ রাখা যাবে। Listing 12-12-এ
+<code>run</code>-এর signature আর body-তে প্রয়োজনীয় পরিবর্তনগুলো দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-12-12">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore"><span class="boring">use std::env;
+</span><span class="boring">use std::fs;
+</span><span class="boring">use std::process;
+</span>use std::error::Error;
+
+// --snip--
+
+<span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let args: Vec&lt;String&gt; = env::args().collect();
+</span><span class="boring">
+</span><span class="boring">    let config = Config::build(&amp;args).unwrap_or_else(|err| {
+</span><span class="boring">        println!("Problem parsing arguments: {err}");
+</span><span class="boring">        process::exit(1);
+</span><span class="boring">    });
+</span><span class="boring">
+</span><span class="boring">    println!("Searching for {}", config.query);
+</span><span class="boring">    println!("In file {}", config.file_path);
+</span><span class="boring">
+</span><span class="boring">    run(config);
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn run(config: Config) -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
+    let contents = fs::read_to_string(config.file_path)?;
+
+    println!("With text:\n{contents}");
+
+    Ok(())
+}
+<span class="boring">
+</span><span class="boring">struct Config {
+</span><span class="boring">    query: String,
+</span><span class="boring">    file_path: String,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Config {
+</span><span class="boring">    fn build(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+</span><span class="boring">        if args.len() &lt; 3 {
+</span><span class="boring">            return Err("not enough arguments");
+</span><span class="boring">        }
+</span><span class="boring">
+</span><span class="boring">        let query = args[1].clone();
+</span><span class="boring">        let file_path = args[2].clone();
+</span><span class="boring">
+</span><span class="boring">        Ok(Config { query, file_path })
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-12-12">Listing 12-12</a>: <code>run</code> function বদলে <code>Result</code> return করানো</figcaption>
+</figure>
+<p>এখানে আমরা তিনটি গুরুত্বপূর্ণ পরিবর্তন করেছি। প্রথমত, <code>run</code> function-এর return type বদলে <code>Result&lt;(), Box&lt;dyn Error&gt;&gt;</code> করেছি। এই
+function আগে unit type <code>()</code> return করত, আর <code>Ok</code>-এর ক্ষেত্রে return মান হিসেবে সেটিই রেখেছি।</p>
+<p>error type-এর জন্য আমরা trait object <code>Box&lt;dyn Error&gt;</code> ব্যবহার করেছি (এবং শুরুতে একটি <code>use</code> statement দিয়ে <code>std::error::Error</code>-কে
+scope-এ এনেছি)। trait object নিয়ে আলোচনা করব <a href="ch18-00-oop.html">অধ্যায় 18</a><!-- ignore -->-এ। আপাতত শুধু জেনে রাখুন, <code>Box&lt;dyn Error&gt;</code> মানে
+function-টি এমন একটি type return করবে যা <code>Error</code> trait implement করে, কিন্তু return মানটি ঠিক কোন type-এর হবে তা আমাদের উল্লেখ
+করতে হবে না। এতে বিভিন্ন error-এর ক্ষেত্রে বিভিন্ন type-এর error মান return করার নমনীয়তা পাই। <code>dyn</code> keyword হলো <em>dynamic</em>
+(চলার সময় নির্ধারিত)-এর সংক্ষেপ।</p>
+<p>দ্বিতীয়ত, আমরা <code>expect</code> call সরিয়ে <code>?</code> operator ব্যবহার করেছি, যেমনটি <a href="ch09-02-recoverable-errors-with-result.html#a-shortcut-for-propagating-errors-the--operator">অধ্যায় 9</a><!-- ignore -->-এ আলোচনা
+করেছিলাম। error হলে <code>panic!</code> না করে <code>?</code> বর্তমান function থেকে error মানটি return করবে, যাতে caller সেটি সামলাতে পারে।</p>
+<p>তৃতীয়ত, <code>run</code> function এখন সফল হলে একটি <code>Ok</code> মান return করে। signature-এ আমরা <code>run</code> function-এর সাফল্যের type <code>()</code> হিসেবে ঘোষণা
+করেছি, অর্থাৎ unit type-এর মানটিকে <code>Ok</code> মানের ভেতরে মুড়ে দিতে হবে। এই <code>Ok(())</code> syntax প্রথমে একটু অদ্ভুত লাগতে পারে। কিন্তু
+এভাবে <code>()</code> ব্যবহার করাই প্রচলিত উপায় এটা বোঝাতে যে আমরা <code>run</code> call করছি শুধু এর side effect (পার্শ্বপ্রতিক্রিয়া)-এর জন্য; এটি
+আমাদের দরকারি কোনো মান return করে না।</p>
+<p>এই কোড চালালে এটি compile হবে, তবে একটি warning দেখাবে:</p>
+<pre><code class="language-console">$ cargo run -- the poem.txt
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
+warning: unused `Result` that must be used
+  --&gt; src/main.rs:19:5
+   |
+19 |     run(config);
+   |     ^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+   = note: `#[warn(unused_must_use)]` on by default
+help: use `let _ = ...` to ignore the resulting value
+   |
+19 |     let _ = run(config);
+   |     +++++++
+
+warning: `minigrep` (bin "minigrep") generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.71s
+     Running `target/debug/minigrep the poem.txt`
+Searching for the
+In file poem.txt
+With text:
+I'm nobody! Who are you?
+Are you nobody, too?
+Then there's a pair of us - don't tell!
+They'd banish us, you know.
+
+How dreary to be somebody!
+How public, like a frog
+To tell your name the livelong day
+To an admiring bog!
+
+</code></pre>
+<p>Rust আমাদের বলছে যে আমাদের কোড <code>Result</code> মানটি উপেক্ষা করেছে, আর <code>Result</code> মান হয়তো বোঝাতে পারে যে একটি error ঘটেছে। কিন্তু error
+হয়েছে কি না তা আমরা যাচাই করছি না, আর compiler মনে করিয়ে দিচ্ছে যে আমরা সম্ভবত এখানে কিছু error-handling কোড রাখতে চেয়েছিলাম!
+চলুন এখনই সমস্যাটি ঠিক করি।</p>
+<h4 id="handling-errors-returned-from-run-in-main"><a class="header" href="#handling-errors-returned-from-run-in-main"><code>main</code>-এ <code>run</code>-এর return করা error সামলানো</a></h4>
+<p>Listing 12-10-এ <code>Config::build</code>-এর সঙ্গে যে কৌশল ব্যবহার করেছিলাম তার মতোই একটি কৌশলে আমরা error যাচাই করে সামলাব, তবে সামান্য
+পার্থক্যসহ:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust ignore"><span class="boring">use std::env;
+</span><span class="boring">use std::error::Error;
+</span><span class="boring">use std::fs;
+</span><span class="boring">use std::process;
+</span><span class="boring">
+</span>fn main() {
+    // --snip--
+
+<span class="boring">    let args: Vec&lt;String&gt; = env::args().collect();
+</span><span class="boring">
+</span><span class="boring">    let config = Config::build(&amp;args).unwrap_or_else(|err| {
+</span><span class="boring">        println!("Problem parsing arguments: {err}");
+</span><span class="boring">        process::exit(1);
+</span><span class="boring">    });
+</span><span class="boring">
+</span>    println!("Searching for {}", config.query);
+    println!("In file {}", config.file_path);
+
+    if let Err(e) = run(config) {
+        println!("Application error: {e}");
+        process::exit(1);
+    }
+}
+<span class="boring">
+</span><span class="boring">fn run(config: Config) -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
+</span><span class="boring">    let contents = fs::read_to_string(config.file_path)?;
+</span><span class="boring">
+</span><span class="boring">    println!("With text:\n{contents}");
+</span><span class="boring">
+</span><span class="boring">    Ok(())
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">struct Config {
+</span><span class="boring">    query: String,
+</span><span class="boring">    file_path: String,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Config {
+</span><span class="boring">    fn build(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+</span><span class="boring">        if args.len() &lt; 3 {
+</span><span class="boring">            return Err("not enough arguments");
+</span><span class="boring">        }
+</span><span class="boring">
+</span><span class="boring">        let query = args[1].clone();
+</span><span class="boring">        let file_path = args[2].clone();
+</span><span class="boring">
+</span><span class="boring">        Ok(Config { query, file_path })
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<p><code>run</code> একটি <code>Err</code> মান return করে কি না যাচাই করতে এবং করলে <code>process::exit(1)</code> call করতে আমরা <code>unwrap_or_else</code>-এর বদলে <code>if let</code>
+ব্যবহার করি। <code>Config::build</code> যেভাবে <code>Config</code> instance return করে, <code>run</code> function সেভাবে এমন কোনো মান return করে না যা আমরা <code>unwrap</code>
+করতে চাই। <code>run</code> যেহেতু সফল হলে <code>()</code> return করে, তাই আমাদের শুধু error শনাক্ত করা নিয়ে মাথাব্যথা, ফলে unwrap করা মান return করতে
+<code>unwrap_or_else</code> দরকার নেই, যা শুধু <code>()</code>-ই হতো।</p>
+<p>দুই ক্ষেত্রেই <code>if let</code> আর <code>unwrap_or_else</code> function-এর body একই: আমরা error print করি এবং বেরিয়ে যাই।</p>
+<h3 id="splitting-code-into-a-library-crate"><a class="header" href="#splitting-code-into-a-library-crate">কোডকে একটি library crate-এ ভাগ করা</a></h3>
+<p>আমাদের <code>minigrep</code> project এ পর্যন্ত বেশ ভালো দেখাচ্ছে! এবার আমরা <em>src/main.rs</em> ফাইল ভাগ করে কিছু কোড <em>src/lib.rs</em> ফাইলে রাখব।
+এতে কোড test করা যাবে, আর <em>src/main.rs</em> ফাইলের দায়িত্বও কমবে।</p>
+<p>লেখা খোঁজার দায়িত্বে থাকা কোড <em>src/main.rs</em>-এর বদলে <em>src/lib.rs</em>-এ সংজ্ঞায়িত করি, যাতে আমরা (বা আমাদের <code>minigrep</code> library ব্যবহার
+করা অন্য যে কেউ) শুধু আমাদের <code>minigrep</code> binary নয়, আরও বিভিন্ন প্রেক্ষাপট থেকে খোঁজার function call করতে পারি।</p>
+<p>প্রথমে <em>src/lib.rs</em>-এ <code>search</code> function-এর signature সংজ্ঞায়িত করি, যেমনটি Listing 12-13-এ দেখানো হয়েছে, যার body <code>unimplemented!</code>
+macro call করে। implementation লেখার সময় signature-টি আরও বিস্তারিত ব্যাখ্যা করব।</p>
+<figure class="listing" id="listing-12-13">
+<span class="file-name">Filename: src/lib.rs</span>
+<pre><code class="language-rust ignore does_not_compile">pub fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    unimplemented!();
+}</code></pre>
+<figcaption><a href="#listing-12-13">Listing 12-13</a>: <em>src/lib.rs</em>-এ <code>search</code> function সংজ্ঞায়িত করা</figcaption>
+</figure>
+<p><code>search</code>-কে আমাদের library crate-এর public API-র অংশ হিসেবে চিহ্নিত করতে function-এর সংজ্ঞায় <code>pub</code> keyword ব্যবহার করেছি। এখন
+আমাদের একটি library crate আছে, যা binary crate থেকে ব্যবহার করা যায় এবং test করা যায়!</p>
+<p>এবার <em>src/lib.rs</em>-এ সংজ্ঞায়িত কোডকে <em>src/main.rs</em>-এর binary crate-এর scope-এ এনে call করতে হবে, যেমনটি Listing 12-14-এ দেখানো
+হয়েছে।</p>
+<figure class="listing" id="listing-12-14">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore"><span class="boring">use std::env;
+</span><span class="boring">use std::error::Error;
+</span><span class="boring">use std::fs;
+</span><span class="boring">use std::process;
+</span><span class="boring">
+</span>// --snip--
+use minigrep::search;
+
+fn main() {
+    // --snip--
+<span class="boring">    let args: Vec&lt;String&gt; = env::args().collect();
+</span><span class="boring">
+</span><span class="boring">    let config = Config::build(&amp;args).unwrap_or_else(|err| {
+</span><span class="boring">        println!("Problem parsing arguments: {err}");
+</span><span class="boring">        process::exit(1);
+</span><span class="boring">    });
+</span><span class="boring">
+</span><span class="boring">    if let Err(e) = run(config) {
+</span><span class="boring">        println!("Application error: {e}");
+</span><span class="boring">        process::exit(1);
+</span><span class="boring">    }
+</span>}
+
+// --snip--
+
+<span class="boring">
+</span><span class="boring">struct Config {
+</span><span class="boring">    query: String,
+</span><span class="boring">    file_path: String,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Config {
+</span><span class="boring">    fn build(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+</span><span class="boring">        if args.len() &lt; 3 {
+</span><span class="boring">            return Err("not enough arguments");
+</span><span class="boring">        }
+</span><span class="boring">
+</span><span class="boring">        let query = args[1].clone();
+</span><span class="boring">        let file_path = args[2].clone();
+</span><span class="boring">
+</span><span class="boring">        Ok(Config { query, file_path })
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn run(config: Config) -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
+    let contents = fs::read_to_string(config.file_path)?;
+
+    for line in search(&amp;config.query, &amp;contents) {
+        println!("{line}");
+    }
+
+    Ok(())
+}</code></pre>
+<figcaption><a href="#listing-12-14">Listing 12-14</a>: <em>src/main.rs</em>-এ <code>minigrep</code> library crate-এর <code>search</code> function ব্যবহার করা</figcaption>
+</figure>
+<p>library crate থেকে <code>search</code> function-কে binary crate-এর scope-এ আনতে আমরা একটি <code>use minigrep::search</code> লাইন যোগ করি। তারপর <code>run</code>
+function-এ ফাইলের বিষয়বস্তু print না করে <code>search</code> function call করি এবং argument হিসেবে <code>config.query</code> মান আর <code>contents</code> পাঠাই।
+তারপর <code>run</code> একটি <code>for</code> loop দিয়ে <code>search</code> থেকে return হওয়া প্রতিটি লাইন print করবে, যা query-র সঙ্গে মিলেছে। <code>main</code> function-এ
+query আর file path দেখানো <code>println!</code> call-গুলো সরিয়ে দেওয়ারও এটি ভালো সময়, যাতে আমাদের প্রোগ্রাম শুধু খোঁজার ফল print করে (যদি
+কোনো error না ঘটে)।</p>
+<p>খেয়াল করুন, কিছু print হওয়ার আগেই search function সব ফল একটি vector-এ জড়ো করবে এবং সেটি return করবে। বড় ফাইলে খোঁজার সময় এই
+implementation ফল দেখাতে ধীর হতে পারে, কারণ ফল পাওয়ার সঙ্গে সঙ্গে print হয় না; iterator ব্যবহার করে এটি ঠিক করার একটি সম্ভাব্য
+উপায় নিয়ে অধ্যায় 13-এ আলোচনা করব।</p>
+<p>উফ! অনেক কাজ হলো, তবে আমরা ভবিষ্যতের সাফল্যের জন্য ভিত তৈরি করে ফেলেছি। এখন error সামলানো অনেক সহজ, আর কোড আরও modular
+(আলাদা আলাদা অংশে ভাগ করা) হয়েছে। এখন থেকে আমাদের প্রায় সব কাজ হবে <em>src/lib.rs</em>-এ।</p>
+<p>চলুন এই নতুন পাওয়া modularity-র সুবিধা নিয়ে এমন কিছু করি যা পুরোনো কোডে কঠিন হতো কিন্তু নতুন কোডে সহজ: আমরা কিছু test লিখব!</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch12-02-reading-a-file.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ch12-04-testing-the-librarys-functionality.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch12-02-reading-a-file.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ch12-04-testing-the-librarys-functionality.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris-2317480c.js"></script>
+        <script src="js-extensions/packages/feedback/dist/index-f1290d8b.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

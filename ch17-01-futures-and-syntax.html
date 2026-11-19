@@ -1,0 +1,557 @@
+<!DOCTYPE HTML>
+<html lang="bn" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>future ও async syntax - Rust প্রোগ্রামিং ভাষা</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris-d33b75bf.css">
+        <link rel="stylesheet" href="theme/semantic-notes-9b5766c0.css">
+        <link rel="stylesheet" href="theme/listing-cab26221.css">
+        <link rel="stylesheet" href="theme/2018-edition-4e126c62.css">
+        <link rel="stylesheet" href="theme/bengali-4de2f0b6.css">
+        <link rel="stylesheet" href="js-extensions/packages/feedback/dist/index-c9d186bd.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-03403162.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-485378fe.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust প্রোগ্রামিং ভাষা</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/ararifdotme/rust-book-bn" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h2 id="futures-and-the-async-syntax"><a class="header" href="#futures-and-the-async-syntax">future ও async syntax</a></h2>
+<p>Rust-এ asynchronous programming-এর মূল উপাদান হলো <em>futures</em> (future) আর Rust-এর
+<code>async</code> ও <code>await</code> keyword।</p>
+<p><em>future</em> হলো এমন একটি মান, যা এখন প্রস্তুত না-ও থাকতে পারে, কিন্তু ভবিষ্যতে কোনো এক সময় প্রস্তুত হবে। (একই ধারণা অনেক ভাষায় আছে, কখনো কখনো অন্য নামে, যেমন <em>task</em> বা <em>promise</em>।)
+Rust একটি মৌলিক উপাদান হিসেবে <code>Future</code> trait দেয়, যাতে বিভিন্ন async operation ভিন্ন ভিন্ন data structure দিয়ে, কিন্তু একটি সাধারণ interface-সহ implement করা যায়। Rust-এ future
+হলো এমন type, যা <code>Future</code> trait implement করে। প্রতিটি future নিজের অগ্রগতির তথ্য আর “প্রস্তুত” বলতে কী বোঝায় তা নিজের কাছে রাখে।</p>
+<p>block আর function-এ <code>async</code> keyword ব্যবহার করে বলে দেওয়া যায় যে এগুলো থামানো ও আবার চালু করা যায়। একটি async block বা async function-এর ভেতরে <code>await</code> keyword ব্যবহার করে
+একটি <em>future-এর জন্য await করা</em> (অর্থাৎ এটি প্রস্তুত হওয়ার জন্য অপেক্ষা করা) যায়। async block বা function-এর ভেতরে যেখানেই একটি future-এর জন্য await করেন, সেটিই সেই block বা
+function-এর থামা ও আবার চালু হওয়ার একটি সম্ভাব্য জায়গা। একটি future-এর মান ইতিমধ্যে পাওয়া যাচ্ছে কি না তা যাচাই করার প্রক্রিয়াকে বলা হয় <em>polling</em>।</p>
+<p>C# আর JavaScript-এর মতো আরও কিছু ভাষাও async programming-এর জন্য <code>async</code> আর <code>await</code> keyword ব্যবহার করে। সেই ভাষাগুলোর সঙ্গে পরিচিত হলে আপনি হয়তো খেয়াল করবেন যে Rust
+syntax-টি যেভাবে সামলায় তাতে কিছু উল্লেখযোগ্য পার্থক্য আছে। দেখব, এর পেছনে ভালো কারণ আছে!</p>
+<p>async Rust লেখার সময় বেশিরভাগ সময় আমরা <code>async</code> আর <code>await</code> keyword ব্যবহার করি। Rust এগুলোকে <code>Future</code> trait ব্যবহার করা সমতুল্য কোডে compile করে, অনেকটা যেভাবে <code>for</code> loop-কে
+<code>Iterator</code> trait ব্যবহার করা সমতুল্য কোডে compile করে। তবে Rust যেহেতু <code>Future</code> trait দেয়, তাই দরকার হলে নিজের data type-এর জন্যও এটি implement করতে পারেন। এই অধ্যায় জুড়ে
+আমরা যে অনেক function দেখব, সেগুলো এমন type return করে যাদের <code>Future</code>-এর নিজস্ব implementation আছে। অধ্যায়ের শেষে আমরা trait-টির সংজ্ঞায় ফিরে আসব এবং এটি কীভাবে কাজ করে তা
+আরও গভীরভাবে দেখব, তবে এগিয়ে যাওয়ার জন্য এটুকু খুঁটিনাটিই যথেষ্ট।</p>
+<p>এসব হয়তো একটু বিমূর্ত লাগছে, তাই চলুন আমাদের প্রথম async প্রোগ্রাম লিখি: একটি ছোট web scraper (web page থেকে তথ্য সংগ্রহের প্রোগ্রাম)। আমরা command line থেকে দুটি URL দেব, দুটিই
+concurrent-ভাবে নিয়ে আসব, আর যেটি আগে শেষ হয় তার ফল return করব। এই উদাহরণে বেশ কিছু নতুন syntax থাকবে, তবে চিন্তা করবেন না—এগোতে এগোতে যা যা জানা দরকার সব ব্যাখ্যা করব।</p>
+<h2 id="our-first-async-program"><a class="header" href="#our-first-async-program">আমাদের প্রথম async প্রোগ্রাম</a></h2>
+<p>ecosystem-এর বিভিন্ন অংশ নিয়ে নাড়াচাড়া না করে এই অধ্যায়ের মনোযোগ async শেখার দিকে রাখতে আমরা <code>trpl</code> crate তৈরি করেছি (<code>trpl</code> হলো “The Rust
+Programming Language”-এর সংক্ষেপ)। এটি আপনার দরকারি সব type, trait আর function re-export করে, মূলত <a href="https://crates.io/crates/futures"><code>futures</code></a><!-- ignore --> আর
+<a href="https://tokio.rs"><code>tokio</code></a><!-- ignore --> crate থেকে। <code>futures</code> crate হলো async কোড নিয়ে Rust-এর পরীক্ষা-নিরীক্ষার একটি দাপ্তরিক আবাস, আর আসলে <code>Future</code> trait প্রথমে এখানেই নকশা করা
+হয়েছিল। Tokio আজ Rust-এ সবচেয়ে বেশি ব্যবহৃত async runtime, বিশেষ করে web application-এর জন্য। আরও অনেক চমৎকার runtime আছে, আর সেগুলো হয়তো আপনার উদ্দেশ্যের জন্য বেশি
+উপযুক্ত। আমরা <code>trpl</code>-এর ভেতরে <code>tokio</code> crate ব্যবহার করি, কারণ এটি ভালোভাবে পরীক্ষিত এবং ব্যাপকভাবে ব্যবহৃত।</p>
+<p>কিছু ক্ষেত্রে <code>trpl</code> মূল API-গুলোর নাম বদলে দেয় বা মুড়ে দেয়, যাতে আপনার মনোযোগ এই অধ্যায়ের প্রাসঙ্গিক খুঁটিনাটিতে থাকে। crate-টি কী করে তা বুঝতে চাইলে <a href="https://github.com/rust-lang/book/tree/main/packages/trpl">এর source code</a>
+দেখার পরামর্শ দিই। সেখানে দেখতে পাবেন প্রতিটি re-export কোন crate থেকে এসেছে, আর crate-টি কী করে তা ব্যাখ্যা করে আমরা বিস্তারিত comment রেখেছি।</p>
+<p><code>hello-async</code> নামে একটি নতুন binary project তৈরি করুন এবং dependency হিসেবে <code>trpl</code> crate যোগ করুন:</p>
+<pre><code class="language-console">$ cargo new hello-async
+$ cd hello-async
+$ cargo add trpl
+</code></pre>
+<p>এখন <code>trpl</code>-এর দেওয়া বিভিন্ন অংশ ব্যবহার করে আমাদের প্রথম async প্রোগ্রাম লিখতে পারি। আমরা একটি ছোট command line tool বানাব, যা দুটি web page নিয়ে আসে, প্রতিটি থেকে <code>&lt;title&gt;</code>
+element বের করে, এবং যে page পুরো প্রক্রিয়াটি আগে শেষ করে তার title print করে।</p>
+<h3 id="defining-the-page_title-function"><a class="header" href="#defining-the-page_title-function">page_title function সংজ্ঞায়িত করা</a></h3>
+<p>চলুন এমন একটি function লেখা দিয়ে শুরু করি, যা parameter হিসেবে একটি page-এর URL নেয়, সেখানে একটি request পাঠায়, এবং <code>&lt;title&gt;</code> element-এর লেখা return করে (Listing
+17-1 দেখুন)।</p>
+<figure class="listing" id="listing-17-1">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    // TODO: এটি আমরা এরপর যোগ করব!
+</span><span class="boring">}
+</span><span class="boring">
+</span>use trpl::Html;
+
+async fn page_title(url: &amp;str) -&gt; Option&lt;String&gt; {
+    let response = trpl::get(url).await;
+    let response_text = response.text().await;
+    Html::parse(&amp;response_text)
+        .select_first("title")
+        .map(|title| title.inner_html())
+}</code></pre>
+<figcaption><a href="#listing-17-1">Listing 17-1</a>: একটি HTML page থেকে title element পেতে একটি async function সংজ্ঞায়িত করা</figcaption>
+</figure>
+<p>প্রথমে আমরা <code>page_title</code> নামের একটি function সংজ্ঞায়িত করে একে <code>async</code> keyword দিয়ে চিহ্নিত করি। তারপর পাঠানো URL নিয়ে আসতে <code>trpl::get</code> function ব্যবহার করি এবং response-এর
+জন্য await করতে <code>await</code> keyword যোগ করি। <code>response</code>-এর লেখা পেতে এর <code>text</code> method call করি এবং আবার <code>await</code> keyword দিয়ে এর জন্য await করি। এই দুটি ধাপই asynchronous। <code>get</code>
+function-এর ক্ষেত্রে server-এর response-এর প্রথম অংশ ফেরত পাঠানোর জন্য আমাদের অপেক্ষা করতে হয়, যাতে HTTP header, cookie ইত্যাদি থাকে এবং যা response body থেকে আলাদাভাবে
+আসতে পারে। বিশেষ করে body খুব বড় হলে সবটা আসতে কিছু সময় লাগতে পারে। যেহেতু আমাদের <em>পুরো</em> response আসার জন্য অপেক্ষা করতে হয়, তাই <code>text</code> method-ও async।</p>
+<p>এই দুটি future-এর জন্যই আমাদের স্পষ্টভাবে await করতে হয়, কারণ Rust-এ future <em>lazy</em>: <code>await</code> keyword দিয়ে না বলা পর্যন্ত এরা কিছুই করে না। (আসলে কোনো future ব্যবহার না করলে Rust
+একটি compiler warning দেখাবে।) এটি হয়তো অধ্যায় 13-এর <a href="ch13-02-iterators.html">“iterator দিয়ে একের পর এক item প্রক্রিয়া
+করা”</a><!-- ignore --> অংশে iterator নিয়ে আলোচনার কথা মনে করিয়ে দেবে। iterator-এর <code>next</code> method call না করলে—সরাসরি, অথবা <code>for</code> loop বা <code>map</code>-এর মতো
+method ব্যবহার করে, যেগুলো ভেতরে ভেতরে <code>next</code> ব্যবহার করে—iterator কিছুই করে না। একইভাবে, স্পষ্টভাবে না বললে future কিছুই করে না। এই lazy স্বভাবের কারণে Rust async কোড সত্যিই
+দরকার না হওয়া পর্যন্ত চালানো এড়াতে পারে।</p>
+<section class="note" aria-role="note">
+<p>Note: অধ্যায় 16-এর <a href="ch16-01-threads.html#creating-a-new-thread-with-spawn">“<code>spawn</code> দিয়ে নতুন thread তৈরি করা”</a><!-- ignore -->
+অংশে <code>thread::spawn</code> ব্যবহারের সময় যে আচরণ দেখেছিলাম, এটি তা থেকে আলাদা, যেখানে অন্য thread-এ পাঠানো closure সঙ্গে সঙ্গে চলতে শুরু করেছিল। অন্য অনেক ভাষা async-কে যেভাবে
+দেখে, তা থেকেও এটি আলাদা। কিন্তু Rust-এর performance-এর নিশ্চয়তা দিতে পারার জন্য এটি গুরুত্বপূর্ণ, ঠিক যেমন iterator-এর ক্ষেত্রে।</p>
+</section>
+<p><code>response_text</code> পেয়ে গেলে <code>Html::parse</code> ব্যবহার করে একে <code>Html</code> type-এর একটি instance-এ parse করতে পারি। একটি কাঁচা string-এর বদলে এখন আমাদের কাছে এমন একটি data type আছে, যা
+দিয়ে HTML-কে আরও সমৃদ্ধ data structure হিসেবে ব্যবহার করা যায়। বিশেষ করে, একটি নির্দিষ্ট CSS selector-এর প্রথম instance খুঁজতে <code>select_first</code> method ব্যবহার করতে পারি। string
+<code>"title"</code> পাঠালে document-এর প্রথম <code>&lt;title&gt;</code> element পাব, যদি থাকে। কোনো মিলে যাওয়া element না-ও থাকতে পারে বলে <code>select_first</code> একটি <code>Option&lt;ElementRef&gt;</code> return করে। শেষে আমরা
+<code>Option::map</code> method ব্যবহার করি, যা <code>Option</code>-এ item থাকলে তা নিয়ে কাজ করতে দেয়, আর না থাকলে কিছুই করে না। (এখানে একটি <code>match</code> expression-ও ব্যবহার করা যেত, তবে <code>map</code> বেশি
+idiomatic।) <code>map</code>-এ দেওয়া function-এর body-তে আমরা <code>title</code>-এর ওপর <code>inner_html</code> call করে এর বিষয়বস্তু পাই, যা একটি <code>String</code>। সব শেষে আমাদের কাছে থাকে একটি <code>Option&lt;String&gt;</code>।</p>
+<p>খেয়াল করুন, Rust-এর <code>await</code> keyword যে expression-এর জন্য await করছেন তার আগে নয়, <em>পরে</em> বসে। অর্থাৎ এটি একটি <em>postfix</em> (পরে বসা) keyword। অন্য ভাষায় <code>async</code> ব্যবহার করে থাকলে এটি
+আপনার অভ্যাসের থেকে আলাদা হতে পারে, কিন্তু Rust-এ এতে method-এর শিকল নিয়ে কাজ করা অনেক সহজ হয়। ফলে আমরা <code>page_title</code>-এর body বদলে <code>trpl::get</code> আর <code>text</code> function call-গুলো
+মাঝখানে <code>await</code> রেখে একসঙ্গে জুড়ে দিতে পারি, যেমনটি Listing 17-2-এ দেখানো হয়েছে।</p>
+<figure class="listing" id="listing-17-2">
+<span class="file-name">Filename: src/main.rs</span>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use trpl::Html;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    // TODO: এটি আমরা এরপর যোগ করব!
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">async fn page_title(url: &amp;str) -&gt; Option&lt;String&gt; {
+</span>    let response_text = trpl::get(url).await.text().await;
+<span class="boring">    Html::parse(&amp;response_text)
+</span><span class="boring">        .select_first("title")
+</span><span class="boring">        .map(|title| title.inner_html())
+</span><span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-17-2">Listing 17-2</a>: <code>await</code> keyword দিয়ে শিকল তৈরি করা</figcaption>
+</figure>
+<p>এর মাধ্যমে আমরা সফলভাবে আমাদের প্রথম async function লিখে ফেলেছি! একে call করতে <code>main</code>-এ কিছু কোড যোগ করার আগে চলুন আরেকটু আলোচনা করি আমরা কী লিখেছি এবং এর মানে কী।</p>
+<p>Rust যখন <code>async</code> keyword দিয়ে চিহ্নিত একটি <em>block</em> দেখে, তখন একে <code>Future</code> trait implement করা একটি অনন্য, নামহীন data type-এ compile করে। Rust যখন <code>async</code> দিয়ে চিহ্নিত একটি
+<em>function</em> দেখে, তখন একে এমন একটি non-async function-এ compile করে, যার body একটি async block। একটি async function-এর return type হলো সেই async block-এর জন্য compiler-এর তৈরি
+নামহীন data type-এর type।</p>
+<p>তাই <code>async fn</code> লেখা এমন একটি function লেখার সমতুল্য, যা return type-এর একটি <em>future</em> return করে। compiler-এর কাছে Listing 17-1-এর <code>async fn page_title</code>-এর মতো একটি function-এর
+সংজ্ঞা মোটামুটি এভাবে সংজ্ঞায়িত একটি non-async function-এর সমতুল্য:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate trpl; // required for mdbook test
+</span>use std::future::Future;
+use trpl::Html;
+
+fn page_title(url: &amp;str) -&gt; impl Future&lt;Output = Option&lt;String&gt;&gt; {
+    async move {
+        let text = trpl::get(url).await.text().await;
+        Html::parse(&amp;text)
+            .select_first("title")
+            .map(|title| title.inner_html())
+    }
+}
+<span class="boring">}</span></code></pre>
+<p>রূপান্তরিত সংস্করণের প্রতিটি অংশ একে একে দেখা যাক:</p>
+<ul>
+<li>এটি অধ্যায় 10-এর <a href="ch10-02-traits.html#traits-as-parameters">“trait-কে parameter হিসেবে ব্যবহার করা”</a><!-- ignore --> অংশে আলোচিত <code>impl Trait</code> syntax ব্যবহার করে।</li>
+<li>return করা মান <code>Output</code> associated type-সহ <code>Future</code> trait implement করে। খেয়াল করুন, <code>Output</code> type হলো <code>Option&lt;String&gt;</code>, যা <code>page_title</code>-এর <code>async fn</code> সংস্করণের মূল return
+type-এর সমান।</li>
+<li>মূল function-এর body-তে call করা সব কোড একটি <code>async move</code> block-এ মোড়ানো। মনে রাখবেন, block হলো expression। এই পুরো block-টিই function থেকে return হওয়া expression।</li>
+<li>এইমাত্র যেমন বর্ণনা করা হলো, এই async block <code>Option&lt;String&gt;</code> type-এর একটি মান তৈরি করে। সেই মান return type-এর <code>Output</code> type-এর সঙ্গে মেলে। আপনার দেখা অন্য block-গুলোর মতোই।</li>
+<li>নতুন function body একটি <code>async move</code> block, কারণ এটি <code>url</code> parameter ব্যবহার করে। (<code>async</code> বনাম <code>async move</code> নিয়ে অধ্যায়ের পরের দিকে আরও অনেক কথা বলব।)</li>
+</ul>
+<p>এবার <code>main</code>-এ <code>page_title</code> call করতে পারি।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="determining-a-single-pages-title"></a></p>
+<h3 id="executing-an-async-function-with-a-runtime"><a class="header" href="#executing-an-async-function-with-a-runtime">runtime দিয়ে একটি async function চালানো</a></h3>
+<p>শুরুতে আমরা একটিমাত্র page-এর title নেব, যেমনটি Listing 17-3-এ দেখানো হয়েছে। দুর্ভাগ্যবশত, এই কোড এখনো compile হয় না।</p>
+<figure class="listing" id="listing-17-3">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use trpl::Html;
+</span><span class="boring">
+</span>async fn main() {
+    let args: Vec&lt;String&gt; = std::env::args().collect();
+    let url = &amp;args[1];
+    match page_title(url).await {
+        Some(title) =&gt; println!("The title for {url} was {title}"),
+        None =&gt; println!("{url} had no title"),
+    }
+}
+<span class="boring">
+</span><span class="boring">async fn page_title(url: &amp;str) -&gt; Option&lt;String&gt; {
+</span><span class="boring">    let response_text = trpl::get(url).await.text().await;
+</span><span class="boring">    Html::parse(&amp;response_text)
+</span><span class="boring">        .select_first("title")
+</span><span class="boring">        .map(|title| title.inner_html())
+</span><span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-17-3">Listing 17-3</a>: ব্যবহারকারীর দেওয়া argument দিয়ে <code>main</code> থেকে <code>page_title</code> function call করা</figcaption>
+</figure>
+<p>অধ্যায় 12-এর <a href="ch12-01-accepting-command-line-arguments.html">“command line argument গ্রহণ করা”</a><!-- ignore --> অংশে command line argument নিতে যে pattern ব্যবহার করেছিলাম, এখানেও তা-ই অনুসরণ করি। তারপর URL
+argument <code>page_title</code>-এ পাঠিয়ে ফলের জন্য await করি। future-এর তৈরি মান যেহেতু একটি <code>Option&lt;String&gt;</code>, তাই page-টিতে <code>&lt;title&gt;</code> ছিল কি না তা বিবেচনা করে ভিন্ন ভিন্ন message print
+করতে একটি <code>match</code> expression ব্যবহার করি।</p>
+<p><code>await</code> keyword শুধু async function বা block-এর ভেতরেই ব্যবহার করা যায়, আর Rust আমাদের বিশেষ <code>main</code> function-কে <code>async</code> হিসেবে চিহ্নিত করতে দেবে না।</p>
+<!-- manual-regeneration
+cd listings/ch17-async-await/listing-17-03
+cargo build
+copy just the compiler error
+-->
+<pre><code class="language-text">error[E0752]: `main` function is not allowed to be `async`
+ --&gt; src/main.rs:6:1
+  |
+6 | async fn main() {
+  | ^^^^^^^^^^^^^^^ `main` function is not allowed to be `async`
+</code></pre>
+<p><code>main</code>-কে <code>async</code> হিসেবে চিহ্নিত করা যায় না কারণ async কোডের একটি <em>runtime</em> দরকার: এমন একটি Rust crate, যা asynchronous কোড চালানোর খুঁটিনাটি সামলায়। একটি প্রোগ্রামের <code>main</code>
+function একটি runtime <em>চালু করতে</em> পারে, কিন্তু এটি <em>নিজে</em> কোনো runtime নয়। (কেন এমন, তা একটু পরেই আরও দেখব।) async কোড চালানো প্রতিটি Rust প্রোগ্রামে অন্তত একটি জায়গা থাকে, যেখানে
+এটি future চালানোর জন্য একটি runtime প্রস্তুত করে।</p>
+<p>async সমর্থন করে এমন বেশিরভাগ ভাষা সঙ্গে একটি runtime দেয়, কিন্তু Rust দেয় না। বরং অনেক ভিন্ন ভিন্ন async runtime পাওয়া যায়, যার প্রতিটি তার লক্ষ্য করা ব্যবহারের জন্য উপযুক্ত
+ভিন্ন ভিন্ন আপস করে। যেমন, অনেক CPU core আর প্রচুর RAM-যুক্ত একটি উচ্চ-throughput web server-এর চাহিদা একটিমাত্র core, অল্প RAM আর heap allocation-এর ক্ষমতা নেই এমন একটি
+microcontroller-এর চাহিদা থেকে একেবারে আলাদা। এই runtime-গুলো দেয় এমন crate প্রায়ই ফাইল বা network I/O-র মতো সাধারণ কার্যক্ষমতার async সংস্করণও দেয়।</p>
+<p>এখানে, এবং এই অধ্যায়ের বাকি অংশ জুড়ে, আমরা <code>trpl</code> crate-এর <code>block_on</code> function ব্যবহার করব, যা argument হিসেবে একটি future নেয় এবং future-টি শেষ পর্যন্ত চলা না পর্যন্ত বর্তমান
+thread block করে রাখে। পর্দার আড়ালে <code>block_on</code> call করলে <code>tokio</code> crate ব্যবহার করে একটি runtime প্রস্তুত হয়, যা পাঠানো future চালাতে ব্যবহৃত হয় (<code>trpl</code> crate-এর <code>block_on</code>-এর
+আচরণ অন্য runtime crate-গুলোর <code>block_on</code> function-এর মতোই)। future শেষ হলে <code>block_on</code> future-এর তৈরি মানটি return করে।</p>
+<p><code>page_title</code>-এর return করা future সরাসরি <code>block_on</code>-এ পাঠাতে পারতাম, আর এটি শেষ হলে Listing 17-3-এ যেমন চেষ্টা করেছিলাম তেমনভাবে ফলাফলের <code>Option&lt;String&gt;</code>-এর ওপর match করতে
+পারতাম। তবে এই অধ্যায়ের বেশিরভাগ উদাহরণে (আর বাস্তবের বেশিরভাগ async কোডে) আমরা শুধু একটি async function call-এর চেয়ে বেশি কিছু করব, তাই এর বদলে আমরা একটি <code>async</code> block
+পাঠাব এবং <code>page_title</code> call-এর ফলের জন্য স্পষ্টভাবে await করব, যেমনটি Listing 17-4-এ আছে।</p>
+<figure class="listing" id="listing-17-4">
+<span class="file-name">Filename: src/main.rs</span>
+<!-- should_panic,noplayground because mdbook test does not pass args -->
+<pre><code class="language-rust should_panic noplayground"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use trpl::Html;
+</span><span class="boring">
+</span>fn main() {
+    let args: Vec&lt;String&gt; = std::env::args().collect();
+
+    trpl::block_on(async {
+        let url = &amp;args[1];
+        match page_title(url).await {
+            Some(title) =&gt; println!("The title for {url} was {title}"),
+            None =&gt; println!("{url} had no title"),
+        }
+    })
+}
+<span class="boring">
+</span><span class="boring">async fn page_title(url: &amp;str) -&gt; Option&lt;String&gt; {
+</span><span class="boring">    let response_text = trpl::get(url).await.text().await;
+</span><span class="boring">    Html::parse(&amp;response_text)
+</span><span class="boring">        .select_first("title")
+</span><span class="boring">        .map(|title| title.inner_html())
+</span><span class="boring">}</span></code></pre>
+<figcaption><a href="#listing-17-4">Listing 17-4</a>: <code>trpl::block_on</code> দিয়ে একটি async block-এর জন্য await করা</figcaption>
+</figure>
+<p>এই কোড চালালে শুরুতে যে আচরণ আশা করেছিলাম তা পাই:</p>
+<!-- manual-regeneration
+cd listings/ch17-async-await/listing-17-04
+cargo build # skip all the build noise
+cargo run -- "https://www.rust-lang.org"
+# copy the output here
+-->
+<pre><code class="language-console">$ cargo run -- "https://www.rust-lang.org"
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running `target/debug/async_await 'https://www.rust-lang.org'`
+The title for https://www.rust-lang.org was
+            Rust Programming Language
+</code></pre>
+<p>যাক—অবশেষে আমাদের কাছে কাজ করে এমন async কোড আছে! তবে দুটি site-এর মধ্যে প্রতিযোগিতা করানোর কোড যোগ করার আগে চলুন সংক্ষেপে আবার future কীভাবে কাজ করে সেদিকে মনোযোগ দিই।</p>
+<p>প্রতিটি <em>await point</em>—অর্থাৎ কোডে যেখানে যেখানে <code>await</code> keyword ব্যবহার হয়েছে—এমন একটি জায়গা বোঝায় যেখানে নিয়ন্ত্রণ runtime-এর হাতে ফিরিয়ে দেওয়া হয়। এটি কাজ করাতে Rust-কে async
+block-এ জড়িত অবস্থার হিসাব রাখতে হয়, যাতে runtime অন্য কোনো কাজ শুরু করতে পারে এবং প্রথমটি আবার এগিয়ে নেওয়ার চেষ্টা করতে প্রস্তুত হলে ফিরে আসতে পারে। এটি একটি অদৃশ্য state
+machine (অবস্থা পরিবর্তনের যন্ত্র), যেন প্রতিটি await point-এ বর্তমান অবস্থা সংরক্ষণের জন্য আপনি এমন একটি enum লিখেছেন:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span>enum PageTitleFuture&lt;'a&gt; {
+    Initial { url: &amp;'a str },
+    GetAwaitPoint { url: &amp;'a str },
+    TextAwaitPoint { response: trpl::Response },
+}
+<span class="boring">}</span></code></pre>
+<p>তবে প্রতিটি অবস্থার মধ্যে বদলের কোড হাতে লেখা একঘেয়ে এবং ভুলপ্রবণ হতো, বিশেষ করে যখন পরে কোডে আরও কার্যক্ষমতা আর আরও অবস্থা যোগ করতে হয়। সৌভাগ্যক্রমে Rust compiler async কোডের
+জন্য state machine-এর data structure স্বয়ংক্রিয়ভাবে তৈরি ও সামলায়। data structure নিয়ে borrowing আর ownership-এর সাধারণ নিয়মগুলো এখনো প্রযোজ্য, আর আনন্দের কথা, compiler আমাদের
+হয়ে সেগুলো যাচাইও করে এবং কাজের error message দেয়। অধ্যায়ের পরের দিকে এর কয়েকটি নিয়ে কাজ করব।</p>
+<p>শেষ পর্যন্ত কোনো কিছুকে এই state machine চালাতে হয়, আর সেই কিছু হলো একটি runtime। (এ কারণেই runtime নিয়ে খোঁজ নেওয়ার সময় হয়তো <em>executors</em> (executor)-এর উল্লেখ পাবেন: executor
+হলো runtime-এর সেই অংশ, যা async কোড চালানোর দায়িত্বে থাকে।)</p>
+<p>এখন বুঝতে পারছেন, Listing 17-3-এ compiler কেন আমাদের <code>main</code>-কে নিজেই একটি async function বানাতে দেয়নি। <code>main</code> যদি একটি async function হতো, তাহলে <code>main</code>-এর return করা future-এর
+state machine অন্য কাউকে সামলাতে হতো, কিন্তু <code>main</code>-ই তো প্রোগ্রামের শুরুর জায়গা! বরং আমরা <code>main</code>-এ <code>trpl::block_on</code> function call করে একটি runtime প্রস্তুত করেছি এবং <code>async</code>
+block-এর return করা future শেষ না হওয়া পর্যন্ত চালিয়েছি।</p>
+<section class="note" aria-role="note">
+<p>Note: কিছু runtime এমন macro দেয়, যাতে আপনি একটি async <code>main</code> function লিখতে <em>পারেন</em>। সেই macro-গুলো <code>async fn main() { ... }</code>-কে নতুন করে লিখে একটি সাধারণ <code>fn main</code> বানায়, যা Listing 17-4-এ আমরা হাতে যা করেছি তা-ই করে: এমন একটি function call করে, যা <code>trpl::block_on</code>-এর মতো করে একটি future শেষ পর্যন্ত চালায়।</p>
+</section>
+<p>এবার এই অংশগুলো একসঙ্গে জুড়ে দেখি কীভাবে concurrent কোড লেখা যায়।</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="racing-our-two-urls-against-each-other"></a></p>
+<h3 id="racing-two-urls-against-each-other-concurrently"><a class="header" href="#racing-two-urls-against-each-other-concurrently">দুটি URL-এর মধ্যে concurrent-ভাবে প্রতিযোগিতা করানো</a></h3>
+<p>Listing 17-5-এ আমরা command line থেকে পাঠানো দুটি ভিন্ন URL দিয়ে <code>page_title</code> call করি এবং যে future আগে শেষ হয় সেটি বেছে নিয়ে দুটির মধ্যে প্রতিযোগিতা করাই।</p>
+<figure class="listing" id="listing-17-5">
+<span class="file-name">Filename: src/main.rs</span>
+<!-- should_panic,noplayground because mdbook does not pass args -->
+<pre><code class="language-rust should_panic noplayground"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span>use trpl::{Either, Html};
+
+fn main() {
+    let args: Vec&lt;String&gt; = std::env::args().collect();
+
+    trpl::block_on(async {
+        let title_fut_1 = page_title(&amp;args[1]);
+        let title_fut_2 = page_title(&amp;args[2]);
+
+        let (url, maybe_title) =
+            match trpl::select(title_fut_1, title_fut_2).await {
+                Either::Left(left) =&gt; left,
+                Either::Right(right) =&gt; right,
+            };
+
+        println!("{url} returned first");
+        match maybe_title {
+            Some(title) =&gt; println!("Its page title was: '{title}'"),
+            None =&gt; println!("It had no title."),
+        }
+    })
+}
+
+async fn page_title(url: &amp;str) -&gt; (&amp;str, Option&lt;String&gt;) {
+    let response_text = trpl::get(url).await.text().await;
+    let title = Html::parse(&amp;response_text)
+        .select_first("title")
+        .map(|title| title.inner_html());
+    (url, title)
+}</code></pre>
+<figcaption><a href="#listing-17-5">Listing 17-5</a>: কোনটি আগে return করে দেখতে দুটি URL-এর জন্য <code>page_title</code> call করা</figcaption>
+</figure>
+<p>প্রথমে ব্যবহারকারীর দেওয়া প্রতিটি URL-এর জন্য <code>page_title</code> call করি। ফলাফলের future-গুলো <code>title_fut_1</code> আর <code>title_fut_2</code> হিসেবে রাখি। মনে রাখবেন, এগুলো এখনো কিছুই করে না, কারণ
+future lazy এবং আমরা এখনো এগুলোর জন্য await করিনি। তারপর future-গুলো <code>trpl::select</code>-এ পাঠাই, যা একটি মান return করে, যা বোঝায় তাকে পাঠানো future-গুলোর মধ্যে কোনটি আগে শেষ হয়।</p>
+<section class="note" aria-role="note">
+<p>Note: ভেতরে ভেতরে <code>trpl::select</code> তৈরি <code>futures</code> crate-এ সংজ্ঞায়িত আরও সাধারণ একটি <code>select</code> function-এর ওপর। <code>futures</code> crate-এর <code>select</code> function এমন অনেক কিছু করতে পারে যা
+<code>trpl::select</code> function পারে না, তবে এর কিছু বাড়তি জটিলতাও আছে, যা আপাতত এড়িয়ে যেতে পারি।</p>
+</section>
+<p>যেকোনো future-ই বৈধভাবে “জিততে” পারে, তাই একটি <code>Result</code> return করা অর্থবহ নয়। বরং <code>trpl::select</code> এমন একটি type return করে যা আমরা আগে দেখিনি,
+<code>trpl::Either</code>। <code>Either</code> type কিছুটা <code>Result</code>-এর মতো, কারণ এর দুটি অবস্থা আছে। তবে <code>Result</code>-এর মতো নয়, <code>Either</code>-এ সাফল্য বা ব্যর্থতার কোনো ধারণা নেই। বরং এটি “একটি অথবা
+অন্যটি” বোঝাতে <code>Left</code> আর <code>Right</code> ব্যবহার করে:</p>
+<pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum Either&lt;A, B&gt; {
+    Left(A),
+    Right(B),
+}
+<span class="boring">}</span></code></pre>
+<p>প্রথম argument জিতলে <code>select</code> function সেই future-এর output-সহ <code>Left</code> return করে, আর <em>দ্বিতীয়টি</em> জিতলে দ্বিতীয় future argument-এর output-সহ <code>Right</code> return করে। function call
+করার সময় argument-গুলো যে ক্রমে থাকে তার সঙ্গে এটি মেলে: প্রথম argument দ্বিতীয় argument-এর বাম দিকে।</p>
+<p>আমরা <code>page_title</code>-ও হালনাগাদ করি, যাতে এটি পাঠানো একই URL return করে। এতে যে page আগে return করে তাতে যদি আমাদের বের করার মতো কোনো <code>&lt;title&gt;</code> না থাকে, তবুও একটি অর্থবহ message
+print করতে পারি। সেই তথ্য হাতে নিয়ে শেষে আমরা <code>println!</code> output হালনাগাদ করি, যাতে এটি বোঝায় কোন URL আগে শেষ হয়েছে এবং সেই URL-এর web page-এর <code>&lt;title&gt;</code> কী, যদি থাকে।</p>
+<p>আপনি এখন একটি ছোট, কাজ করা web scraper বানিয়ে ফেলেছেন! কয়েকটি URL বেছে নিয়ে command line tool-টি চালান। হয়তো দেখবেন কিছু site সবসময় অন্যগুলোর চেয়ে দ্রুত, আবার অন্য ক্ষেত্রে
+দ্রুততর site প্রতিবার চালানোয় বদলে যায়। আরও গুরুত্বপূর্ণ হলো, আপনি future নিয়ে কাজ করার মূল বিষয়গুলো শিখেছেন, তাই এখন async দিয়ে আর কী করা যায় তা আরও গভীরভাবে দেখতে পারি।</p>
+<div class="quiz-placeholder" data-quiz-name="&quot;async-01-futures-and-syntax&quot;" data-quiz-questions="{&quot;questions&quot;:[{&quot;context&quot;:&quot;Rust `async` block বা function-এর বাইরে `.await` ব্যবহার করতে দেয় না। Rust-এর কোনো built-in async runtime-ও নেই।&#92;n`tokio` বা `trpl`-এর মতো একটি third-party async runtime ব্যবহার করা উচিত। &#92;n&quot;,&quot;id&quot;:&quot;de2a5023-dd5c-412e-8425-c8ed638f18f0&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:&quot;future-টি একটি third-party async runtime-কে দেওয়া&quot;},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;future-এর ঠিক পরে একটি `.await` বসানো&quot;,&quot;future-টি Rust-এর built-in async runtime-কে দেওয়া&quot;,&quot;future-টি একটি `async` block-এ মুড়ে block-টির জন্য `.await` করা&quot;],&quot;prompt&quot;:&quot;async নয় এমন কোডে একটি future-এর জন্য অপেক্ষা করতে চাইলে নিচের কোনটি করা উচিত?&quot;}},{&quot;context&quot;:&quot;একটি async function এমন একটি নামহীন type return করে, যা `Future` trait implement করে এবং যার output হলো function-এর return type। &#92;nতাই এখানে তা প্রকাশ করা হয় `impl Future&lt;Output = i32&gt;` হিসেবে। future-টি function-এর argument-গুলোর সব lifetime capture করে।&#92;nতাই return করা type-এ `+ &#39;a` bound থাকে, আর input slice-এর type হয় `&amp;&#39;a [i32]`। এটি বোঝায় যে slice-টিকে &#92;nঅন্তত সেই future-এর সমান সময় বাঁচতে হবে, যা একে capture করে।&#92;n&quot;,&quot;id&quot;:&quot;9c000322-464b-4d34-9e30-55591f9283d2&quot;,&quot;type&quot;:&quot;MultipleChoice&quot;,&quot;answer&quot;:{&quot;answer&quot;:&quot;```rust&#92;nfn calculate&lt;&#39;a&gt;(nums: &amp;&#39;a [i32]) -&gt; impl Future&lt;Output = i32&gt; + &#39;a;&#92;n```&#92;n&quot;},&quot;prompt&quot;:{&quot;distractors&quot;:[&quot;```rust&#92;nfn calculate&lt;&#39;a&gt;(nums: &amp;&#39;a [i32], output: &amp;mut impl Future&lt;Output = i32&gt; + &#39;a);&#92;n```&#92;n  &quot;,&quot;```rust&#92;nfn calculate(nums: &amp;&#39;_ [i32]) -&gt; i32 as Future;&#92;n```&#92;n  &quot;,&quot;```rust&#92;nfn calculate() -&gt; impl for&lt;&#39;a&gt; Future&lt;Input = &amp;&#39;a [i32], Output = i32&gt; + &#39;a;&#92;n```&#92;n  &quot;],&quot;prompt&quot;:&quot;নিচের async function-টির সহজ রূপ (desugar করা রূপ) কোন type signature?&#92;n&#92;n```rust&#92;nasync fn calculate(nums: &amp;[i32]) -&gt; i32 {&#92;n  /* ... */&#92;n}&#92;n```&#92;n&quot;}}]}" data-quiz-fullscreen="true"></div>
+
+<!-- TODO: map source link version to version of Rust? -->
+<script type="text/javascript" src="quiz/quiz-embed.iife.js"></script><link rel="stylesheet" type="text/css" href="quiz/style.css">
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch17-00-async-await.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ch17-02-concurrency-with-async.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch17-00-async-await.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ch17-02-concurrency-with-async.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris-2317480c.js"></script>
+        <script src="js-extensions/packages/feedback/dist/index-f1290d8b.js"></script>
+
+
+
+    </div>
+    </body>
+</html>
