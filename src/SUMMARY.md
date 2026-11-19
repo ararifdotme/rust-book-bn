@@ -1,5 +1,6 @@
 # Rust প্রোগ্রামিং ভাষা
 
+[অনুবাদ সম্পর্কে](about-translation.md)
 [এই বইটি কোথায় আলাদা?](experiment-intro.md)
 [Rust প্রোগ্রামিং ভাষা](title-page.md)
 [মুখবন্ধ](foreword.md)

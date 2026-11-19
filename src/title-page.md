@@ -12,7 +12,7 @@ Rust ইনস্টল বা আপডেট করার নির্দে�
 অংশে][install]<!-- ignore -->, আর edition সম্পর্কে জানতে দেখুন
 [পরিশিষ্ট E][appendix-e]<!-- ignore -->।
 
-পরীক্ষামূলক সংস্করণটি শুধু অনলাইনে এবং ইংরেজিতে পাওয়া যায়; আপনি এখন যেটি পড়ছেন, সেটি তার একটি অনানুষ্ঠানিক বাংলা অনুবাদ। 
+পরীক্ষামূলক সংস্করণটি শুধু অনলাইনে এবং ইংরেজিতে পাওয়া যায়; আপনি এখন যেটি পড়ছেন, সেটি তার একটি অনানুষ্ঠানিক বাংলা অনুবাদ ([অনুবাদ সম্পর্কে][about-translation]<!-- ignore -->)। 
 পরীক্ষামূলক নয় এমন মূল সংস্করণটি `rustup` দিয়ে Rust ইনস্টল করলে অফলাইনেও পাওয়া যায়; খুলতে চালান `rustup doc
 --book`।
 
@@ -24,3 +24,4 @@ Rust ইনস্টল বা আপডেট করার নির্দে�
 [appendix-e]: appendix-05-editions.html
 [nsprust]: https://nostarch.com/rust-programming-language-3rd-edition
 [translations]: appendix-06-translation.html
+[about-translation]: about-translation.html
