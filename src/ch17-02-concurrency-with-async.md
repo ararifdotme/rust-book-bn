@@ -2,33 +2,26 @@
 
 <a id="concurrency-with-async"></a>
 
-## Applying Concurrency with Async
+## async দিয়ে concurrency প্রয়োগ {#applying-concurrency-with-async}
 
-In this section, we’ll apply async to some of the same concurrency challenges
-we tackled with threads in Chapter 16. Because we already talked about a lot of
-the key ideas there, in this section we’ll focus on what’s different between
-threads and futures.
+এই অংশে আমরা অধ্যায় 16-এ thread দিয়ে মোকাবিলা করা কিছু একই concurrency চ্যালেঞ্জে async প্রয়োগ করব। সেখানে অনেক মূল ধারণা নিয়ে আগেই আলোচনা করেছি বলে এই অংশে আমরা thread আর
+future-এর মধ্যে কী কী আলাদা সেদিকে মনোযোগ দেব।
 
-In many cases, the APIs for working with concurrency using async are very
-similar to those for using threads. In other cases, they end up being quite
-different. Even when the APIs _look_ similar between threads and async, they
-often have different behavior—and they nearly always have different performance
-characteristics.
+অনেক ক্ষেত্রে async দিয়ে concurrency নিয়ে কাজ করার API thread ব্যবহারের API-র খুব কাছাকাছি। অন্য ক্ষেত্রে এরা বেশ আলাদা হয়ে যায়। thread আর async-এর API দেখতে একই রকম _মনে হলেও_
+এদের আচরণ প্রায়ই আলাদা হয়—আর performance-এর বৈশিষ্ট্য প্রায় সবসময়ই আলাদা হয়।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="counting"></a>
 
-### Creating a New Task with `spawn_task`
+### `spawn_task` দিয়ে নতুন task তৈরি করা {#creating-a-new-task-with-spawn_task}
 
-The first operation we tackled in the [“Creating a New Thread with
-`spawn`”][thread-spawn]<!-- ignore --> section in Chapter 16 was counting up on
-two separate threads. Let’s do the same using async. The `trpl` crate supplies
-a `spawn_task` function that looks very similar to the `thread::spawn` API, and
-a `sleep` function that is an async version of the `thread::sleep` API. We can
-use these together to implement the counting example, as shown in Listing 17-6.
+অধ্যায় 16-এর [“`spawn` দিয়ে নতুন thread তৈরি
+করা”][thread-spawn]<!-- ignore --> অংশে আমরা প্রথম যে কাজটি করেছিলাম তা হলো দুটি আলাদা thread-এ গোনা। চলুন async দিয়ে একই কাজ করি। `trpl` crate একটি `spawn_task` function দেয়, যা
+দেখতে `thread::spawn` API-র খুব কাছাকাছি, আর একটি `sleep` function দেয়, যা `thread::sleep` API-র async সংস্করণ। এগুলো একসঙ্গে ব্যবহার করে গোনার উদাহরণটি implement করা যায়,
+যেমনটি Listing 17-6-এ দেখানো হয়েছে।
 
-<Listing number="17-6" caption="Creating a new task to print one thing while the main task prints something else" file-name="src/main.rs">
+<Listing number="17-6" caption="main task যখন অন্য কিছু print করছে, তখন একটি জিনিস print করতে নতুন task তৈরি করা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-06/src/main.rs:all}}
@@ -36,21 +29,15 @@ use these together to implement the counting example, as shown in Listing 17-6.
 
 </Listing>
 
-As our starting point, we set up our `main` function with `trpl::block_on` so
-that our top-level function can be async.
+শুরুর বিন্দু হিসেবে আমরা `trpl::block_on` দিয়ে `main` function প্রস্তুত করি, যাতে আমাদের top-level function async হতে পারে।
 
-> Note: From this point forward in the chapter, every example will include this
-> exact same wrapping code with `trpl::block_on` in `main`, so we’ll often skip it
-> just as we do with `main`. Remember to include it in your code!
+> Note: অধ্যায়ের এখান থেকে প্রতিটি উদাহরণে `main`-এ `trpl::block_on`-সহ হুবহু এই মোড়কের কোড থাকবে, তাই `main`-এর মতোই আমরা প্রায়ই এটি বাদ দিয়ে দেখাব। আপনার কোডে এটি যোগ করতে
+> ভুলবেন না!
 
-Then we write two loops within that block, each containing a `trpl::sleep`
-call, which waits for half a second (500 milliseconds) before sending the next
-message. We put one loop in the body of a `trpl::spawn_task` and the other in a
-top-level `for` loop. We also add an `await` after the `sleep` calls.
+তারপর সেই block-এর ভেতরে দুটি loop লিখি, যার প্রতিটিতে একটি `trpl::sleep` call আছে, যা পরের message পাঠানোর আগে আধা সেকেন্ড (500 millisecond) অপেক্ষা করে। একটি loop রাখি একটি
+`trpl::spawn_task`-এর body-তে, আর অন্যটি একটি top-level `for` loop-এ। `sleep` call-গুলোর পরে একটি করে `await`-ও যোগ করি।
 
-This code behaves similarly to the thread-based implementation—including the
-fact that you may see the messages appear in a different order in your own
-terminal when you run it:
+এই কোড thread-ভিত্তিক implementation-এর মতোই আচরণ করে—এমনকি চালানোর সময় নিজের terminal-এ message-গুলো ভিন্ন ক্রমে দেখতে পাওয়ার ব্যাপারটিও:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -68,16 +55,11 @@ hi number 4 from the second task!
 hi number 5 from the first task!
 ```
 
-This version stops as soon as the `for` loop in the body of the main async
-block finishes, because the task spawned by `spawn_task` is shut down when the
-`main` function ends. If you want it to run all the way to the task’s
-completion, you will need to use a join handle to wait for the first task to
-complete. With threads, we used the `join` method to “block” until the thread
-was done running. In Listing 17-7, we can use `await` to do the same thing,
-because the task handle itself is a future. Its `Output` type is a `Result`, so
-we also unwrap it after awaiting it.
+main async block-এর body-র `for` loop শেষ হওয়ার সঙ্গে সঙ্গে এই সংস্করণ থেমে যায়, কারণ `main` function শেষ হলে `spawn_task`-এর চালু করা task বন্ধ হয়ে যায়। task-টি পুরোপুরি শেষ হওয়া পর্যন্ত
+চালাতে চাইলে প্রথম task শেষ হওয়ার জন্য অপেক্ষা করতে একটি join handle ব্যবহার করতে হবে। thread-এর ক্ষেত্রে thread-এর চলা শেষ না হওয়া পর্যন্ত “block” করতে আমরা `join` method ব্যবহার
+করেছিলাম। Listing 17-7-এ একই কাজ করতে `await` ব্যবহার করা যায়, কারণ task handle নিজেই একটি future। এর `Output` type একটি `Result`, তাই await করার পর একে unwrap-ও করি।
 
-<Listing number="17-7" caption="Using `await` with a join handle to run a task to completion" file-name="src/main.rs">
+<Listing number="17-7" caption="একটি task শেষ পর্যন্ত চালাতে join handle-এর সঙ্গে `await` ব্যবহার করা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-07/src/main.rs:handle}}
@@ -85,7 +67,7 @@ we also unwrap it after awaiting it.
 
 </Listing>
 
-This updated version runs until _both_ loops finish:
+এই হালনাগাদ করা সংস্করণ _দুটি_ loop-ই শেষ না হওয়া পর্যন্ত চলে:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -107,27 +89,18 @@ hi number 8 from the first task!
 hi number 9 from the first task!
 ```
 
-So far, it looks like async and threads give us similar outcomes, just with
-different syntax: using `await` instead of calling `join` on the join handle,
-and awaiting the `sleep` calls.
+এ পর্যন্ত মনে হচ্ছে async আর thread আমাদের একই রকম ফল দেয়, শুধু syntax আলাদা: join handle-এর ওপর `join` call করার বদলে `await` ব্যবহার, আর `sleep` call-গুলোর জন্য await করা।
 
-The bigger difference is that we didn’t need to spawn another operating system
-thread to do this. In fact, we don’t even need to spawn a task here. Because
-async blocks compile to anonymous futures, we can put each loop in an async
-block and have the runtime run them both to completion using the `trpl::join`
-function.
+বড় পার্থক্য হলো, এটা করতে আমাদের operating system-এর আরেকটি thread চালু করতে হয়নি। আসলে এখানে একটি task চালু করারও দরকার নেই। async block যেহেতু নামহীন future-এ compile হয়, তাই
+প্রতিটি loop একটি async block-এ রেখে `trpl::join` function ব্যবহার করে runtime-কে দিয়ে দুটিই শেষ পর্যন্ত চালানো যায়।
 
-In the [“Waiting for All Threads to Finish”][join-handles]<!-- ignore -->
-section in Chapter 16, we showed how to use the `join` method on the
-`JoinHandle` type returned when you call `std::thread::spawn`. The `trpl::join`
-function is similar, but for futures. When you give it two futures, it produces
-a single new future whose output is a tuple containing the output of each
-future you passed in once they _both_ complete. Thus, in Listing 17-8, we use
-`trpl::join` to wait for both `fut1` and `fut2` to finish. We do _not_ await
-`fut1` and `fut2` but instead the new future produced by `trpl::join`. We
-ignore the output, because it’s just a tuple containing two unit values.
+অধ্যায় 16-এর [“সব thread শেষ হওয়ার জন্য অপেক্ষা করা”][join-handles]<!-- ignore -->
+অংশে আমরা দেখিয়েছিলাম `std::thread::spawn` call করলে return হওয়া `JoinHandle` type-এর ওপর কীভাবে `join` method ব্যবহার করতে হয়। `trpl::join` function-ও একই রকম, তবে future-এর
+জন্য। একে দুটি future দিলে এটি একটি নতুন future তৈরি করে, যার output হলো এমন একটি tuple, যাতে পাঠানো প্রতিটি future-এর output থাকে, যখন _দুটিই_ শেষ হয়। তাই Listing 17-8-এ আমরা
+`fut1` আর `fut2` দুটিই শেষ হওয়ার জন্য অপেক্ষা করতে `trpl::join` ব্যবহার করি। আমরা `fut1` আর `fut2`-এর জন্য await _করি না_, বরং `trpl::join`-এর তৈরি নতুন future-এর জন্য করি। output
+উপেক্ষা করি, কারণ এটি শুধু দুটি unit মানযুক্ত একটি tuple।
 
-<Listing number="17-8" caption="Using `trpl::join` to await two anonymous futures" file-name="src/main.rs">
+<Listing number="17-8" caption="দুটি নামহীন future-এর জন্য await করতে `trpl::join` ব্যবহার করা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-08/src/main.rs:join}}
@@ -135,7 +108,7 @@ ignore the output, because it’s just a tuple containing two unit values.
 
 </Listing>
 
-When we run this, we see both futures run to completion:
+এটি চালালে দেখি দুটি future-ই শেষ পর্যন্ত চলে:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -157,45 +130,33 @@ hi number 8 from the first task!
 hi number 9 from the first task!
 ```
 
-Now, you’ll see the exact same order every time, which is very different from
-what we saw with threads and with `trpl::spawn_task` in Listing 17-7. That is
-because the `trpl::join` function is _fair_, meaning it checks each future
-equally often, alternating between them, and never lets one race ahead if the
-other is ready. With threads, the operating system decides which thread to
-check and how long to let it run. With async Rust, the runtime decides which
-task to check. (In practice, the details get complicated because an async
-runtime might use operating system threads under the hood as part of how it
-manages concurrency, so guaranteeing fairness can be more work for a
-runtime—but it’s still possible!) Runtimes don’t have to guarantee fairness for
-any given operation, and they often offer different APIs to let you choose
-whether or not you want fairness.
+এখন প্রতিবার হুবহু একই ক্রম দেখবেন, যা thread আর Listing 17-7-এর `trpl::spawn_task`-এর সঙ্গে দেখা আচরণ থেকে একেবারে আলাদা। কারণ `trpl::join` function _fair_ (ন্যায্য), অর্থাৎ এটি
+প্রতিটি future সমান ঘন ঘন পরীক্ষা করে, পালা করে, আর অন্যটি প্রস্তুত থাকলে কোনোটিকে এগিয়ে যেতে দেয় না। thread-এর ক্ষেত্রে operating system ঠিক করে কোন thread পরীক্ষা করবে এবং কতক্ষণ
+চলতে দেবে। async Rust-এ runtime ঠিক করে কোন task পরীক্ষা করবে। (বাস্তবে খুঁটিনাটি জটিল হয়ে যায়, কারণ একটি async runtime concurrency সামলানোর অংশ হিসেবে ভেতরে ভেতরে operating system-এর
+thread ব্যবহার করতে পারে, তাই ন্যায্যতার নিশ্চয়তা দেওয়া runtime-এর জন্য বাড়তি কাজ হতে পারে—তবে তবুও সম্ভব!) কোনো নির্দিষ্ট operation-এর জন্য runtime-কে ন্যায্যতার নিশ্চয়তা দিতে হয়
+না, আর ন্যায্যতা চান কি না তা বেছে নেওয়ার জন্য এরা প্রায়ই ভিন্ন ভিন্ন API দেয়।
 
-Try some of these variations on awaiting the futures and see what they do:
+future-এর জন্য await করার এই কয়েকটি ভিন্ন রূপ চেষ্টা করে দেখুন এরা কী করে:
 
-- Remove the async block from around either or both of the loops.
-- Await each async block immediately after defining it.
-- Wrap only the first loop in an async block, and await the resulting future
-  after the body of second loop.
+- একটি বা দুটি loop-এর চারপাশ থেকে async block সরিয়ে দিন।
+- প্রতিটি async block সংজ্ঞায়িত করার ঠিক পরেই সেটির জন্য await করুন।
+- শুধু প্রথম loop-টি একটি async block-এ মুড়ে দিন, আর দ্বিতীয় loop-এর body-র পরে ফলাফলের future-এর জন্য await করুন।
 
-For an extra challenge, see if you can figure out what the output will be in
-each case _before_ running the code!
+বাড়তি চ্যালেঞ্জ হিসেবে, কোড চালানোর _আগেই_ প্রতিটি ক্ষেত্রে output কী হবে তা বের করতে পারেন কি না দেখুন!
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="message-passing"></a>
 <a id="counting-up-on-two-tasks-using-message-passing"></a>
 
-### Sending Data Between Two Tasks Using Message Passing
+### message passing দিয়ে দুটি task-এর মধ্যে ডেটা পাঠানো {#sending-data-between-two-tasks-using-message-passing}
 
-Sharing data between futures will also be familiar: we’ll use message passing
-again, but this time with async versions of the types and functions. We’ll take
-a slightly different path than we did in the [“Transfer Data Between Threads
-with Message Passing”][message-passing-threads]<!-- ignore --> section in
-Chapter 16 to illustrate some of the key differences between thread-based and
-futures-based concurrency. In Listing 17-9, we’ll begin with just a single
-async block—_not_ spawning a separate task as we spawned a separate thread.
+future-এর মধ্যে ডেটা ভাগ করাও পরিচিত লাগবে: আমরা আবার message passing ব্যবহার করব, তবে এবার type আর function-গুলোর async সংস্করণ দিয়ে। thread-ভিত্তিক আর future-ভিত্তিক
+concurrency-র কিছু মূল পার্থক্য দেখাতে আমরা অধ্যায় 16-এর [“message passing দিয়ে thread-এর মধ্যে ডেটা
+আদান-প্রদান”][message-passing-threads]<!-- ignore --> অংশের চেয়ে একটু ভিন্ন পথ নেব। Listing 17-9-এ আমরা শুরু করব শুধু একটি async block দিয়ে—যেভাবে আলাদা thread চালু করেছিলাম,
+সেভাবে আলাদা task চালু _না_ করে।
 
-<Listing number="17-9" caption="Creating an async channel and assigning the two halves to `tx` and `rx`" file-name="src/main.rs">
+<Listing number="17-9" caption="একটি async channel তৈরি করে এর দুটি অংশ `tx` আর `rx`-এ রাখা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-09/src/main.rs:channel}}
@@ -203,40 +164,27 @@ async block—_not_ spawning a separate task as we spawned a separate thread.
 
 </Listing>
 
-Here, we use `trpl::channel`, an async version of the multiple-producer,
-single-consumer channel API we used with threads back in Chapter 16. The async
-version of the API is only a little different from the thread-based version: it
-uses a mutable rather than an immutable receiver `rx`, and its `recv` method
-produces a future we need to await rather than producing the value directly.
-Now we can send messages from the sender to the receiver. Notice that we don’t
-have to spawn a separate thread or even a task; we merely need to await the
-`rx.recv` call.
+এখানে আমরা `trpl::channel` ব্যবহার করি, যা অধ্যায় 16-এ thread-এর সঙ্গে ব্যবহার করা multiple-producer, single-consumer channel API-র একটি async সংস্করণ। API-র async সংস্করণ thread-ভিত্তিক
+সংস্করণ থেকে সামান্যই আলাদা: এটি immutable-এর বদলে একটি mutable receiver `rx` ব্যবহার করে, আর এর `recv` method সরাসরি মান তৈরি না করে এমন একটি future তৈরি করে, যার জন্য await
+করতে হয়।
+এখন sender থেকে receiver-এ message পাঠাতে পারি। খেয়াল করুন, একটি আলাদা thread, এমনকি একটি task-ও চালু করতে হয় না; শুধু `rx.recv` call-এর জন্য await করলেই চলে।
 
-The synchronous `Receiver::recv` method in `std::mpsc::channel` blocks until it
-receives a message. The `trpl::Receiver::recv` method does not, because it is
-async. Instead of blocking, it hands control back to the runtime until either a
-message is received or the send side of the channel closes. By contrast, we
-don’t await the `send` call, because it doesn’t block. It doesn’t need to,
-because the channel we’re sending it into is unbounded.
+`std::mpsc::channel`-এর synchronous `Receiver::recv` method একটি message না পাওয়া পর্যন্ত block করে। `trpl::Receiver::recv` method তা করে না, কারণ এটি async। block না করে এটি runtime-এর
+হাতে নিয়ন্ত্রণ ফিরিয়ে দেয়, যতক্ষণ না একটি message আসে বা channel-এর পাঠানোর দিক বন্ধ হয়। বিপরীতে, `send` call-এর জন্য আমরা await করি না, কারণ এটি block করে না। এর দরকারও নেই,
+কারণ যে channel-এ পাঠাচ্ছি সেটি unbounded (সীমাহীন)।
 
-> Note: Because all of this async code runs in an async block in a
-> `trpl::block_on` call, everything within it can avoid blocking. However, the
-> code _outside_ it will block on the `block_on` function returning. That’s the
-> whole point of the `trpl::block_on` function: it lets you _choose_ where to
-> block on some set of async code, and thus where to transition between sync
-> and async code.
+> Note: এই সব async কোড যেহেতু একটি `trpl::block_on` call-এর async block-এ চলে, তাই এর ভেতরের সবকিছু block করা এড়াতে পারে। তবে এর _বাইরের_ কোড `block_on` function return হওয়া
+> পর্যন্ত block হয়ে থাকবে। `trpl::block_on` function-এর মূল কথাই এটি: এটি আপনাকে _বেছে নিতে_ দেয় async কোডের কোন অংশের জন্য কোথায় block করবেন, এবং তাই কোথায় sync আর async কোডের
+> মধ্যে বদল হবে।
 
-Notice two things about this example. First, the message will arrive right
-away. Second, although we use a future here, there’s no concurrency yet.
-Everything in the listing happens in sequence, just as it would if there were
-no futures involved.
+এই উদাহরণে দুটি বিষয় খেয়াল করুন। প্রথমত, message সঙ্গে সঙ্গে পৌঁছাবে। দ্বিতীয়ত, এখানে future ব্যবহার করলেও এখনো কোনো concurrency নেই। listing-এর সবকিছু একটির পর একটি ঘটে, ঠিক
+যেমনটি ঘটত কোনো future জড়িত না থাকলে।
 
-Let’s address the first part by sending a series of messages and sleeping in
-between them, as shown in Listing 17-10.
+প্রথম বিষয়টি সমাধান করতে চলুন একাধিক message পাঠাই এবং মাঝে মাঝে sleep করি, যেমনটি Listing 17-10-এ দেখানো হয়েছে।
 
 <!-- We cannot test this one because it never stops! -->
 
-<Listing number="17-10" caption="Sending and receiving multiple messages over the async channel and sleeping with an `await` between each message" file-name="src/main.rs">
+<Listing number="17-10" caption="async channel দিয়ে একাধিক message পাঠানো ও গ্রহণ করা, এবং প্রতিটি message-এর মাঝে `await` দিয়ে sleep করা" file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-10/src/main.rs:many-messages}}
@@ -244,65 +192,40 @@ between them, as shown in Listing 17-10.
 
 </Listing>
 
-In addition to sending the messages, we need to receive them. In this case,
-because we know how many messages are coming in, we could do that manually by
-calling `rx.recv().await` four times. In the real world, though, we’ll generally
-be waiting on some _unknown_ number of messages, so we need to keep waiting
-until we determine that there are no more messages.
+message পাঠানোর পাশাপাশি সেগুলো গ্রহণও করতে হবে। এই ক্ষেত্রে কতগুলো message আসছে তা জানি বলে চারবার `rx.recv().await` call করে হাতে সেটা করা যেত। তবে বাস্তবে আমরা সাধারণত _অজানা_
+সংখ্যক message-এর জন্য অপেক্ষা করব, তাই আর কোনো message নেই তা নির্ধারণ না করা পর্যন্ত অপেক্ষা করে যেতে হবে।
 
-In Listing 16-10, we used a `for` loop to process all the items received from a
-synchronous channel. Rust doesn’t yet have a way to use a `for` loop with an
-_asynchronously produced_ series of items, however, so we need to use a loop we
-haven’t seen before: the `while let` conditional loop. This is the loop version
-of the `if let` construct we saw back in the [“Concise Control Flow with `if
-let` and `let...else`”][if-let]<!-- ignore --> section in Chapter 6. The loop
-will continue executing as long as the pattern it specifies continues to match
-the value.
+Listing 16-10-এ একটি synchronous channel থেকে পাওয়া সব item প্রক্রিয়া করতে আমরা একটি `for` loop ব্যবহার করেছিলাম। তবে _asynchronous-ভাবে তৈরি_ item-এর ধারার সঙ্গে `for` loop
+ব্যবহারের কোনো উপায় Rust-এ এখনো নেই, তাই আমাদের এমন একটি loop ব্যবহার করতে হবে যা আগে দেখিনি: `while let` শর্তসাপেক্ষ loop। এটি অধ্যায় 6-এর [“`if
+let` আর `let...else` দিয়ে সংক্ষিপ্ত control flow”][if-let]<!-- ignore --> অংশে দেখা `if let` গঠনের loop সংস্করণ। এটি যে pattern উল্লেখ করে তা মানের সঙ্গে মিলতে থাকা পর্যন্ত loop চলতে
+থাকবে।
 
-The `rx.recv` call produces a future, which we await. The runtime will pause
-the future until it is ready. Once a message arrives, the future will resolve
-to `Some(message)` as many times as a message arrives. When the channel closes,
-regardless of whether _any_ messages have arrived, the future will instead
-resolve to `None` to indicate that there are no more values and thus we should
-stop polling—that is, stop awaiting.
+`rx.recv` call একটি future তৈরি করে, যার জন্য আমরা await করি। runtime future-টিকে প্রস্তুত না হওয়া পর্যন্ত থামিয়ে রাখবে। একটি message এলে future `Some(message)`-এ পরিণত হবে, যতবার message
+আসে ততবার। channel বন্ধ হলে, _কোনো_ message এসেছে কি না তা নির্বিশেষে, future বরং `None`-এ পরিণত হবে, যা বোঝায় যে আর কোনো মান নেই এবং তাই আমাদের polling থামানো উচিত—অর্থাৎ await
+করা থামানো উচিত।
 
-The `while let` loop pulls all of this together. If the result of calling
-`rx.recv().await` is `Some(message)`, we get access to the message and we can
-use it in the loop body, just as we could with `if let`. If the result is
-`None`, the loop ends. Every time the loop completes, it hits the await point
-again, so the runtime pauses it again until another message arrives.
+`while let` loop এই সবকিছু একসঙ্গে জুড়ে দেয়। `rx.recv().await` call করার ফল যদি `Some(message)` হয়, তাহলে আমরা message-টি পাই এবং loop-এর body-তে ব্যবহার করতে পারি, ঠিক যেমন `if let`-এর
+সঙ্গে পারতাম। ফল যদি `None` হয়, loop শেষ হয়। প্রতিবার loop শেষ হলে এটি আবার await point-এ পৌঁছায়, তাই আরেকটি message না আসা পর্যন্ত runtime একে আবার থামিয়ে রাখে।
 
-The code now successfully sends and receives all of the messages.
-Unfortunately, there are still a couple of problems. For one thing, the
-messages do not arrive at half-second intervals. They arrive all at once, 2
-seconds (2,000 milliseconds) after we start the program. For another, this
-program also never exits! Instead, it waits forever for new messages. You will
-need to shut it down using <kbd>ctrl</kbd>-<kbd>C</kbd>.
+কোডটি এখন সফলভাবে সব message পাঠায় ও গ্রহণ করে। দুর্ভাগ্যবশত, এখনো কয়েকটি সমস্যা আছে। একটি হলো, message-গুলো আধা সেকেন্ড পরপর আসে না। প্রোগ্রাম শুরু করার 2 সেকেন্ড (2,000
+millisecond) পরে সবগুলো একসঙ্গে আসে। আরেকটি হলো, এই প্রোগ্রাম কখনো বন্ধও হয় না! বরং নতুন message-এর জন্য চিরকাল অপেক্ষা করে। আপনাকে <kbd>ctrl</kbd>-<kbd>C</kbd> দিয়ে এটি বন্ধ
+করতে হবে।
 
-#### Code Within One Async Block Executes Linearly
+#### একটি async block-এর কোড সরলরৈখিকভাবে চলে {#code-within-one-async-block-executes-linearly}
 
-Let’s start by examining why the messages come in all at once after the full
-delay, rather than coming in with delays between each one. Within a given async
-block, the order in which `await` keywords appear in the code is also the order
-in which they’re executed when the program runs.
+চলুন প্রথমে দেখি কেন message-গুলো প্রতিটির মাঝে বিরতি দিয়ে না এসে পুরো বিলম্বের পরে একসঙ্গে আসে। একটি নির্দিষ্ট async block-এর ভেতরে `await` keyword-গুলো কোডে যে ক্রমে থাকে, প্রোগ্রাম চলার
+সময় সেগুলো সেই ক্রমেই চলে।
 
-There’s only one async block in Listing 17-10, so everything in it runs
-linearly. There’s still no concurrency. All the `tx.send` calls happen,
-interspersed with all of the `trpl::sleep` calls and their associated await
-points. Only then does the `while let` loop get to go through any of the
-`await` points on the `recv` calls.
+Listing 17-10-এ মাত্র একটি async block আছে, তাই এর ভেতরের সবকিছু সরলরৈখিকভাবে চলে। এখনো কোনো concurrency নেই। সব `tx.send` call ঘটে, মাঝে মাঝে সব `trpl::sleep` call আর তাদের
+সংশ্লিষ্ট await point-সহ। কেবল তারপরই `while let` loop `recv` call-গুলোর কোনো `await` point পার হওয়ার সুযোগ পায়।
 
-To get the behavior we want, where the sleep delay happens between each
-message, we need to put the `tx` and `rx` operations in their own async blocks,
-as shown in Listing 17-11. Then the runtime can execute each of them separately
-using `trpl::join`, just as in Listing 17-8. Once again, we await the result of
-calling `trpl::join`, not the individual futures. If we awaited the individual
-futures in sequence, we would just end up back in a sequential flow—exactly
-what we’re trying _not_ to do.
+আমাদের কাঙ্ক্ষিত আচরণ পেতে, যেখানে প্রতিটি message-এর মাঝে sleep-এর বিরতি ঘটে, `tx` আর `rx` operation-গুলোকে তাদের নিজস্ব async block-এ রাখতে হবে, যেমনটি Listing 17-11-এ দেখানো হয়েছে।
+তাহলে runtime `trpl::join` ব্যবহার করে প্রতিটি আলাদাভাবে চালাতে পারবে, ঠিক Listing 17-8-এর মতো। আবারও, আমরা আলাদা আলাদা future-এর জন্য নয়, `trpl::join` call করার ফলের জন্য await
+করি। আলাদা future-গুলোর জন্য পরপর await করলে আমরা আবার একটি ক্রমানুসারী প্রবাহে ফিরে যেতাম—ঠিক যা আমরা করতে _চাই না_।
 
 <!-- We cannot test this one because it never stops! -->
 
-<Listing number="17-11" caption="Separating `send` and `recv` into their own `async` blocks and awaiting the futures for those blocks" file-name="src/main.rs">
+<Listing number="17-11" caption="`send` আর `recv`-কে তাদের নিজস্ব `async` block-এ আলাদা করে সেই block-গুলোর future-এর জন্য await করা" file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-11/src/main.rs:futures}}
@@ -310,44 +233,32 @@ what we’re trying _not_ to do.
 
 </Listing>
 
-With the updated code in Listing 17-11, the messages get printed at
-500-millisecond intervals, rather than all in a rush after 2 seconds.
+Listing 17-11-এর হালনাগাদ করা কোডে message-গুলো 2 সেকেন্ড পরে একসঙ্গে হুড়মুড় করে না এসে
+500 millisecond পরপর print হয়।
 
-#### Moving Ownership Into an Async Block
+#### async block-এর ভেতরে ownership সরিয়ে নেওয়া {#moving-ownership-into-an-async-block}
 
-The program still never exits, though, because of the way the `while let` loop
-interacts with `trpl::join`:
+তবে `while let` loop যেভাবে `trpl::join`-এর সঙ্গে কাজ করে, তার কারণে প্রোগ্রামটি এখনো কখনো বন্ধ হয় না:
 
-- The future returned from `trpl::join` completes only once _both_ futures
-  passed to it have completed.
-- The `tx_fut` future completes once it finishes sleeping after sending the last
-  message in `vals`.
-- The `rx_fut` future won’t complete until the `while let` loop ends.
-- The `while let` loop won’t end until awaiting `rx.recv` produces `None`.
-- Awaiting `rx.recv` will return `None` only once the other end of the channel
-  is closed.
-- The channel will close only if we call `rx.close` or when the sender side,
-  `tx`, is dropped.
-- We don’t call `rx.close` anywhere, and `tx` won’t be dropped until the
-  outermost async block passed to `trpl::block_on` ends.
-- The block can’t end because it is blocked on `trpl::join` completing, which
-  takes us back to the top of this list.
+- `trpl::join` থেকে return হওয়া future শেষ হয় কেবল তখনই, যখন তাকে পাঠানো _দুটি_ future-ই শেষ হয়েছে।
+- `vals`-এর শেষ message পাঠানোর পর sleep শেষ হলেই `tx_fut` future শেষ হয়।
+- `while let` loop শেষ না হওয়া পর্যন্ত `rx_fut` future শেষ হবে না।
+- `rx.recv`-এর জন্য await করে `None` না পাওয়া পর্যন্ত `while let` loop শেষ হবে না।
+- channel-এর অন্য প্রান্ত বন্ধ হলেই কেবল `rx.recv`-এর জন্য await করলে `None` return হবে।
+- channel বন্ধ হবে কেবল তখনই, যখন আমরা `rx.close` call করব, অথবা যখন পাঠানোর দিক, `tx`, drop হবে।
+- আমরা কোথাও `rx.close` call করি না, আর `trpl::block_on`-এ পাঠানো সবচেয়ে বাইরের async block শেষ না হওয়া পর্যন্ত `tx` drop হবে না।
+- block-টি শেষ হতে পারে না, কারণ এটি `trpl::join` শেষ হওয়ার জন্য block হয়ে আছে, যা আমাদের আবার এই তালিকার শুরুতে নিয়ে যায়।
 
-Right now, the async block where we send the messages only _borrows_ `tx`
-because sending a message doesn’t require ownership, but if we could _move_
-`tx` into that async block, it would be dropped once that block ends. In the
-[“Capturing References or Moving Ownership”][capture-or-move]<!-- ignore -->
-section in Chapter 13, you learned how to use the `move` keyword with closures,
-and, as discussed in the [“Using `move` Closures with
-Threads”][move-threads]<!-- ignore --> section in Chapter 16, we often need to
-move data into closures when working with threads. The same basic dynamics
-apply to async blocks, so the `move` keyword works with async blocks just as it
-does with closures.
+এই মুহূর্তে যে async block-এ message পাঠাই, সেটি শুধু `tx` _borrow_ করে, কারণ message পাঠাতে ownership দরকার হয় না, কিন্তু যদি `tx`-কে সেই async block-এর ভেতরে _সরিয়ে_ নিতে পারতাম, তাহলে
+block শেষ হলেই এটি drop হতো। অধ্যায় 13-এর [“reference capture করা বা ownership সরিয়ে নেওয়া”][capture-or-move]<!-- ignore -->
+অংশে আপনি শিখেছেন closure-এর সঙ্গে কীভাবে `move` keyword ব্যবহার করতে হয়, আর অধ্যায় 16-এর [“thread-এর সঙ্গে `move` closure
+ব্যবহার”][move-threads]<!-- ignore --> অংশে যেমন আলোচনা করা হয়েছে, thread নিয়ে কাজ করার সময় প্রায়ই closure-এর ভেতরে ডেটা সরিয়ে নিতে হয়। async block-এর ক্ষেত্রেও একই মৌলিক গতিপ্রকৃতি
+প্রযোজ্য, তাই `move` keyword closure-এর মতোই async block-এর সঙ্গে কাজ করে।
 
-In Listing 17-12, we change the block used to send messages from `async` to
-`async move`.
+Listing 17-12-এ আমরা message পাঠানোর block-টি `async` থেকে বদলে
+`async move` করি।
 
-<Listing number="17-12" caption="A revision of the code from Listing 17-11 that correctly shuts down when complete" file-name="src/main.rs">
+<Listing number="17-12" caption="Listing 17-11-এর কোডের একটি সংশোধিত রূপ, যা কাজ শেষে ঠিকমতো বন্ধ হয়" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-12/src/main.rs:with-move}}
@@ -355,17 +266,14 @@ In Listing 17-12, we change the block used to send messages from `async` to
 
 </Listing>
 
-When we run _this_ version of the code, it shuts down gracefully after the last
-message is sent and received. Next, let’s see what would need to change to send
-data from more than one future.
+কোডের _এই_ সংস্করণ চালালে শেষ message পাঠানো ও গ্রহণ করার পর এটি সুন্দরভাবে বন্ধ হয়। এরপর দেখা যাক একাধিক future থেকে ডেটা পাঠাতে কী বদলাতে হবে।
 
-#### Joining a Number of Futures with the `join!` Macro
+#### `join!` macro দিয়ে কয়েকটি future একসঙ্গে জোড়া {#joining-a-number-of-futures-with-the-join-macro}
 
-This async channel is also a multiple-producer channel, so we can call `clone`
-on `tx` if we want to send messages from multiple futures, as shown in Listing
-17-13.
+এই async channel-টিও একটি multiple-producer channel, তাই একাধিক future থেকে message পাঠাতে চাইলে `tx`-এর ওপর `clone` call করতে পারি, যেমনটি Listing
+17-13-এ দেখানো হয়েছে।
 
-<Listing number="17-13" caption="Using multiple producers with async blocks" file-name="src/main.rs">
+<Listing number="17-13" caption="async block-এর সঙ্গে একাধিক producer ব্যবহার করা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-13/src/main.rs:here}}
@@ -373,25 +281,16 @@ on `tx` if we want to send messages from multiple futures, as shown in Listing
 
 </Listing>
 
-First, we clone `tx`, creating `tx1` outside the first async block. We move
-`tx1` into that block just as we did before with `tx`. Then, later, we move the
-original `tx` into a _new_ async block, where we send more messages on a
-slightly slower delay. We happen to put this new async block after the async
-block for receiving messages, but it could go before it just as well. The key is
-the order in which the futures are awaited, not in which they’re created.
+প্রথমে আমরা `tx` clone করে প্রথম async block-এর বাইরে `tx1` তৈরি করি। আগে `tx`-এর ক্ষেত্রে যেমন করেছিলাম, তেমনভাবে `tx1`-কে সেই block-এ সরিয়ে নিই। তারপর পরে মূল `tx`-কে একটি _নতুন_
+async block-এ সরিয়ে নিই, যেখানে একটু বেশি বিলম্বে আরও message পাঠাই। ঘটনাচক্রে এই নতুন async block-টি message গ্রহণের async block-এর পরে রেখেছি, তবে আগেও রাখা যেত। মূল কথা হলো
+future-গুলোর জন্য কোন ক্রমে await করা হচ্ছে, কোন ক্রমে তৈরি হচ্ছে তা নয়।
 
-Both of the async blocks for sending messages need to be `async move` blocks so
-that both `tx` and `tx1` get dropped when those blocks finish. Otherwise, we’ll
-end up back in the same infinite loop we started out in.
+message পাঠানোর দুটি async block-কেই `async move` block হতে হবে, যাতে সেই block-গুলো শেষ হলে `tx` আর `tx1` দুটিই drop হয়। নইলে আমরা শুরুর সেই একই অসীম loop-এ ফিরে যাব।
 
-Finally, we switch from `trpl::join` to `trpl::join!` to handle the additional
-future: the `join!` macro awaits an arbitrary number of futures where we know
-the number of futures at compile time. We’ll discuss awaiting a collection of
-an unknown number of futures later in this chapter.
+শেষে বাড়তি future সামলাতে আমরা `trpl::join` থেকে `trpl::join!`-এ বদলাই: `join!` macro যেকোনো সংখ্যক future-এর জন্য await করে, যখন compile time-এ future-এর সংখ্যা জানা থাকে।
+অজানা সংখ্যক future-এর একটি collection-এর জন্য await করা নিয়ে এই অধ্যায়ের পরের দিকে আলোচনা করব।
 
-Now we see all the messages from both sending futures, and because the sending
-futures use slightly different delays after sending, the messages are also
-received at those different intervals:
+এখন দুটি পাঠানোর future থেকেই সব message দেখি, আর পাঠানোর future-গুলো পাঠানোর পর একটু ভিন্ন বিলম্ব ব্যবহার করে বলে message-গুলোও সেই ভিন্ন ভিন্ন বিরতিতে গৃহীত হয়:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -408,10 +307,8 @@ received 'for'
 received 'you'
 ```
 
-We’ve explored how to use message passing to send data between futures, how
-code within an async block runs sequentially, how to move ownership into an
-async block, and how to join multiple futures. Next, let’s discuss how and why
-to tell the runtime it can switch to another task.
+আমরা দেখেছি কীভাবে future-গুলোর মধ্যে ডেটা পাঠাতে message passing ব্যবহার করতে হয়, কীভাবে একটি async block-এর কোড ক্রমানুসারে চলে, কীভাবে একটি async block-এ ownership সরিয়ে নিতে হয়,
+এবং কীভাবে একাধিক future জোড়া লাগাতে হয়। এরপর চলুন আলোচনা করি runtime-কে কীভাবে এবং কেন বলতে হয় যে এটি অন্য task-এ যেতে পারে।
 
 {{#quiz ../quizzes/async-02-concurrency-with-async.toml}}
 

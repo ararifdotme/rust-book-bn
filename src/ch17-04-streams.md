@@ -2,39 +2,25 @@
 
 <a id="streams"></a>
 
-## Streams: Futures in Sequence
+## stream: ক্রমানুসারে future {#streams-futures-in-sequence}
 
-Recall how we used the receiver for our async channel earlier in this chapter
-in the [“Message Passing”][17-02-messages]<!-- ignore --> section. The async
-`recv` method produces a sequence of items over time. This is an instance of a
-much more general pattern known as a _stream_. Many concepts are naturally
-represented as streams: items becoming available in a queue, chunks of data
-being pulled incrementally from the filesystem when the full data set is too
-large for the computer’s memory, or data arriving over the network over time.
-Because streams are futures, we can use them with any other kind of future and
-combine them in interesting ways. For example, we can batch up events to avoid
-triggering too many network calls, set timeouts on sequences of long-running
-operations, or throttle user interface events to avoid doing needless work.
+মনে করুন, এই অধ্যায়ের আগের দিকে [“message passing”][17-02-messages]<!-- ignore --> অংশে আমরা কীভাবে আমাদের async channel-এর receiver ব্যবহার করেছিলাম। async
+`recv` method সময়ের সঙ্গে item-এর একটি ধারা তৈরি করে। এটি _stream_ নামে পরিচিত অনেক বেশি সাধারণ একটি pattern-এর উদাহরণ। অনেক ধারণা স্বাভাবিকভাবেই stream হিসেবে প্রকাশ পায়: একটি
+queue-তে item পাওয়া যেতে থাকা, পুরো ডেটা কম্পিউটারের মেমোরির জন্য খুব বড় হলে filesystem থেকে ধাপে ধাপে ডেটার টুকরো টেনে আনা, বা সময়ের সঙ্গে network দিয়ে ডেটা আসা।
+stream যেহেতু future, তাই এদের অন্য যেকোনো ধরনের future-এর সঙ্গে ব্যবহার করা যায় এবং মজার উপায়ে মেলানো যায়। যেমন, খুব বেশি network call চালু হওয়া এড়াতে event-গুলো দলবদ্ধ করা যায়,
+দীর্ঘ সময় ধরে চলা operation-এর ধারায় timeout বসানো যায়, বা অপ্রয়োজনীয় কাজ এড়াতে user interface-এর event-এর গতি কমিয়ে দেওয়া যায় (throttle করা)।
 
-We saw a sequence of items back in Chapter 13, when we looked at the Iterator
-trait in [“The Iterator Trait and the `next` Method”][iterator-trait]<!--
-ignore --> section, but there are two differences between iterators and the
-async channel receiver. The first difference is time: iterators are
-synchronous, while the channel receiver is asynchronous. The second difference
-is the API. When working directly with `Iterator`, we call its synchronous
-`next` method. With the `trpl::Receiver` stream in particular, we called an
-asynchronous `recv` method instead. Otherwise, these APIs feel very similar,
-and that similarity isn’t a coincidence. A stream is like an asynchronous form
-of iteration. Whereas the `trpl::Receiver` specifically waits to receive
-messages, though, the general-purpose stream API is much broader: it provides
-the next item the way `Iterator` does, but asynchronously.
+item-এর ধারা আমরা অধ্যায় 13-এ দেখেছিলাম, যখন [“`Iterator` trait ও `next` method”][iterator-trait]<!--
+ignore --> অংশে Iterator trait দেখেছিলাম, তবে iterator আর async channel receiver-এর মধ্যে দুটি পার্থক্য আছে। প্রথম পার্থক্য সময়: iterator synchronous, আর channel receiver
+asynchronous। দ্বিতীয় পার্থক্য API। সরাসরি `Iterator` নিয়ে কাজ করার সময় আমরা এর synchronous `next` method call করি। বিশেষ করে `trpl::Receiver` stream-এর ক্ষেত্রে আমরা বরং একটি
+asynchronous `recv` method call করেছিলাম। এ ছাড়া এই API-গুলো খুবই কাছাকাছি মনে হয়, আর এই মিল কাকতালীয় নয়। stream হলো iteration-এর একটি asynchronous রূপের মতো। তবে `trpl::Receiver`
+যেখানে বিশেষভাবে message গ্রহণের জন্য অপেক্ষা করে, সাধারণ-উদ্দেশ্যের stream API সেখানে অনেক বেশি বিস্তৃত: এটি `Iterator`-এর মতোই পরের item দেয়, তবে asynchronous-ভাবে।
 
-The similarity between iterators and streams in Rust means we can actually
-create a stream from any iterator. As with an iterator, we can work with a
-stream by calling its `next` method and then awaiting the output, as in Listing
-17-21, which won’t compile yet.
+Rust-এ iterator আর stream-এর মিলের মানে হলো আমরা আসলে যেকোনো iterator থেকে একটি stream তৈরি করতে পারি। iterator-এর মতোই stream-এর `next` method call করে তারপর output-এর জন্য await
+করে stream নিয়ে কাজ করা যায়, যেমনটি Listing
+17-21-এ, যা এখনো compile হবে না।
 
-<Listing number="17-21" caption="Creating a stream from an iterator and printing its values" file-name="src/main.rs">
+<Listing number="17-21" caption="একটি iterator থেকে stream তৈরি করে এর মানগুলো print করা" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-21/src/main.rs:stream}}
@@ -42,13 +28,10 @@ stream by calling its `next` method and then awaiting the output, as in Listing
 
 </Listing>
 
-We start with an array of numbers, which we convert to an iterator and then
-call `map` on to double all the values. Then we convert the iterator into a
-stream using the `trpl::stream_from_iter` function. Next, we loop over the
-items in the stream as they arrive with the `while let` loop.
+আমরা সংখ্যার একটি array দিয়ে শুরু করি, যাকে একটি iterator-এ রূপান্তর করে তারপর সব মান দ্বিগুণ করতে `map` call করি। তারপর `trpl::stream_from_iter` function ব্যবহার করে iterator-কে
+একটি stream-এ রূপান্তর করি। এরপর `while let` loop দিয়ে stream-এর item-গুলো আসার সঙ্গে সঙ্গে সেগুলোর ওপর দিয়ে loop করি।
 
-Unfortunately, when we try to run the code, it doesn’t compile but instead
-reports that there’s no `next` method available:
+দুর্ভাগ্যবশত, কোডটি চালানোর চেষ্টা করলে এটি compile হয় না, বরং জানায় যে কোনো `next` method পাওয়া যাচ্ছে না:
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-21
@@ -80,23 +63,16 @@ help: there is a method `try_next` with a similar name
    |                                        ~~~~~~~~
 ```
 
-As this output explains, the reason for the compiler error is that we need the
-right trait in scope to be able to use the `next` method. Given our discussion
-so far, you might reasonably expect that trait to be `Stream`, but it’s
-actually `StreamExt`. Short for _extension_, `Ext` is a common pattern in the
-Rust community for extending one trait with another.
+এই output যেমন ব্যাখ্যা করে, compiler error-এর কারণ হলো `next` method ব্যবহার করতে পারতে সঠিক trait-টি scope-এ থাকতে হবে। এ পর্যন্ত আলোচনার ভিত্তিতে আপনি যুক্তিসঙ্গতভাবেই আশা করতে
+পারেন যে trait-টি `Stream`, কিন্তু আসলে এটি `StreamExt`। _extension_-এর সংক্ষেপ `Ext` হলো Rust community-তে এক trait দিয়ে আরেক trait-এর ক্ষমতা বাড়ানোর একটি প্রচলিত pattern।
 
-The `Stream` trait defines a low-level interface that effectively combines the
-`Iterator` and `Future` traits. `StreamExt` supplies a higher-level set of APIs
-on top of `Stream`, including the `next` method as well as other utility
-methods similar to those provided by the `Iterator` trait. `Stream` and
-`StreamExt` are not yet part of Rust’s standard library, but most ecosystem
-crates use similar definitions.
+`Stream` trait একটি নিম্ন-স্তরের interface সংজ্ঞায়িত করে, যা কার্যত `Iterator` আর `Future` trait-কে মিলিয়ে দেয়। `StreamExt` `Stream`-এর ওপরে উচ্চ-স্তরের API-র একটি সেট দেয়, যার মধ্যে
+আছে `next` method এবং `Iterator` trait-এর দেওয়া method-এর মতো আরও কিছু কাজের method। `Stream` আর `StreamExt` এখনো Rust-এর standard library-র অংশ নয়, তবে ecosystem-এর বেশিরভাগ crate একই রকম
+সংজ্ঞা ব্যবহার করে।
 
-The fix to the compiler error is to add a `use` statement for
-`trpl::StreamExt`, as in Listing 17-22.
+compiler error-এর সমাধান হলো `trpl::StreamExt`-এর জন্য একটি `use` statement যোগ করা, যেমনটি Listing 17-22-এ।
 
-<Listing number="17-22" caption="Successfully using an iterator as the basis for a stream" file-name="src/main.rs">
+<Listing number="17-22" caption="একটি stream-এর ভিত্তি হিসেবে সফলভাবে একটি iterator ব্যবহার করা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-22/src/main.rs:all}}
@@ -104,9 +80,7 @@ The fix to the compiler error is to add a `use` statement for
 
 </Listing>
 
-With all those pieces put together, this code works the way we want! What’s
-more, now that we have `StreamExt` in scope, we can use all of its utility
-methods, just as with iterators.
+এই সব অংশ একসঙ্গে জোড়া দেওয়ায় কোডটি আমাদের কাঙ্ক্ষিতভাবে কাজ করে! আরও কী, এখন `StreamExt` scope-এ থাকায় iterator-এর মতোই এর সব কাজের method ব্যবহার করতে পারি।
 
 {{#quiz ../quizzes/async-04-streams.toml}}
 

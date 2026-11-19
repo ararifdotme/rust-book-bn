@@ -298,3 +298,12 @@ lock, concurrency primitive, atomic, marker trait.
 | Wow, that error message is very wordy! | বাপরে, error message-টি খুবই শব্দবহুল! |
 | it will happily run on multiple threads | এটি … আনন্দের সঙ্গে একাধিক thread-এ চলবে |
 | Go forth and make your programs concurrent, fearlessly! | এগিয়ে যান এবং নির্ভয়ে আপনার প্রোগ্রামগুলোকে concurrent করুন! |
+
+## Chapter 17: Async and Await (IN PROGRESS)
+
+**Status:** the prose of all seven `src/ch17-*.md` files is translated and
+builds; the heading IDs are unchanged. **Not done yet:** the quiz files
+`quizzes/async-0[1-5]-*.toml`, the glossary rows, and the Progress tick.
+Planned terms: future, polling, await point, runtime, executor, state machine,
+task, cooperative multitasking, work stealing, stream, pin / `Pin`, `Unpin`,
+self-referential type, CPU-bound / I/O-bound, serial.

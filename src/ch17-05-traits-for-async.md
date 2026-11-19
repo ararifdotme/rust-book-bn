@@ -2,25 +2,19 @@
 
 <a id="digging-into-the-traits-for-async"></a>
 
-## A Closer Look at the Traits for Async
+## async-এর trait-গুলো আরও কাছ থেকে দেখা {#a-closer-look-at-the-traits-for-async}
 
-Throughout the chapter, we’ve used the `Future`, `Stream`, and `StreamExt`
-traits in various ways. So far, though, we’ve avoided getting too far into the
-details of how they work or how they fit together, which is fine most of the
-time for your day-to-day Rust work. Sometimes, though, you’ll encounter
-situations where you’ll need to understand a few more of these traits’ details,
-along with the `Pin` type and the `Unpin` trait. In this section, we’ll dig in
-just enough to help in those scenarios, still leaving the _really_ deep dive
-for other documentation.
+এই অধ্যায় জুড়ে আমরা `Future`, `Stream` আর `StreamExt` trait নানাভাবে ব্যবহার করেছি। তবে এ পর্যন্ত এগুলো কীভাবে কাজ করে বা কীভাবে একসঙ্গে খাপ খায় তার খুঁটিনাটিতে বেশি ঢোকা এড়িয়ে গেছি,
+যা প্রতিদিনের Rust কাজে বেশিরভাগ সময় ঠিকই আছে। তবে কখনো কখনো এমন পরিস্থিতিতে পড়বেন যেখানে এই trait-গুলোর আরও কিছু খুঁটিনাটি বুঝতে হবে, সঙ্গে `Pin` type আর `Unpin` trait-ও। এই অংশে
+আমরা ঠিক ততটুকুই গভীরে যাব যতটুকু ওই পরিস্থিতিতে সাহায্য করে, _সত্যিকারের_ গভীর আলোচনা অন্য documentation-এর জন্য রেখে দিয়ে।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="future"></a>
 
-### The `Future` Trait
+### `Future` trait {#the-future-trait}
 
-Let’s start by taking a closer look at how the `Future` trait works. Here’s how
-Rust defines it:
+চলুন `Future` trait কীভাবে কাজ করে তা আরও কাছ থেকে দেখা দিয়ে শুরু করি। Rust একে এভাবে সংজ্ঞায়িত করে:
 
 ```rust
 use std::pin::Pin;
@@ -33,15 +27,11 @@ pub trait Future {
 }
 ```
 
-That trait definition includes a bunch of new types and also some syntax we
-haven’t seen before, so let’s walk through the definition piece by piece.
+এই trait-এর সংজ্ঞায় বেশ কিছু নতুন type আর এমন কিছু syntax আছে যা আগে দেখিনি, তাই চলুন সংজ্ঞাটি টুকরো টুকরো করে দেখি।
 
-First, `Future`’s associated type `Output` says what the future resolves to.
-This is analogous to the `Item` associated type for the `Iterator` trait.
-Second, `Future` has the `poll` method, which takes a special `Pin` reference
-for its `self` parameter and a mutable reference to a `Context` type, and
-returns a `Poll<Self::Output>`. We’ll talk more about `Pin` and `Context` in a
-moment. For now, let’s focus on what the method returns, the `Poll` type:
+প্রথমত, `Future`-এর associated type `Output` বলে future-টি শেষে কোন মানে পরিণত হয়। এটি `Iterator` trait-এর `Item` associated type-এর মতো। দ্বিতীয়ত, `Future`-এর `poll` method আছে, যা
+তার `self` parameter-এর জন্য একটি বিশেষ `Pin` reference আর একটি `Context` type-এর mutable reference নেয়, এবং একটি `Poll<Self::Output>` return করে। `Pin` আর `Context` নিয়ে একটু পরেই আরও
+বলব। আপাতত method-টি কী return করে, অর্থাৎ `Poll` type-এর দিকে মনোযোগ দিই:
 
 ```rust
 pub enum Poll<T> {
@@ -50,23 +40,14 @@ pub enum Poll<T> {
 }
 ```
 
-This `Poll` type is similar to an `Option`. It has one variant that has a value,
-`Ready(T)`, and one that does not, `Pending`. `Poll` means something quite
-different from `Option`, though! The `Pending` variant indicates that the future
-still has work to do, so the caller will need to check again later. The `Ready`
-variant indicates that the `Future` has finished its work and the `T` value is
-available.
+এই `Poll` type একটি `Option`-এর মতো। এর একটি variant-এ মান আছে, `Ready(T)`, আর একটিতে নেই, `Pending`। তবে `Poll`-এর অর্থ `Option` থেকে বেশ আলাদা! `Pending` variant বোঝায় future-এর
+এখনো কাজ বাকি, তাই caller-কে পরে আবার যাচাই করতে হবে। `Ready` variant বোঝায় `Future` তার কাজ শেষ করেছে এবং `T` মান পাওয়া যাচ্ছে।
 
-> Note: It’s rare to need to call `poll` directly, but if you do need to, keep
-> in mind that with most futures, the caller should not call `poll` again after
-> the future has returned `Ready`. Many futures will panic if polled again after
-> becoming ready. Futures that are safe to poll again will say so explicitly in
-> their documentation. This is similar to how `Iterator::next` behaves.
+> Note: সরাসরি `poll` call করার দরকার খুব কমই হয়, তবে যদি করতে হয়, মনে রাখবেন যে বেশিরভাগ future-এর ক্ষেত্রে future `Ready` return করার পর caller-এর আবার `poll` call করা উচিত নয়।
+> প্রস্তুত হওয়ার পর আবার poll করলে অনেক future panic করবে। যে future আবার poll করা নিরাপদ, সেগুলো তাদের documentation-এ তা স্পষ্টভাবে বলে দেবে। এটি `Iterator::next`-এর আচরণের মতো।
 
-When you see code that uses `await`, Rust compiles it under the hood to code
-that calls `poll`. If you look back at Listing 17-4, where we printed out the
-page title for a single URL once it resolved, Rust compiles it into something
-kind of (although not exactly) like this:
+`await` ব্যবহার করা কোড দেখলে জানবেন, Rust ভেতরে ভেতরে একে `poll` call করা কোডে compile করে। Listing 17-4-এর দিকে ফিরে তাকালে, যেখানে একটি URL-এর page title পাওয়া গেলে তা print
+করেছিলাম, Rust একে মোটামুটি (যদিও হুবহু নয়) এমন কিছুতে compile করে:
 
 ```rust,ignore
 match page_title(url).poll() {
@@ -80,9 +61,7 @@ match page_title(url).poll() {
 }
 ```
 
-What should we do when the future is still `Pending`? We need some way to try
-again, and again, and again, until the future is finally ready. In other words,
-we need a loop:
+future যখন এখনো `Pending`, তখন কী করা উচিত? আমাদের এমন কোনো উপায় দরকার, যাতে future শেষ পর্যন্ত প্রস্তুত না হওয়া পর্যন্ত বারবার চেষ্টা করা যায়। অন্যভাবে বললে, একটি loop দরকার:
 
 ```rust,ignore
 let mut page_title_fut = page_title(url);
@@ -99,43 +78,29 @@ loop {
 }
 ```
 
-If Rust compiled it to exactly that code, though, every `await` would be
-blocking—exactly the opposite of what we were going for! Instead, Rust ensures
-that the loop can hand off control to something that can pause work on this
-future to work on other futures and then check this one again later. As we’ve
-seen, that something is an async runtime, and this scheduling and coordination
-work is one of its main jobs.
+তবে Rust যদি একে হুবহু ওই কোডে compile করত, তাহলে প্রতিটি `await` block করত—যা আমরা চাইছিলাম ঠিক তার উল্টো! বরং Rust নিশ্চিত করে যে loop এমন কিছুর হাতে নিয়ন্ত্রণ দিতে পারে, যা এই
+future-এর কাজ থামিয়ে অন্য future-এর কাজ করতে পারে এবং পরে আবার এটি যাচাই করতে পারে। যেমন দেখেছি, সেই কিছু হলো একটি async runtime, আর এই সময়সূচি ও সমন্বয়ের কাজ এর প্রধান কাজগুলোর একটি।
 
-In the [“Sending Data Between Two Tasks Using Message
-Passing”][message-passing]<!-- ignore --> section, we described waiting on
-`rx.recv`. The `recv` call returns a future, and awaiting the future polls it.
-We noted that a runtime will pause the future until it’s ready with either
-`Some(message)` or `None` when the channel closes. With our deeper
-understanding of the `Future` trait, and specifically `Future::poll`, we can
-see how that works. The runtime knows the future isn’t ready when it returns
-`Poll::Pending`. Conversely, the runtime knows the future _is_ ready and
-advances it when `poll` returns `Poll::Ready(Some(message))` or
-`Poll::Ready(None)`.
+[“message passing দিয়ে দুটি task-এর মধ্যে ডেটা
+পাঠানো”][message-passing]<!-- ignore --> অংশে আমরা `rx.recv`-এর জন্য অপেক্ষা করার বর্ণনা দিয়েছিলাম। `recv` call একটি future return করে, আর future-এর জন্য await করলে একে poll করা হয়।
+আমরা বলেছিলাম যে runtime future-টিকে থামিয়ে রাখবে, যতক্ষণ না এটি `Some(message)` নিয়ে, বা channel বন্ধ হলে `None` নিয়ে প্রস্তুত হয়। `Future` trait, বিশেষ করে `Future::poll` সম্পর্কে আরও
+গভীর বোঝাপড়া নিয়ে এখন দেখতে পাই এটি কীভাবে কাজ করে। future `Poll::Pending` return করলে runtime জানে এটি প্রস্তুত নয়। উল্টোভাবে, `poll` যখন `Poll::Ready(Some(message))` বা
+`Poll::Ready(None)` return করে, তখন runtime জানে future প্রস্তুত _আছে_ এবং একে এগিয়ে নেয়।
 
-The exact details of how a runtime does that are beyond the scope of this book,
-but the key is to see the basic mechanics of futures: a runtime _polls_ each
-future it is responsible for, putting the future back to sleep when it is not
-yet ready.
+একটি runtime ঠিক কীভাবে তা করে তার খুঁটিনাটি এই বইয়ের আওতার বাইরে, তবে মূল কথা হলো future-এর মৌলিক কার্যপ্রণালী দেখা: একটি runtime তার দায়িত্বে থাকা প্রতিটি future _poll_ করে, এবং
+future এখনো প্রস্তুত না হলে একে আবার ঘুম পাড়িয়ে দেয়।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="pinning-and-the-pin-and-unpin-traits"></a>
 <a id="the-pin-and-unpin-traits"></a>
 
-### The `Pin` Type and the `Unpin` Trait
+### `Pin` type ও `Unpin` trait {#the-pin-type-and-the-unpin-trait}
 
-Back in Listing 17-13, we used the `trpl::join!` macro to await three
-futures. However, it’s common to have a collection such as a vector containing
-some number futures that won’t be known until runtime. Let’s change Listing
-17-13 to the code in Listing 17-23 that puts the three futures into a vector
-and calls the `trpl::join_all` function instead, which won’t compile yet.
+Listing 17-13-এ আমরা তিনটি future-এর জন্য await করতে `trpl::join!` macro ব্যবহার করেছিলাম। তবে vector-এর মতো এমন একটি collection থাকা প্রচলিত, যাতে কতগুলো future থাকবে তা runtime-এর
+আগে জানা যাবে না। চলুন Listing 17-13 বদলে Listing 17-23-এর কোড করি, যা তিনটি future একটি vector-এ রেখে বরং `trpl::join_all` function call করে; এটি এখনো compile হবে না।
 
-<Listing number="17-23" caption="Awaiting futures in a collection"  file-name="src/main.rs">
+<Listing number="17-23" caption="একটি collection-এর future-গুলোর জন্য await করা"  file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-23/src/main.rs:here}}
@@ -143,22 +108,13 @@ and calls the `trpl::join_all` function instead, which won’t compile yet.
 
 </Listing>
 
-We put each future within a `Box` to make them into _trait objects_, just as
-we did in the “Returning Errors from `run`” section in Chapter 12. (We’ll cover
-trait objects in detail in Chapter 18.) Using trait objects lets us treat each
-of the anonymous futures produced by these types as the same type, because all
-of them implement the `Future` trait.
+প্রতিটি future-কে আমরা একটি `Box`-এর ভেতরে রাখি, যাতে এগুলো _trait object_ হয়ে যায়, ঠিক যেমন অধ্যায় 12-এর “`run` থেকে error return করা” অংশে করেছিলাম। (trait object বিস্তারিত দেখব অধ্যায় 18-এ।)
+trait object ব্যবহার করলে এই type-গুলোর তৈরি প্রতিটি নামহীন future-কে একই type হিসেবে ব্যবহার করা যায়, কারণ সবগুলোই `Future` trait implement করে।
 
-This might be surprising. After all, none of the async blocks returns anything,
-so each one produces a `Future<Output = ()>`. Remember that `Future` is a
-trait, though, and that the compiler creates a unique enum for each async
-block, even when they have identical output types. Just as you can’t put two
-different handwritten structs in a `Vec`, you can’t mix compiler-generated
-enums.
+এটি অবাক করার মতো লাগতে পারে। কারণ async block-গুলোর কোনোটিই কিছু return করে না, তাই প্রতিটি একটি `Future<Output = ()>` তৈরি করে। তবে মনে রাখবেন, `Future` একটি trait, আর compiler প্রতিটি
+async block-এর জন্য একটি অনন্য enum তৈরি করে, এমনকি তাদের output type একই হলেও। যেমন হাতে লেখা দুটি ভিন্ন struct একটি `Vec`-এ রাখা যায় না, তেমনি compiler-এর তৈরি enum-ও মেশানো যায় না।
 
-Then we pass the collection of futures to the `trpl::join_all` function and
-await the result. However, this doesn’t compile; here’s the relevant part of
-the error messages.
+তারপর future-এর collection-টি `trpl::join_all` function-এ পাঠিয়ে ফলের জন্য await করি। কিন্তু এটি compile হয় না; error message-এর প্রাসঙ্গিক অংশ এই:
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-23
@@ -186,26 +142,16 @@ note: required by a bound in `futures_util::future::join_all::JoinAll`
    |        ^^^^^^ required by this bound in `JoinAll`
 ```
 
-The note in this error message tells us that we should use the `pin!` macro to
-_pin_ the values, which means putting them inside the `Pin` type that
-guarantees the values won’t be moved in memory. The error message says pinning
-is required because `dyn Future<Output = ()>` needs to implement the `Unpin`
-trait and it currently does not.
+এই error message-এর note আমাদের বলছে মানগুলোকে _pin_ করতে `pin!` macro ব্যবহার করা উচিত, অর্থাৎ এগুলোকে `Pin` type-এর ভেতরে রাখা, যা নিশ্চয়তা দেয় যে মানগুলো মেমোরিতে সরবে না। error message
+বলছে pin করা দরকার, কারণ `dyn Future<Output = ()>`-কে `Unpin` trait implement করতে হবে, আর এটি এখন তা করে না।
 
-The `trpl::join_all` function returns a struct called `JoinAll`. That struct is
-generic over a type `F`, which is constrained to implement the `Future` trait.
-Directly awaiting a future with `await` pins the future implicitly. That’s why
-we don’t need to use `pin!` everywhere we want to await futures.
+`trpl::join_all` function `JoinAll` নামের একটি struct return করে। সেই struct একটি type `F`-এর ওপর generic, যাকে `Future` trait implement করতে হবে। `await` দিয়ে সরাসরি একটি future-এর জন্য
+await করলে future-টি অপ্রকাশ্যভাবে pin হয়ে যায়। এ কারণেই যেখানে যেখানে future-এর জন্য await করতে চাই, সব জায়গায় `pin!` ব্যবহার করতে হয় না।
 
-However, we’re not directly awaiting a future here. Instead, we construct a new
-future, JoinAll, by passing a collection of futures to the `join_all` function.
-The signature for `join_all` requires that the types of the items in the
-collection all implement the `Future` trait, and `Box<T>` implements `Future`
-only if the `T` it wraps is a future that implements the `Unpin` trait.
+তবে এখানে আমরা সরাসরি কোনো future-এর জন্য await করছি না। বরং `join_all` function-এ future-এর একটি collection পাঠিয়ে একটি নতুন future, JoinAll, তৈরি করছি। `join_all`-এর signature চায়
+collection-এর item-গুলোর type সবই `Future` trait implement করুক, আর `Box<T>` `Future` implement করে কেবল তখনই, যদি এর মোড়ানো `T` এমন একটি future হয় যা `Unpin` trait implement করে।
 
-That’s a lot to absorb! To really understand it, let’s dive a little further
-into how the `Future` trait actually works, in particular around pinning. Look
-again at the definition of the `Future` trait:
+এক সঙ্গে অনেক কিছু! সত্যিই বুঝতে চলুন `Future` trait আসলে কীভাবে কাজ করে, বিশেষ করে pinning-এর ক্ষেত্রে, তা আরেকটু গভীরে দেখি। `Future` trait-এর সংজ্ঞাটি আবার দেখুন:
 
 ```rust
 use std::pin::Pin;
@@ -219,138 +165,89 @@ pub trait Future {
 }
 ```
 
-The `cx` parameter and its `Context` type are the key to how a runtime actually
-knows when to check any given future while still being lazy. Again, the details
-of how that works are beyond the scope of this chapter, and you generally only
-need to think about this when writing a custom `Future` implementation. We’ll
-focus instead on the type for `self`, as this is the first time we’ve seen a
-method where `self` has a type annotation. A type annotation for `self` works
-like type annotations for other function parameters but with two key
-differences:
+`cx` parameter আর এর `Context` type-ই হলো সেই চাবি, যা দিয়ে একটি runtime lazy থেকেও আসলে জানে কখন কোনো নির্দিষ্ট future যাচাই করতে হবে। আবারও, এটি কীভাবে কাজ করে তার খুঁটিনাটি এই
+অধ্যায়ের আওতার বাইরে, আর সাধারণত শুধু নিজস্ব `Future` implementation লেখার সময়ই এ নিয়ে ভাবতে হয়। আমরা বরং `self`-এর type-এর দিকে মনোযোগ দেব, কারণ এই প্রথম এমন একটি method দেখছি
+যেখানে `self`-এর type annotation আছে। `self`-এর type annotation অন্য function parameter-এর type annotation-এর মতোই কাজ করে, তবে দুটি মূল পার্থক্যসহ:
 
-- It tells Rust what type `self` must be for the method to be called.
-- It can’t be just any type. It’s restricted to the type on which the method is
-  implemented, a reference or smart pointer to that type, or a `Pin` wrapping a
-  reference to that type.
+- এটি Rust-কে বলে method-টি call করতে হলে `self`-কে কোন type-এর হতে হবে।
+- এটি যেকোনো type হতে পারে না। এটি সীমাবদ্ধ সেই type-এ যার ওপর method-টি implement করা, সেই type-এর একটি reference বা smart pointer, অথবা সেই type-এর একটি reference মোড়ানো একটি `Pin`-এ।
 
-We’ll see more on this syntax in [Chapter 18][ch-18]<!-- ignore -->. For now,
-it’s enough to know that if we want to poll a future to check whether it is
-`Pending` or `Ready(Output)`, we need a `Pin`-wrapped mutable reference to the
-type.
+এই syntax নিয়ে আরও দেখব [অধ্যায় 18][ch-18]<!-- ignore -->-এ। আপাতত এটুকু জানলেই যথেষ্ট যে একটি future `Pending` নাকি `Ready(Output)` তা যাচাই করতে poll করতে চাইলে আমাদের type-টির
+একটি `Pin`-মোড়ানো mutable reference দরকার।
 
-`Pin` is a wrapper for pointer-like types such as `&`, `&mut`, `Box`, and `Rc`.
-(Technically, `Pin` works with types that implement the `Deref` or `DerefMut`
-traits, but this is effectively equivalent to working only with references and
-smart pointers.) `Pin` is not a pointer itself and doesn’t have any behavior of
-its own like `Rc` and `Arc` do with reference counting; it’s purely a tool the
-compiler can use to enforce constraints on pointer usage.
+`Pin` হলো `&`, `&mut`, `Box` আর `Rc`-এর মতো pointer-সদৃশ type-এর একটি wrapper। (কারিগরি দিক থেকে `Pin` এমন type-এর সঙ্গে কাজ করে যা `Deref` বা `DerefMut` trait implement করে, তবে কার্যত
+এটি শুধু reference আর smart pointer-এর সঙ্গে কাজ করার সমতুল্য।) `Pin` নিজে কোনো pointer নয়, আর reference counting-এর ক্ষেত্রে `Rc` আর `Arc`-এর যেমন নিজস্ব আচরণ আছে, এর তেমন কোনো নিজস্ব
+আচরণ নেই; এটি পুরোপুরি একটি হাতিয়ার, যা দিয়ে compiler pointer ব্যবহারের ওপর বাধ্যবাধকতা প্রয়োগ করতে পারে।
 
-Recalling that `await` is implemented in terms of calls to `poll` starts to
-explain the error message we saw earlier, but that was in terms of `Unpin`, not
-`Pin`. So how exactly does `Pin` relate to `Unpin`, and why does `Future` need
-`self` to be in a `Pin` type to call `poll`?
+`await` যে `poll` call দিয়ে implement করা, তা মনে করলে আগে দেখা error message-এর ব্যাখ্যা কিছুটা পাওয়া যায়, কিন্তু সেটি ছিল `Pin` নয়, `Unpin` নিয়ে। তাহলে `Pin` ঠিক কীভাবে `Unpin`-এর
+সঙ্গে সম্পর্কিত, আর `poll` call করতে `Future`-এর কেন `self`-কে একটি `Pin` type-এ থাকা দরকার?
 
-Remember from earlier in this chapter that a series of await points in a future
-get compiled into a state machine, and the compiler makes sure that state
-machine follows all of Rust’s normal rules around safety, including borrowing
-and ownership. To make that work, Rust looks at what data is needed between one
-await point and either the next await point or the end of the async block. It
-then creates a corresponding variant in the compiled state machine. Each
-variant gets the access it needs to the data that will be used in that section
-of the source code, whether by taking ownership of that data or by getting a
-mutable or immutable reference to it.
+এই অধ্যায়ের আগের অংশ থেকে মনে করুন, একটি future-এর ধারাবাহিক await point-গুলো একটি state machine-এ compile হয়, আর compiler নিশ্চিত করে যে সেই state machine নিরাপত্তা নিয়ে Rust-এর সব
+সাধারণ নিয়ম মেনে চলে, borrowing আর ownership-সহ। এটি কাজ করাতে Rust দেখে একটি await point আর পরের await point বা async block-এর শেষের মাঝে কোন ডেটা দরকার। তারপর compile করা state
+machine-এ একটি সংশ্লিষ্ট variant তৈরি করে। source code-এর সেই অংশে যে ডেটা ব্যবহার হবে, প্রতিটি variant সেই ডেটায় তার দরকারি প্রবেশাধিকার পায়, হয় সেই ডেটার ownership নিয়ে, নয়তো এর একটি
+mutable বা immutable reference নিয়ে।
 
-So far, so good: if we get anything wrong about the ownership or references in
-a given async block, the borrow checker will tell us. When we want to move
-around the future that corresponds to that block—like moving it into a `Vec` to
-pass to `join_all`—things get trickier.
+এ পর্যন্ত সব ঠিক আছে: কোনো async block-এ ownership বা reference নিয়ে কিছু ভুল করলে borrow checker আমাদের জানাবে। কিন্তু যখন সেই block-এর সংশ্লিষ্ট future-কে এদিক-ওদিক সরাতে চাই—যেমন
+`join_all`-এ পাঠাতে একে একটি `Vec`-এ সরানো—তখন ব্যাপারটা জটিল হয়ে যায়।
 
-When we move a future—whether by pushing it into a data structure to use as an
-iterator with `join_all` or by returning it from a function—that actually means
-moving the state machine Rust creates for us. And unlike most other types in
-Rust, the futures Rust creates for async blocks can end up with references to
-themselves in the fields of any given variant, as shown in the simplified illustration in Figure 17-4.
+যখন একটি future সরাই—হোক `join_all`-এর সঙ্গে iterator হিসেবে ব্যবহারের জন্য একটি data structure-এ push করে, বা একটি function থেকে return করে—তখন আসলে Rust আমাদের জন্য যে state machine তৈরি
+করে সেটিই সরানো হয়। আর Rust-এর অন্য বেশিরভাগ type-এর মতো নয়, async block-এর জন্য Rust যে future তৈরি করে, তাদের কোনো variant-এর field-এ নিজেদেরই reference থেকে যেতে পারে, যেমনটি Figure 17-4-এর সরলীকৃত চিত্রে দেখানো হয়েছে।
 
 <figure>
 
-<img alt="A single-column, three-row table representing a future, fut1, which has data values 0 and 1 in the first two rows and an arrow pointing from the third row back to the second row, representing an internal reference within the future." src="img/trpl17-04.svg" class="center" />
+<img alt="একটি future, fut1, বোঝানো এক কলাম আর তিন সারির একটি table, যার প্রথম দুই সারিতে ডেটা মান 0 আর 1, আর তৃতীয় সারি থেকে একটি তীরচিহ্ন আবার দ্বিতীয় সারির দিকে গেছে, যা future-এর ভেতরের একটি reference বোঝায়।" src="img/trpl17-04.svg" class="center" />
 
-<figcaption>Figure 17-4: A self-referential data type</figcaption>
+<figcaption>Figure 17-4: নিজেকেই reference করে এমন একটি data type</figcaption>
 
 </figure>
 
-By default, though, any object that has a reference to itself is unsafe to move,
-because references always point to the actual memory address of whatever they
-refer to (see Figure 17-5). If you move the data structure itself, those
-internal references will be left pointing to the old location. However, that
-memory location is now invalid. For one thing, its value will not be updated
-when you make changes to the data structure. For another—more important—thing,
-the computer is now free to reuse that memory for other purposes! You could end
-up reading completely unrelated data later.
+তবে default-ভাবে নিজের reference আছে এমন যেকোনো object সরানো অনিরাপদ, কারণ reference সবসময় যেটিকে নির্দেশ করে তার আসল মেমোরি ঠিকানাকে নির্দেশ করে (Figure 17-5 দেখুন)। data structure-টি
+নিজে সরালে সেই ভেতরের reference-গুলো পুরোনো জায়গাকেই নির্দেশ করতে থাকবে। কিন্তু সেই মেমোরির জায়গা এখন অবৈধ। একটি কারণ, data structure-এ পরিবর্তন আনলে এর মান হালনাগাদ হবে না। আরেকটি—আরও
+গুরুত্বপূর্ণ—কারণ হলো, কম্পিউটার এখন সেই মেমোরি অন্য কাজে আবার ব্যবহার করতে স্বাধীন! পরে আপনি হয়তো একেবারে সম্পর্কহীন ডেটা পড়ে ফেলবেন।
 
 <figure>
 
-<img alt="Two tables, depicting two futures, fut1 and fut2, each of which has one column and three rows, representing the result of having moved a future out of fut1 into fut2. The first, fut1, is grayed out, with a question mark in each index, representing unknown memory. The second, fut2, has 0 and 1 in the first and second rows and an arrow pointing from its third row back to the second row of fut1, representing a pointer that is referencing the old location in memory of the future before it was moved." src="img/trpl17-05.svg" class="center" />
+<img alt="দুটি future, fut1 আর fut2, বোঝানো দুটি table, প্রতিটিতে এক কলাম আর তিন সারি, যা fut1 থেকে একটি future fut2-তে সরানোর ফল দেখায়। প্রথমটি, fut1, ধূসর করা, প্রতিটি ঘরে একটি প্রশ্নবোধক চিহ্ন, যা অজানা মেমোরি বোঝায়। দ্বিতীয়টি, fut2-এর প্রথম আর দ্বিতীয় সারিতে 0 আর 1, আর এর তৃতীয় সারি থেকে একটি তীরচিহ্ন আবার fut1-এর দ্বিতীয় সারির দিকে গেছে, যা এমন একটি pointer বোঝায় যা সরানোর আগের future-এর মেমোরির পুরোনো জায়গাকে নির্দেশ করছে।" src="img/trpl17-05.svg" class="center" />
 
-<figcaption>Figure 17-5: The unsafe result of moving a self-referential data type</figcaption>
+<figcaption>Figure 17-5: নিজেকেই reference করে এমন একটি data type সরানোর অনিরাপদ ফল</figcaption>
 
 </figure>
 
-Theoretically, the Rust compiler could try to update every reference to an
-object whenever it gets moved, but that could add a lot of performance overhead,
-especially if a whole web of references needs updating. If we could instead make
-sure the data structure in question _doesn’t move in memory_, we wouldn’t have
-to update any references. This is exactly what Rust’s borrow checker is for:
-in safe code, it prevents you from moving any item with an active reference to
-it.
+তাত্ত্বিকভাবে, Rust compiler কোনো object সরানোর সময় প্রতিবার এর প্রতিটি reference হালনাগাদ করার চেষ্টা করতে পারত, কিন্তু তাতে performance-এর অনেক বাড়তি খরচ হতে পারত, বিশেষ করে যদি
+reference-এর একটি পুরো জাল হালনাগাদ করতে হয়। এর বদলে যদি নিশ্চিত করা যেত যে সংশ্লিষ্ট data structure _মেমোরিতে সরে না_, তাহলে কোনো reference হালনাগাদ করতে হতো না। Rust-এর borrow
+checker ঠিক এই কাজটিই করে: নিরাপদ কোডে কোনো item-এর সক্রিয় reference থাকলে এটি item-টি সরাতে দেয় না।
 
-`Pin` builds on that to give us the exact guarantee we need. When we _pin_ a
-value by wrapping a pointer to that value in `Pin`, it can no longer move. Thus,
-if you have `Pin<Box<SomeType>>`, you actually pin the `SomeType` value, _not_
-the `Box` pointer. Figure 17-6 illustrates this process.
+`Pin` এর ওপর ভিত্তি করে আমাদের ঠিক দরকারি নিশ্চয়তাটি দেয়। একটি মানের দিকে একটি pointer-কে `Pin`-এ মুড়ে যখন মানটি _pin_ করি, তখন এটি আর সরতে পারে না। তাই আপনার কাছে যদি
+`Pin<Box<SomeType>>` থাকে, তাহলে আসলে আপনি `SomeType` মানটি pin করছেন, `Box` pointer-টি _নয়_। Figure 17-6 এই প্রক্রিয়াটি দেখায়।
 
 <figure>
 
-<img alt="Three boxes laid out side by side. The first is labeled “Pin”, the second “b1”, and the third “pinned”. Within “pinned” is a table labeled “fut”, with a single column; it represents a future with cells for each part of the data structure. Its first cell has the value “0”, its second cell has an arrow coming out of it and pointing to the fourth and final cell, which has the value “1” in it, and the third cell has dashed lines and an ellipsis to indicate there may be other parts to the data structure. All together, the “fut” table represents a future which is self-referential. An arrow leaves the box labeled “Pin”, goes through the box labeled “b1” and terminates inside the “pinned” box at the “fut” table." src="img/trpl17-06.svg" class="center" />
+<img alt="পাশাপাশি সাজানো তিনটি বাক্স। প্রথমটিতে লেখা “Pin”, দ্বিতীয়টিতে “b1”, আর তৃতীয়টিতে “pinned”। “pinned”-এর ভেতরে “fut” লেখা এক কলামের একটি table আছে; এটি একটি future বোঝায়, যার data structure-এর প্রতিটি অংশের জন্য একটি করে ঘর। এর প্রথম ঘরে মান “0”, দ্বিতীয় ঘর থেকে একটি তীরচিহ্ন বেরিয়ে চতুর্থ ও শেষ ঘরের দিকে গেছে, যাতে মান “1”, আর তৃতীয় ঘরে ড্যাশ-দেওয়া রেখা আর তিন বিন্দু, যা বোঝায় data structure-এর আরও অংশ থাকতে পারে। সব মিলিয়ে “fut” table নিজেকেই reference করে এমন একটি future বোঝায়। একটি তীরচিহ্ন “Pin” লেখা বাক্স থেকে বেরিয়ে “b1” লেখা বাক্সের ভেতর দিয়ে গিয়ে “pinned” বাক্সের ভেতরে “fut” table-এ শেষ হয়।" src="img/trpl17-06.svg" class="center" />
 
-<figcaption>Figure 17-6: Pinning a `Box` that points to a self-referential future type</figcaption>
+<figcaption>Figure 17-6: নিজেকেই reference করে এমন একটি future type-কে নির্দেশ করা একটি `Box` pin করা</figcaption>
 
 </figure>
 
-In fact, the `Box` pointer can still move around freely. Remember: we care about
-making sure the data ultimately being referenced stays in place. If a pointer
-moves around, _but the data it points to_ is in the same place, as in Figure
-17-7, there’s no potential problem. (As an independent exercise, look at the docs
-for the types as well as the `std::pin` module and try to work out how you’d do
-this with a `Pin` wrapping a `Box`.) The key is that the self-referential type
-itself cannot move, because it is still pinned.
+আসলে `Box` pointer এখনো স্বাধীনভাবে এদিক-ওদিক সরতে পারে। মনে রাখবেন: আমাদের মাথাব্যথা শেষ পর্যন্ত যে ডেটাকে reference করা হচ্ছে তা জায়গায় থাকছে কি না। একটি pointer যদি এদিক-ওদিক সরে, _কিন্তু
+এটি যে ডেটাকে নির্দেশ করে_ তা একই জায়গায় থাকে, যেমনটি Figure 17-7-এ, তাহলে কোনো সম্ভাব্য সমস্যা নেই। (একটি স্বাধীন অনুশীলন হিসেবে type-গুলোর আর `std::pin` module-এর docs দেখে বের করার
+চেষ্টা করুন একটি `Box` মোড়ানো `Pin` দিয়ে কীভাবে এটা করতেন।) মূল কথা হলো নিজেকেই reference করে এমন type-টি নিজে সরতে পারে না, কারণ এটি এখনো pin করা।
 
 <figure>
 
-<img alt="Four boxes laid out in three rough columns, identical to the previous diagram with a change to the second column. Now there are two boxes in the second column, labeled “b1” and “b2”, “b1” is grayed out, and the arrow from “Pin” goes through “b2” instead of “b1”, indicating that the pointer has moved from “b1” to “b2”, but the data in “pinned” has not moved." src="img/trpl17-07.svg" class="center" />
+<img alt="মোটামুটি তিনটি কলামে সাজানো চারটি বাক্স, আগের diagram-এর মতোই, শুধু দ্বিতীয় কলামে একটি পরিবর্তন। এখন দ্বিতীয় কলামে দুটি বাক্স, যাতে লেখা “b1” আর “b2”; “b1” ধূসর করা, আর “Pin” থেকে তীরচিহ্নটি “b1”-এর বদলে “b2”-এর ভেতর দিয়ে যায়, যা বোঝায় pointer-টি “b1” থেকে “b2”-তে সরেছে, কিন্তু “pinned”-এর ডেটা সরেনি।" src="img/trpl17-07.svg" class="center" />
 
-<figcaption>Figure 17-7: Moving a `Box` which points to a self-referential future type</figcaption>
+<figcaption>Figure 17-7: নিজেকেই reference করে এমন একটি future type-কে নির্দেশ করা একটি `Box` সরানো</figcaption>
 
 </figure>
 
-However, most types are perfectly safe to move around, even if they happen to be
-behind a `Pin` pointer. We only need to think about pinning when items have
-internal references. Primitive values such as numbers and Booleans are safe
-because they obviously don’t have any internal references.
-Neither do most types you normally work with in Rust. You can move around
-a `Vec`, for example, without worrying. Given what we have seen so far, if
-you have a `Pin<Vec<String>>`, you’d have to do everything via the safe but
-restrictive APIs provided by `Pin`, even though a `Vec<String>` is always safe
-to move if there are no other references to it. We need a way to tell the
-compiler that it’s fine to move items around in cases like this—and that’s
-where `Unpin` comes into play.
+তবে বেশিরভাগ type এদিক-ওদিক সরানো পুরোপুরি নিরাপদ, এমনকি সেগুলো ঘটনাচক্রে একটি `Pin` pointer-এর পেছনে থাকলেও। item-এর ভেতরের reference থাকলে কেবল তখনই pinning নিয়ে ভাবতে হয়। সংখ্যা আর
+Boolean-এর মতো primitive মান নিরাপদ, কারণ স্পষ্টতই এদের কোনো ভেতরের reference নেই। Rust-এ সাধারণত যে type-গুলো নিয়ে কাজ করেন, তাদের বেশিরভাগেরও নেই। যেমন, কোনো চিন্তা না করেই একটি `Vec`
+এদিক-ওদিক সরাতে পারেন। এ পর্যন্ত যা দেখেছি তার ভিত্তিতে, আপনার কাছে একটি `Pin<Vec<String>>` থাকলে `Pin`-এর দেওয়া নিরাপদ কিন্তু সীমাবদ্ধ API দিয়ে সবকিছু করতে হতো, যদিও অন্য কোনো
+reference না থাকলে একটি `Vec<String>` সবসময় সরানো নিরাপদ। এমন ক্ষেত্রে item এদিক-ওদিক সরানো যে ঠিক আছে তা compiler-কে জানানোর একটি উপায় দরকার—আর এখানেই আসে `Unpin`।
 
-`Unpin` is a marker trait, similar to the `Send` and `Sync` traits we saw in
-Chapter 16, and thus has no functionality of its own. Marker traits exist only
-to tell the compiler it’s safe to use the type implementing a given trait in a
-particular context. `Unpin` informs the compiler that a given type does _not_
-need to uphold any guarantees about whether the value in question can be safely
-moved.
+`Unpin` একটি marker trait, অধ্যায় 16-এ দেখা `Send` আর `Sync` trait-এর মতো, তাই এর নিজস্ব কোনো কার্যক্ষমতা নেই। marker trait থাকে শুধু compiler-কে জানাতে যে একটি নির্দিষ্ট trait implement
+করা type নির্দিষ্ট একটি প্রেক্ষাপটে ব্যবহার করা নিরাপদ। `Unpin` compiler-কে জানায় যে সংশ্লিষ্ট মানটি নিরাপদে সরানো যায় কি না সে বিষয়ে একটি নির্দিষ্ট type-কে কোনো নিশ্চয়তা বজায় রাখতে
+_হয় না_।
 
 <!--
   The inline `<code>` in the next block is to allow the inline `<em>` inside it,
@@ -358,56 +255,42 @@ moved.
   that it is something distinct from a normal type.
 -->
 
-Just as with `Send` and `Sync`, the compiler implements `Unpin` automatically
-for all types where it can prove it is safe. A special case, again similar to
-`Send` and `Sync`, is where `Unpin` is _not_ implemented for a type. The
-notation for this is <code>impl !Unpin for <em>SomeType</em></code>, where
-<code><em>SomeType</em></code> is the name of a type that _does_ need to uphold
-those guarantees to be safe whenever a pointer to that type is used in a `Pin`.
+`Send` আর `Sync`-এর মতোই, যেসব type-এর ক্ষেত্রে compiler প্রমাণ করতে পারে যে এটি নিরাপদ, সেগুলোর জন্য এটি স্বয়ংক্রিয়ভাবে `Unpin` implement করে। একটি বিশেষ ক্ষেত্র, আবারও `Send` আর
+`Sync`-এর মতো, হলো যখন একটি type-এর জন্য `Unpin` implement করা _হয় না_। এর চিহ্ন হলো <code>impl !Unpin for <em>SomeType</em></code>, যেখানে
+<code><em>SomeType</em></code> হলো এমন একটি type-এর নাম, যার pointer যখনই একটি `Pin`-এ ব্যবহার হয়, নিরাপদ থাকতে তাকে সেই নিশ্চয়তাগুলো বজায় রাখতে _হয়_।
 
-In other words, there are two things to keep in mind about the relationship
-between `Pin` and `Unpin`. First, `Unpin` is the “normal” case, and `!Unpin` is
-the special case. Second, whether a type implements `Unpin` or `!Unpin` _only_
-matters when you’re using a pinned pointer to that type like <code>Pin<&mut
-<em>SomeType</em>></code>.
+অন্যভাবে বললে, `Pin` আর `Unpin`-এর সম্পর্ক নিয়ে দুটি বিষয় মনে রাখতে হবে। প্রথমত, `Unpin` হলো “সাধারণ” ক্ষেত্র, আর `!Unpin` বিশেষ ক্ষেত্র। দ্বিতীয়ত, একটি type `Unpin` নাকি `!Unpin`
+implement করে, তা _কেবল_ তখনই গুরুত্বপূর্ণ, যখন আপনি সেই type-এর একটি pin করা pointer ব্যবহার করছেন, যেমন <code>Pin<&mut
+<em>SomeType</em>></code>।
 
-To make that concrete, think about a `String`: it has a length and the Unicode
-characters that make it up. We can wrap a `String` in `Pin`, as seen in Figure
-17-8. However, `String` automatically implements `Unpin`, as do most other types
-in Rust.
+বিষয়টি স্পষ্ট করতে একটি `String`-এর কথা ভাবুন: এর একটি দৈর্ঘ্য আর এটি গঠনকারী Unicode অক্ষরগুলো আছে। একটি `String`-কে `Pin`-এ মোড়ানো যায়, যেমনটি Figure
+17-8-এ দেখা যাচ্ছে। তবে Rust-এর অন্য বেশিরভাগ type-এর মতোই `String` স্বয়ংক্রিয়ভাবে `Unpin` implement করে।
 
 <figure>
 
-<img alt="A box labeled “Pin” on the left with an arrow going from it to a box labeled “String” on the right. The “String” box contains the data 5usize, representing the length of the string, and the letters “h”, “e”, “l”, “l”, and “o” representing the characters of the string “hello” stored in this String instance. A dotted rectangle surrounds the “String” box and its label, but not the “Pin” box." src="img/trpl17-08.svg" class="center" />
+<img alt="বাম দিকে “Pin” লেখা একটি বাক্স, যা থেকে একটি তীরচিহ্ন ডান দিকের “String” লেখা একটি বাক্সে গেছে। “String” বাক্সে আছে ডেটা 5usize, যা string-এর দৈর্ঘ্য বোঝায়, আর “h”, “e”, “l”, “l” ও “o” অক্ষরগুলো, যা এই String instance-এ রাখা “hello” string-এর অক্ষর বোঝায়। একটি বিন্দু-রেখার আয়তক্ষেত্র “String” বাক্স আর এর লেবেল ঘিরে আছে, কিন্তু “Pin” বাক্সকে নয়।" src="img/trpl17-08.svg" class="center" />
 
-<figcaption>Figure 17-8: Pinning a `String`; the dotted line indicates that the `String` implements the `Unpin` trait and thus is not pinned</figcaption>
+<figcaption>Figure 17-8: একটি `String` pin করা; বিন্দু-রেখা বোঝায় যে `String` `Unpin` trait implement করে এবং তাই pin হয় না</figcaption>
 
 </figure>
 
-As a result, we can do things that would be illegal if `String` implemented
-`!Unpin` instead, such as replacing one string with another at the exact same
-location in memory as in Figure 17-9. This doesn’t violate the `Pin` contract,
-because `String` has no internal references that make it unsafe to move around.
-That is precisely why it implements `Unpin` rather than `!Unpin`.
+ফলে আমরা এমন কাজ করতে পারি, যা `String` বরং `!Unpin` implement করলে অবৈধ হতো, যেমন মেমোরির হুবহু একই জায়গায় একটি string-এর বদলে আরেকটি string বসানো, যেমনটি Figure 17-9-এ। এটি `Pin`-এর
+চুক্তি ভঙ্গ করে না, কারণ `String`-এর এমন কোনো ভেতরের reference নেই যা একে সরানো অনিরাপদ করে। ঠিক এ কারণেই এটি `!Unpin`-এর বদলে `Unpin` implement করে।
 
 <figure>
 
-<img alt="The same “hello” string data from the previous example, now labeled “s1” and grayed out. The “Pin” box from the previous example now points to a different String instance, one that is labeled “s2”, is valid, has a length of 7usize, and contains the characters of the string “goodbye”. s2 is surrounded by a dotted rectangle because it, too, implements the Unpin trait." src="img/trpl17-09.svg" class="center" />
+<img alt="আগের উদাহরণের সেই একই “hello” string ডেটা, এখন “s1” লেখা এবং ধূসর করা। আগের উদাহরণের “Pin” বাক্স এখন একটি ভিন্ন String instance-কে নির্দেশ করে, যাতে লেখা “s2”, যা বৈধ, যার দৈর্ঘ্য 7usize, এবং যাতে “goodbye” string-এর অক্ষরগুলো আছে। s2 একটি বিন্দু-রেখার আয়তক্ষেত্রে ঘেরা, কারণ এটিও Unpin trait implement করে।" src="img/trpl17-09.svg" class="center" />
 
-<figcaption>Figure 17-9: Replacing the `String` with an entirely different `String` in memory</figcaption>
+<figcaption>Figure 17-9: মেমোরিতে `String`-এর বদলে সম্পূর্ণ ভিন্ন একটি `String` বসানো</figcaption>
 
 </figure>
 
-Now we know enough to understand the errors reported for that `join_all` call
-from back in Listing 17-23. We originally tried to move the futures produced by
-async blocks into a `Vec<Box<dyn Future<Output = ()>>>`, but as we’ve seen,
-those futures may have internal references, so they don’t automatically
-implement `Unpin`. Once we pin them, we can pass the resulting `Pin` type into
-the `Vec`, confident that the underlying data in the futures will _not_ be
-moved. Listing 17-24 shows how to fix the code by calling the `pin!` macro
-where each of the three futures are defined and adjusting the trait object type.
+এখন Listing 17-23-এর সেই `join_all` call-এর জন্য দেখানো error বোঝার মতো যথেষ্ট জানি। আমরা শুরুতে async block-এর তৈরি future-গুলো একটি `Vec<Box<dyn Future<Output = ()>>>`-এ সরানোর চেষ্টা
+করেছিলাম, কিন্তু যেমন দেখেছি, সেই future-গুলোর ভেতরের reference থাকতে পারে, তাই এরা স্বয়ংক্রিয়ভাবে `Unpin` implement করে না। এগুলো pin করে ফেললে ফলাফলের `Pin` type `Vec`-এ পাঠাতে পারি,
+এই আস্থা নিয়ে যে future-গুলোর ভেতরের ডেটা সরবে _না_। Listing 17-24-এ দেখানো হয়েছে তিনটি future যেখানে সংজ্ঞায়িত সেখানে `pin!` macro call করে এবং trait object type ঠিক করে কীভাবে কোডটি
+সারানো যায়।
 
-<Listing number="17-24" caption="Pinning the futures to enable moving them into the vector">
+<Listing number="17-24" caption="future-গুলো vector-এ সরাতে পারার জন্য সেগুলো pin করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-24/src/main.rs:here}}
@@ -415,45 +298,29 @@ where each of the three futures are defined and adjusting the trait object type.
 
 </Listing>
 
-This example now compiles and runs, and we could add or remove futures from the
-vector at runtime and join them all.
+এই উদাহরণ এখন compile হয়ে চলে, আর আমরা runtime-এ vector-এ future যোগ বা বাদ দিয়ে সবগুলো একসঙ্গে join করতে পারতাম।
 
-`Pin` and `Unpin` are mostly important for building lower-level libraries, or
-when you’re building a runtime itself, rather than for day-to-day Rust code.
-When you see these traits in error messages, though, now you’ll have a better
-idea of how to fix your code!
+`Pin` আর `Unpin` মূলত গুরুত্বপূর্ণ নিম্ন-স্তরের library বানানোর সময়, বা যখন নিজেই একটি runtime বানাচ্ছেন, প্রতিদিনের Rust কোডের জন্য নয়। তবে error message-এ এই trait-গুলো দেখলে এখন
+আপনার কোড কীভাবে ঠিক করবেন সে সম্পর্কে আরও ভালো ধারণা থাকবে!
 
-> Note: This combination of `Pin` and `Unpin` makes it possible to safely
-> implement a whole class of complex types in Rust that would otherwise prove
-> challenging because they’re self-referential. Types that require `Pin` show up
-> most commonly in async Rust today, but every once in a while, you might see
-> them in other contexts, too.
+> Note: `Pin` আর `Unpin`-এর এই সমন্বয় Rust-এ এমন এক পুরো শ্রেণির জটিল type নিরাপদে implement করা সম্ভব করে, যা নিজেকেই reference করে বলে অন্যথায় কঠিন হতো। `Pin` দরকার এমন type
+> আজকাল সবচেয়ে বেশি দেখা যায় async Rust-এ, তবে মাঝে মাঝে অন্য প্রেক্ষাপটেও দেখতে পারেন।
 >
-> The specifics of how `Pin` and `Unpin` work, and the rules they’re required
-> to uphold, are covered extensively in the API documentation for `std::pin`, so
-> if you’re interested in learning more, that’s a great place to start.
+> `Pin` আর `Unpin` কীভাবে কাজ করে এবং এদের কোন নিয়ম বজায় রাখতে হয়, তার খুঁটিনাটি `std::pin`-এর API documentation-এ বিস্তারিত আলোচনা করা আছে, তাই আরও জানতে আগ্রহী হলে সেখান থেকে শুরু
+> করা চমৎকার।
 >
-> If you want to understand how things work under the hood in even more detail,
-> see Chapters [2][under-the-hood]<!-- ignore --> and
-> [4][pinning]<!-- ignore --> of
-> [_Asynchronous Programming in Rust_][async-book].
+> ভেতরে ভেতরে জিনিসগুলো কীভাবে কাজ করে তা আরও বিস্তারিত বুঝতে চাইলে
+> [_Asynchronous Programming in Rust_][async-book]-এর অধ্যায় [2][under-the-hood]<!-- ignore --> আর
+> [4][pinning]<!-- ignore --> দেখুন।
 
-### The `Stream` Trait
+### `Stream` trait {#the-stream-trait}
 
-Now that you have a deeper grasp on the `Future`, `Pin`, and `Unpin` traits, we
-can turn our attention to the `Stream` trait. As you learned earlier in the
-chapter, streams are similar to asynchronous iterators. Unlike `Iterator` and
-`Future`, however, `Stream` has no definition in the standard library as of
-this writing, but there _is_ a very common definition from the `futures` crate
-used throughout the ecosystem.
+`Future`, `Pin` আর `Unpin` trait সম্পর্কে আরও গভীর ধারণা পাওয়ার পর এবার `Stream` trait-এর দিকে নজর দিতে পারি। অধ্যায়ের আগের অংশে যেমন শিখেছেন, stream asynchronous iterator-এর মতো। তবে
+`Iterator` আর `Future`-এর মতো নয়, এই লেখার সময় পর্যন্ত standard library-তে `Stream`-এর কোনো সংজ্ঞা নেই, তবে `futures` crate-এর একটি খুবই প্রচলিত সংজ্ঞা _আছে_, যা পুরো ecosystem-এ ব্যবহৃত হয়।
 
-Let’s review the definitions of the `Iterator` and `Future` traits before
-looking at how a `Stream` trait might merge them together. From `Iterator`, we
-have the idea of a sequence: its `next` method provides an
-`Option<Self::Item>`. From `Future`, we have the idea of readiness over time:
-its `poll` method provides a `Poll<Self::Output>`. To represent a sequence of
-items that become ready over time, we define a `Stream` trait that puts those
-features together:
+একটি `Stream` trait কীভাবে এদের মিলিয়ে দিতে পারে তা দেখার আগে চলুন `Iterator` আর `Future` trait-এর সংজ্ঞা আবার দেখি। `Iterator` থেকে আমরা পাই একটি ধারার ধারণা: এর `next` method একটি
+`Option<Self::Item>` দেয়। `Future` থেকে পাই সময়ের সঙ্গে প্রস্তুত হওয়ার ধারণা: এর `poll` method একটি `Poll<Self::Output>` দেয়। সময়ের সঙ্গে প্রস্তুত হওয়া item-এর একটি ধারা বোঝাতে আমরা
+এমন একটি `Stream` trait সংজ্ঞায়িত করি, যা এই বৈশিষ্ট্যগুলো একসঙ্গে জুড়ে দেয়:
 
 ```rust
 use std::pin::Pin;
@@ -469,30 +336,20 @@ trait Stream {
 }
 ```
 
-The `Stream` trait defines an associated type called `Item` for the type of the
-items produced by the stream. This is similar to `Iterator`, where there may be
-zero to many items, and unlike `Future`, where there is always a single
-`Output`, even if it’s the unit type `()`.
+`Stream` trait stream-এর তৈরি item-এর type-এর জন্য `Item` নামের একটি associated type সংজ্ঞায়িত করে। এটি `Iterator`-এর মতো, যেখানে শূন্য থেকে অনেক item থাকতে পারে, আর `Future`-এর মতো
+নয়, যেখানে সবসময় একটিমাত্র `Output` থাকে, তা unit type `()` হলেও।
 
-`Stream` also defines a method to get those items. We call it `poll_next`, to
-make it clear that it polls in the same way `Future::poll` does and produces a
-sequence of items in the same way `Iterator::next` does. Its return type
-combines `Poll` with `Option`. The outer type is `Poll`, because it has to be
-checked for readiness, just as a future does. The inner type is `Option`,
-because it needs to signal whether there are more messages, just as an iterator
-does.
+`Stream` সেই item-গুলো পাওয়ার জন্য একটি method-ও সংজ্ঞায়িত করে। আমরা একে বলি `poll_next`, যাতে স্পষ্ট হয় যে এটি `Future::poll`-এর মতোই poll করে এবং `Iterator::next`-এর মতোই item-এর একটি ধারা
+তৈরি করে। এর return type `Poll`-কে `Option`-এর সঙ্গে মেলায়। বাইরের type হলো `Poll`, কারণ একটি future-এর মতোই এটি প্রস্তুত কি না যাচাই করতে হয়। ভেতরের type হলো `Option`, কারণ একটি
+iterator-এর মতোই এটি জানাতে হয় আরও message আছে কি না।
 
-Something very similar to this definition will likely end up as part of Rust’s
-standard library. In the meantime, it’s part of the toolkit of most runtimes,
-so you can rely on it, and everything we cover next should generally apply!
+এই সংজ্ঞার খুব কাছাকাছি কিছু সম্ভবত শেষ পর্যন্ত Rust-এর standard library-র অংশ হবে। এর মধ্যে এটি বেশিরভাগ runtime-এর হাতিয়ারের অংশ, তাই এর ওপর নির্ভর করতে পারেন, আর এরপর যা আলোচনা
+করব তা সাধারণত প্রযোজ্য হওয়ার কথা!
 
-In the examples we saw in the [“Streams: Futures in Sequence”][streams]<!--
-ignore --> section, though, we didn’t use `poll_next` _or_ `Stream`, but
-instead used `next` and `StreamExt`. We _could_ work directly in terms of the
-`poll_next` API by hand-writing our own `Stream` state machines, of course,
-just as we _could_ work with futures directly via their `poll` method. Using
-`await` is much nicer, though, and the `StreamExt` trait supplies the `next`
-method so we can do just that:
+তবে [“stream: ক্রমানুসারে future”][streams]<!--
+ignore --> অংশে দেখা উদাহরণগুলোতে আমরা `poll_next` _বা_ `Stream` ব্যবহার করিনি, বরং ব্যবহার করেছি `next` আর `StreamExt`। অবশ্যই আমরা নিজেদের `Stream` state machine হাতে লিখে সরাসরি
+`poll_next` API দিয়ে কাজ _করতে পারতাম_, ঠিক যেমন future-এর `poll` method দিয়ে সরাসরি তাদের সঙ্গে কাজ _করতে পারতাম_। তবে `await` ব্যবহার করা অনেক বেশি সুবিধাজনক, আর `StreamExt` trait
+`next` method দেয়, যাতে আমরা ঠিক সেটাই করতে পারি:
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/no-listing-stream-ext/src/lib.rs:here}}
@@ -503,34 +360,24 @@ TODO: update this if/when tokio/etc. update their MSRV and switch to using async
 in traits, since the lack thereof is the reason they do not yet have this.
 -->
 
-> Note: The actual definition we used earlier in the chapter looks slightly
-> different than this, because it supports versions of Rust that did not yet
-> support using async functions in traits. As a result, it looks like this:
+> Note: অধ্যায়ের আগের অংশে আমরা যে আসল সংজ্ঞা ব্যবহার করেছি তা দেখতে এর থেকে একটু আলাদা, কারণ এটি Rust-এর এমন সংস্করণও সমর্থন করে, যেগুলোতে trait-এর ভেতরে async function ব্যবহারের
+> সুবিধা তখনো ছিল না। ফলে এটি দেখতে এমন:
 >
 > ```rust,ignore
 > fn next(&mut self) -> Next<'_, Self> where Self: Unpin;
 > ```
 >
-> That `Next` type is a `struct` that implements `Future` and allows us to name
-> the lifetime of the reference to `self` with `Next<'_, Self>`, so that `await`
-> can work with this method.
+> সেই `Next` type হলো একটি `struct`, যা `Future` implement করে এবং `Next<'_, Self>` দিয়ে `self`-এর reference-এর lifetime-এর নাম দিতে দেয়, যাতে `await` এই method-এর সঙ্গে কাজ
+> করতে পারে।
 
-The `StreamExt` trait is also the home of all the interesting methods available
-to use with streams. `StreamExt` is automatically implemented for every type
-that implements `Stream`, but these traits are defined separately to enable the
-community to iterate on convenience APIs without affecting the foundational
-trait.
+stream-এর সঙ্গে ব্যবহারযোগ্য সব মজার method-এর আবাসও `StreamExt` trait। `Stream` implement করে এমন প্রতিটি type-এর জন্য `StreamExt` স্বয়ংক্রিয়ভাবে implement হয়, তবে এই trait-গুলো আলাদাভাবে
+সংজ্ঞায়িত, যাতে community মৌলিক trait-কে প্রভাবিত না করেই সুবিধাজনক API নিয়ে বারবার কাজ করতে পারে।
 
-In the version of `StreamExt` used in the `trpl` crate, the trait not only
-defines the `next` method but also supplies a default implementation of `next`
-that correctly handles the details of calling `Stream::poll_next`. This means
-that even when you need to write your own streaming data type, you _only_ have
-to implement `Stream`, and then anyone who uses your data type can use
-`StreamExt` and its methods with it automatically.
+`trpl` crate-এ ব্যবহৃত `StreamExt` সংস্করণে trait-টি শুধু `next` method সংজ্ঞায়িতই করে না, বরং `next`-এর এমন একটি default implementation-ও দেয় যা `Stream::poll_next` call করার খুঁটিনাটি
+সঠিকভাবে সামলায়। এর মানে, নিজস্ব streaming data type লিখতে হলেও আপনাকে _শুধু_ `Stream` implement করতে হবে, তারপর যে কেউ আপনার data type ব্যবহার করলে স্বয়ংক্রিয়ভাবে এর সঙ্গে `StreamExt`
+আর এর method-গুলো ব্যবহার করতে পারবে।
 
-That’s all we’re going to cover for the lower-level details on these traits. To
-wrap up, let’s consider how futures (including streams), tasks, and threads all
-fit together!
+এই trait-গুলোর নিম্ন-স্তরের খুঁটিনাটি নিয়ে আমরা এটুকুই দেখব। শেষ করতে চলুন ভেবে দেখি future (stream-সহ), task আর thread কীভাবে একসঙ্গে খাপ খায়!
 
 {{#quiz ../quizzes/async-05-traits-for-async.toml}}
 
