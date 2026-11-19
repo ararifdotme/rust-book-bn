@@ -492,6 +492,13 @@ tested with this repo's build.
 | thread-safe | thread-safe | একাধিক thread থেকে একসঙ্গে ব্যবহার করা নিরাপদ | 11 |
 | parallel | parallel-ভাবে | একসঙ্গে (সমান্তরালে) | 11 |
 | configuration (`cfg`) | configuration | কোন অবস্থায় কোড যুক্ত হবে তার বিকল্প | 11 |
+| test-driven development (TDD) | test-driven development | আগে test লিখে তারপর কোড লেখার পদ্ধতি | 12 |
+| test coverage | test coverage | কোডের কতটা অংশ test-এর আওতায় | 12 |
+| case-insensitive / case-sensitive | case-insensitive / case-sensitive | বড়-ছোট হাতের অক্ষরের পার্থক্য উপেক্ষা করে / মেনে | 12 |
+| exit status (code) | exit status | প্রোগ্রাম শেষে ফেরত দেওয়া সংখ্যা (0 মানে সফল) | 12 |
+| separation of concerns | দায়িত্ব আলাদা করা (separation of concerns) | প্রতিটি অংশকে একটি কাজের দায়িত্ব দেওয়া | 12 |
+| modular / modularity | modular / modularity | আলাদা আলাদা অংশে ভাগ করা | 12 |
+| redirect (output) | অন্যত্র পাঠানো (redirect) | output স্ক্রিনের বদলে ফাইলে পাঠানো | 12 |
 
 ### Everyday computing words
 
@@ -570,6 +577,7 @@ Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
 | local (to a crate) | নিজস্ব (local) | 10 |
 | template | template (কাঠামো) | 11 |
 | ignored | উপেক্ষিত (ignored) | 11 |
+| lowercase / uppercase | ছোট হাতের / বড় হাতের অক্ষর | 12 |
 
 ## Progress
 
@@ -593,7 +601,7 @@ use.
 - [x] Chapter 9: Error Handling (ch09-*)
 - [x] Chapter 10: Generic Types, Traits, and Lifetimes (ch10-*)
 - [x] Chapter 11: Writing Automated Tests (ch11-*)
-- [ ] Chapter 12: An I/O Project: Building a Command Line Program (ch12-*)
+- [x] Chapter 12: An I/O Project: Building a Command Line Program (ch12-*)
 - [ ] Chapter 13: Functional Language Features: Iterators and Closures (ch13-*)
 - [ ] Chapter 14: More about Cargo and Crates.io (ch14-*)
 - [ ] Chapter 15: Smart Pointers (ch15-*)

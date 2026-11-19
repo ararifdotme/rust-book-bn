@@ -1,13 +1,12 @@
-## Reading a File
+## একটি ফাইল পড়া {#reading-a-file}
 
-Now we’ll add functionality to read the file specified in the `file_path`
-argument. First, we need a sample file to test it with: We’ll use a file with a
-small amount of text over multiple lines with some repeated words. Listing 12-3
-has an Emily Dickinson poem that will work well! Create a file called
-_poem.txt_ at the root level of your project, and enter the poem “I’m Nobody!
-Who are you?”
+এবার আমরা `file_path` argument-এ উল্লেখ করা ফাইলটি পড়ার কার্যক্ষমতা যোগ করব। প্রথমে এটি test করার জন্য একটি নমুনা ফাইল
+দরকার: আমরা এমন একটি ফাইল ব্যবহার করব যাতে কয়েক লাইনে অল্প কিছু লেখা আছে এবং কিছু শব্দ বারবার এসেছে। Listing 12-3-এ
+Emily Dickinson-এর একটি কবিতা আছে, যা এ কাজে বেশ ভালো চলবে! আপনার project-এর মূল স্তরে _poem.txt_ নামে একটি ফাইল তৈরি করুন,
+আর তাতে “I’m Nobody!
+Who are you?” কবিতাটি লিখুন।
 
-<Listing number="12-3" file-name="poem.txt" caption="A poem by Emily Dickinson makes a good test case.">
+<Listing number="12-3" file-name="poem.txt" caption="Emily Dickinson-এর একটি কবিতা ভালো test case হয়।">
 
 ```text
 {{#include ../listings/ch12-an-io-project/listing-12-03/poem.txt}}
@@ -15,10 +14,9 @@ Who are you?”
 
 </Listing>
 
-With the text in place, edit _src/main.rs_ and add code to read the file, as
-shown in Listing 12-4.
+লেখাটি জায়গামতো রেখে _src/main.rs_ সম্পাদনা করুন এবং ফাইল পড়ার কোড যোগ করুন, যেমনটি Listing 12-4-এ দেখানো হয়েছে।
 
-<Listing number="12-4" file-name="src/main.rs" caption="Reading the contents of the file specified by the second argument">
+<Listing number="12-4" file-name="src/main.rs" caption="দ্বিতীয় argument-এ উল্লেখ করা ফাইলের বিষয়বস্তু পড়া">
 
 ```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/src/main.rs:here}}
@@ -26,31 +24,23 @@ shown in Listing 12-4.
 
 </Listing>
 
-First, we bring in a relevant part of the standard library with a `use`
-statement: We need `std::fs` to handle files.
+প্রথমে একটি `use` statement দিয়ে standard library-র প্রাসঙ্গিক অংশ আনি: ফাইল সামলাতে আমাদের `std::fs` দরকার।
 
-In `main`, the new statement `fs::read_to_string` takes the `file_path`, opens
-that file, and returns a value of type `std::io::Result<String>` that contains
-the file’s contents.
+`main`-এ নতুন statement `fs::read_to_string` `file_path` নেয়, সেই ফাইলটি খোলে, এবং `std::io::Result<String>` type-এর একটি মান
+return করে, যাতে ফাইলের বিষয়বস্তু থাকে।
 
-After that, we again add a temporary `println!` statement that prints the value
-of `contents` after the file is read so that we can check that the program is
-working so far.
+এরপর আবার একটি সাময়িক `println!` statement যোগ করি, যা ফাইল পড়ার পর `contents`-এর মান print করে, যাতে যাচাই করতে পারি যে
+প্রোগ্রাম এ পর্যন্ত কাজ করছে।
 
-Let’s run this code with any string as the first command line argument (because
-we haven’t implemented the searching part yet) and the _poem.txt_ file as the
-second argument:
+চলুন প্রথম command line argument হিসেবে যেকোনো string (কারণ খোঁজার অংশটি এখনো implement করিনি) আর দ্বিতীয় argument হিসেবে
+_poem.txt_ ফাইল দিয়ে এই কোড চালাই:
 
 ```console
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/output.txt}}
 ```
 
-Great! The code read and then printed the contents of the file. But the code
-has a few flaws. At the moment, the `main` function has multiple
-responsibilities: Generally, functions are clearer and easier to maintain if
-each function is responsible for only one idea. The other problem is that we’re
-not handling errors as well as we could. The program is still small, so these
-flaws aren’t a big problem, but as the program grows, it will be harder to fix
-them cleanly. It’s a good practice to begin refactoring early on when
-developing a program because it’s much easier to refactor smaller amounts of
-code. We’ll do that next.
+চমৎকার! কোডটি ফাইলের বিষয়বস্তু পড়ে print করেছে। কিন্তু কোডে কয়েকটি ত্রুটি আছে। এই মুহূর্তে `main` function-এর একাধিক
+দায়িত্ব: সাধারণত প্রতিটি function শুধু একটি ধারণার দায়িত্বে থাকলে function আরও পরিষ্কার হয় এবং রক্ষণাবেক্ষণ সহজ হয়। অন্য
+সমস্যা হলো আমরা যতটা ভালোভাবে পারতাম ততটা ভালোভাবে error সামলাচ্ছি না। প্রোগ্রামটি এখনো ছোট, তাই এই ত্রুটিগুলো বড় সমস্যা
+নয়, কিন্তু প্রোগ্রাম বড় হতে থাকলে এগুলো পরিচ্ছন্নভাবে ঠিক করা কঠিন হবে। প্রোগ্রাম তৈরির শুরুর দিকেই refactoring (আচরণ না
+বদলে কোডের গঠন উন্নত করা) শুরু করা ভালো অভ্যাস, কারণ অল্প কোড refactor করা অনেক সহজ। এরপর আমরা সেটাই করব।

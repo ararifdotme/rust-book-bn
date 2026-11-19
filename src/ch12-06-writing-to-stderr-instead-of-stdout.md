@@ -2,64 +2,49 @@
 
 <a id="writing-error-messages-to-standard-error-instead-of-standard-output"></a>
 
-## Redirecting Errors to Standard Error
+## error-কে standard error-এ পাঠানো {#redirecting-errors-to-standard-error}
 
-At the moment, we’re writing all of our output to the terminal using the
-`println!` macro. In most terminals, there are two kinds of output: _standard
-output_ (`stdout`) for general information and _standard error_ (`stderr`) for
-error messages. This distinction enables users to choose to direct the
-successful output of a program to a file but still print error messages to the
-screen.
+এই মুহূর্তে আমরা `println!` macro দিয়ে আমাদের সব output terminal-এ লিখছি। বেশিরভাগ terminal-এ দুই ধরনের output থাকে: সাধারণ তথ্যের
+জন্য _standard
+output_ (`stdout`) আর error message-এর জন্য _standard error_ (`stderr`)। এই পার্থক্যের কারণে ব্যবহারকারী একটি প্রোগ্রামের সফল output
+একটি ফাইলে পাঠিয়ে দিয়েও error message-গুলো স্ক্রিনে print করাতে পারে।
 
-The `println!` macro is only capable of printing to standard output, so we have
-to use something else to print to standard error.
+`println!` macro শুধু standard output-এ print করতে পারে, তাই standard error-এ print করতে আমাদের অন্য কিছু ব্যবহার করতে হবে।
 
-### Checking Where Errors Are Written
+### error কোথায় লেখা হচ্ছে তা যাচাই করা {#checking-where-errors-are-written}
 
-First, let’s observe how the content printed by `minigrep` is currently being
-written to standard output, including any error messages we want to write to
-standard error instead. We’ll do that by redirecting the standard output stream
-to a file while intentionally causing an error. We won’t redirect the standard
-error stream, so any content sent to standard error will continue to display on
-the screen.
+প্রথমে দেখা যাক `minigrep`-এর print করা বিষয়বস্তু এখন কীভাবে standard output-এ লেখা হচ্ছে, এমনকি সেই error message-গুলোও, যা আমরা
+বরং standard error-এ লিখতে চাই। এটা দেখতে আমরা ইচ্ছে করে একটি error ঘটিয়ে standard output stream-কে একটি ফাইলে পাঠাব। standard
+error stream-কে আমরা অন্য কোথাও পাঠাব না, তাই standard error-এ পাঠানো যেকোনো বিষয়বস্তু স্ক্রিনেই দেখা যেতে থাকবে।
 
-Command line programs are expected to send error messages to the standard error
-stream so that we can still see error messages on the screen even if we
-redirect the standard output stream to a file. Our program is not currently
-well behaved: We’re about to see that it saves the error message output to a
-file instead!
+command line প্রোগ্রামের কাছে প্রত্যাশা হলো এরা error message standard error stream-এ পাঠাবে, যাতে standard output stream-কে একটি
+ফাইলে পাঠালেও আমরা স্ক্রিনে error message দেখতে পাই। আমাদের প্রোগ্রাম এখন ঠিকমতো আচরণ করছে না: আমরা এখনই দেখব যে এটি বরং error
+message-এর output একটি ফাইলে সংরক্ষণ করে!
 
-To demonstrate this behavior, we’ll run the program with `>` and the file path,
-_output.txt_, that we want to redirect the standard output stream to. We won’t
-pass any arguments, which should cause an error:
+এই আচরণ দেখাতে আমরা `>` আর যে file path-এ standard output stream পাঠাতে চাই সেই _output.txt_ দিয়ে প্রোগ্রাম চালাব। কোনো argument
+দেব না, যার ফলে একটি error ঘটার কথা:
 
 ```console
 $ cargo run > output.txt
 ```
 
-The `>` syntax tells the shell to write the contents of standard output to
-_output.txt_ instead of the screen. We didn’t see the error message we were
-expecting printed to the screen, so that means it must have ended up in the
-file. This is what _output.txt_ contains:
+`>` syntax shell-কে বলে standard output-এর বিষয়বস্তু স্ক্রিনের বদলে _output.txt_-এ লিখতে। আমরা যে error message স্ক্রিনে print হবে
+বলে আশা করছিলাম তা দেখিনি, অর্থাৎ সেটি নিশ্চয়ই ফাইলে গিয়ে পৌঁছেছে। _output.txt_-এ এটি আছে:
 
 ```text
 Problem parsing arguments: not enough arguments
 ```
 
-Yup, our error message is being printed to standard output. It’s much more
-useful for error messages like this to be printed to standard error so that
-only data from a successful run ends up in the file. We’ll change that.
+হ্যাঁ, আমাদের error message standard output-এ print হচ্ছে। এ ধরনের error message standard error-এ print হলে অনেক বেশি কাজে লাগে,
+যাতে শুধু সফলভাবে চলার ডেটাই ফাইলে যায়। আমরা এটি বদলাব।
 
-### Printing Errors to Standard Error
+### error-কে standard error-এ print করা {#printing-errors-to-standard-error}
 
-We’ll use the code in Listing 12-24 to change how error messages are printed.
-Because of the refactoring we did earlier in this chapter, all the code that
-prints error messages is in one function, `main`. The standard library provides
-the `eprintln!` macro that prints to the standard error stream, so let’s change
-the two places we were calling `println!` to print errors to use `eprintln!`
-instead.
+error message কীভাবে print হবে তা বদলাতে আমরা Listing 12-24-এর কোড ব্যবহার করব। এই অধ্যায়ের আগের দিকে করা refactoring-এর কারণে
+error message print করা সব কোড একটি function-এ, `main`-এ আছে। standard library `eprintln!` macro দেয়, যা standard error stream-এ
+print করে, তাই error print করতে যে দুই জায়গায় `println!` call করছিলাম, সেখানে এর বদলে `eprintln!` ব্যবহার করি।
 
-<Listing number="12-24" file-name="src/main.rs" caption="Writing error messages to standard error instead of standard output using `eprintln!`">
+<Listing number="12-24" file-name="src/main.rs" caption="`eprintln!` ব্যবহার করে error message standard output-এর বদলে standard error-এ লেখা">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-24/src/main.rs:here}}
@@ -67,26 +52,22 @@ instead.
 
 </Listing>
 
-Let’s now run the program again in the same way, without any arguments and
-redirecting standard output with `>`:
+এবার একইভাবে, কোনো argument ছাড়া এবং `>` দিয়ে standard output অন্যত্র পাঠিয়ে, প্রোগ্রামটি আবার চালাই:
 
 ```console
 $ cargo run > output.txt
 Problem parsing arguments: not enough arguments
 ```
 
-Now we see the error onscreen and _output.txt_ contains nothing, which is the
-behavior we expect of command line programs.
+এখন আমরা স্ক্রিনে error দেখছি এবং _output.txt_-এ কিছুই নেই, যা command line প্রোগ্রামের কাছে প্রত্যাশিত আচরণ।
 
-Let’s run the program again with arguments that don’t cause an error but still
-redirect standard output to a file, like so:
+এবার এমন argument দিয়ে প্রোগ্রামটি আবার চালাই যাতে error হয় না, কিন্তু standard output তখনো একটি ফাইলে পাঠাই, এভাবে:
 
 ```console
 $ cargo run -- to poem.txt > output.txt
 ```
 
-We won’t see any output to the terminal, and _output.txt_ will contain our
-results:
+terminal-এ কোনো output দেখব না, আর _output.txt_-এ আমাদের ফল থাকবে:
 
 <span class="filename">Filename: output.txt</span>
 
@@ -95,19 +76,14 @@ Are you nobody, too?
 How dreary to be somebody!
 ```
 
-This demonstrates that we’re now using standard output for successful output
-and standard error for error output as appropriate.
+এটি দেখায় যে আমরা এখন যথাযথভাবে সফল output-এর জন্য standard output আর error output-এর জন্য standard error ব্যবহার করছি।
 
-## Summary
+## সারসংক্ষেপ {#summary}
 
-This chapter recapped some of the major concepts you’ve learned so far and
-covered how to perform common I/O operations in Rust. By using command line
-arguments, files, environment variables, and the `eprintln!` macro for printing
-errors, you’re now prepared to write command line applications. Combined with
-the concepts in previous chapters, your code will be well organized, store data
-effectively in the appropriate data structures, handle errors nicely, and be
-well tested.
+এই অধ্যায়ে এ পর্যন্ত শেখা কিছু প্রধান ধারণার পুনরালোচনা হয়েছে, আর Rust-এ সাধারণ I/O operation কীভাবে করতে হয় তা দেখানো হয়েছে।
+command line argument, ফাইল, environment variable আর error print করার জন্য `eprintln!` macro ব্যবহার করে আপনি এখন command line
+application লিখতে প্রস্তুত। আগের অধ্যায়গুলোর ধারণার সঙ্গে মিলিয়ে আপনার কোড ভালোভাবে গোছানো থাকবে, উপযুক্ত data structure-এ
+কার্যকরভাবে ডেটা রাখবে, সুন্দরভাবে error সামলাবে, এবং ভালোভাবে test করা থাকবে।
 
-Next, we’ll explore some Rust features that were influenced by functional
-languages: closures and iterators.
+এরপর আমরা Rust-এর এমন কিছু বৈশিষ্ট্য দেখব যা functional ভাষা দ্বারা প্রভাবিত: closure আর iterator।
 

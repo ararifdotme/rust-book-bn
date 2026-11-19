@@ -1,7 +1,7 @@
 // ANCHOR: here
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     for line in contents.lines() {
-        // do something with line
+        // line দিয়ে কিছু একটা করা
     }
 }
 // ANCHOR_END: here

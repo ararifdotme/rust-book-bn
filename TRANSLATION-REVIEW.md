@@ -160,3 +160,33 @@ configuration (`cfg`). Everyday: template (কাঠামো), উপেক্�
 | we have a silly function | একটি সাদামাটা function |
 | Regardless of which testing ideology you adhere to | আপনি testing-এর যে মতাদর্শই মানুন না কেন |
 | to more closely imitate the way end users will be using your crate | শেষ ব্যবহারকারীরা আপনার crate যেভাবে ব্যবহার করবে তা আরও কাছ থেকে অনুকরণ করতে |
+
+## Chapter 12: An I/O Project: Building a Command Line Program
+
+**Auto-chosen terms:** test-driven development (TDD), test coverage,
+case-insensitive / case-sensitive, exit status, separation of concerns
+(দায়িত্ব আলাদা করা), modular / modularity, redirect (অন্যত্র পাঠানো). Everyday:
+ছোট হাতের / বড় হাতের অক্ষর (lowercase / uppercase).
+
+**Decisions:**
+- `> **Note:** there are no quizzes…` keeps the English bold `**Note:**`
+  prefix, the same way `> Note:` is kept.
+- The `grep` acronym explanation (**g**lobally search a **r**egular
+  **e**xpression and **p**rint) stays in English, because the bold letters
+  spell the name.
+- The poem title “I’m Nobody! Who are you?” stays in English (the poem file is
+  English).
+- Link labels to chapters 3, 7, 9, 10 and 11 use their Bengali headings; the
+  chapter 13 and 18 links are bare chapter numbers ("অধ্যায় 13").
+- Listing comments `// do something with line` (listings 12-17, 12-18) were
+  translated; they do not appear in any output.txt.
+
+**Unsure sentences:**
+
+| English | Bengali |
+| --- | --- |
+| We’ll test-drive the implementation of the functionality | কার্যক্ষমতাটি আমরা test-এর নির্দেশনায় implement করব |
+| giving up a little performance to gain simplicity is a worthwhile trade-off | সরলতার বিনিময়ে সামান্য performance ছেড়ে দেওয়া লাভজনক আপস |
+| than to try to hyperoptimize code on your first pass | প্রথম চেষ্টাতেই কোডকে অতিমাত্রায় optimize করার চেষ্টার চেয়ে |
+| Whew! … we’ve set ourselves up for success in the future. | উফ! … আমরা ভবিষ্যতের সাফল্যের জন্য ভিত তৈরি করে ফেলেছি। |
+| Our program is not currently well behaved | আমাদের প্রোগ্রাম এখন ঠিকমতো আচরণ করছে না |
