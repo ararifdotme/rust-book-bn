@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - '**'
+  workflow_dispatch:
+
+# Needed so the last step can push the built site to the gh-pages branch.
+permissions:
+  contents: write
 
 # TODO: make a version that runs on pull_request
 
@@ -81,8 +86,6 @@ jobs:
 
     - name: Install mdbook-trpl binaries
       run: cargo install --path packages/mdbook-trpl
-    - name: Install aspell
-      run: sudo apt-get install aspell
     - name: Install shellcheck
       run: sudo apt-get install shellcheck
     - name: Report versions
@@ -90,12 +93,11 @@ jobs:
         rustup --version
         rustc -Vv
         mdbook --version
-        aspell --version
         shellcheck --version
     - name: Shellcheck
       run: find ci tools -name '*.sh' -print0 | xargs -0 shellcheck
-    - name: Spellcheck
-      run: bash ci/spellcheck.sh list
+    # The upstream English spellcheck (ci/spellcheck.sh) is skipped: it
+    # cannot check Bengali text.
     - name: Lint for local file paths
       run: |
         mdbook build
@@ -126,4 +128,10 @@ jobs:
     - name: Build mdbook
       run: mdbook build
 
-    # Publishing is done by deploy.yml (rust-bangla.ararif.me).
+    - name: Deploy to GitHub Pages
+      if: ${{ github.ref == 'refs/heads/main' }}
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./book
+        cname: rust-bangla.ararif.me
