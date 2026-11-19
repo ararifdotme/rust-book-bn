@@ -2,14 +2,14 @@
 id = "3da96b29-d975-4cd8-a8eb-b1a6bd9b5c0a"
 type = "MultipleChoice"
 prompt.prompt = """
-Which of the following is NOT a good reason to wrap unit tests in `#[cfg(test)] mod tests { ... }`?
+unit test-কে `#[cfg(test)] mod tests { ... }`-এর ভেতরে রাখার জন্য নিচের কোনটি ভালো কারণ **নয়**?
 """
-answer.answer = "It gives your tests access to private functions"
+answer.answer = "এতে আপনার test-গুলো private function ব্যবহারের সুযোগ পায়"
 prompt.distractors = [
-  "It can reduce the size of generated compiler artifacts",
-  "It can improve compile times",
-  "It separates test helper functions from library code"
+  "এতে compiler-এর তৈরি artifact-এর আকার কমতে পারে",
+  "এতে compile-এর সময় কমতে পারে",
+  "এতে test-এর সহায়ক function-গুলো library কোড থেকে আলাদা থাকে"
 ]
 context = """
-All unit tests in a given file have access to that file's private functions, regardless of being in a `mod tests` or not.
+একটি নির্দিষ্ট ফাইলের সব unit test সেই ফাইলের private function ব্যবহার করতে পারে, `mod tests`-এর ভেতরে থাকুক বা না থাকুক।
 """

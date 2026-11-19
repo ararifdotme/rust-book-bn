@@ -131,3 +131,32 @@ dynamically typed, deallocate. Everyday: বিমূর্ত রূপ (abstra
 | the compiler might only be able to point to a use of our code many steps away from the cause of the problem | compiler হয়তো শুধু আমাদের কোডের এমন কোনো ব্যবহার দেখাতে পারত যা সমস্যার আসল কারণ থেকে অনেক ধাপ দূরে |
 | Let’s pretend we’re the compiler. | চলুন নিজেদের compiler ভেবে নিই। |
 | 3 really is the correct answer! If you disagree with the answer, please don't submit a bug report! | 3-ই আসলে সঠিক উত্তর! উত্তরের সঙ্গে একমত না হলে দয়া করে bug report জমা দেবেন না! |
+
+## Chapter 11: Writing Automated Tests
+
+**Auto-chosen terms:** test, assert / assertion, test runner, test harness,
+unit test, integration test, test suite, correctness, filtering, benchmark
+test, documentation test, race condition, thread-safe, parallel,
+configuration (`cfg`). Everyday: template (কাঠামো), উপেক্ষিত (ignored).
+
+**Decisions:**
+- "pass" / "fail" stay in Latin as verbs ("test pass করে", "fail করে"), since
+  the output shows `ok`, `FAILED`, `passed`, `failed`.
+- The Dijkstra quote is translated into Bengali; the essay title stays in
+  English.
+- Link labels to chapter 14 ("Documentation Comments as Tests") and Appendix C
+  ("Derivable Traits") stay in English until those parts are translated.
+- Listing comments translated: no-listing-11 (`expensive_test`), and the
+  `setup` comment in no-listing-12 and no-listing-13. None of them appear in
+  any output.txt.
+- Quiz: "Which of the following is NOT …" puts **নয়** in bold, to keep the
+  emphasis the capitals gave.
+
+**Unsure sentences:**
+
+| English | Bengali |
+| --- | --- |
+| program testing can be a very effective way to show the presence of bugs, but it is hopelessly inadequate for showing their absence | প্রোগ্রাম testing বাগের উপস্থিতি দেখানোর খুব কার্যকর উপায় হতে পারে, কিন্তু বাগের অনুপস্থিতি দেখানোর জন্য এটি একেবারেই অপর্যাপ্ত |
+| we have a silly function | একটি সাদামাটা function |
+| Regardless of which testing ideology you adhere to | আপনি testing-এর যে মতাদর্শই মানুন না কেন |
+| to more closely imitate the way end users will be using your crate | শেষ ব্যবহারকারীরা আপনার crate যেভাবে ব্যবহার করবে তা আরও কাছ থেকে অনুকরণ করতে |

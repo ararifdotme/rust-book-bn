@@ -1,34 +1,24 @@
-# Writing Automated Tests
+# স্বয়ংক্রিয় test লেখা {#writing-automated-tests}
 
-In his 1972 essay “The Humble Programmer,” Edsger W. Dijkstra said that “program
-testing can be a very effective way to show the presence of bugs, but it is
-hopelessly inadequate for showing their absence.” That doesn’t mean we shouldn’t
-try to test as much as we can!
+1972 সালে লেখা “The Humble Programmer” প্রবন্ধে Edsger W. Dijkstra বলেছিলেন, “প্রোগ্রাম testing বাগের উপস্থিতি দেখানোর
+খুব কার্যকর উপায় হতে পারে, কিন্তু বাগের অনুপস্থিতি দেখানোর জন্য এটি একেবারেই অপর্যাপ্ত।” এর মানে এই নয় যে আমাদের যতটা
+সম্ভব test করার চেষ্টা করা উচিত নয়!
 
-_Correctness_ in our programs is the extent to which our code does what we
-intend it to do. Rust is designed with a high degree of concern about the
-correctness of programs, but correctness is complex and not easy to prove.
-Rust’s type system shoulders a huge part of this burden, but the type system
-cannot catch everything. As such, Rust includes support for writing automated
-software tests.
+আমাদের প্রোগ্রামের _correctness_ (সঠিকতা) হলো আমাদের কোড যা করার কথা তা কতটা করে। Rust প্রোগ্রামের সঠিকতা নিয়ে অনেক
+যত্ন নিয়ে নকশা করা হয়েছে, কিন্তু সঠিকতা জটিল একটি বিষয় এবং প্রমাণ করা সহজ নয়। Rust-এর type system এই দায়িত্বের একটা
+বড় অংশ বহন করে, কিন্তু type system সবকিছু ধরতে পারে না। তাই Rust-এ স্বয়ংক্রিয় software test লেখার ব্যবস্থা আছে।
 
-Say we write a function `add_two` that adds 2 to whatever number is passed to
-it. This function’s signature accepts an integer as a parameter and returns an
-integer as a result. When we implement and compile that function, Rust does all
-the type checking and borrow checking that you’ve learned so far to ensure
-that, for instance, we aren’t passing a `String` value or an invalid reference
-to this function. But Rust _can’t_ check that this function will do precisely
-what we intend, which is return the parameter plus 2 rather than, say, the
-parameter plus 10 or the parameter minus 50! That’s where tests come in.
+ধরুন আমরা `add_two` নামের একটি function লিখলাম, যা তাকে দেওয়া যেকোনো সংখ্যার সঙ্গে 2 যোগ করে। এই function-এর signature
+parameter হিসেবে একটি integer নেয় এবং ফল হিসেবে একটি integer return করে। function-টি implement ও compile করার সময় Rust এ
+পর্যন্ত আপনার শেখা সব type checking ও borrow checking করে, যাতে নিশ্চিত হয় যে, যেমন, আমরা এই function-এ কোনো `String`
+মান বা অবৈধ reference পাঠাচ্ছি না। কিন্তু function-টি ঠিক আমাদের উদ্দেশ্য অনুযায়ী কাজ করবে কি না, অর্থাৎ parameter-এর
+সঙ্গে 10 যোগ বা parameter থেকে 50 বিয়োগ না করে parameter-এর সঙ্গে 2 যোগ করে return করবে কি না, Rust তা যাচাই _করতে
+পারে না_! এখানেই test-এর দরকার।
 
-We can write tests that assert, for example, that when we pass `3` to the
-`add_two` function, the returned value is `5`. We can run these tests whenever
-we make changes to our code to make sure any existing correct behavior has not
-changed.
+আমরা এমন test লিখতে পারি যা assert করে (জোর দিয়ে যাচাই করে), যেমন, `add_two` function-এ `3` পাঠালে return মান হবে `5`।
+কোডে যখনই পরিবর্তন আনি, তখনই এই test-গুলো চালিয়ে নিশ্চিত হতে পারি যে আগের সঠিক আচরণ বদলে যায়নি।
 
-Testing is a complex skill: Although we can’t cover in one chapter every detail
-about how to write good tests, in this chapter we will discuss the mechanics of
-Rust’s testing facilities. We’ll talk about the annotations and macros
-available to you when writing your tests, the default behavior and options
-provided for running your tests, and how to organize tests into unit tests and
-integration tests.
+testing একটি জটিল দক্ষতা: ভালো test কীভাবে লিখতে হয় তার প্রতিটি খুঁটিনাটি এক অধ্যায়ে আলোচনা করা সম্ভব না হলেও এই
+অধ্যায়ে আমরা Rust-এর testing সুবিধাগুলোর কার্যপ্রণালী নিয়ে আলোচনা করব। test লেখার সময় আপনার হাতে থাকা annotation ও
+macro, test চালানোর default আচরণ ও বিকল্পগুলো, আর test-গুলোকে unit test ও integration test-এ কীভাবে সাজাতে হয়, তা নিয়ে
+কথা বলব।

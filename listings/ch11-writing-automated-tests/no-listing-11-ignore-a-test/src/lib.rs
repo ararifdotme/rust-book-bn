@@ -16,7 +16,7 @@ mod tests {
     #[test]
     #[ignore]
     fn expensive_test() {
-        // code that takes an hour to run
+        // এমন কোড, যা চলতে এক ঘণ্টা লাগে
     }
 }
 // ANCHOR_END: here

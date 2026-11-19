@@ -477,6 +477,21 @@ tested with this repo's build.
 | inheritance | inheritance | উত্তরাধিকার | 10 |
 | dynamically typed | dynamically typed | চলার সময় type যাচাই হয় এমন | 10 |
 | deallocate | deallocate করা | মেমোরি মুক্ত করা | 10 |
+| test | test | কোড ঠিকমতো কাজ করছে কি না যাচাই করার function | 11 |
+| assert / assertion | assert করা / assertion | শর্তটি সত্য কি না জোর দিয়ে যাচাই করা | 11 |
+| test runner | test runner | test চালানোর প্রোগ্রাম | 11 |
+| test harness | test harness | test চালানোর কাঠামো | 11 |
+| unit test | unit test | একটি module-কে আলাদা করে test করা | 11 |
+| integration test | integration test | library-র বাইরে থেকে public API দিয়ে test করা | 11 |
+| test suite | test suite | সব test-এর সংগ্রহ | 11 |
+| correctness | correctness | সঠিকতা | 11 |
+| filtering (tests) | filtering | নাম মিলিয়ে কিছু test ছেঁকে নেওয়া | 11 |
+| benchmark test | benchmark test | performance মাপার test | 11 |
+| documentation test (doc test) | documentation test | documentation-এর কোড উদাহরণ চালিয়ে করা test | 11 |
+| race condition | race condition | একসঙ্গে চলা কাজের মধ্যে প্রতিযোগিতাজনিত সমস্যা | 11 |
+| thread-safe | thread-safe | একাধিক thread থেকে একসঙ্গে ব্যবহার করা নিরাপদ | 11 |
+| parallel | parallel-ভাবে | একসঙ্গে (সমান্তরালে) | 11 |
+| configuration (`cfg`) | configuration | কোন অবস্থায় কোড যুক্ত হবে তার বিকল্প | 11 |
 
 ### Everyday computing words
 
@@ -553,6 +568,8 @@ Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
 | question mark operator | প্রশ্নবোধক চিহ্নের operator | 9 |
 | abstraction | বিমূর্ত রূপ (abstraction) | 10 |
 | local (to a crate) | নিজস্ব (local) | 10 |
+| template | template (কাঠামো) | 11 |
+| ignored | উপেক্ষিত (ignored) | 11 |
 
 ## Progress
 
@@ -575,7 +592,7 @@ use.
 - [x] Chapter 8: Common Collections (ch08-*)
 - [x] Chapter 9: Error Handling (ch09-*)
 - [x] Chapter 10: Generic Types, Traits, and Lifetimes (ch10-*)
-- [ ] Chapter 11: Writing Automated Tests (ch11-*)
+- [x] Chapter 11: Writing Automated Tests (ch11-*)
 - [ ] Chapter 12: An I/O Project: Building a Command Line Program (ch12-*)
 - [ ] Chapter 13: Functional Language Features: Iterators and Closures (ch13-*)
 - [ ] Chapter 14: More about Cargo and Crates.io (ch14-*)
