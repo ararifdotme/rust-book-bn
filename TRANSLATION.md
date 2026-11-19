@@ -509,6 +509,14 @@ tested with this repo's build.
 | iterator adapter | iterator adapter | এক iterator থেকে আরেক iterator তৈরি করে এমন method (যেমন `map`) | 13 |
 | loop unrolling | loop unrolling | loop খুলে পুনরাবৃত্তিগুলো সরাসরি লিখে দেওয়ার optimization | 13 |
 | top-level function | top-level function | কোনো কিছুর ভেতরে নয়, সরাসরি module-এ সংজ্ঞায়িত function | 13 |
+| release profile | release profile | compile-এর বিকল্পগুলোর পূর্বনির্ধারিত সেট (`dev`, `release`) | 14 |
+| optimization (`opt-level`) | optimization | কোড দ্রুত চালাতে compiler-এর করা উন্নয়ন | 14 |
+| yank | yank করা | প্রকাশিত version নতুন project-এর জন্য তুলে নেওয়া (মুছে না ফেলে) | 14 |
+| binary target | binary target | crate থেকে তৈরি হওয়া চালানো যায় এমন প্রোগ্রাম | 14 |
+| path dependency | path dependency | স্থানীয় path দিয়ে উল্লেখ করা dependency | 14 |
+| API token | API token | account-এর পরিচয় প্রমাণের গোপন চাবি | 14 |
+| license identifier | license identifier | license শনাক্তকারী মান (যেমন `MIT`) | 14 |
+| subcommand | subcommand | `cargo`-র অধীনের command (যেমন `cargo build`) | 14 |
 
 ### Everyday computing words
 
@@ -589,6 +597,8 @@ Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
 | ignored | উপেক্ষিত (ignored) | 11 |
 | lowercase / uppercase | ছোট হাতের / বড় হাতের অক্ষর | 12 |
 | spoiler alert | আগেভাগে বলে দিই | 13 |
+| dual license | দুটি license একসঙ্গে (dual license) | 14 |
+| first-come, first-served | আগে এলে আগে পাবেন ভিত্তিতে | 14 |
 
 ## Progress
 
@@ -614,7 +624,7 @@ use.
 - [x] Chapter 11: Writing Automated Tests (ch11-*)
 - [x] Chapter 12: An I/O Project: Building a Command Line Program (ch12-*)
 - [x] Chapter 13: Functional Language Features: Iterators and Closures (ch13-*)
-- [ ] Chapter 14: More about Cargo and Crates.io (ch14-*)
+- [x] Chapter 14: More about Cargo and Crates.io (ch14-*)
 - [ ] Chapter 15: Smart Pointers (ch15-*)
 - [ ] Chapter 16: Fearless Concurrency (ch16-*)
 - [ ] Chapter 17: Fundamentals of Asynchronous Programming: Async, Await, Futures, and Streams (ch17-*)

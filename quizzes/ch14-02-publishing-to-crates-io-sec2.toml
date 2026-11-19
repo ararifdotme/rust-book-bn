@@ -2,35 +2,35 @@
 id = "7e4eeb62-55c2-443b-a8cc-fba060501245"
 type = "MultipleChoice"
 prompt.prompt = """
-Say you are publishing a library `foobar v0.1.0`. After running `cargo publish`, you realize there is a bug in one
-of your functions. Which of the following best describes how to overwrite the published crate at the same `v0.1.0` version?
+ধরুন আপনি `foobar v0.1.0` নামের একটি library প্রকাশ করছেন। `cargo publish` চালানোর পর বুঝলেন আপনার একটি function-এ
+বাগ আছে। একই `v0.1.0` version-এ প্রকাশিত crate কীভাবে overwrite করবেন, তা নিচের কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?
 """
-answer.answer = "It is impossible to overwrite a published crate at a given version"
+answer.answer = "একটি নির্দিষ্ট version-এ প্রকাশিত crate overwrite করা অসম্ভব"
 prompt.distractors = [
-    "Add the flag `--overwrite-published` to the `cargo publish` command",
-    "Login to Crates.io and delete `v0.1.0` of the published crate",   
-    "Run `cargo yank` and then run `cargo publish`"
+    "`cargo publish` command-এ `--overwrite-published` flag যোগ করা",
+    "Crates.io-তে log in করে প্রকাশিত crate-এর `v0.1.0` মুছে ফেলা",   
+    "`cargo yank` চালিয়ে তারপর `cargo publish` চালানো"
 ]
 context = """
-Crates.io does not allow overwriting of published versions. The best option in these situations is to yank the buggy version
-and then publish a new version such as `v0.1.1`.
+Crates.io প্রকাশিত version overwrite করতে দেয় না। এমন পরিস্থিতিতে সবচেয়ে ভালো উপায় হলো বাগযুক্ত version yank করা
+এবং তারপর `v0.1.1`-এর মতো একটি নতুন version প্রকাশ করা।
 """
 
 [[questions]]
 id = "84ac16a8-2460-4baf-8913-06da6e3603e6"
 type = "MultipleChoice"
 prompt.prompt = """
-Which of the following steps is NOT required to publish a crate to Crates.io?
+Crates.io-তে একটি crate প্রকাশ করতে নিচের কোন ধাপটি বাধ্যতামূলক **নয়**?
 """
-answer.answer = "Adding documentation to each public function in the crate"
+answer.answer = "crate-এর প্রতিটি public function-এ documentation যোগ করা"
 prompt.distractors = [
-    "Adding a license to the `[package]` section of `Cargo.toml`",    
-    "Registering and logging in to Crates.io",
-    "Selecting a crate name that is not registered on Crates.io"
+    "`Cargo.toml`-এর `[package]` অংশে একটি license যোগ করা",    
+    "Crates.io-তে নিবন্ধন করে log in করা",
+    "Crates.io-তে নিবন্ধিত নয় এমন একটি crate নাম বেছে নেওয়া"
 ]
 context = """
-Adding documentation to public functions is certainly recommended, but not required by default. Note that if you
-want Rust to treat undocumented code as an error, you can add the following statement at the root of your library:
+public function-এ documentation যোগ করা অবশ্যই উচিত, তবে default-ভাবে বাধ্যতামূলক নয়। খেয়াল করুন, আপনি যদি
+চান Rust documentation-হীন কোডকে error হিসেবে গণ্য করুক, তাহলে আপনার library-র root-এ এই statement যোগ করতে পারেন:
 
 ```
 #![deny(missing_docs)]

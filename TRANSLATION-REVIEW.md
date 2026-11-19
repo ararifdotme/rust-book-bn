@@ -217,3 +217,32 @@ adapter, loop unrolling, top-level function. Everyday: আগেভাগে ব
 | Instead of fiddling with the various bits of looping | loop-এর নানা খুঁটিনাটি নিয়ে নাড়াচাড়া না করে |
 | sometimes called the "toilet closure" (quiz, inside code: left in English) | — |
 | What you don’t use, you don’t pay for. And further: What you do use, you couldn’t hand code any better. | যা আপনি ব্যবহার করেন না, তার জন্য আপনাকে মূল্য দিতে হয় না। আর আরও বলা যায়: যা আপনি ব্যবহার করেন, তা আপনি হাতে লিখে এর চেয়ে ভালো করতে পারতেন না। |
+
+## Chapter 14: More About Cargo and Crates.io
+
+**Auto-chosen terms:** release profile, optimization (`opt-level`), yank,
+binary target, path dependency, API token, license identifier, subcommand.
+Everyday: dual license (দুটি license একসঙ্গে), first-come, first-served (আগে
+এলে আগে পাবেন ভিত্তিতে).
+
+**Decisions:**
+- "Figure 14-N" stays in English in the captions, like "Listing N-M"; the
+  caption text and the `alt` text are translated.
+- The doc comments (`///`, `//!`) in listings 14-1 and 14-2 stay in English,
+  because Figures 14-1 and 14-2 are screenshots of exactly that text.
+- The shortcut link `[Semantic Versioning]` keeps its English label, because
+  in Markdown the label is also the reference key.
+- "Section headings" used inside docs (Examples, Panics, Errors, Safety) stay
+  in English, since they are literal Markdown headings rustdoc users write.
+- Quiz: the Yes/No options became "হ্যাঁ" / "না".
+- From this chapter on, long files were translated paragraph by paragraph
+  with a script that leaves every code block byte for byte untouched.
+
+**Unsure sentences:**
+
+| English | Bengali |
+| --- | --- |
+| Creating a useful public API structure is more an art than a science | একটি কাজের public API গঠন তৈরি করা বিজ্ঞানের চেয়ে বেশি শিল্প |
+| a faster, Rustier tool for searching files | ফাইলে খোঁজার জন্য আরও দ্রুত, আরও Rust-সুলভ একটি tool |
+| than one big blob of code | একটি বড় কোডের স্তূপের বদলে |
+| If that happens, you must reset those secrets immediately. | এমন হলে সঙ্গে সঙ্গে সেই গোপন তথ্যগুলো (যেমন password বা token) বদলে ফেলতে হবে। (added the example in parentheses) |

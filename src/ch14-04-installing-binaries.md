@@ -2,28 +2,20 @@
 
 <a id="installing-binaries-from-cratesio-with-cargo-install"></a>
 
-## Installing Binaries with `cargo install`
+## `cargo install` দিয়ে binary install করা {#installing-binaries-with-cargo-install}
 
-The `cargo install` command allows you to install and use binary crates
-locally. This isn’t intended to replace system packages; it’s meant to be a
-convenient way for Rust developers to install tools that others have shared on
-[crates.io](https://crates.io/)<!-- ignore -->. Note that you can only install
-packages that have binary targets. A _binary target_ is the runnable program
-that is created if the crate has a _src/main.rs_ file or another file specified
-as a binary, as opposed to a library target that isn’t runnable on its own but
-is suitable for including within other programs. Usually, crates have
-information in the README file about whether a crate is a library, has a
-binary target, or both.
+`cargo install` command দিয়ে binary crate স্থানীয়ভাবে install করে ব্যবহার করা যায়। এটি system package-এর বিকল্প হওয়ার জন্য নয়; বরং
+[crates.io](https://crates.io/)<!-- ignore -->-তে অন্যদের ভাগ করা tool Rust ডেভেলপারদের সহজে install করার একটি সুবিধাজনক উপায়। খেয়াল করুন, শুধু
+binary target আছে এমন package-ই install করা যায়। _binary target_ হলো চালানো যায় এমন প্রোগ্রাম, যা তৈরি হয় যদি crate-এ একটি _src/main.rs_ ফাইল
+বা binary হিসেবে উল্লেখ করা অন্য কোনো ফাইল থাকে; এর বিপরীতে library target নিজে নিজে চালানো যায় না, তবে অন্য প্রোগ্রামের ভেতরে যুক্ত করার উপযোগী।
+সাধারণত crate-এর README ফাইলে তথ্য থাকে যে crate-টি একটি library, নাকি এর binary target আছে, নাকি দুটিই।
 
-All binaries installed with `cargo install` are stored in the installation
-root’s _bin_ folder. If you installed Rust using _rustup.rs_ and don’t have any
-custom configurations, this directory will be *$HOME/.cargo/bin*. Ensure that
-this directory is in your `$PATH` to be able to run programs you’ve installed
-with `cargo install`.
+`cargo install` দিয়ে install করা সব binary installation root-এর _bin_ folder-এ রাখা হয়। আপনি যদি _rustup.rs_ দিয়ে Rust install করে থাকেন এবং কোনো
+নিজস্ব configuration না থাকে, তাহলে এই directory হবে *$HOME/.cargo/bin*। `cargo install` দিয়ে install করা প্রোগ্রাম চালাতে পারতে নিশ্চিত করুন যে
+এই directory আপনার `$PATH`-এ আছে।
 
-For example, in Chapter 12 we mentioned that there’s a Rust implementation of
-the `grep` tool called `ripgrep` for searching files. To install `ripgrep`, we
-can run the following:
+যেমন, অধ্যায় 12-এ আমরা উল্লেখ করেছিলাম যে ফাইলে খোঁজার জন্য `grep` tool-এর একটি Rust implementation আছে, যার নাম `ripgrep`। `ripgrep` install
+করতে এটি চালাতে পারি:
 
 <!-- manual-regeneration
 cargo install something you don't have, copy relevant output below
@@ -42,7 +34,5 @@ $ cargo install ripgrep
    Installed package `ripgrep v14.1.1` (executable `rg`)
 ```
 
-The second-to-last line of the output shows the location and the name of the
-installed binary, which in the case of `ripgrep` is `rg`. As long as the
-installation directory is in your `$PATH`, as mentioned previously, you can
-then run `rg --help` and start using a faster, Rustier tool for searching files!
+output-এর শেষের আগের লাইন install করা binary-র অবস্থান আর নাম দেখায়, যা `ripgrep`-এর ক্ষেত্রে `rg`। আগে যেমন বলা হয়েছে, installation directory
+আপনার `$PATH`-এ থাকলে আপনি `rg --help` চালিয়ে ফাইলে খোঁজার জন্য আরও দ্রুত, আরও Rust-সুলভ একটি tool ব্যবহার শুরু করতে পারেন!

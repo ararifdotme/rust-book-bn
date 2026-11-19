@@ -2,8 +2,8 @@
 id = "e2df0a8a-7bdd-40a3-9918-e4a856978cbb"
 type = "MultipleChoice"
 prompt.prompt = """
-Say you are publishing a library, and you want to write documentation about the entire library at the top of the `lib.rs` file.
-The documentation should be prefixed with the following comment syntax:
+ধরুন আপনি একটি library প্রকাশ করছেন, আর `lib.rs` ফাইলের শুরুতে পুরো library সম্পর্কে documentation লিখতে চান।
+documentation-এর শুরুতে কোন comment syntax থাকা উচিত:
 """
 answer.answer = "`//!`"
 prompt.distractors = [
@@ -11,14 +11,14 @@ prompt.distractors = [
     "`//`",    
 ]
 context = """
-`//!` is appropriate for module-level documentation, while `///` is for documenting individual items like functions.
+module-স্তরের documentation-এর জন্য `//!` উপযুক্ত, আর function-এর মতো আলাদা আলাদা item-এর documentation-এর জন্য `///`।
 """
 
 [[questions]]
 id = "cfb65011-0578-4032-8aaa-b346b091602b"
 type = "MultipleChoice"
 prompt.prompt = """
-Say you are creating a library `worldly` with the following function `lib.rs`:
+ধরুন আপনি `worldly` নামের একটি library তৈরি করছেন, যার `lib.rs`-এ নিচের function আছে:
 
     /// Adds the string "world" to `s`.
     ///
@@ -39,12 +39,12 @@ Say you are creating a library `worldly` with the following function `lib.rs`:
         assert_eq!(s, "world");
     }
 
-If you run `cargo test`, will any test fail?
+`cargo test` চালালে কোনো test কি fail করবে?
 """
-answer.answer = "Yes"
+answer.answer = "হ্যাঁ"
 prompt.distractors = [
-    "No",    
+    "না",    
 ]
 context = """
-The incorrect example will be run as a doc-test, and cause `cargo test` to fail.
+ভুল উদাহরণটি doc-test হিসেবে চলবে এবং `cargo test`-কে fail করাবে।
 """

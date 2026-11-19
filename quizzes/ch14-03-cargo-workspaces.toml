@@ -2,7 +2,7 @@
 id = "20846719-fe7b-48b8-abfd-9c5f1174472f"
 type = "MultipleChoice"
 prompt.prompt = """
-Consider a workspace with the following structure:
+নিচের গঠনের একটি workspace বিবেচনা করুন:
 
 ```
 ├── Cargo.lock
@@ -16,7 +16,7 @@ Consider a workspace with the following structure:
         └── Cargo.toml
 ```
 
-With the following content in each file:
+প্রতিটি ফাইলে এই বিষয়বস্তু আছে:
 
 ```
 // crates/b/lib.rs
@@ -29,7 +29,7 @@ pub fn f() {}
 b = {path = "../b"}
 ```
 
-Which of the following is the correct path to refer to `f` inside of `a/lib.rs`?
+`a/lib.rs`-এর ভেতরে `f` উল্লেখ করার সঠিক path নিচের কোনটি?
 """
 answer.answer = "`b::f`"
 prompt.distractors = [
@@ -38,14 +38,14 @@ prompt.distractors = [
     "`super::b::f`",
 ]
 context = """
-From the perspective of `a`, `b` is an external crate like any other, so you don't use a prefix to access its items.
+`a`-এর দৃষ্টিকোণ থেকে `b` অন্য যেকোনো বাইরের crate-এর মতোই, তাই এর item ব্যবহার করতে কোনো prefix লাগে না।
 """
 
 [[questions]]
 id = "bc8a69b2-d9a8-4438-8657-391c3fda5ed9"
 type = "ShortAnswer"
 prompt.prompt = """
-Consider a workspace with three packages `a`, `b`, and `c`. Their respective manifests are:
+`a`, `b` ও `c` নামের তিনটি package-যুক্ত একটি workspace বিবেচনা করুন। তাদের নিজ নিজ manifest হলো:
 
 ```toml
 # a/Cargo.toml
@@ -61,11 +61,11 @@ rand = "0.7.3"
 rand = "0.8.5"
 ```
 
-How many different versions of `rand` will be used when compiling all packages in the workspace? 
-Write your answer as a digit, e.g. 0, 1, so on.
+workspace-এর সব package compile করার সময় `rand`-এর কতগুলো ভিন্ন version ব্যবহৃত হবে? 
+উত্তর একটি অঙ্ক হিসেবে লিখুন, যেমন 0, 1, ইত্যাদি।
 """
 answer.answer = "2"
 context = """
-According to the rules of semantic versioning, `a` and `c` will both share the latest patch of the minor version `0.8`.
-`b` will use the latest patch of the minor version `0.7`. So two versions in total will be used.
+semantic versioning-এর নিয়ম অনুযায়ী `a` আর `c` দুটিই minor version `0.8`-এর সর্বশেষ patch ভাগ করে নেবে।
+`b` ব্যবহার করবে minor version `0.7`-এর সর্বশেষ patch। তাই মোট দুটি version ব্যবহৃত হবে।
 """

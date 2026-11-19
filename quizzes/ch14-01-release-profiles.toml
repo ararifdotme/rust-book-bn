@@ -2,7 +2,7 @@
 id = "c753bc38-0dc1-44d5-8b06-136fdbbc26d2"
 type = "MultipleChoice"
 prompt.prompt = """
-When you run `cargo build` with no additional flags, which profile is used by default?
+কোনো বাড়তি flag ছাড়া `cargo build` চালালে default-ভাবে কোন profile ব্যবহৃত হয়?
 """
 answer.answer = "`dev`"
 prompt.distractors = [
@@ -10,6 +10,6 @@ prompt.distractors = [
     "`build`",
 ]
 context = """
-To minimize compile times, the default profile is `dev`. You should add `--release` if you want the `release` profile
-for longer compile times but faster code execution. (There is no `build` profile).
+compile-এর সময় যতটা সম্ভব কমাতে default profile হলো `dev`। বেশি compile সময়ের বিনিময়ে দ্রুত কোড চালাতে `release` profile চাইলে
+`--release` যোগ করা উচিত। (`build` নামে কোনো profile নেই।)
 """
