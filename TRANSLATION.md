@@ -443,6 +443,20 @@ tested with this repo's build.
 | buffer overflow | buffer overflow | বাফারের সীমার বাইরে লেখা | 8 |
 | null-terminated | null-terminated | শেষে একটি null byte দিয়ে শেষ হওয়া | 8 |
 | predicate | predicate | true/false ফেরত দেয় এমন শর্ত-function | 8 |
+| recoverable / unrecoverable error | recoverable / unrecoverable error | সামলে ওঠা যায় এমন / সামলে ওঠা যায় না এমন error | 9 |
+| unwind | unwind করা | stack ধরে ফিরে গিয়ে ডেটা পরিষ্কার করা | 9 |
+| abort | abort করা | পরিষ্কার না করেই প্রোগ্রাম সঙ্গে সঙ্গে বন্ধ করা | 9 |
+| call stack | call stack | call হওয়া function-গুলোর ক্রম | 9 |
+| backtrace | backtrace | এই পর্যন্ত call হওয়া সব function-এর তালিকা | 9 |
+| environment variable | environment variable | অপারেটিং সিস্টেমে রাখা নামযুক্ত সেটিং-মান | 9 |
+| buffer overread | buffer overread | বাফারের সীমার বাইরে পড়া | 9 |
+| debug symbols | debug symbol | ডিবাগের জন্য প্রোগ্রামে রাখা বাড়তি তথ্য | 9 |
+| file handle | file handle | খোলা ফাইল ব্যবহারের মাধ্যম | 9 |
+| propagate | propagate করা | error-কে call করা কোডের দিকে ফেরত পাঠানো | 9 |
+| chain (method calls) | chain করা | একটির পর একটি method call জুড়ে লেখা | 9 |
+| parser | parser | লেখা বিশ্লেষণ করে গঠন বের করে এমন প্রোগ্রাম | 9 |
+| rate limit | rate limit | নির্দিষ্ট সময়ে অনুরোধের সর্বোচ্চ সীমা | 9 |
+| system call | system call | অপারেটিং সিস্টেমের কাছে সরাসরি অনুরোধ | 9 |
 
 ### Everyday computing words
 
@@ -514,6 +528,9 @@ Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
 | angle brackets | কৌণিক বন্ধনী | 8 |
 | Cyrillic / Devanagari | সিরিলিক / দেবনাগরী | 8 |
 | median / mode | median / mode (with an explanation in the sentence) | 8 |
+| prototype | prototype (Latin; "প্রোটোটাইপ" also fine) | 9 |
+| contract (of a function) | চুক্তি (contract) | 9 |
+| question mark operator | প্রশ্নবোধক চিহ্নের operator | 9 |
 
 ## Progress
 
@@ -534,7 +551,7 @@ use.
 - [x] Chapter 6: Enums and Pattern Matching (ch06-*)
 - [x] Chapter 7: Packages, Crates, and Modules (ch07-*)
 - [x] Chapter 8: Common Collections (ch08-*)
-- [ ] Chapter 9: Error Handling (ch09-*)
+- [x] Chapter 9: Error Handling (ch09-*)
 - [ ] Chapter 10: Generic Types, Traits, and Lifetimes (ch10-*)
 - [ ] Chapter 11: Writing Automated Tests (ch11-*)
 - [ ] Chapter 12: An I/O Project: Building a Command Line Program (ch12-*)

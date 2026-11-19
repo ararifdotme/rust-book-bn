@@ -1,13 +1,13 @@
 [[questions]]
 id = "8f9e0e79-f4a7-4056-b35e-f7ae65b78888"
 type = "MultipleChoice"
-prompt.prompt = "Which of these statements best describes why `File::open` returns a `Result` and not an `Option`?"
-answer.answer = "Because `Result` can represent why an operation failed, and file opening can fail for many reasons"
+prompt.prompt = "`File::open` কেন একটি `Option` নয়, বরং একটি `Result` return করে, তা এই বক্তব্যগুলোর কোনটি সবচেয়ে ভালোভাবে বর্ণনা করে?"
+answer.answer = "কারণ একটি operation কেন ব্যর্থ হলো, তা `Result` প্রকাশ করতে পারে, আর ফাইল খোলা অনেক কারণে ব্যর্থ হতে পারে"
 prompt.distractors = [
-  "Because `Result` represents the possibility of failure, while `Option` cannot represent failures",
-  "Because `Result` uses fewer bytes at runtime than `Option` to represent failures",
-  "Because `Result` represents errors the same way as the underlying system calls"
+  "কারণ `Result` ব্যর্থতার সম্ভাবনা প্রকাশ করে, অথচ `Option` ব্যর্থতা প্রকাশ করতে পারে না",
+  "কারণ ব্যর্থতা প্রকাশ করতে runtime-এ `Result` `Option`-এর চেয়ে কম byte ব্যবহার করে",
+  "কারণ `Result` নিচের স্তরের system call-এর মতো একইভাবে error প্রকাশ করে"
 ]
 context = """
-`Option` can just represent *that* an operation has failed, but `Result` can explain *why* the operation has failed.
+`Option` শুধু প্রকাশ করতে পারে *যে* একটি operation ব্যর্থ হয়েছে, কিন্তু `Result` ব্যাখ্যা করতে পারে operation-টি *কেন* ব্যর্থ হয়েছে।
 """

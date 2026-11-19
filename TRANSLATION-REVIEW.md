@@ -72,3 +72,29 @@ Everyday: জোড়া লাগানো (concatenate), কৌণিক ব�
 | plays more nicely with the borrow checker | borrow checker-এর সঙ্গেও বেশি ভালোভাবে মানিয়ে চলে |
 | Rust developers need job security (quiz joke) | Rust ডেভেলপারদের চাকরির নিরাপত্তা দরকার |
 | several granularities of sequenced data (quiz) | ক্রমিক ডেটার কয়েকটি আলাদা স্তর |
+
+## Chapter 9: Error Handling
+
+**Auto-chosen terms:** recoverable / unrecoverable error, unwind, abort, call
+stack, backtrace, environment variable, buffer overread, debug symbol, file
+handle, propagate, chain (method calls), parser, rate limit, system call.
+Everyday: চুক্তি (contract), প্রশ্নবোধক চিহ্নের operator.
+
+**Decisions:**
+- The section title "To `panic!` or Not to `panic!`" became "`panic!` করব
+  নাকি করব না" (the second `panic!` is dropped as natural Bengali).
+- Link labels to chapter 18 ("Encoding States and Behavior as Types", "Using
+  Trait Objects to Abstract over Shared Behavior") stay in English until that
+  chapter is translated.
+- *prototype* stays in Latin.
+
+**Unsure sentences:**
+
+| English | Bengali |
+| --- | --- |
+| Errors are a fact of life in software | সফটওয়্যারে error থাকবেই |
+| That’s a lot of `match`! The `match` expression is very useful but also very much a primitive. | অনেক `match`! `match` expression খুবই কাজের, কিন্তু বেশ আদিম একটি গঠনও। |
+| this is just a different, more ergonomic way to write it | এটি শুধু লেখার একটি আলাদা, বেশি ব্যবহার-স্বাচ্ছন্দ্যপূর্ণ উপায় |
+| a _bad state_ is when some assumption, guarantee, contract, or invariant has been broken | _খারাপ অবস্থা_ মানে যখন কোনো ধারণা, নিশ্চয়তা, চুক্তি বা invariant ভেঙে গেছে |
+| a contract violation always indicates a caller-side bug | চুক্তি লঙ্ঘন সবসময় caller-এর দিকের একটি বাগ বোঝায় |
+| will make your code more reliable in the face of inevitable problems | অনিবার্য সমস্যার মুখে আপনার কোড আরও নির্ভরযোগ্য হবে |

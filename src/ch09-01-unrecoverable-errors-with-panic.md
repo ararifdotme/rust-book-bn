@@ -1,35 +1,30 @@
-## Unrecoverable Errors with `panic!`
+## `panic!` দিয়ে unrecoverable error {#unrecoverable-errors-with-panic}
 
-Sometimes bad things happen in your code, and there’s nothing you can do about
-it. In these cases, Rust has the `panic!` macro. There are two ways to cause a
-panic in practice: by taking an action that causes our code to panic (such as
-accessing an array past the end) or by explicitly calling the `panic!` macro.
-In both cases, we cause a panic in our program. By default, these panics will
-print a failure message, unwind, clean up the stack, and quit. Via an
-environment variable, you can also have Rust display the call stack when a
-panic occurs to make it easier to track down the source of the panic.
+কখনো কখনো আপনার কোডে খারাপ কিছু ঘটে, আর তা নিয়ে আপনার কিছুই করার থাকে না। এসব ক্ষেত্রের জন্য Rust-এ আছে
+`panic!` macro। বাস্তবে panic ঘটানোর দুটি উপায় আছে: এমন কোনো কাজ করে, যার ফলে আমাদের কোড panic করে (যেমন একটি
+array-র শেষের পরে পৌঁছানো), অথবা স্পষ্টভাবে `panic!` macro call করে। দুই ক্ষেত্রেই আমরা আমাদের প্রোগ্রামে একটি
+panic ঘটাই। ডিফল্টভাবে এই panic-গুলো একটি ব্যর্থতার বার্তা প্রিন্ট করবে, unwind (stack ধরে ফিরে গিয়ে ডেটা পরিষ্কার)
+করবে, stack পরিষ্কার করবে, আর বন্ধ হয়ে যাবে। একটি environment variable (অপারেটিং সিস্টেমে রাখা নামযুক্ত সেটিং-মান)-এর
+মাধ্যমে আপনি panic ঘটলে Rust-কে দিয়ে call stack (call হওয়া function-গুলোর ক্রম) দেখাতে পারেন, যাতে panic-এর উৎস
+খুঁজে বের করা সহজ হয়।
 
-> ### Unwinding the Stack or Aborting in Response to a Panic
+> ### panic-এর জবাবে stack unwind করা বা abort করা {#unwinding-the-stack-or-aborting-in-response-to-a-panic}
 >
-> By default, when a panic occurs, the program starts _unwinding_, which means
-> Rust walks back up the stack and cleans up the data from each function it
-> encounters. However, walking back and cleaning up is a lot of work. Rust
-> therefore allows you to choose the alternative of immediately _aborting_,
-> which ends the program without cleaning up.
+> ডিফল্টভাবে panic ঘটলে প্রোগ্রাম _unwinding_ শুরু করে, অর্থাৎ Rust stack ধরে ওপরের দিকে ফিরে যায় এবং পথে পাওয়া
+> প্রতিটি function-এর ডেটা পরিষ্কার করে। তবে ফিরে গিয়ে পরিষ্কার করা অনেক কাজের। তাই Rust আপনাকে বিকল্প হিসেবে সঙ্গে
+> সঙ্গে _aborting_ (পরিষ্কার না করেই প্রোগ্রাম বন্ধ করা) বেছে নিতে দেয়, যা কোনো পরিষ্কার ছাড়াই প্রোগ্রাম শেষ করে দেয়।
 >
-> Memory that the program was using will then need to be cleaned up by the
-> operating system. If in your project you need to make the resultant binary as
-> small as possible, you can switch from unwinding to aborting upon a panic by
-> adding `panic = 'abort'` to the appropriate `[profile]` sections in your
-> _Cargo.toml_ file. For example, if you want to abort on panic in release mode,
-> add this:
+> তখন প্রোগ্রাম যে মেমোরি ব্যবহার করছিল, তা অপারেটিং সিস্টেমকে পরিষ্কার করতে হবে। আপনার প্রজেক্টে যদি তৈরি হওয়া
+> binary যতটা সম্ভব ছোট রাখতে হয়, তাহলে আপনার _Cargo.toml_ ফাইলের উপযুক্ত `[profile]` অংশে `panic = 'abort'` যোগ
+> করে panic-এর ক্ষেত্রে unwind থেকে abort-এ যেতে পারেন। যেমন, release mode-এ panic হলে abort করতে চাইলে এটি যোগ
+> করুন:
 >
 > ```toml
 > [profile.release]
 > panic = 'abort'
 > ```
 
-Let’s try calling `panic!` in a simple program:
+চলুন একটি সহজ প্রোগ্রামে `panic!` call করে দেখি:
 
 <Listing file-name="src/main.rs">
 
@@ -39,35 +34,32 @@ Let’s try calling `panic!` in a simple program:
 
 </Listing>
 
-When you run the program, you’ll see something like this:
+প্রোগ্রামটি চালালে এরকম কিছু দেখবেন:
 
 ```console
 {{#include ../listings/ch09-error-handling/no-listing-01-panic/output.txt}}
 ```
 
-The call to `panic!` causes the error message contained in the last two lines.
-The first line shows our panic message and the place in our source code where
-the panic occurred: _src/main.rs:2:5_ indicates that it’s the second line,
-fifth character of our _src/main.rs_ file.
+`panic!` call-এর কারণেই শেষ দুই লাইনের error message এসেছে। প্রথম লাইনটি দেখায় আমাদের panic বার্তা আর আমাদের
+সোর্স কোডের কোন জায়গায় panic ঘটেছে: _src/main.rs:2:5_ বোঝায় যে এটি আমাদের _src/main.rs_ ফাইলের দ্বিতীয় লাইনের
+পঞ্চম অক্ষর।
 
-In this case, the line indicated is part of our code, and if we go to that
-line, we see the `panic!` macro call. In other cases, the `panic!` call might
-be in code that our code calls, and the filename and line number reported by
-the error message will be someone else’s code where the `panic!` macro is
-called, not the line of our code that eventually led to the `panic!` call.
+এই ক্ষেত্রে নির্দেশিত লাইনটি আমাদের কোডেরই অংশ, আর সেই লাইনে গেলে আমরা `panic!` macro call দেখতে পাই। অন্য
+ক্ষেত্রে `panic!` call থাকতে পারে এমন কোডে, যা আমাদের কোড call করে, আর তখন error message-এ জানানো ফাইলের নাম ও
+লাইন নম্বর হবে অন্য কারও কোডের, যেখানে `panic!` macro call করা হয়েছে, আমাদের কোডের সেই লাইন নয়, যা শেষ পর্যন্ত
+`panic!` call-এর দিকে নিয়ে গেছে।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-a-panic-backtrace"></a>
 
-We can use the backtrace of the functions the `panic!` call came from to figure
-out the part of our code that is causing the problem. To understand how to use
-a `panic!` backtrace, let’s look at another example and see what it’s like when
-a `panic!` call comes from a library because of a bug in our code instead of
-from our code calling the macro directly. Listing 9-1 has some code that
-attempts to access an index in a vector beyond the range of valid indexes.
+`panic!` call যে function-গুলো থেকে এসেছে, সেগুলোর backtrace (এই পর্যন্ত call হওয়া সব function-এর তালিকা) ব্যবহার
+করে আমরা খুঁজে বের করতে পারি আমাদের কোডের কোন অংশ সমস্যা ঘটাচ্ছে। একটি `panic!` backtrace কীভাবে ব্যবহার করতে হয় তা
+বুঝতে চলুন আরেকটি উদাহরণ দেখি, যেখানে `panic!` call আমাদের কোড সরাসরি macro call করার কারণে নয়, বরং আমাদের কোডের
+একটি বাগের কারণে একটি library থেকে আসে। Listing 9-1-এ এমন কিছু কোড আছে, যা একটি vector-এ বৈধ index-এর পরিসরের বাইরের
+একটি index-এ পৌঁছানোর চেষ্টা করে।
 
-<Listing number="9-1" file-name="src/main.rs" caption="Attempting to access an element beyond the end of a vector, which will cause a call to `panic!`">
+<Listing number="9-1" file-name="src/main.rs" caption="একটি vector-এর শেষের পরের একটি উপাদানে পৌঁছানোর চেষ্টা, যা একটি `panic!` call ঘটাবে">
 
 ```rust,should_panic,panics
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-01/src/main.rs}}
@@ -75,42 +67,33 @@ attempts to access an index in a vector beyond the range of valid indexes.
 
 </Listing>
 
-Here, we’re attempting to access the 100th element of our vector (which is at
-index 99 because indexing starts at zero), but the vector has only three
-elements. In this situation, Rust will panic. Using `[]` is supposed to return
-an element, but if you pass an invalid index, there’s no element that Rust
-could return here that would be correct.
+এখানে আমরা আমাদের vector-এর 100তম উপাদানে পৌঁছানোর চেষ্টা করছি (যা আছে index 99-এ, কারণ index শূন্য থেকে শুরু হয়),
+কিন্তু vector-এ মাত্র তিনটি উপাদান আছে। এই পরিস্থিতিতে Rust panic করবে। `[]` ব্যবহার করলে একটি উপাদান return করার
+কথা, কিন্তু অবৈধ index দিলে এখানে Rust এমন কোনো উপাদান return করতে পারে না, যা সঠিক হতো।
 
-In C, attempting to read beyond the end of a data structure is undefined
-behavior. You might get whatever is at the location in memory that would
-correspond to that element in the data structure, even though the memory
-doesn’t belong to that structure. This is called a _buffer overread_ and can
-lead to security vulnerabilities if an attacker is able to manipulate the index
-in such a way as to read data they shouldn’t be allowed to that is stored after
-the data structure.
+C-তে একটি data structure-এর শেষের পরে পড়ার চেষ্টা করা undefined behavior। data structure-এ ওই উপাদানের সংশ্লিষ্ট
+মেমোরি-অবস্থানে যা-ই থাকুক, আপনি হয়তো তা-ই পেয়ে যাবেন, যদিও সেই মেমোরি ওই structure-এর নয়। একে বলা হয় _buffer
+overread_ (বাফারের সীমার বাইরে পড়া), আর আক্রমণকারী যদি index এমনভাবে নিয়ন্ত্রণ করতে পারে, যাতে data structure-এর
+পরে রাখা এমন ডেটা পড়া যায়, যা তার পড়ার অনুমতি নেই, তাহলে এটি নিরাপত্তা-দুর্বলতার দিকে নিয়ে যেতে পারে।
 
-To protect your program from this sort of vulnerability, if you try to read an
-element at an index that doesn’t exist, Rust will stop execution and refuse to
-continue. Let’s try it and see:
+আপনার প্রোগ্রামকে এ ধরনের দুর্বলতা থেকে রক্ষা করতে, অস্তিত্ব নেই এমন একটি index-এর উপাদান পড়ার চেষ্টা করলে Rust
+প্রোগ্রাম চলা থামিয়ে দেবে এবং চালিয়ে যেতে রাজি হবে না। চলুন চেষ্টা করে দেখি:
 
 ```console
 {{#include ../listings/ch09-error-handling/listing-09-01/output.txt}}
 ```
 
-This error points at line 4 of our _main.rs_ where we attempt to access index
-99 of the vector in `v`.
+এই error আমাদের _main.rs_-এর লাইন 4-কে নির্দেশ করে, যেখানে আমরা `v`-এর vector-এর index 99-এ পৌঁছানোর চেষ্টা
+করেছি।
 
-The `note:` line tells us that we can set the `RUST_BACKTRACE` environment
-variable to get a backtrace of exactly what happened to cause the error. A
-_backtrace_ is a list of all the functions that have been called to get to this
-point. Backtraces in Rust work as they do in other languages: The key to
-reading the backtrace is to start from the top and read until you see files you
-wrote. That’s the spot where the problem originated. The lines above that spot
-are code that your code has called; the lines below are code that called your
-code. These before-and-after lines might include core Rust code, standard
-library code, or crates that you’re using. Let’s try to get a backtrace by
-setting the `RUST_BACKTRACE` environment variable to any value except `0`.
-Listing 9-2 shows output similar to what you’ll see.
+`note:` লাইনটি আমাদের জানায় যে error-টি ঘটার পেছনে ঠিক কী ঘটেছে তার backtrace পেতে আমরা `RUST_BACKTRACE`
+environment variable সেট করতে পারি। একটি _backtrace_ হলো এই পর্যায়ে পৌঁছাতে যত function call হয়েছে, তাদের সবগুলোর
+একটি তালিকা। Rust-এ backtrace অন্য ভাষার মতোই কাজ করে: backtrace পড়ার মূল কৌশল হলো ওপর থেকে শুরু করে পড়তে থাকা,
+যতক্ষণ না আপনার লেখা ফাইল দেখতে পান। সেটিই সেই জায়গা, যেখান থেকে সমস্যার শুরু। ওই জায়গার ওপরের লাইনগুলো হলো সেই
+কোড, যা আপনার কোড call করেছে; নিচের লাইনগুলো হলো সেই কোড, যা আপনার কোডকে call করেছে। এই আগে-পরের লাইনগুলোতে থাকতে
+পারে Rust-এর মূল কোড, standard library-র কোড, বা আপনার ব্যবহৃত crate। চলুন `RUST_BACKTRACE` environment variable-কে
+`0` ছাড়া যেকোনো মানে সেট করে একটি backtrace পাওয়ার চেষ্টা করি। Listing 9-2-এ আপনি যা দেখবেন, তার মতো আউটপুট দেখানো
+হয়েছে।
 
 <!-- manual-regeneration
 cd listings/ch09-error-handling/listing-09-01
@@ -119,7 +102,7 @@ copy the backtrace output below
 check the backtrace number mentioned in the text below the listing
 -->
 
-<Listing number="9-2" caption="The backtrace generated by a call to `panic!` displayed when the environment variable `RUST_BACKTRACE` is set">
+<Listing number="9-2" caption="environment variable `RUST_BACKTRACE` সেট করা থাকলে একটি `panic!` call-এর তৈরি backtrace দেখানো হয়">
 
 ```console
 $ RUST_BACKTRACE=1 cargo run
@@ -147,25 +130,21 @@ note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose bac
 
 </Listing>
 
-That’s a lot of output! The exact output you see might be different depending
-on your operating system and Rust version. In order to get backtraces with this
-information, debug symbols must be enabled. Debug symbols are enabled by
-default when using `cargo build` or `cargo run` without the `--release` flag,
-as we have here.
+অনেক আউটপুট! আপনার অপারেটিং সিস্টেম আর Rust-এর সংস্করণ অনুযায়ী আপনি যে আউটপুট দেখবেন, তা হুবহু আলাদা হতে পারে।
+এই তথ্যসহ backtrace পেতে debug symbol (ডিবাগের জন্য প্রোগ্রামে রাখা বাড়তি তথ্য) চালু থাকতে হবে। `--release` flag ছাড়া
+`cargo build` বা `cargo run` ব্যবহার করলে, যেমনটি আমরা এখানে করেছি, debug symbol ডিফল্টভাবেই চালু থাকে।
 
-In the output in Listing 9-2, line 6 of the backtrace points to the line in our
-project that’s causing the problem: line 4 of _src/main.rs_. If we don’t want
-our program to panic, we should start our investigation at the location pointed
-to by the first line mentioning a file we wrote. In Listing 9-1, where we
-deliberately wrote code that would panic, the way to fix the panic is to not
-request an element beyond the range of the vector indexes. When your code
-panics in the future, you’ll need to figure out what action the code is taking
-with what values to cause the panic and what the code should do instead.
+Listing 9-2-এর আউটপুটে backtrace-এর লাইন 6 আমাদের প্রজেক্টের সেই লাইনকে নির্দেশ করে, যা সমস্যা ঘটাচ্ছে:
+_src/main.rs_-এর লাইন 4। আমরা যদি না চাই আমাদের প্রোগ্রাম panic করুক, তাহলে আমাদের অনুসন্ধান শুরু করা উচিত আমাদের লেখা
+একটি ফাইলের উল্লেখ থাকা প্রথম লাইনটি যে জায়গাকে নির্দেশ করে, সেখান থেকে। Listing 9-1-এ, যেখানে আমরা ইচ্ছে করে এমন কোড
+লিখেছি যা panic করবে, panic ঠিক করার উপায় হলো vector-এর index-এর পরিসরের বাইরের কোনো উপাদান না চাওয়া। ভবিষ্যতে আপনার
+কোড panic করলে আপনাকে খুঁজে বের করতে হবে, কোড কোন মান দিয়ে কী কাজ করার ফলে panic ঘটছে, আর এর বদলে কোডের কী করা
+উচিত।
 
-We’ll come back to `panic!` and when we should and should not use `panic!` to
-handle error conditions in the [“To `panic!` or Not to
-`panic!`”][to-panic-or-not-to-panic]<!-- ignore --> section later in this
-chapter. Next, we’ll look at how to recover from an error using `Result`.
+এই অধ্যায়ের পরের দিকে [“`panic!` করব নাকি
+করব না”][to-panic-or-not-to-panic]<!-- ignore --> অংশে আমরা `panic!`-এ ফিরে আসব, আর দেখব error-এর পরিস্থিতি সামলাতে
+কখন `panic!` ব্যবহার করা উচিত আর কখন উচিত নয়। এরপর আমরা দেখব `Result` ব্যবহার করে একটি error থেকে কীভাবে সামলে
+ওঠা যায়।
 
 {{#quiz ../quizzes/ch09-01-panic.toml}}
 
