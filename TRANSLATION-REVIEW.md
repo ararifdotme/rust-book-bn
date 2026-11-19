@@ -403,3 +403,37 @@ procedural macro, metaprogramming, token / `TokenStream`, reflection.
 | “Trust me, I know what I’m doing.” | “আমাকে বিশ্বাস করো, আমি জানি কী করছি।” |
 | we can get into the nitty-gritty | আমরা খুঁটিনাটির গভীরে যেতে পারি |
 | The golden rule of dynamically sized types | dynamically sized type-এর সোনালি নিয়ম |
+
+## Chapter 21: Final Project: Building a Multithreaded Web Server
+
+**Auto-chosen terms:** TCP, HTTP, request / response, status line, header, body,
+URI, port, socket, listener, connection, thread pool, throughput, Worker (কর্মী),
+job (কাজ), compiler-driven development, graceful shutdown (সুশৃঙ্খলভাবে বন্ধ
+করা), DoS আক্রমণ, poisoned (দূষিত), double panic.
+
+**Decisions:**
+- Networking terms (TCP, HTTP, request, response, header, port…) stay in
+  English, as Bengali developers usually say them.
+- "DoS attack" and "compiler-driven development" get a short Bengali gloss the
+  first time they appear.
+- The `Worker` type name stays in code formatting; "worker" as a concept is
+  glossed once as "কর্মী".
+- The terminal output block in ch21-03 is hand-copied and is not an
+  output.txt include. It stays in English because it is program output.
+- Only two listing comments were translated: listing-21-06 ("some other
+  request") and listing-21-14 ("create some threads…"). The other ch21 listings
+  either have an output.txt or contain no comments.
+- ch21 has no quizzes.
+- Link labels to integer types (ch03), moving out of closures (ch13) and type
+  aliases (ch20) use the Bengali headings.
+
+**Unsure sentences:**
+
+| English | Bengali |
+| --- | --- |
+| wreak havoc by making 10 million requests | 1 কোটি request পাঠিয়ে … তাণ্ডব ঘটাতে পারত |
+| this is exactly the kind of situation where async and await really shine! | এটি ঠিক সেই ধরনের পরিস্থিতি যেখানে async আর await সত্যিই উজ্জ্বল! |
+| “If the code compiles, it works.” | “কোড compile হলে কাজ করে।” |
+| We’re getting there! | আমরা লক্ষ্যের কাছাকাছি পৌঁছে যাচ্ছি! |
+| a welcoming community of other Rustaceans | অন্য Rustacean-দের একটি স্বাগত জানানো community |
+| the less elegant ctrl-C method | কম মার্জিত ctrl-C পদ্ধতি |

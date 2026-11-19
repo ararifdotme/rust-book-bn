@@ -600,6 +600,28 @@ tested with this repo's build.
 | metaprogramming | metaprogramming | কোড নিয়ে কোড লেখা | 20 |
 | token / `TokenStream` | token | কোডের ক্ষুদ্রতম একক / token-এর ধারা | 20 |
 | reflection | reflection | চলার সময় নিজের গঠন পরীক্ষার ক্ষমতা | 20 |
+| TCP (Transmission Control Protocol) | TCP | data কীভাবে এক server থেকে আরেক server-এ যায় তা বর্ণনাকারী নিম্ন-স্তরের protocol | 21 |
+| HTTP (Hypertext Transfer Protocol) | HTTP | request ও response-এর বিষয়বস্তু সংজ্ঞায়িত করা protocol | 21 |
+| web server | web server | — | 21 |
+| request | request | client থেকে server-এ পাঠানো বার্তা | 21 |
+| response | response | server থেকে client-এ ফেরত পাঠানো বার্তা | 21 |
+| status line | status line | response-এর প্রথম লাইন | 21 |
+| header | header | — | 21 |
+| body (HTTP) | body | — | 21 |
+| URI | URI | — | 21 |
+| port | port | — | 21 |
+| socket | socket | — | 21 |
+| listener | listener | — | 21 |
+| connection | connection | — | 21 |
+| thread pool | thread pool | কাজের জন্য অপেক্ষারত চালু thread-এর দল | 21 |
+| throughput | throughput | — | 21 |
+| worker (thread pool) | Worker (কর্মী) | pool থেকে job নিয়ে নিজের thread-এ চালানো কাঠামো | 21 |
+| job | job (কাজ) | — | 21 |
+| compiler-driven development | compiler-driven development (compiler-এর error দেখে দেখে কোড এগিয়ে নেওয়া) | — | 21 |
+| graceful shutdown | সুশৃঙ্খলভাবে বন্ধ করা | — | 21 |
+| DoS (denial of service) attack | DoS আক্রমণ | অসংখ্য request পাঠিয়ে সেবা অচল করে দেওয়া | 21 |
+| poisoned (mutex) | poisoned (দূষিত) | — | 21 |
+| double panic | double panic | — | 21 |
 
 ### Everyday computing words
 
@@ -717,6 +739,6 @@ use.
 - [x] Chapter 18: Object Oriented Programming Features (ch18-*)
 - [x] Chapter 19: Patterns and Matching (ch19-*)
 - [x] Chapter 20: Advanced Features (ch20-*)
-- [ ] Chapter 21: Final Project: Building a Multithreaded Web Server (ch21-*)
+- [x] Chapter 21: Final Project: Building a Multithreaded Web Server (ch21-*)
 - [ ] End of Experiment (end-of-experiment)
 - [ ] Appendix (appendix-00 to appendix-07)
