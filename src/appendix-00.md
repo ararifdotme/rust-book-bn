@@ -1,4 +1,3 @@
-# Appendix
+# পরিশিষ্ট {#appendix}
 
-The following sections contain reference material you may find useful in your
-Rust journey.
+নিচের অংশগুলোতে এমন সহায়ক তথ্য আছে, যা আপনার Rust যাত্রায় কাজে লাগতে পারে।

@@ -437,3 +437,44 @@ job (কাজ), compiler-driven development, graceful shutdown (সুশৃঙ
 | We’re getting there! | আমরা লক্ষ্যের কাছাকাছি পৌঁছে যাচ্ছি! |
 | a welcoming community of other Rustaceans | অন্য Rustacean-দের একটি স্বাগত জানানো community |
 | the less elegant ctrl-C method | কম মার্জিত ctrl-C পদ্ধতি |
+
+## End of Experiment
+
+A short page. "End of Experiment" became "পরীক্ষার সমাপ্তি"; the Mastodon
+handle and link are unchanged.
+
+## Appendix (A–G)
+
+**Auto-chosen terms:** পরিশিষ্ট (appendix), keyword, raw identifier, edition,
+linter / lint, regression, release channel, train model, feature flag / feature
+gate, toolchain, RFC প্রক্রিয়া, “স্থবিরতা ছাড়াই স্থিতিশীলতা” (stability
+without stagnation), “derive করা যায় এমন trait”.
+
+**Decisions:**
+- Appendix letters stay Latin ("পরিশিষ্ট A", "Table B-1"), the same way
+  "Listing N-M" stays in English.
+- Appendix B tables: only the Explanation and header cells are translated.
+  Operators, examples and trait names are unchanged, and every table keeps its
+  row and column count (checked in the rendered HTML). Each row's column
+  padding was collapsed to single spaces, which renders the same.
+- `<span class="filename">Filename: …</span>` labels stay in English, as in
+  every earlier chapter.
+- Appendix F's language list is unchanged (native language names and links);
+  only the intro is translated.
+- Compiler and Clippy output blocks in Appendix A and D stay in English.
+- Link labels to ch05 (struct update syntax) and ch20 (custom `derive` macros)
+  use the Bengali headings. The ch05 link still points at the old-heading
+  anchor, which still exists.
+- SUMMARY.md (sidebar titles) is untranslated for the whole book, as before.
+
+**Unsure sentences:**
+
+| English | Bengali |
+| --- | --- |
+| Choo, Choo! Release Channels and Riding the Trains | ঝিক ঝিক! release channel এবং ট্রেনে চড়া |
+| Rust releases every six weeks, like clockwork. | ঘড়ির কাঁটার মতো নিয়ম করে Rust প্রতি ছয় সপ্তাহে release হয়। |
+| Those who wish to opt into the bleeding edge | যারা একেবারে সর্বাধুনিক জিনিস বেছে নিতে চান |
+| a rallying point for the project as a whole | পুরো project-এর একটি মিলনবিন্দু |
+| Collection indexing pretending to be collection slicing | collection slicing-এর ভান করা collection indexing |
+| Always-empty bottom type for diverging functions | diverging function-এর জন্য সবসময় খালি bottom type |
+| Right-exclusive / Right-inclusive range literal | ডান প্রান্ত বাদ দেওয়া / অন্তর্ভুক্ত range literal |

@@ -622,6 +622,17 @@ tested with this repo's build.
 | DoS (denial of service) attack | DoS আক্রমণ | অসংখ্য request পাঠিয়ে সেবা অচল করে দেওয়া | 21 |
 | poisoned (mutex) | poisoned (দূষিত) | — | 21 |
 | double panic | double panic | — | 21 |
+| raw identifier | raw identifier | `r#` দিয়ে keyword-কে identifier হিসেবে ব্যবহার | Appendix |
+| edition | edition | — | Appendix |
+| linter / lint | linter / lint | — | Appendix |
+| regression | regression (আগে কাজ করা জিনিস ভেঙে যাওয়া) | — | Appendix |
+| release channel | release channel | nightly, beta, stable | Appendix |
+| train model | train model | প্রতি ছয় সপ্তাহে release “স্টেশন ছেড়ে যায়” | Appendix |
+| feature flag / feature gate | feature flag / feature gate | — | Appendix |
+| toolchain | toolchain | Rust-এর release ও সংশ্লিষ্ট component | Appendix |
+| RFC (Request For Comments) | RFC প্রক্রিয়া | — | Appendix |
+| stability without stagnation | স্থবিরতা ছাড়াই স্থিতিশীলতা | — | Appendix |
+| derivable trait | derive করা যায় এমন trait | — | Appendix |
 
 ### Everyday computing words
 
@@ -707,6 +718,7 @@ Names and acronyms (IDE, DevOps, Firefox, GitHub) stay unchanged.
 | resource | resource (সম্পদ, যেমন ফাইল বা network connection) | 15 |
 | paradigm | paradigm (ধারা) | 18 |
 | design trade-offs | নকশার সুবিধা-অসুবিধা | 18 |
+| appendix | পরিশিষ্ট | Appendix |
 
 ## Progress
 
@@ -741,4 +753,4 @@ use.
 - [x] Chapter 20: Advanced Features (ch20-*)
 - [x] Chapter 21: Final Project: Building a Multithreaded Web Server (ch21-*)
 - [x] End of Experiment (end-of-experiment)
-- [ ] Appendix (appendix-00 to appendix-07)
+- [x] Appendix (appendix-00 to appendix-07)
