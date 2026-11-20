@@ -128,6 +128,9 @@ jobs:
     - name: Build mdbook
       run: mdbook build
 
+    - name: Generate sitemap.xml
+      run: python3 ci/sitemap.py book https://rust-bangla.ararif.me
+
     - name: Deploy to GitHub Pages
       if: ${{ github.ref == 'refs/heads/main' }}
       uses: peaceiris/actions-gh-pages@v4

@@ -5,8 +5,10 @@
 title = "Rust প্রোগ্রামিং ভাষা"
 authors = ["Steve Klabnik", "Carol Nichols", "Contributions from the Rust Community"]
 language = "bn"
+description = "Rust প্রোগ্রামিং ভাষার বাংলা অনুবাদ: কুইজ, ownership diagram আর ইন্টারঅ্যাকটিভ উদাহরণসহ Rust শেখার বই।"
 
 [output.html]
+site-url = "/"
 additional-css = [
   "ferris.css",
   "theme/semantic-notes.css", 
